@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[RequireComponent(typeof(Assignment_Student))]
+[RequireComponent(typeof(Assignment_Student_Week01))]
 public class Assignment_Submitter : MonoBehaviour
 {
     [Header("ข้อมูลนักศึกษา (ห้ามเว้นว่าง)")]
@@ -85,7 +85,7 @@ public class Assignment_Submitter : MonoBehaviour
     private int CalculateScore()
     {
         int totalScore = 0;
-        Assignment_Student studentScript = GetComponent<Assignment_Student>();
+        Assignment_Student_Week01 studentScript = GetComponent<Assignment_Student_Week01>();
 
         // ตรวจโจทย์ระดับ 1-4
         if (IsFieldCorrect(studentScript, "characterName", typeof(string))) totalScore++;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Assignment_Teacher : MonoBehaviour
+public class Assignment_Teacher_Week01 : MonoBehaviour
 {
     // ==========================================
     // เฉลยโจทย์ระดับ 1: แนะนำตัวละคร

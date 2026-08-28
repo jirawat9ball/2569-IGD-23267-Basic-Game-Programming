@@ -107,10 +107,10 @@ public class Week01
 
     private void CheckField(string varName, Type expectedType, bool? shouldBeExposed = null)
     {
-        // ใช้ Reflection เพื่อดึงคลาส Assignment_Student จากโปรเจกต์หลัก (Assembly-CSharp) 
-        Type studentType = Type.GetType("Assignment_Student, Assembly-CSharp");
+        // ใช้ Reflection เพื่อดึงคลาส Assignment_Student_Week01 จากโปรเจกต์หลัก (Assembly-CSharp) 
+        Type studentType = Type.GetType("Assignment_Student_Week01, Assembly-CSharp");
         
-        Assert.IsNotNull(studentType, "❌ ไม่พบคลาส 'Assignment_Student' ในโปรเจกต์ (ลบไฟล์สคริปต์ไปหรือเปล่า?)");
+        Assert.IsNotNull(studentType, "❌ ไม่พบคลาส 'Assignment_Student_Week01' ในโปรเจกต์ (ลบไฟล์สคริปต์ไปหรือเปล่า?)");
 
         FieldInfo field = studentType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         
