@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class Assignment_Student_Week01 : MonoBehaviour
 {
@@ -24,11 +24,16 @@ public class Assignment_Student_Week01 : MonoBehaviour
 
 
     // ==========================================
-    // โจทย์ระดับ 3: การคำนวณเงินทอง
+    // โจทย์ระดับ 3: การคำนวณเบื้องต้น
     // ==========================================
-    // คำใบ้: สร้างตัวแปร 2 ตัว ได้แก่
-    // 1. playerMoney ชนิด int
-    // 2. itemPrice ชนิด int
+    // คำใบ้: สร้างตัวแปร 7 ตัว ได้แก่
+    // 1. NAME ชนิด string
+    // 2. LASTNAME ชนิด string
+    // 3. HP ชนิด int
+    // 4. DAMAGE ชนิด int
+    // 5. SPEED ชนิด float
+    // 6. TIME ชนิด float
+    // 7. DISTANCE ชนิด float
 
 
 
@@ -41,17 +46,23 @@ public class Assignment_Student_Week01 : MonoBehaviour
 
 
     // ==========================================
-    // โจทย์ระดับ 5: อ้างอิง Component และ GameObject
+    // โจทย์ระดับ 5: ตัวแปรของ Unity
+    // ==========================================
+    // คำใบ้: สร้างตัวแปร 3 ตัวที่สามารถรับค่าผ่าน Inspector ได้
+    // 1. StartPosition ชนิด Vector3
+    // 2. colorPlayer ชนิด Color
+    // 3. playerMesh ชนิด MeshRenderer
+
+
+
+    // ==========================================
+    // โจทย์ระดับ 6: อ้างอิง Component และ GameObject
     // ==========================================
     // คำใบ้: สร้างตัวแปร 4 ตัวที่สามารถรับค่าผ่าน Inspector ได้
     // 1. Heart ชนิด GameObject
-    // 2. SpwanHeart ชนิด Transform (พิมพ์ชื่อตัวแปรให้ตรงเป๊ะ)
+    // 2. SpawnHeart ชนิด Transform (พิมพ์ชื่อตัวแปรให้ตรงเป๊ะ)
     // 3. C1 ชนิด FirstPersonMovement
     // 4. C2 ชนิด FirstPersonInterface
-
-
-
-
     void Start()
     {
         // --- ส่วนที่ 1: แสดงชื่อตัวละคร ---
@@ -62,15 +73,22 @@ public class Assignment_Student_Week01 : MonoBehaviour
         // คำใบ้: กำหนดค่าเริ่มต้นให้กับ currentHealth ให้เท่ากับ maxHealth
 
 
-        // --- ส่วนที่ 3: ซื้อของ ---
-        // คำใบ้: คำนวณเงินที่เหลือหลังจากการซื้อของ โดยนำ playerMoney หักลบด้วย itemPrice
-        // (สามารถเขียนย่อแบบ playerMoney -= itemPrice;)
-        // จากนั้นใช้ Debug.Log() แสดงจำนวนเงินที่เหลือ
+        // --- ส่วนที่ 3: การคำนวณเบื้องต้น ---
+        // คำใบ้: ให้ใช้ Debug.Log() แสดงผลการคำนวณดังนี้
+        // 1. NAME + LASTNAME
+        // 2. HP - DAMAGE
+        // 3. SPEED * TIME
+        // 4. DISTANCE / TIME
+        // 5. HP % DAMAGE
 
 
-        // --- ส่วนที่ 5: ใช้งาน Component ---
+        // --- ส่วนที่ 5: ใช้งานตัวแปรของ Unity ---
+        // คำใบ้: กำหนดตำแหน่ง (transform.position) ให้เท่ากับ StartPosition
+        // และตั้งค่าสีของออบเจกต์ โดยเรียกใช้คำสั่ง C2.SetColorCapsule(colorPlayer, playerMesh);
+
+
+        // --- ส่วนที่ 6: ใช้งาน Component ---
         // คำใบ้: (ถ้าโจทย์มีการให้อ้างอิง Component ผ่าน Code เช่น GetComponent สามารถเขียนที่นี่)
-
 
     }
 
@@ -85,7 +103,7 @@ public class Assignment_Student_Week01 : MonoBehaviour
         // ถ้าใช่ ให้แสดงข้อความแจ้งเตือนด้วย Debug.Log() และรีเซ็ต timer ให้กลับเป็น 0
 
 
-        // --- ส่วนที่ 5: ใช้งาน Component ---
+        // --- ส่วนที่ 6: ใช้งาน Component ---
         // คำใบ้: (ถ้ามีการทำงานของ Component ที่ต้องทำตลอดเวลา สามารถเขียนที่นี่)
 
 

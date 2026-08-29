@@ -76,7 +76,7 @@ public class Assignment_Submitter : MonoBehaviour
         }
 
         int score = CalculateScore();
-        int maxScore = 13; // มีตัวแปร 13 ตัวที่ต้องตรวจ
+        int maxScore = 21; // มีตัวแปร 21 ตัวที่ต้องตรวจ
 
         Debug.Log($"⏳ กำลังส่งงาน... (คะแนนที่ได้ {score}/{maxScore})");
         StartCoroutine(SendPostRequest(studentID, studentName, score.ToString(), maxScore.ToString()));
@@ -96,13 +96,23 @@ public class Assignment_Submitter : MonoBehaviour
         if (IsFieldCorrect(studentScript, "maxHealth", typeof(int), true)) totalScore++;
         if (IsFieldCorrect(studentScript, "currentHealth", typeof(int), false)) totalScore++;
         
-        if (IsFieldCorrect(studentScript, "playerMoney", typeof(int))) totalScore++;
-        if (IsFieldCorrect(studentScript, "itemPrice", typeof(int))) totalScore++;
+        if (IsFieldCorrect(studentScript, "NAME", typeof(string))) totalScore++;
+        if (IsFieldCorrect(studentScript, "LASTNAME", typeof(string))) totalScore++;
+        if (IsFieldCorrect(studentScript, "HP", typeof(int))) totalScore++;
+        if (IsFieldCorrect(studentScript, "DAMAGE", typeof(int))) totalScore++;
+        if (IsFieldCorrect(studentScript, "SPEED", typeof(float))) totalScore++;
+        if (IsFieldCorrect(studentScript, "TIME", typeof(float))) totalScore++;
+        if (IsFieldCorrect(studentScript, "DISTANCE", typeof(float))) totalScore++;
         if (IsFieldCorrect(studentScript, "timer", typeof(float))) totalScore++;
 
         // ตรวจโจทย์ระดับ 5
+        if (IsFieldCorrect(studentScript, "StartPosition", typeof(Vector3), true)) totalScore++;
+        if (IsFieldCorrect(studentScript, "colorPlayer", typeof(Color), true)) totalScore++;
+        if (IsFieldCorrect(studentScript, "playerMesh", typeof(MeshRenderer), true)) totalScore++;
+
+        // ตรวจโจทย์ระดับ 6
         if (IsFieldCorrect(studentScript, "Heart", typeof(GameObject), true)) totalScore++;
-        if (IsFieldCorrect(studentScript, "SpwanHeart", typeof(Transform), true)) totalScore++;
+        if (IsFieldCorrect(studentScript, "SpawnHeart", typeof(Transform), true)) totalScore++;
 
         Type c1Type = Type.GetType("FirstPersonMovement, Assembly-CSharp");
         if (c1Type != null && IsFieldCorrect(studentScript, "C1", c1Type, true)) totalScore++;

@@ -21,19 +21,30 @@
    *(คำแนะนำ: สามารถใช้ `[SerializeField] private int maxHealth;` ได้)*
 2. `currentHealth` ชนิด `int` ที่**ไม่ให้แสดงใน Inspector** (ซ่อนไว้)
 
-### โจทย์ระดับ 3: การคำนวณเงินทอง
-สร้างตัวแปร 2 ตัว ได้แก่
-1. `playerMoney` ชนิด `int`
-2. `itemPrice` ชนิด `int`
+### โจทย์ระดับ 3: การคำนวณเบื้องต้น
+สร้างตัวแปร 7 ตัว ได้แก่
+1. `NAME` ชนิด `string`
+2. `LASTNAME` ชนิด `string`
+3. `HP` ชนิด `int`
+4. `DAMAGE` ชนิด `int`
+5. `SPEED` ชนิด `float`
+6. `TIME` ชนิด `float`
+7. `DISTANCE` ชนิด `float`
 
 ### โจทย์ระดับ 4: การจับเวลา
 สร้างตัวแปร 1 ตัว ได้แก่
 1. `timer` ชนิด `float`
 
-### โจทย์ระดับ 5: อ้างอิง Component และ GameObject
+### โจทย์ระดับ 5: ตัวแปรของ Unity
+สร้างตัวแปร 3 ตัวที่**สามารถรับค่าผ่าน Inspector ได้**
+1. `StartPosition` ชนิด `Vector3`
+2. `colorPlayer` ชนิด `Color`
+3. `playerMesh` ชนิด `MeshRenderer`
+
+### โจทย์ระดับ 6: อ้างอิง Component และ GameObject
 สร้างตัวแปร 4 ตัวที่**สามารถรับค่าผ่าน Inspector ได้**
 1. `Heart` ชนิด `GameObject`
-2. `SpwanHeart` ชนิด `Transform` (⚠️ *ข้อควรระวัง: สะกดชื่อตัวแปรตามนี้เป๊ะๆ*)
+2. `SpawnHeart` ชนิด `Transform` (⚠️ *ข้อควรระวัง: สะกดชื่อตัวแปรตามนี้เป๊ะๆ*)
 3. `C1` ชนิด `FirstPersonMovement`
 4. `C2` ชนิด `FirstPersonInterface`
 
@@ -44,7 +55,13 @@
 ### ในฟังก์ชัน `Start()`
 1. **แสดงชื่อตัวละคร:** ใช้ `Debug.Log()` เพื่อแสดงข้อความพร้อมกับชื่อตัวละคร (`characterName`)
 2. **ตั้งค่าพลังชีวิต:** กำหนดค่าเริ่มต้นให้ `currentHealth` มีค่าเท่ากับ `maxHealth`
-3. **ระบบซื้อของ:** จำลองการซื้อของโดยคำนวณเงินที่เหลือ (`playerMoney -= itemPrice;`) จากนั้นใช้ `Debug.Log()` แสดงจำนวนเงินที่เหลือ
+3. **การคำนวณเบื้องต้น:** ใช้ `Debug.Log()` แสดงผลลัพธ์การดำเนินการทางคณิตศาสตร์และการต่อข้อความดังนี้:
+   - `NAME + LASTNAME`
+   - `HP - DAMAGE`
+   - `SPEED * TIME`
+   - `DISTANCE / TIME`
+   - `HP % DAMAGE`
+4. **กำหนดตำแหน่งและสี:** กำหนดตำแหน่ง `transform.position` ให้เท่ากับ `StartPosition` และเซตสีวัตถุด้วยคำสั่ง `C2.SetColorCapsule(colorPlayer, playerMesh);`
 
 ### ในฟังก์ชัน `Update()`
 1. **ระบบนับเวลา:** สั่งให้ตัวแปร `timer` เพิ่มค่าขึ้นอย่างต่อเนื่องตามเวลาจริง โดยใช้ `timer += Time.deltaTime;`

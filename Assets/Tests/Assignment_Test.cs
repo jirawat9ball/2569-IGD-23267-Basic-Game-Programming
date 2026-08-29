@@ -51,53 +51,15 @@ public class Week01
     }
 
     [Test]
-    public void _07_Check_PlayerMoney()
+    public void _07_Check_Level3_Variables()
     {
-        CheckField("playerMoney", typeof(int));
-    }
-
-    [Test]
-    public void _08_Check_ItemPrice_And_Calculation()
-    {
-        CheckField("itemPrice", typeof(int));
-        
-        Type studentType = Type.GetType("Assignment_Student_Week01, Assembly-CSharp");
-        UnityEngine.Object studentScript = null;
-        
-        foreach (var mb in Resources.FindObjectsOfTypeAll<MonoBehaviour>())
-        {
-            if (mb.GetType().Name == "Assignment_Student_Week01" && !PrefabUtility.IsPartOfPrefabAsset(mb))
-            {
-                studentScript = mb;
-                break;
-            }
-        }
-        if (studentScript != null)
-        {
-            var moneyField = studentType.GetField("playerMoney", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            var priceField = studentType.GetField("itemPrice", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            
-            if (moneyField != null && priceField != null)
-            {
-                int origMoney = (int)moneyField.GetValue(studentScript);
-                int origPrice = (int)priceField.GetValue(studentScript);
-
-                moneyField.SetValue(studentScript, 100);
-                priceField.SetValue(studentScript, 30);
-
-                MethodInfo startMethod = studentType.GetMethod("Start", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (startMethod != null)
-                {
-                    try { startMethod.Invoke(studentScript, null); } catch { }
-                    int newMoney = (int)moneyField.GetValue(studentScript);
-                    Assert.AreEqual(70, newMoney, "❌ การคำนวณเงินในเมธอด Start() ไม่ถูกต้อง! (ลืมเขียน playerMoney -= itemPrice; หรือเปล่า?)");
-                }
-
-                // Restore
-                moneyField.SetValue(studentScript, origMoney);
-                priceField.SetValue(studentScript, origPrice);
-            }
-        }
+        CheckField("NAME", typeof(string));
+        CheckField("LASTNAME", typeof(string));
+        CheckField("HP", typeof(int));
+        CheckField("DAMAGE", typeof(int));
+        CheckField("SPEED", typeof(float));
+        CheckField("TIME", typeof(float));
+        CheckField("DISTANCE", typeof(float));
     }
 
     [Test]
@@ -143,27 +105,49 @@ public class Week01
     }
 
     // =====================================
-    // แบบทดสอบที่เพิ่มใหม่ (ระดับ 5)
+    // แบบทดสอบระดับ 5
     // =====================================
 
     [Test]
-    public void _10_Check_Heart_GameObject()
+    public void _10_Check_StartPosition()
+    {
+        CheckField("StartPosition", typeof(Vector3), true);
+    }
+
+    [Test]
+    public void _11_Check_ColorPlayer()
+    {
+        CheckField("colorPlayer", typeof(Color), true);
+    }
+
+    [Test]
+    public void _12_Check_PlayerMesh()
+    {
+        CheckField("playerMesh", typeof(MeshRenderer), true);
+        CheckAssignment("playerMesh", false); // ต้องเป็น Scene Object
+    }
+
+    // =====================================
+    // แบบทดสอบระดับ 6
+    // =====================================
+
+    [Test]
+    public void _13_Check_Heart_GameObject()
     {
         CheckField("Heart", typeof(GameObject), true);
         CheckAssignment("Heart", true); // ต้องเป็น Asset (Prefab จากโฟลเดอร์)
     }
 
     [Test]
-    public void _11_Check_SpwanHeart_Transform()
+    public void _14_Check_SpawnHeart_Transform()
     {
-        CheckField("SpwanHeart", typeof(Transform), true);
-        CheckAssignment("SpwanHeart", false); // ต้องเป็น Scene Object
+        CheckField("SpawnHeart", typeof(Transform), true);
+        CheckAssignment("SpawnHeart", false); // ต้องเป็น Scene Object
     }
 
     [Test]
-    public void _12_Check_C1_FirstPersonMovement()
+    public void _15_Check_C1_FirstPersonMovement()
     {
-        // ใช้ Reflection ดึง Type ของ FirstPersonMovement จาก Assembly-CSharp
         Type componentType = Type.GetType("FirstPersonMovement, Assembly-CSharp");
         if (componentType != null)
         {
@@ -177,9 +161,8 @@ public class Week01
     }
 
     [Test]
-    public void _13_Check_C2_FirstPersonInterface()
+    public void _16_Check_C2_FirstPersonInterface()
     {
-        // ใช้ Reflection ดึง Type ของ FirstPersonInterface จาก Assembly-CSharp
         Type componentType = Type.GetType("FirstPersonInterface, Assembly-CSharp");
         if (componentType != null)
         {

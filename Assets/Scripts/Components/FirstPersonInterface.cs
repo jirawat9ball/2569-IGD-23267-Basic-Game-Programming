@@ -13,11 +13,11 @@ public class FirstPersonInterface : MonoBehaviour
     public void SetUIName(string Name) {
         textMeshName.text = Name;
     }
-    public void SetUIHp(int Hp, GameObject Heart,Transform SpwanPointHeart) {
+    public void SetUIHp(int Hp, GameObject Heart,Transform SpawnPointHeart) {
         for (int i = 0; i < Hp; i++)
         {
-            Vector3 pos = SpwanPointHeart.position + new Vector3(i, 0, 0);
-            Instantiate(Heart, pos, SpwanPointHeart.rotation, SpwanPointHeart);
+            Vector3 pos = SpawnPointHeart.position + new Vector3(i, 0, 0);
+            Instantiate(Heart, pos, SpawnPointHeart.rotation, SpawnPointHeart);
         }
     }
 }
