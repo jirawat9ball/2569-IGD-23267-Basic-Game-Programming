@@ -30,9 +30,17 @@ namespace Week02
             As02_StringComparisonExample(stringPassword);
             As03_NumberComparisonExample(comparisonNumber);
             As04_AndOrOperatorExample(comparisonNumber);
-            As05_GuessingNumberExample(guessingNumber, randomNumber);
-            As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
-            As07_VerifyIdentityExample(username, identityPassword, age, isPaid);
+        }
+
+        void Update()
+        {
+            // กดปุ่ม Enter (Return) เพื่อรันข้อ 5-7
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                As05_GuessingNumberExample(guessingNumber, randomNumber);
+                As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
+                As07_VerifyIdentityExample(username, identityPassword, age, isPaid);
+            }
         }
 
         #region Examples
