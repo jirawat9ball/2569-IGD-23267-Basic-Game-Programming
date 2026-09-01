@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b17f88b6e4f2d1048a3699d97bf70d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Assignment_Submitter
-  studentID: "\u0E23\u0E2B\u0E31\u0E2A\u0E19\u0E31\u0E01\u0E28\u0E36\u0E01\u0E29\u0E32"
-  studentName: "\u0E0A\u0E37\u0E48\u0E2D-\u0E19\u0E32\u0E21\u0E2A\u0E01\u0E38\u0E25"
+  studentID: 66047294
+  studentName: "\u0E09\u0E31\u0E15\u0E23\u0E0A\u0E31\u0E22"
   section: 0
   customSection: 
 --- !u!114 &467755866
