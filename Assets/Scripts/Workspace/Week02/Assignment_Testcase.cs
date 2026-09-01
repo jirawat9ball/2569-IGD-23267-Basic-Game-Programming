@@ -9,13 +9,24 @@ namespace Week02
     {
         // Add using for debug console
         private IAssignment assignment;
+        private UnityEngine.GameObject testGo;
 
         [SetUp]
         public void Setup()
         {
             // This will need to be set to the actual implementation class
-            assignment = new StudentSolution();
+            testGo = new UnityEngine.GameObject();
+            assignment = testGo.AddComponent<Assignment_Student_Week02>();
             AssignmentDebugConsole.Clear();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (testGo != null)
+            {
+                UnityEngine.Object.DestroyImmediate(testGo);
+            }
         }
 
         #region Level 1 - Simple Problem Tests

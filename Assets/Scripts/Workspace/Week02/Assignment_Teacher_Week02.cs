@@ -1,11 +1,40 @@
-using AssignmentSystem.Services;
 using UnityEngine;
-using Debug = AssignmentSystem.Services.AssignmentDebugConsole;
 
 namespace Week02
 {
-    public class StudentSolution : IAssignment
+    public class Assignment_Teacher_Week02 : MonoBehaviour, IAssignment
     {
+        [Header("As01 Variables")]
+        public bool isSixoClock;
+
+        [Header("As02 Variables")]
+        public string stringPassword;
+
+        [Header("As03 & As04 Variables")]
+        public int comparisonNumber;
+
+        [Header("As05 & As06 Variables")]
+        public int guessingNumber;
+        public int randomNumber;
+
+        [Header("As07 Variables")]
+        public string username;
+        public string identityPassword;
+        public int age;
+        public bool isPaid;
+
+        void Start()
+        {
+            // สามารถเปิด-ปิด คอมเมนต์เพื่อทดสอบทีละข้อได้
+            As01_SyntaxIf(isSixoClock);
+            As02_StringComparisonExample(stringPassword);
+            As03_NumberComparisonExample(comparisonNumber);
+            As04_AndOrOperatorExample(comparisonNumber);
+            As05_GuessingNumberExample(guessingNumber, randomNumber);
+            As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
+            As07_VerifyIdentityExample(username, identityPassword, age, isPaid);
+        }
+
         #region Examples
 
         public void As01_SyntaxIf(bool isSixoClock)
