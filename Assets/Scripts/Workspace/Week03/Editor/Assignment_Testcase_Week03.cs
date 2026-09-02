@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -64,7 +63,7 @@ namespace Week03
             src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");
             src = Regex.Replace(src, "'([^'\\\\]|\\\\.)*'", "' '");
 
-            int sig = src.IndexOf("public void " + methodName, StringComparison.Ordinal);
+            int sig = src.IndexOf("public void " + methodName, System.StringComparison.Ordinal);
             Assert.Greater(sig, -1, $"ไม่พบเมธอด public void {methodName} ในไฟล์ student");
 
             int open = src.IndexOf('{', sig);

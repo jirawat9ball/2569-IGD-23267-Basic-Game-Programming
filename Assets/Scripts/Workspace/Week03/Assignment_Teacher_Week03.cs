@@ -3,10 +3,6 @@ using Debug = AssignmentSystem.Services.AssignmentDebugConsole;
 
 namespace Week03
 {
-    /// <summary>
-    /// เฉลยอ้างอิงของ Week 03 (Testcase รันกับ Assignment_Student_Week03 ไม่ใช่ไฟล์นี้)
-    /// เก็บไว้คู่กับ pattern ของ Week 02
-    /// </summary>
     public class Assignment_Teacher_Week03 : MonoBehaviour, IAssignment
     {
         #region Array (ข้อ 1-6)

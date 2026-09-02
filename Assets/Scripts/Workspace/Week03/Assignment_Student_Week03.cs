@@ -39,7 +39,6 @@ namespace Week03
 
         void Start()
         {
-            // เปิด-ปิดคอมเมนต์เพื่อทดสอบทีละข้อได้
             Ex01_IronManSuit();
             Ex02_SpiderManAndBatMan();
             Ex03_AttackTarget(enemyHP, damage, target);
@@ -49,10 +48,6 @@ namespace Week03
 
         public void Ex01_IronManSuit()
         {
-            // Guideline: ประกาศ string[] IronManSuit ขนาด 7 ("Mark I"–"Mark VII")
-            // เก็บช่องแรกไว้ใน TonyStarkWear แล้วพิมพ์ "TonyStark Wear : <ค่า>"
-            // พิมพ์ "Room size IronManSuit : <ขนาด>"
-            // พิมพ์ "===All suit in collection===" แล้ววนลูปพิมพ์ทุกชุด
             string[] IronManSuit = new string[7]
             {
                 "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI", "Mark VII"
@@ -71,8 +66,6 @@ namespace Week03
 
         public void Ex02_SpiderManAndBatMan()
         {
-            // Guideline: spiderMan ประกาศแบบไม่ระบุขนาด (5 ชุด), BatMan ประกาศด้วย new string[4]
-            // พิมพ์ขนาดและเนื้อหาของทั้งสอง array
             string[] spiderMan =
             {
                 "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider", "Miles Morales", "Spider-Man 2099"
@@ -99,8 +92,6 @@ namespace Week03
 
         public void Ex03_AttackTarget(int[] enemyHP, int damage, int target)
         {
-            // Guideline: โจมตี (ลด HP) ตัวแรก -> ตัวสุดท้าย -> ตัวเป้าหมาย ตามลำดับ
-            // พิมพ์ "FirstEnemy hp :<hp>", "LastEnemy hp :<hp>", "TargetEnemy <target> hp :<hp>"
             int last = enemyHP.Length - 1;
 
             enemyHP[0] -= damage;
@@ -115,7 +106,6 @@ namespace Week03
 
         public void Ex04_RandomItemDrop(GameObject[] items)
         {
-            // Guideline: สุ่ม item ด้วย Random.Range แล้ว Instantiate จากนั้นพิมพ์ "Got item: <ชื่อ>"
             int index = Random.Range(0, items.Length);
             GameObject picked = items[index];
             Instantiate(picked);
@@ -124,7 +114,6 @@ namespace Week03
 
         public void Ex05_HealTarget(int[] enemyHP, int heal, int target)
         {
-            // Guideline: เหมือนข้อ 3 แต่บวก HP แทน (ตัวแรก -> ตัวสุดท้าย -> ตัวเป้าหมาย)
             int last = enemyHP.Length - 1;
 
             enemyHP[0] += heal;
@@ -139,7 +128,6 @@ namespace Week03
 
         public void Ex06_RandomDialogue(string[] npc1Dialogues)
         {
-            // Guideline: สุ่ม index ด้วย Random.Range แล้วพิมพ์บทสนทนานั้น
             int index = Random.Range(0, npc1Dialogues.Length);
             Debug.Log(npc1Dialogues[index]);
         }
@@ -150,7 +138,6 @@ namespace Week03
 
         public void Ex07_ForLoopBasic()
         {
-            // Guideline: ลูป 1 i 0..9 พิมพ์ "<10 : i" | คั่นด้วย "======================" | ลูป 2 i 1..10 พิมพ์ "<=10 : i"
             for (int i = 0; i < 10; i++)
             {
                 Debug.Log("<10 : " + i);
@@ -166,7 +153,6 @@ namespace Week03
 
         public void Ex08_ForLoopN(int n)
         {
-            // Guideline: วนลูป for จาก 0 ถึง n-1 พิมพ์ตัวเลขรอบนั้น
             for (int i = 0; i < n; i++)
             {
                 Debug.Log(i);
@@ -175,7 +161,6 @@ namespace Week03
 
         public void Ex09_ForLoopStep(string[] suiteNames)
         {
-            // Guideline: "======Log by One======" วนพิมพ์ทุกชุด | "======Log by Two======" วนพิมพ์ข้ามทีละ 2 (index 0,2,4...)
             Debug.Log("======Log by One======");
             for (int i = 0; i < suiteNames.Length; i++)
             {
@@ -191,7 +176,6 @@ namespace Week03
 
         public void Ex10_MultiplicationTable(int n)
         {
-            // Guideline: วนลูป for พิมพ์สูตรคูณแม่ n ตั้งแต่ 1 ถึง 12 รูปแบบ "n x i = (n*i)"
             for (int i = 1; i <= 12; i++)
             {
                 Debug.Log(n + " x " + i + " = " + (n * i));
@@ -204,7 +188,6 @@ namespace Week03
 
         public void Ex11_WhileLoopBasic()
         {
-            // Guideline: วนลูป while 0..9 พิมพ์ "while loop : i"
             int i = 0;
             while (i < 10)
             {
@@ -215,7 +198,6 @@ namespace Week03
 
         public void Ex12_WhileLoopN(int n)
         {
-            // Guideline: วนลูป while พิมพ์ตัวเลข 0 ถึง n-1
             int i = 0;
             while (i < n)
             {
@@ -226,7 +208,6 @@ namespace Week03
 
         public void Ex13_WhileLoopStep(string[] suiteNames)
         {
-            // Guideline: เหมือนข้อ 9 แต่ใช้ while loop
             Debug.Log("======Log by One======");
             int i = 0;
             while (i < suiteNames.Length)
@@ -246,7 +227,6 @@ namespace Week03
 
         public void Ex14_WhileLoopSum(int n)
         {
-            // Guideline: ใช้ while loop หาผลรวม 1..n แล้วพิมพ์ "ผลรวมของ n จาก 0 ถึง <n> คือ <sum>"
             int i = 1;
             int sum = 0;
             while (i <= n)
@@ -263,8 +243,6 @@ namespace Week03
 
         public void Ex15_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)
         {
-            // Guideline: วนลูป for ตามจำนวน HpEnemy, Instantiate โดยแกน X เพิ่มทีละ 1 (เริ่ม x=1)
-            // พิมพ์ "new enemy at position x = <x>"
             for (int i = 0; i < HpEnemy.Length; i++)
             {
                 GameObject spawned = Instantiate(Enemy);
@@ -275,9 +253,6 @@ namespace Week03
 
         public void Ex16_MoveToTarget(Transform positionToMove, float speed)
         {
-            // Guideline: วนลูปจนกว่า x ปัจจุบัน >= positionToMove.position.x
-            // เคลื่อนที่ด้วย transform.Translate(Vector3.right * speed * 0.1f)
-            // พิมพ์ transform.position.x.ToString("F2") ทุกรอบ
             int safety = 0;
             while (transform.position.x < positionToMove.position.x && safety < 10000)
             {
