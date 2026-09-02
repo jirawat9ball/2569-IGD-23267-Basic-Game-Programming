@@ -1,57 +1,59 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Reflection;
 using System;
 
-public class Week01
+namespace Week01
+{
+    public class Homework
 {
     [OneTimeSetUp]
     public void LoadTestScene()
     {
-        // บังคับเปิด Scene ที่ต้องการเทสต์ เพื่อให้ดึงค่าวัตถุใน Scene ได้
+        // เธเธฑเธเธเธฑเธเน€เธเธดเธ” Scene เธ—เธตเนเธ•เนเธญเธเธเธฒเธฃเน€เธ—เธชเธ•เน เน€เธเธทเนเธญเนเธซเนเธ”เธถเธเธเนเธฒเธงเธฑเธ•เธ–เธธเนเธ Scene เนเธ”เน
         EditorSceneManager.OpenScene("Assets/Scenes/Week01 Value.unity", OpenSceneMode.Single);
     }
 
     [Test]
-    public void _01_Check_CharacterName()
+    public void Lv01_Check_CharacterName()
     {
         CheckField("characterName", typeof(string));
     }
 
     [Test]
-    public void _02_Check_Level()
+    public void Lv02_Check_Level()
     {
         CheckField("level", typeof(int));
     }
 
     [Test]
-    public void _03_Check_MoveSpeed()
+    public void Lv03_Check_MoveSpeed()
     {
         CheckField("moveSpeed", typeof(float));
     }
 
     [Test]
-    public void _04_Check_IsAlive()
+    public void Lv04_Check_IsAlive()
     {
         CheckField("isAlive", typeof(bool));
     }
 
     [Test]
-    public void _05_Check_MaxHealth_InspectorVisible()
+    public void Lv05_Check_MaxHealth_InspectorVisible()
     {
         CheckField("maxHealth", typeof(int), true);
     }
 
     [Test]
-    public void _06_Check_CurrentHealth_Hidden()
+    public void Lv06_Check_CurrentHealth_Hidden()
     {
         CheckField("currentHealth", typeof(int), false);
     }
 
     [Test]
-    public void _07_Check_Level3_Variables()
+    public void Lv07_Check_Level3_Variables()
     {
         CheckField("NAME", typeof(string));
         CheckField("LASTNAME", typeof(string));
@@ -63,7 +65,7 @@ public class Week01
     }
 
     [Test]
-    public void _09_Check_Timer_And_Reset()
+    public void Lv09_Check_Timer_And_Reset()
     {
         CheckField("timer", typeof(float));
 
@@ -95,7 +97,7 @@ public class Week01
                     float newTimer = (float)timerField.GetValue(studentScript);
                     
                     // After Update, timer should be reset to 0 (or near 0 if Time.deltaTime was added before reset)
-                    Assert.IsTrue(newTimer < 1f, "❌ ตัวแปร timer ไม่ถูกรีเซ็ตกลับเป็น 0 เมื่อเวลาเกิน 3 วินาที (เขียนเงื่อนไข if(timer >= 3) รีเซ็ตค่าหรือยัง?)");
+                    Assert.IsTrue(newTimer < 1f, "โ เธ•เธฑเธงเนเธเธฃ timer เนเธกเนเธ–เธนเธเธฃเธตเน€เธเนเธ•เธเธฅเธฑเธเน€เธเนเธ 0 เน€เธกเธทเนเธญเน€เธงเธฅเธฒเน€เธเธดเธ 3 เธงเธดเธเธฒเธ—เธต (เน€เธเธตเธขเธเน€เธเธทเนเธญเธเนเธ if(timer >= 3) เธฃเธตเน€เธเนเธ•เธเนเธฒเธซเธฃเธทเธญเธขเธฑเธ?)");
                 }
 
                 // Restore
@@ -105,98 +107,98 @@ public class Week01
     }
 
     // =====================================
-    // แบบทดสอบระดับ 5
+    // เนเธเธเธ—เธ”เธชเธญเธเธฃเธฐเธ”เธฑเธ 5
     // =====================================
 
     [Test]
-    public void _10_Check_StartPosition()
+    public void Lv10_Check_StartPosition()
     {
         CheckField("StartPosition", typeof(Vector3), true);
     }
 
     [Test]
-    public void _11_Check_ColorPlayer()
+    public void Lv11_Check_ColorPlayer()
     {
         CheckField("colorPlayer", typeof(Color), true);
     }
 
     [Test]
-    public void _12_Check_PlayerMesh()
+    public void Lv12_Check_PlayerMesh()
     {
         CheckField("playerMesh", typeof(MeshRenderer), true);
-        CheckAssignment("playerMesh", false); // ต้องเป็น Scene Object
+        CheckAssignment("playerMesh", false); // เธ•เนเธญเธเน€เธเนเธ Scene Object
     }
 
     // =====================================
-    // แบบทดสอบระดับ 6
+    // เนเธเธเธ—เธ”เธชเธญเธเธฃเธฐเธ”เธฑเธ 6
     // =====================================
 
     [Test]
-    public void _13_Check_Heart_GameObject()
+    public void Lv13_Check_Heart_GameObject()
     {
         CheckField("Heart", typeof(GameObject), true);
-        CheckAssignment("Heart", true); // ต้องเป็น Asset (Prefab จากโฟลเดอร์)
+        CheckAssignment("Heart", true); // เธ•เนเธญเธเน€เธเนเธ Asset (Prefab เธเธฒเธเนเธเธฅเน€เธ”เธญเธฃเน)
     }
 
     [Test]
-    public void _14_Check_SpawnHeart_Transform()
+    public void Lv14_Check_SpawnHeart_Transform()
     {
         CheckField("SpawnHeart", typeof(Transform), true);
-        CheckAssignment("SpawnHeart", false); // ต้องเป็น Scene Object
+        CheckAssignment("SpawnHeart", false); // เธ•เนเธญเธเน€เธเนเธ Scene Object
     }
 
     [Test]
-    public void _15_Check_C1_FirstPersonMovement()
+    public void Lv15_Check_C1_FirstPersonMovement()
     {
         Type componentType = Type.GetType("FirstPersonMovement, Assembly-CSharp");
         if (componentType != null)
         {
             CheckField("C1", componentType, true);
-            CheckAssignment("C1", false); // ต้องเป็น Scene Object
+            CheckAssignment("C1", false); // เธ•เนเธญเธเน€เธเนเธ Scene Object
         }
         else
         {
-            Assert.Fail("❌ ไม่พบสคริปต์ FirstPersonMovement ในโปรเจกต์!");
+            Assert.Fail("โ เนเธกเนเธเธเธชเธเธฃเธดเธเธ•เน FirstPersonMovement เนเธเนเธเธฃเน€เธเธเธ•เน!");
         }
     }
 
     [Test]
-    public void _16_Check_C2_FirstPersonInterface()
+    public void Lv16_Check_C2_FirstPersonInterface()
     {
         Type componentType = Type.GetType("FirstPersonInterface, Assembly-CSharp");
         if (componentType != null)
         {
             CheckField("C2", componentType, true);
-            CheckAssignment("C2", false); // ต้องเป็น Scene Object
+            CheckAssignment("C2", false); // เธ•เนเธญเธเน€เธเนเธ Scene Object
         }
         else
         {
-            Assert.Fail("❌ ไม่พบสคริปต์ FirstPersonInterface ในโปรเจกต์!");
+            Assert.Fail("โ เนเธกเนเธเธเธชเธเธฃเธดเธเธ•เน FirstPersonInterface เนเธเนเธเธฃเน€เธเธเธ•เน!");
         }
     }
 
     private void CheckField(string varName, Type expectedType, bool? shouldBeExposed = null)
     {
-        // ใช้ Reflection เพื่อดึงคลาส Assignment_Student_Week01 จากโปรเจกต์หลัก (Assembly-CSharp) 
+        // เนเธเน Reflection เน€เธเธทเนเธญเธ”เธถเธเธเธฅเธฒเธช Assignment_Student_Week01 เธเธฒเธเนเธเธฃเน€เธเธเธ•เนเธซเธฅเธฑเธ (Assembly-CSharp) 
         Type studentType = Type.GetType("Assignment_Student_Week01, Assembly-CSharp");
         
-        Assert.IsNotNull(studentType, "❌ ไม่พบคลาส 'Assignment_Student_Week01' ในโปรเจกต์ (ลบไฟล์สคริปต์ไปหรือเปล่า?)");
+        Assert.IsNotNull(studentType, "โ เนเธกเนเธเธเธเธฅเธฒเธช 'Assignment_Student_Week01' เนเธเนเธเธฃเน€เธเธเธ•เน (เธฅเธเนเธเธฅเนเธชเธเธฃเธดเธเธ•เนเนเธเธซเธฃเธทเธญเน€เธเธฅเนเธฒ?)");
 
         FieldInfo field = studentType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         
-        Assert.IsNotNull(field, $"❌ ไม่พบตัวแปรชื่อ '{varName}' (ตรวจสอบตัวพิมพ์เล็ก-พิมพ์ใหญ่ให้ตรงเป๊ะ)");
-        Assert.AreEqual(expectedType, field.FieldType, $"❌ ตัวแปร '{varName}' ชนิดผิด! ควรจะเป็น {expectedType.Name} แต่ตอนนี้เป็น {field.FieldType.Name}");
+        Assert.IsNotNull(field, $"โ เนเธกเนเธเธเธ•เธฑเธงเนเธเธฃเธเธทเนเธญ '{varName}' (เธ•เธฃเธงเธเธชเธญเธเธ•เธฑเธงเธเธดเธกเธเนเน€เธฅเนเธ-เธเธดเธกเธเนเนเธซเธเนเนเธซเนเธ•เธฃเธเน€เธเนเธฐ)");
+        Assert.AreEqual(expectedType, field.FieldType, $"โ เธ•เธฑเธงเนเธเธฃ '{varName}' เธเธเธดเธ”เธเธดเธ”! เธเธงเธฃเธเธฐเน€เธเนเธ {expectedType.Name} เนเธ•เนเธ•เธญเธเธเธตเนเน€เธเนเธ {field.FieldType.Name}");
 
         if (shouldBeExposed.HasValue)
         {
             bool isExposed = field.IsPublic || Attribute.IsDefined(field, typeof(SerializeField));
             if (shouldBeExposed.Value)
             {
-                Assert.IsTrue(isExposed, $"⚠️ ตัวแปร '{varName}' ควรตั้งค่าเป็น public หรือเพิ่ม [SerializeField] ให้ปรับค่าใน Inspector ได้");
+                Assert.IsTrue(isExposed, $"โ ๏ธ เธ•เธฑเธงเนเธเธฃ '{varName}' เธเธงเธฃเธ•เธฑเนเธเธเนเธฒเน€เธเนเธ public เธซเธฃเธทเธญเน€เธเธดเนเธก [SerializeField] เนเธซเนเธเธฃเธฑเธเธเนเธฒเนเธ Inspector เนเธ”เน");
             }
             else
             {
-                Assert.IsFalse(isExposed, $"⚠️ ตัวแปร '{varName}' ควรตั้งค่าเป็น private ไม่ให้แสดงใน Inspector");
+                Assert.IsFalse(isExposed, $"โ ๏ธ เธ•เธฑเธงเนเธเธฃ '{varName}' เธเธงเธฃเธ•เธฑเนเธเธเนเธฒเน€เธเนเธ private เนเธกเนเนเธซเนเนเธชเธ”เธเนเธ Inspector");
             }
         }
     }
@@ -204,7 +206,7 @@ public class Week01
     private void CheckAssignment(string varName, bool shouldBeAsset)
     {
         Type studentType = Type.GetType("Assignment_Student_Week01, Assembly-CSharp");
-        Assert.IsNotNull(studentType, "❌ ไม่พบคลาส 'Assignment_Student_Week01'");
+        Assert.IsNotNull(studentType, "โ เนเธกเนเธเธเธเธฅเธฒเธช 'Assignment_Student_Week01'");
 
         UnityEngine.Object studentScript = null;
         foreach (var mb in Resources.FindObjectsOfTypeAll<MonoBehaviour>())
@@ -216,10 +218,10 @@ public class Week01
             }
         }
 
-        Assert.IsNotNull(studentScript, "❌ ไม่พบ Component 'Assignment_Student_Week01' ใน Scene ปัจจุบัน (เปิด Scene ถูกต้องและลากสคริปต์ใส่ GameObject หรือยัง?)");
+        Assert.IsNotNull(studentScript, "โ เนเธกเนเธเธ Component 'Assignment_Student_Week01' เนเธ Scene เธเธฑเธเธเธธเธเธฑเธ (เน€เธเธดเธ” Scene เธ–เธนเธเธ•เนเธญเธเนเธฅเธฐเธฅเธฒเธเธชเธเธฃเธดเธเธ•เนเนเธชเน GameObject เธซเธฃเธทเธญเธขเธฑเธ?)");
 
         FieldInfo field = studentType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        Assert.IsNotNull(field, $"❌ ไม่พบตัวแปรชื่อ '{varName}'");
+        Assert.IsNotNull(field, $"โ เนเธกเนเธเธเธ•เธฑเธงเนเธเธฃเธเธทเนเธญ '{varName}'");
 
         object fieldValue = field.GetValue(studentScript);
         
@@ -227,7 +229,7 @@ public class Week01
         if (fieldValue == null) isNull = true;
         else if (fieldValue is UnityEngine.Object uObj && uObj == null) isNull = true;
 
-        Assert.IsFalse(isNull, $"❌ ยังไม่ได้ลากออบเจกต์มาใส่ในช่อง '{varName}' ใน Inspector");
+        Assert.IsFalse(isNull, $"โ เธขเธฑเธเนเธกเนเนเธ”เนเธฅเธฒเธเธญเธญเธเน€เธเธเธ•เนเธกเธฒเนเธชเนเนเธเธเนเธญเธ '{varName}' เนเธ Inspector");
 
         bool isAsset = false;
         if (fieldValue is GameObject go)
@@ -241,11 +243,13 @@ public class Week01
         
         if (shouldBeAsset)
         {
-            Assert.IsTrue(isAsset, $"❌ ช่อง '{varName}' ผิดพลาด! ต้องลาก Prefab (หรือ Asset) จากหน้าต่าง Project ด้านล่างมาใส่ ห้ามลากจาก Hierarchy ใน Scene");
+            Assert.IsTrue(isAsset, $"โ เธเนเธญเธ '{varName}' เธเธดเธ”เธเธฅเธฒเธ”! เธ•เนเธญเธเธฅเธฒเธ Prefab (เธซเธฃเธทเธญ Asset) เธเธฒเธเธซเธเนเธฒเธ•เนเธฒเธ Project เธ”เนเธฒเธเธฅเนเธฒเธเธกเธฒเนเธชเน เธซเนเธฒเธกเธฅเธฒเธเธเธฒเธ Hierarchy เนเธ Scene");
         }
         else
         {
-            Assert.IsFalse(isAsset, $"❌ ช่อง '{varName}' ผิดพลาด! ต้องลากวัตถุจากหน้าต่าง Hierarchy (ของที่อยู่ใน Scene) มาใส่");
+            Assert.IsFalse(isAsset, $"โ เธเนเธญเธ '{varName}' เธเธดเธ”เธเธฅเธฒเธ”! เธ•เนเธญเธเธฅเธฒเธเธงเธฑเธ•เธ–เธธเธเธฒเธเธซเธเนเธฒเธ•เนเธฒเธ Hierarchy (เธเธญเธเธ—เธตเนเธญเธขเธนเนเนเธ Scene) เธกเธฒเนเธชเน");
         }
     }
+    }
 }
+
