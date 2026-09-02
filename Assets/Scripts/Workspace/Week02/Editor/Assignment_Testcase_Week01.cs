@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 using System.Reflection;
 using System;
 
-namespace Week01
+namespace Week01_Value
 {
     public class Lecture
 {
@@ -252,5 +252,6 @@ namespace Week01
     }
     }
 }
+
 
 

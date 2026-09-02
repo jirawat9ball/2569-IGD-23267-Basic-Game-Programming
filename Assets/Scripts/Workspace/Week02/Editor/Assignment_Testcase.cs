@@ -1,8 +1,10 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AssignmentSystem.Services;
 using NUnit.Framework;
 
-namespace Week02
+using Week02;
+
+namespace Week02_If
 {
     public class TestBase
     {
@@ -223,10 +225,10 @@ namespace Week02
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(1, 10, 20, "คุณได้รับสินค้าแล้ว\nคุณได้รับเงินทอน 10 บาท", TestName = "PurchasingSystemExample_EnoughMoneyWithChange")]
-        [TestCase(1, 10, 10, "คุณได้รับสินค้าแล้ว", TestName = "PurchasingSystemExample_ExactMoney")]
-        [TestCase(1, 10, 5, "คุณมีเงินไม่พอ", TestName = "PurchasingSystemExample_NotEnoughMoney")]
-        [TestCase(0, 10, 20, "สินค้าหมด", TestName = "PurchasingSystemExample_OutOfStock")]
+        [TestCase(1, 10, 20, "เธเธธเธ“เนเธ”เนเธฃเธฑเธเธชเธดเธเธเนเธฒเนเธฅเนเธง\nเธเธธเธ“เนเธ”เนเธฃเธฑเธเน€เธเธดเธเธ—เธญเธ 10 เธเธฒเธ—", TestName = "PurchasingSystemExample_EnoughMoneyWithChange")]
+        [TestCase(1, 10, 10, "เธเธธเธ“เนเธ”เนเธฃเธฑเธเธชเธดเธเธเนเธฒเนเธฅเนเธง", TestName = "PurchasingSystemExample_ExactMoney")]
+        [TestCase(1, 10, 5, "เธเธธเธ“เธกเธตเน€เธเธดเธเนเธกเนเธเธญ", TestName = "PurchasingSystemExample_NotEnoughMoney")]
+        [TestCase(0, 10, 20, "เธชเธดเธเธเนเธฒเธซเธกเธ”", TestName = "PurchasingSystemExample_OutOfStock")]
         public void Ex01_PurchasingSystemExample(int quantity, int price, int payment, string expected)
         {
             assignment.Ex01_PurchasingSystemExample(quantity, price, payment);
@@ -234,12 +236,12 @@ namespace Week02
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(0, 0, "เสมอ", TestName = "RockPaperScissorsExample_DrawRock")]
-        [TestCase(0, 2, "คุณชนะ!", TestName = "RockPaperScissorsExample_RockBeatsScissors")]
-        [TestCase(1, 0, "คุณชนะ!", TestName = "RockPaperScissorsExample_PaperBeatsRock")]
-        [TestCase(2, 1, "คุณชนะ!", TestName = "RockPaperScissorsExample_ScissorsBeatsPaper")]
-        [TestCase(2, 0, "คุณแพ้!", TestName = "RockPaperScissorsExample_ScissorsLosesToRock")]
-        [TestCase(3, 0, "กรุณาเลือกเป็นตัวเลขที่ถูกต้อง", TestName = "RockPaperScissorsExample_InvalidUserChoice")]
+        [TestCase(0, 0, "เน€เธชเธกเธญ", TestName = "RockPaperScissorsExample_DrawRock")]
+        [TestCase(0, 2, "เธเธธเธ“เธเธเธฐ!", TestName = "RockPaperScissorsExample_RockBeatsScissors")]
+        [TestCase(1, 0, "เธเธธเธ“เธเธเธฐ!", TestName = "RockPaperScissorsExample_PaperBeatsRock")]
+        [TestCase(2, 1, "เธเธธเธ“เธเธเธฐ!", TestName = "RockPaperScissorsExample_ScissorsBeatsPaper")]
+        [TestCase(2, 0, "เธเธธเธ“เนเธเน!", TestName = "RockPaperScissorsExample_ScissorsLosesToRock")]
+        [TestCase(3, 0, "เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเน€เธเนเธเธ•เธฑเธงเน€เธฅเธเธ—เธตเนเธ–เธนเธเธ•เนเธญเธ", TestName = "RockPaperScissorsExample_InvalidUserChoice")]
         public void Ex02_RockPaperScissorsExample(int userChoice, int computerChoice, string expected)
         {
             assignment.Ex02_RockPaperScissorsExample(userChoice, computerChoice);
@@ -317,3 +319,4 @@ namespace Week02
         }
     }
 }
+
