@@ -7,7 +7,7 @@ using System;
 
 namespace Week01
 {
-    public class Homework
+    public class Lecture
 {
     [OneTimeSetUp]
     public void LoadTestScene()
@@ -17,43 +17,43 @@ namespace Week01
     }
 
     [Test]
-    public void Lv01_Check_CharacterName()
+    public void As01_Check_CharacterName()
     {
         CheckField("characterName", typeof(string));
     }
 
     [Test]
-    public void Lv02_Check_Level()
+    public void As02_Check_Level()
     {
         CheckField("level", typeof(int));
     }
 
     [Test]
-    public void Lv03_Check_MoveSpeed()
+    public void As03_Check_MoveSpeed()
     {
         CheckField("moveSpeed", typeof(float));
     }
 
     [Test]
-    public void Lv04_Check_IsAlive()
+    public void As04_Check_IsAlive()
     {
         CheckField("isAlive", typeof(bool));
     }
 
     [Test]
-    public void Lv05_Check_MaxHealth_InspectorVisible()
+    public void As05_Check_MaxHealth_InspectorVisible()
     {
         CheckField("maxHealth", typeof(int), true);
     }
 
     [Test]
-    public void Lv06_Check_CurrentHealth_Hidden()
+    public void As06_Check_CurrentHealth_Hidden()
     {
         CheckField("currentHealth", typeof(int), false);
     }
 
     [Test]
-    public void Lv07_Check_Level3_Variables()
+    public void As07_Check_Level3_Variables()
     {
         CheckField("NAME", typeof(string));
         CheckField("LASTNAME", typeof(string));
@@ -65,7 +65,7 @@ namespace Week01
     }
 
     [Test]
-    public void Lv09_Check_Timer_And_Reset()
+    public void As09_Check_Timer_And_Reset()
     {
         CheckField("timer", typeof(float));
 
@@ -111,19 +111,19 @@ namespace Week01
     // =====================================
 
     [Test]
-    public void Lv10_Check_StartPosition()
+    public void As10_Check_StartPosition()
     {
         CheckField("StartPosition", typeof(Vector3), true);
     }
 
     [Test]
-    public void Lv11_Check_ColorPlayer()
+    public void As11_Check_ColorPlayer()
     {
         CheckField("colorPlayer", typeof(Color), true);
     }
 
     [Test]
-    public void Lv12_Check_PlayerMesh()
+    public void As12_Check_PlayerMesh()
     {
         CheckField("playerMesh", typeof(MeshRenderer), true);
         CheckAssignment("playerMesh", false); // เธ•เนเธญเธเน€เธเนเธ Scene Object
@@ -134,21 +134,21 @@ namespace Week01
     // =====================================
 
     [Test]
-    public void Lv13_Check_Heart_GameObject()
+    public void As13_Check_Heart_GameObject()
     {
         CheckField("Heart", typeof(GameObject), true);
         CheckAssignment("Heart", true); // เธ•เนเธญเธเน€เธเนเธ Asset (Prefab เธเธฒเธเนเธเธฅเน€เธ”เธญเธฃเน)
     }
 
     [Test]
-    public void Lv14_Check_SpawnHeart_Transform()
+    public void As14_Check_SpawnHeart_Transform()
     {
         CheckField("SpawnHeart", typeof(Transform), true);
         CheckAssignment("SpawnHeart", false); // เธ•เนเธญเธเน€เธเนเธ Scene Object
     }
 
     [Test]
-    public void Lv15_Check_C1_FirstPersonMovement()
+    public void As15_Check_C1_FirstPersonMovement()
     {
         Type componentType = Type.GetType("FirstPersonMovement, Assembly-CSharp");
         if (componentType != null)
@@ -163,7 +163,7 @@ namespace Week01
     }
 
     [Test]
-    public void Lv16_Check_C2_FirstPersonInterface()
+    public void As16_Check_C2_FirstPersonInterface()
     {
         Type componentType = Type.GetType("FirstPersonInterface, Assembly-CSharp");
         if (componentType != null)
@@ -252,4 +252,5 @@ namespace Week01
     }
     }
 }
+
 
