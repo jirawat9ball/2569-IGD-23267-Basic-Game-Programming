@@ -1,13 +1,15 @@
 {
-    "name": "Workspace",
+    "name": "Workspace.Editor",
     "rootNamespace": "",
     "references": [
+        "Workspace",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Components",
-        "Unity.TextMeshPro"
+        "Components"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -5,6 +5,50 @@ using UnityEditor.TestTools.TestRunner.Api;
 [CustomEditor(typeof(Assignment_Submitter_Week02))]
 public class Assignment_SubmitterEditor_Week02 : Editor
 {
+        [MenuItem("Assignment/Submit Score Week 02 %g")]
+    public static void SubmitScoreFromMenu()
+    {
+        var submitter = Object.FindObjectOfType<Assignment_Submitter_Week02>();
+        if (submitter == null)
+        {
+            Debug.LogError("? ? GameObject ? Assignment_Submitter_Week02  Scene! ??? Scene ??");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "???" || string.IsNullOrEmpty(submitter.studentName))
+        {
+            Debug.LogError("? ? ???  -? ?????");
+            return;
+        }
+
+        if (submitter.section == Assignment_Submitter_Week02.StudentSection.Other && string.IsNullOrEmpty(submitter.customSection))
+        {
+            Debug.LogError("? ??? 'Other' ????? Custom Section ?");
+            return;
+        }
+
+        Debug.Log("? ??????...");
+
+        TestRunnerCallback receiver = ScriptableObject.CreateInstance<TestRunnerCallback>(); 
+        receiver.hideFlags = HideFlags.HideAndDontSave;
+        
+        receiver.studentID = submitter.studentID;
+        receiver.studentName = submitter.studentName;
+        receiver.sectionString = (submitter.section == Assignment_Submitter_Week02.StudentSection.Other) ? submitter.customSection : submitter.section.ToString().Replace("_", " ");
+        receiver.weekName = submitter.weekName;
+
+        var prop = typeof(Assignment_Submitter_Week02).GetProperty("googleSheetWebAppURL", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        receiver.googleSheetWebAppURL = (string)prop.GetValue(submitter);
+
+        var api = ScriptableObject.CreateInstance<TestRunnerApi>();
+        api.RegisterCallbacks(receiver);
+
+        api.Execute(new ExecutionSettings(new Filter() { 
+            testMode = TestMode.EditMode,
+            assemblyNames = new string[] { "Workspace.Editor" } 
+        }));
+    }
+
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
@@ -34,7 +78,7 @@ public class Assignment_SubmitterEditor_Week02 : Editor
 
             Debug.Log("? กำลังคำนวณคะแนนและส่งงาน...");
 
-            TestRunnerCallback receiver = ScriptableObject.CreateInstance<TestRunnerCallback>();
+            TestRunnerCallback receiver = ScriptableObject.CreateInstance<TestRunnerCallback>(); receiver.hideFlags = HideFlags.HideAndDontSave;
             
             receiver.studentID = submitter.studentID;
             receiver.studentName = submitter.studentName;
@@ -50,7 +94,7 @@ public class Assignment_SubmitterEditor_Week02 : Editor
             // รันแบบ EditMode เพื่อความรวดเร็วและไม่กระตุก (เหมือนวีค 1)
             api.Execute(new ExecutionSettings(new Filter() { 
                 testMode = TestMode.EditMode,
-                assemblyNames = new string[] { "Workspace.dll" } 
+                assemblyNames = new string[] { "Workspace.Editor" } 
             }));
         }
     }
@@ -87,28 +131,33 @@ public class TestRunnerCallback : ScriptableObject, ICallbacks
 
     private void SendScoreToGoogleSheet(string score, string maxScore)
     {
-        try
+        UnityEditor.EditorApplication.CallbackFunction updateCallback = null;
+        UnityEngine.WWWForm form = new UnityEngine.WWWForm();
+        form.AddField("studentId", studentID);
+        form.AddField("studentName", studentName);
+        form.AddField("section", sectionString);
+        form.AddField("score", score);
+        form.AddField("maxScore", maxScore);
+        form.AddField("week", weekName);
+        UnityEngine.Networking.UnityWebRequest www = UnityEngine.Networking.UnityWebRequest.Post(googleSheetWebAppURL, form);
+        www.SendWebRequest();
+        updateCallback = () =>
         {
-            using (var client = new System.Net.WebClient())
+            if (www.isDone)
             {
-                var values = new System.Collections.Specialized.NameValueCollection();
-                values["studentId"] = studentID;
-                values["studentName"] = studentName;
-                values["section"] = sectionString;
-                values["score"] = score;
-                values["maxScore"] = maxScore;
-                values["week"] = weekName;
-
-                byte[] response = client.UploadValues(googleSheetWebAppURL, values);
-                string responseString = System.Text.Encoding.UTF8.GetString(response);
-                
-                Debug.Log($"<color=green>? ส่งงานเรียบร้อยแล้ว!</color> ข้อมูลถูกบันทึกลง Google Sheet แท็บ Week02 (คะแนน {score}/{maxScore})");
+                if (www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+                {
+                    UnityEngine.Debug.LogError("Error: " + www.error);
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("<color=green>Success!</color> Score " + score + "/" + maxScore + " submitted to Google Sheet.");
+                }
+                www.Dispose();
+                UnityEditor.EditorApplication.update -= updateCallback;
             }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("? การส่งข้อมูลล้มเหลว: " + e.Message);
-        }
+        };
+        UnityEditor.EditorApplication.update += updateCallback;
     }
 
     public void RunStarted(ITestAdaptor testsToRun) { }
