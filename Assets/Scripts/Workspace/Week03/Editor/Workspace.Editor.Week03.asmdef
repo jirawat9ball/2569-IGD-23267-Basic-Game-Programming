@@ -1,0 +1,21 @@
+{
+    "name": "Workspace.Editor.Week03",
+    "rootNamespace": "",
+    "references": [
+        "Workspace",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Components"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
