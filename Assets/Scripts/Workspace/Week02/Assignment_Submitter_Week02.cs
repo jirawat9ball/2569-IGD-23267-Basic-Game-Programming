@@ -18,16 +18,16 @@ public class Assignment_Submitter_Week02 : MonoBehaviour
         Sec_103,
         Other
     }
-    [Tooltip("เลือกกลุ่มเรียน")]
+    [Tooltip("เลือก Section ที่เรียน")]
     public StudentSection section = StudentSection.Sec_001;
     
-    [Tooltip("หากเลือก Other ให้ระบุกลุ่มเรียนที่นี่")]
+    [Tooltip("หากเลือก Other ให้ระบุ Section อื่นๆ")]
     public string customSection = "";
 
     [HideInInspector]
     public string weekName = "Week02";
     
-    // ซ่อนลิงก์ Web App URL ด้วยการเข้ารหัส Base64 (เหมือน Week 01)
+    // ซ่อนการเก็บ Web App URL ด้วยการเข้ารหัส Base64 (ป้องกันการแก้ไข)
     private string googleSheetWebAppURL
     {
         get
@@ -44,11 +44,11 @@ public class Assignment_Submitter_Week02 : MonoBehaviour
     }
 
     /// <summary>
-    /// ถูกเรียกจาก Editor Script หลังจาก NUnit Test Runner รันเสร็จและได้คะแนนแล้ว
+    /// ฟังก์ชันนี้ถูกเรียกโดย Editor Script หลังจากรัน NUnit Test Runner เสร็จแล้วเพื่อส่งคะแนน
     /// </summary>
     public void SendScoreToGoogleSheet(string score, string maxScore)
     {
-        Debug.Log($"⏳ กำลังส่งงาน Week 02... (คะแนนที่ได้ {score}/{maxScore})");
+        Debug.Log($"ส่งคะแนน Week 02... (คะแนนที่ได้ {score}/{maxScore})");
         
         // ส่ง HTTP Request ผ่าน UnityEditor.EditorApplication.update เพื่อให้ทำงานใน EditMode ได้
 #if UNITY_EDITOR
@@ -73,11 +73,11 @@ public class Assignment_Submitter_Week02 : MonoBehaviour
             {
                 if (www.result != UnityWebRequest.Result.Success)
                 {
-                    Debug.LogError("❌ การส่งข้อมูลล้มเหลว: " + www.error);
+                    Debug.LogError("เกิดข้อผิดพลาดในการส่งข้อมูล : " + www.error);
                 }
                 else
                 {
-                    Debug.Log("<color=green>✅ ส่งงานเรียบร้อยแล้ว!</color> ข้อมูลถูกบันทึกลง Google Sheet แท็บ Week02");
+                    Debug.Log("<color=green>ส่งข้อมูลสำเร็จ!</color> คะแนนถูกส่งไปยัง Google Sheet เรียบร้อยแล้ว");
                 }
                 www.Dispose();
                 UnityEditor.EditorApplication.update -= updateCallback;

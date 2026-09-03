@@ -5,29 +5,29 @@ using UnityEditor.TestTools.TestRunner.Api;
 [CustomEditor(typeof(Assignment_Submitter_Week02))]
 public class Assignment_SubmitterEditor_Week02 : Editor
 {
-        [MenuItem("Assignment/Submit Score Week 02 %g")]
+    [MenuItem("Assignment/Submit Score Week 02 %g")]
     public static void SubmitScoreFromMenu()
     {
         var submitter = Object.FindObjectOfType<Assignment_Submitter_Week02>();
         if (submitter == null)
         {
-            Debug.LogError("? ? GameObject ? Assignment_Submitter_Week02  Scene! ??? Scene ??");
+            Debug.LogError("ไม่พบ GameObject ชื่อ Assignment_Submitter_Week02 ใน Scene! กรุณาเพิ่มลงใน Scene ด้วยครับ");
             return;
         }
 
-        if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "???" || string.IsNullOrEmpty(submitter.studentName))
+        if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "รหัสนักศึกษา" || string.IsNullOrEmpty(submitter.studentName))
         {
-            Debug.LogError("? ? ???  -? ?????");
+            Debug.LogError("กรุณาใส่ รหัสนักศึกษา และ ชื่อ-นามสกุล");
             return;
         }
 
         if (submitter.section == Assignment_Submitter_Week02.StudentSection.Other && string.IsNullOrEmpty(submitter.customSection))
         {
-            Debug.LogError("? ??? 'Other' ????? Custom Section ?");
+            Debug.LogError("หากเลือก 'Other' กรุณาระบุ Section ในช่อง Custom Section ด้วยครับ");
             return;
         }
 
-        Debug.Log("? ??????...");
+        Debug.Log("กำลังเตรียมส่งคะแนน...");
 
         TestRunnerCallback receiver = ScriptableObject.CreateInstance<TestRunnerCallback>(); 
         receiver.hideFlags = HideFlags.HideAndDontSave;
@@ -45,7 +45,8 @@ public class Assignment_SubmitterEditor_Week02 : Editor
 
         api.Execute(new ExecutionSettings(new Filter() { 
             testMode = TestMode.EditMode,
-            assemblyNames = new string[] { "Workspace.Editor" } 
+            assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+            groupNames = new string[] { submitter.weekName }
         }));
     }
 
@@ -62,21 +63,21 @@ public class Assignment_SubmitterEditor_Week02 : Editor
         buttonStyle.fontSize = 14;
         buttonStyle.fixedHeight = 40;
         
-        if (GUILayout.Button("?? �觧ҹ��� Google Sheet", buttonStyle))
+        if (GUILayout.Button("ส่งงานเข้า Google Sheet", buttonStyle))
         {
-            if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "���ʹѡ�֡��" || string.IsNullOrEmpty(submitter.studentName))
+            if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "รหัสนักศึกษา" || string.IsNullOrEmpty(submitter.studentName))
             {
-                Debug.LogError("? ��س���� ���ʹѡ�֡�� ��� ����-���ʡ�� ������º���¡�͹�觧ҹ");
+                Debug.LogError("กรุณาใส่ รหัสนักศึกษา และ ชื่อ-นามสกุล ก่อนส่งงาน");
                 return;
             }
 
             if (submitter.section == Assignment_Submitter_Week02.StudentSection.Other && string.IsNullOrEmpty(submitter.customSection))
             {
-                Debug.LogError("? �س���͡��������¹ 'Other' ��س��кء�������¹㹪�ͧ Custom Section ���¤�Ѻ");
+                Debug.LogError("หากเลือก 'Other' กรุณาระบุ Section ในช่อง Custom Section ด้วยครับ");
                 return;
             }
 
-            Debug.Log("? ���ѧ�ӹǳ��ṹ����觧ҹ...");
+            Debug.Log("กำลังตรวจคะแนนและส่งงาน...");
 
             TestRunnerCallback receiver = ScriptableObject.CreateInstance<TestRunnerCallback>(); receiver.hideFlags = HideFlags.HideAndDontSave;
             
@@ -91,10 +92,11 @@ public class Assignment_SubmitterEditor_Week02 : Editor
             var api = ScriptableObject.CreateInstance<TestRunnerApi>();
             api.RegisterCallbacks(receiver);
 
-            // �ѹẺ EditMode ���ͤ����Ǵ�����������еء (����͹�դ 1)
+            // รัน EditMode เพื่อตรวจสอบ (เหมือนการรัน Test) โดยกรองเฉพาะประจำสัปดาห์นั้น
             api.Execute(new ExecutionSettings(new Filter() { 
                 testMode = TestMode.EditMode,
-                assemblyNames = new string[] { "Workspace.Editor" } 
+                assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+                groupNames = new string[] { submitter.weekName }
             }));
         }
     }
@@ -116,11 +118,11 @@ public class TestRunnerCallback : ScriptableObject, ICallbacks
 
         if (totalCount == 0)
         {
-            Debug.LogError("? ��辺�ʵ��� �к��觤�ṹ 0/0");
+            Debug.LogError("ไม่พบการทดสอบ ได้คะแนน 0/0");
         }
         else
         {
-            Debug.Log($"? �ӹǳ��ṹ�������! �س���ṹ {passCount}/{totalCount}");
+            Debug.Log($"ตรวจคะแนนเสร็จสิ้น! คุณได้คะแนน {passCount}/{totalCount}");
         }
 
         SendScoreToGoogleSheet(passCount.ToString(), totalCount.ToString());

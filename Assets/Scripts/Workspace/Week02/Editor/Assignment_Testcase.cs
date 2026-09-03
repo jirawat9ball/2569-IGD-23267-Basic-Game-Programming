@@ -1,23 +1,24 @@
 using System.Diagnostics;
-using AssignmentSystem.Services;
+
 using NUnit.Framework;
 
-namespace Week02
+using Week02;
+
+using Workspace.Core;
+
+namespace Week02_If
 {
-    // Add using for debug console
-    public class Assignment_Testcase
+    public class TestBase
     {
-        // Add using for debug console
-        private IAssignment assignment;
-        private UnityEngine.GameObject testGo;
+        protected IAssignment assignment;
+        protected UnityEngine.GameObject testGo;
 
         [SetUp]
         public void Setup()
         {
-            // This will need to be set to the actual implementation class
             testGo = new UnityEngine.GameObject();
             assignment = testGo.AddComponent<Assignment_Student_Week02>();
-            AssignmentDebugConsole.Clear();
+            Workspace.Core.SimpleDebugConsole.Clear();
         }
 
         [TearDown]
@@ -28,21 +29,82 @@ namespace Week02
                 UnityEngine.Object.DestroyImmediate(testGo);
             }
         }
+    }
 
-        #region Level 1 - Simple Problem Tests
-
-
+    public class Lecture : TestBase
+    {
         [TestCase(true, "You can get in\nCrack Crack!!!!", TestName = "CheckSyntax_true", Description = "Checks if is six o clock")]
         [TestCase(false, "Crack Crack!!!!", TestName = "CheckSyntax_false", Description = "Checks if is not six o clock")]
         public void AS01_Syntax_AllCases(bool istrue, string expected)
         {
             assignment.As01_SyntaxIf(istrue);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
+        [TestCase("Moon", TestName = "StringComparisonExample_WithMoonPassword", Description = "Tests StringComparisonExample with 'Moon' (correct) password")]
+        [TestCase("Sun", TestName = "StringComparisonExample_WithSunPassword", Description = "Tests StringComparisonExample with 'Sun' (incorrect) password")]
+        public void As02_StringComparisonExample(string password)
+        {
+            assignment.As02_StringComparisonExample(password);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            string expected = password == "Moon" ? "password is correct" : "wrong password";
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
 
+        [TestCase(11, "My Number > 10\nMy Number >= 10\nMy Number != 10", TestName = "NumberComparisonExample_GreaterThan10")]
+        [TestCase(10, "My Number == 10\nMy Number >= 10\nMy Number <= 10", TestName = "NumberComparisonExample_Equal10")]
+        [TestCase(9, "My Number < 10\nMy Number <= 10\nMy Number != 10", TestName = "NumberComparisonExample_LessThan10")]
+        public void As03_NumberComparisonExample(int number, string expected)
+        {
+            assignment.As03_NumberComparisonExample(number);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
 
+        [TestCase(10, "My Number 8 > < 12\nMy Number or 8 || 12", TestName = "AndOrOperatorExample_10")]
+        [TestCase(7, "My Number or 8 || 12", TestName = "AndOrOperatorExample_7")]
+        [TestCase(13, "My Number or 8 || 12", TestName = "AndOrOperatorExample_13")]
+        public void As04_AndOrOperatorExample(int number, string expected)
+        {
+            assignment.As04_AndOrOperatorExample(number);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
+
+        [TestCase(5, 5, "Congratulations! You guessed the correct number.", TestName = "GuessingNumberExample_Correct")]
+        [TestCase(3, 5, "I guess we can just agree to disagree.", TestName = "GuessingNumberExample_Incorrect")]
+        public void As05_GuessingNumberExample(int guessingNumber, int randomNumber, string expected)
+        {
+            assignment.As05_GuessingNumberExample(guessingNumber, randomNumber);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
+
+        [TestCase(3, 5, "Too low! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooLow")]
+        [TestCase(7, 5, "Too high! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooHigh")]
+        [TestCase(5, 5, "Congratulations! We are same mind.", TestName = "GuessingNumberMoreOrLessExample_Correct")]
+        public void As06_GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber, string expected)
+        {
+            assignment.As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
+
+        [TestCase("user", "user123", 20, true, "You have user access.\nwelcome vip member.\nYou have access to exclusive content.", TestName = "VerifyIdentityExample_VIPAdult")]
+        [TestCase("user", "user123", 15, true, "You have user access.\nwelcome vip member.", TestName = "VerifyIdentityExample_VIPUnderage")]
+        [TestCase("user", "user123", 20, false, "You have user access.\nwelcome free member.", TestName = "VerifyIdentityExample_FreeMember")]
+        [TestCase("guest", "pass", 20, false, "You have guest access.", TestName = "VerifyIdentityExample_Guest")]
+        public void As07_VerifyIdentityExample(string username, string password, int age, bool isPaid, string expected)
+        {
+            assignment.As07_VerifyIdentityExample(username, password, age, isPaid);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
+    }
+
+    public class Homework : TestBase
+    {
         [TestCase(5, "Positive", TestName = "CheckNumberSign_Positive", Description = "Checks if the number is positive")]
         [TestCase(-3, "Negative", TestName = "CheckNumberSign_Negative", Description = "Checks if the number is negative")]
         [TestCase(0, "Zero", TestName = "CheckNumberSign_Zero", Description = "Checks if the number is zero")]
@@ -51,7 +113,7 @@ namespace Week02
         public void Lv01_CheckNumberSign_AllCases(int number, string expected)
         {
             assignment.Lv01_CheckNumberSign(number);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -68,7 +130,7 @@ namespace Week02
         public void LV02_GetDayName_AllCases(int day, string expected)
         {
             assignment.Lv02_GetDayName(day);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -82,7 +144,7 @@ namespace Week02
         public void Lv03_ValidatePassword_AllCases(string input, string correct, bool expected)
         {
             assignment.Lv03_ValidatePassword(input, correct);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected ? "True" : "False", output);
         }
 
@@ -103,7 +165,7 @@ namespace Week02
         public void Lv04_GetGrade_AllCases(int score, string expected)
         {
             assignment.Lv04_GetGrade(score);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -119,7 +181,7 @@ namespace Week02
         public void Lv05_IsLeapYear_AllCases(int year, bool expected)
         {
             assignment.Lv05_IsLeapYear(year);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected ? "True" : "False", output);
         }
 
@@ -138,7 +200,7 @@ namespace Week02
         public void Lv06_Calculate_AllCases(double num1, char op, double num2, string expected)
         {
             assignment.Lv06_Calculate(num1, op, num2);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -161,13 +223,33 @@ namespace Week02
         public void Lv07_GetSeason_AllCases(int month, string expected)
         {
             assignment.Lv07_GetSeason(month);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        #endregion
+        [TestCase(1, 10, 20, "Item purchased successfully\nYour change is 10 baht", TestName = "PurchasingSystemExample_EnoughMoneyWithChange")]
+        [TestCase(1, 10, 10, "Item purchased successfully", TestName = "PurchasingSystemExample_ExactMoney")]
+        [TestCase(1, 10, 5, "Not enough money", TestName = "PurchasingSystemExample_NotEnoughMoney")]
+        [TestCase(0, 10, 20, "Out of stock", TestName = "PurchasingSystemExample_OutOfStock")]
+        public void Ex01_PurchasingSystemExample(int quantity, int price, int payment, string expected)
+        {
+            assignment.Ex01_PurchasingSystemExample(quantity, price, payment);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
 
-        #region Level 2: Moderate problems
+        [TestCase(0, 0, "Draw", TestName = "RockPaperScissorsExample_DrawRock")]
+        [TestCase(0, 2, "You Win!", TestName = "RockPaperScissorsExample_RockBeatsScissors")]
+        [TestCase(1, 0, "You Win!", TestName = "RockPaperScissorsExample_PaperBeatsRock")]
+        [TestCase(2, 1, "You Win!", TestName = "RockPaperScissorsExample_ScissorsBeatsPaper")]
+        [TestCase(2, 0, "You Lose!", TestName = "RockPaperScissorsExample_ScissorsLosesToRock")]
+        [TestCase(3, 0, "Please select a valid number", TestName = "RockPaperScissorsExample_InvalidUserChoice")]
+        public void Ex02_RockPaperScissorsExample(int userChoice, int computerChoice, string expected)
+        {
+            assignment.Ex02_RockPaperScissorsExample(userChoice, computerChoice);
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
+            TestUtils.AssertMultilineEqual(expected, output);
+        }
 
         [TestCase("sword", 50, 65, TestName = "CalculateWeaponDamage_Sword", Description = "Sword damage with 30% bonus")]
         [TestCase("axe", 50, 70, TestName = "CalculateWeaponDamage_Axe", Description = "Axe damage with 40% bonus")]
@@ -178,13 +260,12 @@ namespace Week02
         public void Ex03_CalculateWeaponDamage_AllCases(string weaponType, int baseDamage, int expected)
         {
             assignment.Ex03_CalculateWeaponDamage(weaponType, baseDamage);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected.ToString(), output);
         }
 
         [TestCase(-1, 30, "Invalid score or time", TestName = "DeterminePlayerRank_InvalidScore", Description = "Invalid score input (-1)")]
         [TestCase(5000, -5, "Invalid score or time", TestName = "DeterminePlayerRank_InvalidTime", Description = "Invalid time input (-5)")]
-        // Participation (<4000)
         [TestCase(0, 0, "Participation Rank - 50 coins earned!", TestName = "DeterminePlayerRank_Participation_0_0", Description = "Participation, 0 min (fast)")]
         [TestCase(2000, 25, "Participation Rank - 50 coins earned!", TestName = "DeterminePlayerRank_Participation_Fast", Description = "Participation, fast (<=30 min)")]
         [TestCase(2000, 35, "Participation Rank - 35 coins earned!", TestName = "DeterminePlayerRank_Participation_Medium", Description = "Participation, medium (31-60 min)")]
@@ -192,7 +273,6 @@ namespace Week02
         [TestCase(3999, 30, "Participation Rank - 50 coins earned!", TestName = "DeterminePlayerRank_Participation_Boundary_Fast", Description = "Participation, upper boundary, fast")]
         [TestCase(3999, 31, "Participation Rank - 35 coins earned!", TestName = "DeterminePlayerRank_Participation_Boundary_Medium", Description = "Participation, upper boundary, medium")]
         [TestCase(3999, 61, "Participation Rank - 25 coins earned!", TestName = "DeterminePlayerRank_Participation_Boundary_Slow", Description = "Participation, upper boundary, slow")]
-        // Bronze (4000-5999)
         [TestCase(4000, 30, "Bronze Rank - 75 coins earned!", TestName = "DeterminePlayerRank_Bronze_LowerBoundary_Fast", Description = "Bronze, lower boundary, fast")]
         [TestCase(4000, 31, "Bronze Rank - 60 coins earned!", TestName = "DeterminePlayerRank_Bronze_LowerBoundary_Medium", Description = "Bronze, lower boundary, medium")]
         [TestCase(4000, 61, "Bronze Rank - 50 coins earned!", TestName = "DeterminePlayerRank_Bronze_LowerBoundary_Slow", Description = "Bronze, lower boundary, slow")]
@@ -202,7 +282,6 @@ namespace Week02
         [TestCase(4500, 25, "Bronze Rank - 75 coins earned!", TestName = "DeterminePlayerRank_Bronze_Fast", Description = "Bronze, fast")]
         [TestCase(4500, 45, "Bronze Rank - 60 coins earned!", TestName = "DeterminePlayerRank_Bronze_Medium", Description = "Bronze, medium")]
         [TestCase(4500, 70, "Bronze Rank - 50 coins earned!", TestName = "DeterminePlayerRank_Bronze_Slow", Description = "Bronze, slow")]
-        // Silver (6000-7999)
         [TestCase(6000, 30, "Silver Rank - 100 coins earned!", TestName = "DeterminePlayerRank_Silver_LowerBoundary_Fast", Description = "Silver, lower boundary, fast")]
         [TestCase(6000, 31, "Silver Rank - 85 coins earned!", TestName = "DeterminePlayerRank_Silver_LowerBoundary_Medium", Description = "Silver, lower boundary, medium")]
         [TestCase(6000, 61, "Silver Rank - 75 coins earned!", TestName = "DeterminePlayerRank_Silver_LowerBoundary_Slow", Description = "Silver, lower boundary, slow")]
@@ -212,7 +291,6 @@ namespace Week02
         [TestCase(6500, 25, "Silver Rank - 100 coins earned!", TestName = "DeterminePlayerRank_Silver_Fast", Description = "Silver, fast")]
         [TestCase(6500, 45, "Silver Rank - 85 coins earned!", TestName = "DeterminePlayerRank_Silver_Medium", Description = "Silver, medium")]
         [TestCase(6500, 70, "Silver Rank - 75 coins earned!", TestName = "DeterminePlayerRank_Silver_Slow", Description = "Silver, slow")]
-        // Gold (8000+)
         [TestCase(8000, 30, "Gold Rank - 125 coins earned!", TestName = "DeterminePlayerRank_Gold_LowerBoundary_Fast", Description = "Gold, lower boundary, fast")]
         [TestCase(8000, 31, "Gold Rank - 110 coins earned!", TestName = "DeterminePlayerRank_Gold_LowerBoundary_Medium", Description = "Gold, lower boundary, medium")]
         [TestCase(8000, 61, "Gold Rank - 100 coins earned!", TestName = "DeterminePlayerRank_Gold_LowerBoundary_Slow", Description = "Gold, lower boundary, slow")]
@@ -226,103 +304,9 @@ namespace Week02
         public void Ex04_DeterminePlayerRank_AllCases(int score, int completionTime, string expected)
         {
             assignment.Ex04_DeterminePlayerRank(score, completionTime);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             Assert.AreEqual(output.Trim(), expected.Trim());
         }
-
-        #endregion
-
-        #region Examples
-
-        [TestCase(11, "My Number > 10\nMy Number >= 10\nMy Number != 10", TestName = "NumberComparisonExample_GreaterThan10")]
-        [TestCase(10, "My Number == 10\nMy Number >= 10\nMy Number <= 10", TestName = "NumberComparisonExample_Equal10")]
-        [TestCase(9, "My Number < 10\nMy Number <= 10\nMy Number != 10", TestName = "NumberComparisonExample_LessThan10")]
-        public void As03_NumberComparisonExample(int number, string expected)
-        {
-            assignment.As03_NumberComparisonExample(number);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase(10, "My Number 8 > < 12\nMy Number or 8 || 12", TestName = "AndOrOperatorExample_10")]
-        [TestCase(7, "My Number or 8 || 12", TestName = "AndOrOperatorExample_7")]
-        [TestCase(13, "My Number or 8 || 12", TestName = "AndOrOperatorExample_13")]
-        public void As04_AndOrOperatorExample(int number, string expected)
-        {
-            assignment.As04_AndOrOperatorExample(number);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase(5, 5, "Guessing number 5\nCongratulations! You guessed the correct number.", TestName = "GuessingNumberExample_Correct")]
-        [TestCase(3, 5, "Guessing number 5\nI guess we can just agree to disagree.", TestName = "GuessingNumberExample_Incorrect")]
-        public void As05_GuessingNumberExample(int guessingNumber, int randomNumber, string expected)
-        {
-            assignment.As05_GuessingNumberExample(guessingNumber, randomNumber);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase(3, 5, "Guessing number 5\nToo low! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooLow")]
-        [TestCase(7, 5, "Guessing number 5\nToo high! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooHigh")]
-        [TestCase(5, 5, "Guessing number 5\nCongratulations! We are same mind.", TestName = "GuessingNumberMoreOrLessExample_Correct")]
-        public void As06_GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber, string expected)
-        {
-            assignment.As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase(1, 10, 20, "คุณได้รับสินค้าแล้ว\nคุณได้รับเงินทอน 10 บาท", TestName = "PurchasingSystemExample_EnoughMoneyWithChange")]
-        [TestCase(1, 10, 10, "คุณได้รับสินค้าแล้ว", TestName = "PurchasingSystemExample_ExactMoney")]
-        [TestCase(1, 10, 5, "คุณมีเงินไม่พอ", TestName = "PurchasingSystemExample_NotEnoughMoney")]
-        [TestCase(0, 10, 20, "สินค้าหมด", TestName = "PurchasingSystemExample_OutOfStock")]
-        public void Ex01_PurchasingSystemExample(int quantity, int price, int payment, string expected)
-        {
-            assignment.Ex01_PurchasingSystemExample(quantity, price, payment);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase("user", "user123", 20, true, "You have user access.\nwelcome vip member.\nYou have access to exclusive content.", TestName = "VerifyIdentityExample_VIPAdult")]
-        [TestCase("user", "user123", 15, true, "You have user access.\nwelcome vip member.", TestName = "VerifyIdentityExample_VIPUnderage")]
-        [TestCase("user", "user123", 20, false, "You have user access.\nwelcome free member.", TestName = "VerifyIdentityExample_FreeMember")]
-        [TestCase("guest", "pass", 20, false, "You have guest access.", TestName = "VerifyIdentityExample_Guest")]
-        public void As07_VerifyIdentityExample(string username, string password, int age, bool isPaid, string expected)
-        {
-            assignment.As07_VerifyIdentityExample(username, password, age, isPaid);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase(0, 0, "เสมอ", TestName = "RockPaperScissorsExample_DrawRock")]
-        [TestCase(0, 2, "คุณชนะ!", TestName = "RockPaperScissorsExample_RockBeatsScissors")]
-        [TestCase(1, 0, "คุณชนะ!", TestName = "RockPaperScissorsExample_PaperBeatsRock")]
-        [TestCase(2, 1, "คุณชนะ!", TestName = "RockPaperScissorsExample_ScissorsBeatsPaper")]
-        [TestCase(2, 0, "คุณแพ้!", TestName = "RockPaperScissorsExample_ScissorsLosesToRock")]
-        [TestCase(3, 0, "กรุณาเลือกเป็นตัวเลขที่ถูกต้อง", TestName = "RockPaperScissorsExample_InvalidUserChoice")]
-        public void Ex02_RockPaperScissorsExample(int userChoice, int computerChoice, string expected)
-        {
-            assignment.Ex02_RockPaperScissorsExample(userChoice, computerChoice);
-            var output = AssignmentDebugConsole.GetOutput();
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-        [TestCase("Moon", TestName = "StringComparisonExample_WithMoonPassword", Description = "Tests StringComparisonExample with 'Moon' (correct) password")]
-        [TestCase("Sun", TestName = "StringComparisonExample_WithSunPassword", Description = "Tests StringComparisonExample with 'Sun' (incorrect) password")]
-        public void As02_StringComparisonExample(string password)
-        {
-            assignment.As02_StringComparisonExample(password);
-            var output = AssignmentDebugConsole.GetOutput();
-            string expected = password == "Moon" ?
-                "password is correct" :
-                "wrong password";
-            TestUtils.AssertMultilineEqual(expected, output);
-        }
-
-
-
-        #endregion
     }
 
     public class TestUtils
@@ -337,3 +321,5 @@ namespace Week02
         }
     }
 }
+
+

@@ -199,16 +199,14 @@ void GuessingNumberExample(int guessingNumber, int randomNumber)
 - แสดงตัวเลขเป้าหมาย โดย randomNumber จะถูกส่งมาจาก Test case
 - เปรียบเทียบการทายกับเป้าหมาย
 - แสดงข้อความชนะหรือแพ้
-- ชนะ : Guessing number {guessingNumber} Congratulations! You guessed the correct number.
+- ชนะ : Congratulations! You guessed the correct number.
 - แพ้ : I guess we can just agree to disagree.
   **Test Cases:**
 
 ```
 AS01.E4: Input: 5, 5 → Output:
-Guessing number 5
 Congratulations! You guessed the correct number.
 AS01.E4b: Input: 3, 5 → Output:
-Guessing number 5
 I guess we can just agree to disagree.
 ```
 
@@ -228,20 +226,17 @@ void GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber)
 
 - แสดงตัวเลขเป้าหมาย โดย randomNumber จะถูกส่งมาจาก Test case
 - ให้ feedback: ต่ำเกินไป, สูงเกินไป หรือถูกต้อง
-- ต่ำเกินไป : Guessing number {guessingNumber} Too low! Try again.
-- สูงเกินไป : Guessing number {guessingNumber} Too high! Try again.
-- ถูกต้อง :Guessing number {guessingNumber} Congratulations! We are same mind.
+- ต่ำเกินไป : Too low! Try again.
+- สูงเกินไป : Too high! Try again.
+- ถูกต้อง : Congratulations! We are same mind.
   **Test Cases:**
 
 ```
 AS01.E5: Input: 3, 5 → Output:
-Guessing number 5
 Too low! Try again.
 AS01.E5b: Input: 7, 5 → Output:
-Guessing number 5
 Too high! Try again.
 AS01.E5c: Input: 5, 5 → Output:
-Guessing number 5
 Congratulations! We are same mind.
 ```
 
@@ -641,26 +636,23 @@ void PurchasingSystemExample(int quantity, int price, int payment)
 
 **Logic ที่ต้อง implement:**
 
-- ตรวจสอบว่าสินค้ามีใน stock หรือไม่
-  - ถ้าไม่เพียงพอให้แสดงข้อความ "สินค้าหมด"
-- จากนั้นตรวจสอบการชำระเงินเพียงพอ
-  - ถ้าเพียงพอให้แสดงข้อความ "คุณได้รับสินค้าแล้ว"
-  - ถ้าไม่พอให้แสดงข้อความ "คุณมีเงินไม่พอ"
-- จากนั้นคำนวณและแสดงเงินทอนถ้าเหมาะสม
-  - แสดงข้อความ "คุณได้รับเงินทอน {change} บาท"
+- เช็ค quantity ว่ามีสินค้าหรือไม่ (ถ้าน้อยกว่าหรือเท่ากับ 0 ให้พิมพ์ "Out of stock")
+- ถ้ามี เช็ค payment ว่าพอจ่าย price หรือไม่
+- ถ้าพอ คำนวณเงินทอนและแสดงข้อความ "Item purchased successfully" และถ้ามีเงินทอน ให้แสดงข้อความ "Your change is {change} baht"
+- ถ้าไม่พอ ให้พิมพ์ "Not enough money"
 
 **Test Cases:**
 
 ```
 AS01.E6: Input: 1, 10, 20 → Output:
-คุณได้รับสินค้าแล้ว
-คุณได้รับเงินทอน 10 บาท
+Item purchased successfully
+Your change is 10 baht
 AS01.E6b: Input: 1, 10, 10 → Output:
-คุณได้รับสินค้าแล้ว
+Item purchased successfully
 AS01.E6c: Input: 1, 10, 5 → Output:
-คุณมีเงินไม่พอ
+Not enough money
 AS01.E6d: Input: 0, 10, 20 → Output:
-สินค้าหมด
+Out of stock
 ```
 
 **Game Context:** ร้านค้าในเกม, การจัดการ inventory, ระบบเศรษฐกิจ
@@ -678,19 +670,19 @@ void RockPaperScissorsExample(int userChoice, int computerChoice)
 **Logic ที่ต้อง implement:**
 
 - ตรวจสอบ user choice (0=Rock, 1=Paper, 2=Scissors)
-- กำหนดผู้ชนะโดยใช้กฎของเกม
-- แสดงผลลัพธ์เป็นภาษาไทย
+- เช็คผู้ชนะ และพิมพ์ข้อความ: "Draw" สำหรับเสมอ, "You Win!" สำหรับชนะ, "You Lose!" สำหรับแพ้
+- (อย่าลืมจัดการกรณี userChoice ไม่อยู่ใน 0-2 ให้พิมพ์ "Please select a valid number")
 - computerChoice จะถูกส่งมาจาก Test Case
 
 **Test Cases:**
 
 ```
-AS01.E8: Input: 0, 0 → Output: เสมอ
-AS01.E8b: Input: 0, 2 → Output: คุณชนะ!
-AS01.E8c: Input: 1, 0 → Output: คุณชนะ!
-AS01.E8d: Input: 2, 1 → Output: คุณชนะ!
-AS01.E8e: Input: 2, 0 → Output: คุณแพ้!
-AS01.E8f: Input: 3, 0 → Output: กรุณาเลือกเป็นตัวเลขที่ถูกต้อง
+AS01.E8: Input: 0, 0 → Output: Draw
+AS01.E8b: Input: 0, 2 → Output: You Win!
+AS01.E8c: Input: 1, 0 → Output: You Win!
+AS01.E8d: Input: 2, 1 → Output: You Win!
+AS01.E8e: Input: 2, 0 → Output: You Lose!
+AS01.E8f: Input: 3, 0 → Output: Please select a valid number
 ```
 
 ### 3. CalculateWeaponDamage (6 test cases)
