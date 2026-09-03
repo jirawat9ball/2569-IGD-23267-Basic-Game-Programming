@@ -274,12 +274,12 @@ namespace Workspace.Core
         //     Debug.Log($"Guessing number {randomNumber}");
         //     if (guessNumber == randomNumber)
         //     {
-        //         Debug.Log("Congratulations! We are same mind.");
+        //         Debug.Log("Correct!");
         //         Answer.text = "�;ǡ��Ҫ�ҧ㨵ç�ѹ";
         //     }
         //     else
         //     {
-        //         Debug.Log("I guess we can just agree to disagree.");
+        //         Debug.Log("Incorrect!");
         //         Answer.text = "�ѹ�����Ҥ�è�ŧ��·�����դ����Դ������ç�ѹ��";
         //     }
         // }
@@ -292,15 +292,15 @@ namespace Workspace.Core
         //     Debug.Log($"Guessing number {randomNumber}");
         //     if (guessNumber < randomNumber)
         //     {
-        //         Debug.Log("Too low! Try again.");
+        //         Debug.Log("Too low!");
         //     }
         //     else if (guessNumber > randomNumber)
         //     {
-        //         Debug.Log("Too high! Try again.");
+        //         Debug.Log("Too high!");
         //     }
         //     else if (guessNumber == randomNumber)
         //     {
-        //         Debug.Log("Congratulations! We are same mind.");
+        //         Debug.Log("Correct!");
         //         Answer.text = "�;ǡ��Ҫ�ҧ㨵ç�ѹ";
         //     }
         // }

@@ -52,16 +52,6 @@ Crack Crack!!!!
 
 **Game Context:** ระบบตรวจสอบ password, การ authentication ผู้ใช้
 
-**Implementation Hint:**
-
-```csharp
-  if (isSixoClock)
-  {
-      Debug.Log("You can get in");
-  }
-  Debug.Log("Crack Crack!!!!");
-```
-
 ### 2. StringComparisonExample (2 test cases)
 
 **วัตถุประสงค์:** แสดงการเปรียบเทียบ string โดยใช้ if statements (==, !=)
@@ -88,19 +78,6 @@ wrong password
 ```
 
 **Game Context:** ระบบตรวจสอบ password, การ authentication ผู้ใช้
-
-**Implementation Hint:**
-
-```csharp
-if (password != "Moon")
-{
-  Debug.Log("wrong password");
-}
-if (password == "Moon")
-{
-  Debug.Log("password is correct");
-}
-```
 
 ### 3. NumberComparisonExample (3 test cases)
 
@@ -136,17 +113,6 @@ My Number != 10
 
 **Game Context:** การเปรียบเทียบคะแนน, ข้อกำหนดระดับ, การตรวจสอบ stats
 
-**Implementation Hint:**
-
-```csharp
-  if (number > 10) // "My Number > 10"
-  if (number < 10) // "My Number < 10"
-  if (number == 10) // "My Number == 10"
-  if (number >= 10) // "My Number >= 10"
-  if (number <= 10) // "My Number <= 10"
-  if (number != 10) // "My Number != 10"
-```
-
 ### 4. AndOrOperatorExample (3 test cases)
 
 **วัตถุประสงค์:** แสดง AND และ OR operators ใน if statements (&&, ||)
@@ -168,21 +134,13 @@ void AndOrOperatorExample(int number)
 ```
 AS01.E3: Input: 10 → Output:
 My Number 8 > < 12
-My Number or 8 || 12
 AS01.E3b: Input: 7 → Output:
-My Number or 8 || 12
+My Number 8 || 12
 AS01.E3c: Input: 13 → Output:
-My Number or 8 || 12
+My Number 8 || 12
 ```
 
 **Game Context:** การตรวจสอบช่วง, conditional game mechanics
-
-**Implementation Hint:**
-
-```csharp
-  if (number > 8 && number < 12) // "My Number 8 > < 12"
-  if (number > 8 || number < 12) // "My Number or 8 || 12"
-```
 
 ### 5. GuessingNumberExample (2 test cases)
 
@@ -199,15 +157,15 @@ void GuessingNumberExample(int guessingNumber, int randomNumber)
 - แสดงตัวเลขเป้าหมาย โดย randomNumber จะถูกส่งมาจาก Test case
 - เปรียบเทียบการทายกับเป้าหมาย
 - แสดงข้อความชนะหรือแพ้
-- ชนะ : Congratulations! You guessed the correct number.
-- แพ้ : I guess we can just agree to disagree.
+- ชนะ : Correct!
+- แพ้ : Incorrect!
   **Test Cases:**
 
 ```
 AS01.E4: Input: 5, 5 → Output:
-Congratulations! You guessed the correct number.
+Correct!
 AS01.E4b: Input: 3, 5 → Output:
-I guess we can just agree to disagree.
+Incorrect!
 ```
 
 **Game Context:** Mini-games, random events, mechanics ที่ขึ้นอยู่กับโชค
@@ -226,18 +184,18 @@ void GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber)
 
 - แสดงตัวเลขเป้าหมาย โดย randomNumber จะถูกส่งมาจาก Test case
 - ให้ feedback: ต่ำเกินไป, สูงเกินไป หรือถูกต้อง
-- ต่ำเกินไป : Too low! Try again.
-- สูงเกินไป : Too high! Try again.
-- ถูกต้อง : Congratulations! We are same mind.
+- ต่ำเกินไป : Too low!
+- สูงเกินไป : Too high!
+- ถูกต้อง : Correct!
   **Test Cases:**
 
 ```
 AS01.E5: Input: 3, 5 → Output:
-Too low! Try again.
+Too low!
 AS01.E5b: Input: 7, 5 → Output:
-Too high! Try again.
+Too high!
 AS01.E5c: Input: 5, 5 → Output:
-Congratulations! We are same mind.
+Correct!
 ```
 
 **Game Context:** Puzzle games, ระบบปรับความยาก
@@ -255,32 +213,32 @@ void VerifyIdentityExample(string username, string password, int age, bool isPai
 **Logic ที่ต้อง implement:**
 
 - ตรวจสอบ username และ password โดย Testcase จะกำหนดให้ username == "user", password == "user123"
-  - ถ้า username และ password ถูกต้อง จะแสดงข้อความ "You have user access."
-  - ถ้า username และ password ไม่ถูกต้อง จะแสดงข้อความ "You have guest access."
+  - ถ้า username และ password ถูกต้อง จะแสดงข้อความ "User access"
+  - ถ้า username และ password ไม่ถูกต้อง จะแสดงข้อความ "Guest access"
 - จากนั้นตรวจสอบสถานะ VIP
-  - ถ้า isPaid เป็นจริง จะแสดงข้อความ "welcome vip member"
-  - ถ้า isPaid เป็นเท็จ จะแสดงข้อความ "welcome free member"
+  - ถ้า isPaid เป็นจริง จะแสดงข้อความ "VIP member"
+  - ถ้า isPaid เป็นเท็จ จะแสดงข้อความ "Free member"
 - จากนั้นอายุสำหรับการเข้าถึงเนื้อหาเพิ่มเติม
-  - ถ้า age มีค่ามากกว่า 18 จะแสดงข้อความ "You have access to exclusive content"
+  - ถ้า age มีค่ามากกว่า 18 จะแสดงข้อความ "Exclusive content"
 
 **Test Cases:**
 
 ```
 AS01.E7: Input: "user", "user123", 20, true → Output:
-You have user access.
-welcome vip member.
-You have access to exclusive content.
+User access
+VIP member
+Exclusive content
 
 AS01.E7b: Input: "user", "user123", 15, true → Output:
-You have user access.
-welcome vip member.
+User access
+VIP member
 
 AS01.E7c: Input: "user", "user123", 20, false → Output:
-You have user access.
-welcome free member.
+User access
+Free member
 
 AS01.E7d: Input: "guest", "pass", 20, false → Output:
-You have guest access.
+Guest access
 ```
 
 **Game Context:** การ authentication ผู้ใช้, การเข้าถึงเนื้อหา premium, การตรวจสอบอายุ
@@ -318,17 +276,6 @@ AS01.01e: Input: -2147483648 → Output: Negative
 
 **Game Context:** การคำนวณพลังชีวิต/ความเสียหาย, การตรวจสอบคะแนน, การตรวจจับทิศทาง
 
-**Implementation Hint:**
-
-```csharp
-// if (number > 0)
-//   Debug.Log("Positive");
-// else if (number < 0)
-//   Debug.Log("Negative");
-// else
-//   Debug.Log("Zero");
-```
-
 ### 2. GetDayName (10 test cases)
 
 **วัตถุประสงค์:** คืนค่าชื่อวันสำหรับจำนวนเต็มที่กำหนด
@@ -362,18 +309,6 @@ AS01.02j: Input: -5 → Output: Invalid day
 
 **Game Context:** ระบบ quest รายวัน, calendar events, mechanics ที่ขึ้นอยู่กับเวลา
 
-**Implementation Hint:**
-
-```csharp
-// switch (day)
-// {
-//   case 1: Debug.Log("Monday"); break;
-//   case 2: Debug.Log("Tuesday"); break;
-//   ...
-//   default: Debug.Log("Invalid day"); break;
-// }
-```
-
 ### 3. ValidatePassword (7 test cases)
 
 **วัตถุประสงค์:** ตรวจสอบ password input ด้วยการจับคู่ string
@@ -403,15 +338,6 @@ AS01.03g: Input: "", "secret123" → Output: False
 ```
 
 **Game Context:** ระบบ login, พื้นที่ปลอดภัย, การตรวจสอบ cheat code
-
-**Implementation Hint:**
-
-```csharp
-// if (inputPassword == correctPassword)
-//   Debug.Log("True");
-// else
-//   Debug.Log("False");
-```
 
 ### 4. GetGrade (14 test cases)
 
@@ -449,16 +375,6 @@ AS01.04n: Input: 101 → Output: A
 
 **Game Context:** ระบบจัดอันดับผู้เล่น, ระดับ achievement, การประเมินผลงาน
 
-**Implementation Hint:**
-
-```csharp
-// if (score >= 80)
-//   Debug.Log("A");
-// else if (score >= 70)
-//   Debug.Log("B");
-// ...
-```
-
 ### 5. IsLeapYear (9 test cases)
 
 **วัตถุประสงค์:** ตรวจสอบว่าปีเป็นปีอธิกสุรทินหรือไม่โดยใช้กฎที่ซับซ้อน
@@ -491,19 +407,6 @@ AS01.05i: Input: 0 → Output: True
 ```
 
 **Game Context:** ระบบปฏิทิน, seasonal events, mechanics ที่ขึ้นอยู่กับเวลา
-
-**Implementation Hint:**
-
-```csharp
-// if (year % 400 == 0)
-//   Debug.Log("True");
-// else if (year % 100 == 0)
-//   Debug.Log("False");
-// else if (year % 4 == 0)
-//   Debug.Log("True");
-// else
-//   Debug.Log("False");
-```
 
 ### 6. Calculate (12 test cases)
 
@@ -540,29 +443,6 @@ AS01.06l: Input: 5.0, 'X', 3.0 → Output: Invalid operator. Please use +, -, *,
 ```
 
 **Game Context:** การคำนวณความเสียหาย, การจัดการ resources, การคำนวณ stats
-
-**Implementation Tips:**
-
-- ใช้ switch-case สำหรับ operators
-- จัดรูปแบบผลลัพธ์โดยใช้ string formatting ที่เหมาะสม
-
-**Implementation Hint:**
-
-```csharp
-// switch (op)
-// {
-//   case '+': result = num1 + num2; break;
-//   case '/':
-//     if (num2 == 0)
-//       Debug.Log("Error: Cannot divide by zero.");
-//     else
-//       result = num1 / num2;
-//     break;
-//   default:
-//     Debug.Log("Invalid operator. Please use +, -, *, or /.");
-//     return;
-// }
-```
 
 ### 7. GetSeason (16 test cases)
 
@@ -604,21 +484,6 @@ AS01.07p: Input: 100 → Output: Invalid month number. Please enter a number bet
 ```
 
 **Game Context:** Seasonal events, ระบบสภาพอากาศ, การเปลี่ยนแปลงสิ่งแวดล้อม
-
-**Implementation Hint:**
-
-```csharp
-// if (month >= 1 && month <= 12)
-// {
-//   if (month == 12 || month == 1 || month == 2)
-//     Debug.Log("It's Winter.");
-//   else if (month >= 3 && month <= 5)
-//     Debug.Log("It's Spring.");
-//   ...
-// }
-// else
-//   Debug.Log("Invalid month number. Please enter a number between 1 and 12.");
-```
 
 ---
 
@@ -723,26 +588,6 @@ AS01.08f: Input: "unknown", 50 → Output: 50
 
 **Game Context:** ระบบการต่อสู้, การปรับสมดุลอาวุธ, การคำนวณความเสียหาย
 
-**Implementation Tips:**
-
-- ใช้ switch-case กับ toLowerCase() สำหรับการจัดการ case
-- แปลงผลลัพธ์สุดท้ายเป็น integer
-
-**Implementation Hint:**
-
-```csharp
-// double multiplier = 1.0;
-// switch (weaponType?.ToLower())
-// {
-//   case "sword": multiplier = 1.3; break;
-//   case "axe": multiplier = 1.4; break;
-//   ...
-//   default: multiplier = 1.0; break;
-// }
-// int totalDamage = (int)(baseDamage * multiplier);
-// Debug.Log(totalDamage.ToString());
-```
-
 ### 4. DeterminePlayerRank (33 test cases)
 
 **วัตถุประสงค์:** กำหนดอันดับผู้เล่นและคำนวณรางวัลตามคะแนนและเวลาที่ใช้ในการเล่น
@@ -792,34 +637,6 @@ AS01.09l: Input: 8500, 45 → Output: Gold Rank - 110 coins earned!
 ```
 
 **Game Context:** ความก้าวหน้าของผู้เล่น, ระบบ leaderboard, รางวัล achievement
-
-**Implementation Tips:**
-
-- ตรวจสอบ inputs ก่อน
-- ใช้ if-else chain สำหรับการกำหนดอันดับ
-- ใช้ nested if-else สำหรับการคำนวณ time bonus
-
-**Implementation Hint:**
-
-```csharp
-// if (score < 0 || completionTime < 0)
-// {
-//   Debug.Log("Invalid score or time");
-//   return;
-// }
-//
-// string rank; int baseCoins;
-// if (score >= 8000) { rank = "Gold"; baseCoins = 100; }
-// else if (score >= 6000) { rank = "Silver"; baseCoins = 75; }
-// ...
-//
-// int timeBonus = 0;
-// if (completionTime <= 30) timeBonus = 25;
-// else if (completionTime <= 60) timeBonus = 10;
-//
-// int totalCoins = baseCoins + timeBonus;
-// Debug.Log($"{rank} Rank - {totalCoins} coins earned!");
-```
 
 ---
 

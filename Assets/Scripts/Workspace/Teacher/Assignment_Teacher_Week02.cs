@@ -85,9 +85,9 @@ namespace Week02
             {
                 Debug.Log("My Number 8 > < 12");
             }
-            if (number > 8 || number < 12)
+            if (number < 8 || number > 12)
             {
-                Debug.Log("My Number or 8 || 12");
+                Debug.Log("My Number 8 || 12");
             }
         }
 
@@ -96,11 +96,11 @@ namespace Week02
 
             if (guessingNumber == randomNumber)
             {
-                Debug.Log("Congratulations! You guessed the correct number.");
+                Debug.Log("Correct!");
             }
             else
             {
-                Debug.Log("I guess we can just agree to disagree.");
+                Debug.Log("Incorrect!");
             }
         }
 
@@ -109,15 +109,15 @@ namespace Week02
 
             if (guessingNumber < randomNumber)
             {
-                Debug.Log("Too low! Try again.");
+                Debug.Log("Too low!");
             }
             else if (guessingNumber > randomNumber)
             {
-                Debug.Log("Too high! Try again.");
+                Debug.Log("Too high!");
             }
             else
             {
-                Debug.Log("Congratulations! We are same mind.");
+                Debug.Log("Correct!");
             }
         }
 
@@ -125,24 +125,24 @@ namespace Week02
         {
             if (username == "user" && password == "user123")
             {
-                Debug.Log("You have user access.");
+                Debug.Log("User access");
                 
                 if (isPaid)
                 {
-                    Debug.Log("welcome vip member.");
+                    Debug.Log("VIP member");
                     if (age > 18)
                     {
-                        Debug.Log("You have access to exclusive content.");
+                        Debug.Log("Exclusive content");
                     }
                 }
                 else
                 {
-                    Debug.Log("welcome free member.");
+                    Debug.Log("Free member");
                 }
             }
             else
             {
-                Debug.Log("You have guest access.");
+                Debug.Log("Guest access");
             }
         }
 

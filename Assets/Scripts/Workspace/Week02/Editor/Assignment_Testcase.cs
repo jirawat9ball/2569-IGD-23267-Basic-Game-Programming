@@ -62,9 +62,9 @@ namespace Week02_If
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(10, "My Number 8 > < 12\nMy Number or 8 || 12", TestName = "AndOrOperatorExample_10")]
-        [TestCase(7, "My Number or 8 || 12", TestName = "AndOrOperatorExample_7")]
-        [TestCase(13, "My Number or 8 || 12", TestName = "AndOrOperatorExample_13")]
+        [TestCase(10, "My Number 8 > < 12", TestName = "AndOrOperatorExample_10")]
+        [TestCase(7, "My Number 8 || 12", TestName = "AndOrOperatorExample_7")]
+        [TestCase(13, "My Number 8 || 12", TestName = "AndOrOperatorExample_13")]
         public void As04_AndOrOperatorExample(int number, string expected)
         {
             assignment.As04_AndOrOperatorExample(number);
@@ -72,8 +72,8 @@ namespace Week02_If
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(5, 5, "Congratulations! You guessed the correct number.", TestName = "GuessingNumberExample_Correct")]
-        [TestCase(3, 5, "I guess we can just agree to disagree.", TestName = "GuessingNumberExample_Incorrect")]
+        [TestCase(5, 5, "Correct!", TestName = "GuessingNumberExample_Correct")]
+        [TestCase(3, 5, "Incorrect!", TestName = "GuessingNumberExample_Incorrect")]
         public void As05_GuessingNumberExample(int guessingNumber, int randomNumber, string expected)
         {
             assignment.As05_GuessingNumberExample(guessingNumber, randomNumber);
@@ -81,9 +81,9 @@ namespace Week02_If
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(3, 5, "Too low! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooLow")]
-        [TestCase(7, 5, "Too high! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooHigh")]
-        [TestCase(5, 5, "Congratulations! We are same mind.", TestName = "GuessingNumberMoreOrLessExample_Correct")]
+        [TestCase(3, 5, "Too low!", TestName = "GuessingNumberMoreOrLessExample_TooLow")]
+        [TestCase(7, 5, "Too high!", TestName = "GuessingNumberMoreOrLessExample_TooHigh")]
+        [TestCase(5, 5, "Correct!", TestName = "GuessingNumberMoreOrLessExample_Correct")]
         public void As06_GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber, string expected)
         {
             assignment.As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
@@ -91,10 +91,10 @@ namespace Week02_If
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase("user", "user123", 20, true, "You have user access.\nwelcome vip member.\nYou have access to exclusive content.", TestName = "VerifyIdentityExample_VIPAdult")]
-        [TestCase("user", "user123", 15, true, "You have user access.\nwelcome vip member.", TestName = "VerifyIdentityExample_VIPUnderage")]
-        [TestCase("user", "user123", 20, false, "You have user access.\nwelcome free member.", TestName = "VerifyIdentityExample_FreeMember")]
-        [TestCase("guest", "pass", 20, false, "You have guest access.", TestName = "VerifyIdentityExample_Guest")]
+        [TestCase("user", "user123", 20, true, "User access\nVIP member\nExclusive content", TestName = "VerifyIdentityExample_VIPAdult")]
+        [TestCase("user", "user123", 15, true, "User access\nVIP member", TestName = "VerifyIdentityExample_VIPUnderage")]
+        [TestCase("user", "user123", 20, false, "User access\nFree member", TestName = "VerifyIdentityExample_FreeMember")]
+        [TestCase("guest", "pass", 20, false, "Guest access", TestName = "VerifyIdentityExample_Guest")]
         public void As07_VerifyIdentityExample(string username, string password, int age, bool isPaid, string expected)
         {
             assignment.As07_VerifyIdentityExample(username, password, age, isPaid);
