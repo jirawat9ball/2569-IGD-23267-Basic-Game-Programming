@@ -45,7 +45,8 @@ public class Assignment_SubmitterEditor_Week02 : Editor
 
         api.Execute(new ExecutionSettings(new Filter() { 
             testMode = TestMode.EditMode,
-            assemblyNames = new string[] { "Workspace.Editor" } 
+            assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+            groupNames = new string[] { submitter.weekName }
         }));
     }
 
@@ -91,10 +92,11 @@ public class Assignment_SubmitterEditor_Week02 : Editor
             var api = ScriptableObject.CreateInstance<TestRunnerApi>();
             api.RegisterCallbacks(receiver);
 
-            // รัน EditMode เพื่อตรวจสอบ (เหมือนการรัน Test)
+            // รัน EditMode เพื่อตรวจสอบ (เหมือนการรัน Test) โดยกรองเฉพาะประจำสัปดาห์นั้น
             api.Execute(new ExecutionSettings(new Filter() { 
                 testMode = TestMode.EditMode,
-                assemblyNames = new string[] { "Workspace.Editor" } 
+                assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+                groupNames = new string[] { submitter.weekName }
             }));
         }
     }

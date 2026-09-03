@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Week02
+namespace Workspace.Core
 {
     public interface IAssignment
     {

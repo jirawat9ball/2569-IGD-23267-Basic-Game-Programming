@@ -1,5 +1,8 @@
 using UnityEngine;
 
+using Workspace.Core;
+using Debug = Workspace.Core.SimpleDebugConsole;
+
 namespace Week02
 {
     public class Assignment_Teacher_Week02 : MonoBehaviour, IAssignment
@@ -25,7 +28,7 @@ namespace Week02
 
         void Start()
         {
-            // สามารถเปิด-ปิด คอมเมนต์เพื่อทดสอบทีละข้อได้
+            // ??????????-??? ????????????????????????????
             As01_SyntaxIf(isSixoClock);
             As02_StringComparisonExample(stringPassword);
             As03_NumberComparisonExample(comparisonNumber);
@@ -34,7 +37,7 @@ namespace Week02
 
         void Update()
         {
-            // กดปุ่ม Enter (Return) เพื่อรันข้อ 5-7
+            // ?????? Enter (Return) ??????????? 5-7
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 As05_GuessingNumberExample(guessingNumber, randomNumber);
@@ -90,7 +93,7 @@ namespace Week02
 
         public void As05_GuessingNumberExample(int guessingNumber, int randomNumber)
         {
-            Debug.Log($"Guessing number {randomNumber}");
+
             if (guessingNumber == randomNumber)
             {
                 Debug.Log("Congratulations! You guessed the correct number.");
@@ -103,7 +106,7 @@ namespace Week02
 
         public void As06_GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber)
         {
-            Debug.Log($"Guessing number {randomNumber}");
+
             if (guessingNumber < randomNumber)
             {
                 Debug.Log("Too low! Try again.");
@@ -267,22 +270,22 @@ namespace Week02
         {
             if (quantity <= 0)
             {
-                Debug.Log("สินค้าหมด");
+                Debug.Log("Out of stock");
             }
             else
             {
                 if (payment >= price)
                 {
-                    Debug.Log("คุณได้รับสินค้าแล้ว");
+                    Debug.Log("Item purchased successfully");
                     int change = payment - price;
                     if (change > 0)
                     {
-                        Debug.Log($"คุณได้รับเงินทอน {change} บาท");
+                        Debug.Log($"Your change is {change} baht");
                     }
                 }
                 else
                 {
-                    Debug.Log("คุณมีเงินไม่พอ");
+                    Debug.Log("Not enough money");
                 }
             }
         }
@@ -291,23 +294,23 @@ namespace Week02
         {
             if (userChoice < 0 || userChoice > 2)
             {
-                Debug.Log("กรุณาเลือกเป็นตัวเลขที่ถูกต้อง");
+                Debug.Log("Please select a valid number");
                 return;
             }
 
             if (userChoice == computerChoice)
             {
-                Debug.Log("เสมอ");
+                Debug.Log("Draw");
             }
             else if ((userChoice == 0 && computerChoice == 2) ||
                      (userChoice == 1 && computerChoice == 0) ||
                      (userChoice == 2 && computerChoice == 1))
             {
-                Debug.Log("คุณชนะ!");
+                Debug.Log("You Win!");
             }
             else
             {
-                Debug.Log("คุณแพ้!");
+                Debug.Log("You Lose!");
             }
         }
 
@@ -355,3 +358,4 @@ namespace Week02
 
     }
 }
+

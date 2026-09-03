@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
-using AssignmentSystem.Services;
+using System.Diagnostics;
+
 using NUnit.Framework;
 
 using Week02;
+
+using Workspace.Core;
 
 namespace Week02_If
 {
@@ -16,7 +18,7 @@ namespace Week02_If
         {
             testGo = new UnityEngine.GameObject();
             assignment = testGo.AddComponent<Assignment_Student_Week02>();
-            AssignmentDebugConsole.Clear();
+            Workspace.Core.SimpleDebugConsole.Clear();
         }
 
         [TearDown]
@@ -36,7 +38,7 @@ namespace Week02_If
         public void AS01_Syntax_AllCases(bool istrue, string expected)
         {
             assignment.As01_SyntaxIf(istrue);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -45,7 +47,7 @@ namespace Week02_If
         public void As02_StringComparisonExample(string password)
         {
             assignment.As02_StringComparisonExample(password);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             string expected = password == "Moon" ? "password is correct" : "wrong password";
             TestUtils.AssertMultilineEqual(expected, output);
         }
@@ -56,7 +58,7 @@ namespace Week02_If
         public void As03_NumberComparisonExample(int number, string expected)
         {
             assignment.As03_NumberComparisonExample(number);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -66,26 +68,26 @@ namespace Week02_If
         public void As04_AndOrOperatorExample(int number, string expected)
         {
             assignment.As04_AndOrOperatorExample(number);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(5, 5, "Guessing number 5\nCongratulations! You guessed the correct number.", TestName = "GuessingNumberExample_Correct")]
-        [TestCase(3, 5, "Guessing number 5\nI guess we can just agree to disagree.", TestName = "GuessingNumberExample_Incorrect")]
+        [TestCase(5, 5, "Congratulations! You guessed the correct number.", TestName = "GuessingNumberExample_Correct")]
+        [TestCase(3, 5, "I guess we can just agree to disagree.", TestName = "GuessingNumberExample_Incorrect")]
         public void As05_GuessingNumberExample(int guessingNumber, int randomNumber, string expected)
         {
             assignment.As05_GuessingNumberExample(guessingNumber, randomNumber);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(3, 5, "Guessing number 5\nToo low! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooLow")]
-        [TestCase(7, 5, "Guessing number 5\nToo high! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooHigh")]
-        [TestCase(5, 5, "Guessing number 5\nCongratulations! We are same mind.", TestName = "GuessingNumberMoreOrLessExample_Correct")]
+        [TestCase(3, 5, "Too low! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooLow")]
+        [TestCase(7, 5, "Too high! Try again.", TestName = "GuessingNumberMoreOrLessExample_TooHigh")]
+        [TestCase(5, 5, "Congratulations! We are same mind.", TestName = "GuessingNumberMoreOrLessExample_Correct")]
         public void As06_GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber, string expected)
         {
             assignment.As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -96,7 +98,7 @@ namespace Week02_If
         public void As07_VerifyIdentityExample(string username, string password, int age, bool isPaid, string expected)
         {
             assignment.As07_VerifyIdentityExample(username, password, age, isPaid);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
     }
@@ -111,7 +113,7 @@ namespace Week02_If
         public void Lv01_CheckNumberSign_AllCases(int number, string expected)
         {
             assignment.Lv01_CheckNumberSign(number);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -128,7 +130,7 @@ namespace Week02_If
         public void LV02_GetDayName_AllCases(int day, string expected)
         {
             assignment.Lv02_GetDayName(day);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -142,7 +144,7 @@ namespace Week02_If
         public void Lv03_ValidatePassword_AllCases(string input, string correct, bool expected)
         {
             assignment.Lv03_ValidatePassword(input, correct);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected ? "True" : "False", output);
         }
 
@@ -163,7 +165,7 @@ namespace Week02_If
         public void Lv04_GetGrade_AllCases(int score, string expected)
         {
             assignment.Lv04_GetGrade(score);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -179,7 +181,7 @@ namespace Week02_If
         public void Lv05_IsLeapYear_AllCases(int year, bool expected)
         {
             assignment.Lv05_IsLeapYear(year);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected ? "True" : "False", output);
         }
 
@@ -198,7 +200,7 @@ namespace Week02_If
         public void Lv06_Calculate_AllCases(double num1, char op, double num2, string expected)
         {
             assignment.Lv06_Calculate(num1, op, num2);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -221,31 +223,31 @@ namespace Week02_If
         public void Lv07_GetSeason_AllCases(int month, string expected)
         {
             assignment.Lv07_GetSeason(month);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(1, 10, 20, "เธเธธเธ“เนเธ”เนเธฃเธฑเธเธชเธดเธเธเนเธฒเนเธฅเนเธง\nเธเธธเธ“เนเธ”เนเธฃเธฑเธเน€เธเธดเธเธ—เธญเธ 10 เธเธฒเธ—", TestName = "PurchasingSystemExample_EnoughMoneyWithChange")]
-        [TestCase(1, 10, 10, "เธเธธเธ“เนเธ”เนเธฃเธฑเธเธชเธดเธเธเนเธฒเนเธฅเนเธง", TestName = "PurchasingSystemExample_ExactMoney")]
-        [TestCase(1, 10, 5, "เธเธธเธ“เธกเธตเน€เธเธดเธเนเธกเนเธเธญ", TestName = "PurchasingSystemExample_NotEnoughMoney")]
-        [TestCase(0, 10, 20, "เธชเธดเธเธเนเธฒเธซเธกเธ”", TestName = "PurchasingSystemExample_OutOfStock")]
+        [TestCase(1, 10, 20, "Item purchased successfully\nYour change is 10 baht", TestName = "PurchasingSystemExample_EnoughMoneyWithChange")]
+        [TestCase(1, 10, 10, "Item purchased successfully", TestName = "PurchasingSystemExample_ExactMoney")]
+        [TestCase(1, 10, 5, "Not enough money", TestName = "PurchasingSystemExample_NotEnoughMoney")]
+        [TestCase(0, 10, 20, "Out of stock", TestName = "PurchasingSystemExample_OutOfStock")]
         public void Ex01_PurchasingSystemExample(int quantity, int price, int payment, string expected)
         {
             assignment.Ex01_PurchasingSystemExample(quantity, price, payment);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
-        [TestCase(0, 0, "เน€เธชเธกเธญ", TestName = "RockPaperScissorsExample_DrawRock")]
-        [TestCase(0, 2, "เธเธธเธ“เธเธเธฐ!", TestName = "RockPaperScissorsExample_RockBeatsScissors")]
-        [TestCase(1, 0, "เธเธธเธ“เธเธเธฐ!", TestName = "RockPaperScissorsExample_PaperBeatsRock")]
-        [TestCase(2, 1, "เธเธธเธ“เธเธเธฐ!", TestName = "RockPaperScissorsExample_ScissorsBeatsPaper")]
-        [TestCase(2, 0, "เธเธธเธ“เนเธเน!", TestName = "RockPaperScissorsExample_ScissorsLosesToRock")]
-        [TestCase(3, 0, "เธเธฃเธธเธ“เธฒเน€เธฅเธทเธญเธเน€เธเนเธเธ•เธฑเธงเน€เธฅเธเธ—เธตเนเธ–เธนเธเธ•เนเธญเธ", TestName = "RockPaperScissorsExample_InvalidUserChoice")]
+        [TestCase(0, 0, "Draw", TestName = "RockPaperScissorsExample_DrawRock")]
+        [TestCase(0, 2, "You Win!", TestName = "RockPaperScissorsExample_RockBeatsScissors")]
+        [TestCase(1, 0, "You Win!", TestName = "RockPaperScissorsExample_PaperBeatsRock")]
+        [TestCase(2, 1, "You Win!", TestName = "RockPaperScissorsExample_ScissorsBeatsPaper")]
+        [TestCase(2, 0, "You Lose!", TestName = "RockPaperScissorsExample_ScissorsLosesToRock")]
+        [TestCase(3, 0, "Please select a valid number", TestName = "RockPaperScissorsExample_InvalidUserChoice")]
         public void Ex02_RockPaperScissorsExample(int userChoice, int computerChoice, string expected)
         {
             assignment.Ex02_RockPaperScissorsExample(userChoice, computerChoice);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected, output);
         }
 
@@ -258,7 +260,7 @@ namespace Week02_If
         public void Ex03_CalculateWeaponDamage_AllCases(string weaponType, int baseDamage, int expected)
         {
             assignment.Ex03_CalculateWeaponDamage(weaponType, baseDamage);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             TestUtils.AssertMultilineEqual(expected.ToString(), output);
         }
 
@@ -302,7 +304,7 @@ namespace Week02_If
         public void Ex04_DeterminePlayerRank_AllCases(int score, int completionTime, string expected)
         {
             assignment.Ex04_DeterminePlayerRank(score, completionTime);
-            var output = AssignmentDebugConsole.GetOutput();
+            var output = Workspace.Core.SimpleDebugConsole.GetOutput();
             Assert.AreEqual(output.Trim(), expected.Trim());
         }
     }
@@ -319,4 +321,5 @@ namespace Week02_If
         }
     }
 }
+
 
