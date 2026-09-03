@@ -1,5 +1,5 @@
 using UnityEngine;
-using Debug = AssignmentSystem.Services.AssignmentDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week03
 {

@@ -1,29 +1,28 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using AssignmentSystem.Services;
+
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Week03
-{
-    /// <summary>
-    /// ตัวตรวจ Week 03 — ตรวจ 2 ชั้น:
-    /// (1) output ต้องตรงเป๊ะ  (2) กัน hardcode: ยิง input หลากหลาย + ตรวจ source ว่าใช้ for/while จริง
-    /// </summary>
-    public class Assignment_Testcase_Week03
-    {
-        private const string StudentPath = "Assets/Scripts/Workspace/Week03/Assignment_Student_Week03.cs";
+using Week03;
+using SimpleDebugConsole = Workspace.Core.SimpleDebugConsole;
 
-        private IAssignment assignment;
-        private GameObject testGo;
+namespace Week03_Loop
+{
+    public class TestBase
+    {
+        protected const string StudentPath = "Assets/Scripts/Workspace/Week03/Assignment_Student_Week03.cs";
+
+        protected IAssignment assignment;
+        protected GameObject testGo;
 
         [SetUp]
         public void Setup()
         {
             testGo = new GameObject("Week03_TestRunner");
             assignment = testGo.AddComponent<Assignment_Student_Week03>();
-            AssignmentDebugConsole.Clear();
+            SimpleDebugConsole.Clear();
         }
 
         [TearDown]
@@ -39,25 +38,14 @@ namespace Week03
             }
         }
 
-        // ---------- helpers ----------
+        // ---- anti hardcode: อ่าน source ของ student ว่าใช้ loop จริงไหม ----
 
-        private static void AssertOutput(string expected, string actual)
-        {
-            string normExpected = expected.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
-            string normActual = actual.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
-            Assert.AreEqual(normExpected, normActual,
-                $"Expected output:\n{normExpected}\n----\nActual output:\n{normActual}");
-        }
-
-        /// <summary>ดึงบอดี้ของเมธอดจาก source ของ student (ตัด comment + string literal ออก)</summary>
-        private static string GetStudentMethodBody(string methodName)
+        protected static string GetStudentMethodBody(string methodName)
         {
             Assert.IsTrue(File.Exists(StudentPath),
                 $"หาไฟล์ student ไม่เจอที่ '{StudentPath}' (cwd={Directory.GetCurrentDirectory()})");
 
             string src = File.ReadAllText(StudentPath);
-
-            // ตัด comment + string literal ทิ้งก่อน เพื่อไม่ให้ { } ในนั้นทำ brace matching เพี้ยน
             src = Regex.Replace(src, @"//.*?$", "", RegexOptions.Multiline);
             src = Regex.Replace(src, @"/\*.*?\*/", "", RegexOptions.Singleline);
             src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");
@@ -84,32 +72,29 @@ namespace Week03
             return null;
         }
 
-        private static void AssertUsesRealLoop(string methodName, bool requireWhile = false, int minLoops = 1)
+        protected static void AssertUsesRealLoop(string methodName, bool requireWhile = false, int minLoops = 1)
         {
             string body = GetStudentMethodBody(methodName);
-
             int forCount = Regex.Matches(body, @"\bfor\s*\(").Count;
             int foreachCount = Regex.Matches(body, @"\bforeach\s*\(").Count;
             int whileCount = Regex.Matches(body, @"\bwhile\s*\(").Count;
 
             if (requireWhile)
-            {
                 Assert.GreaterOrEqual(whileCount, minLoops,
                     $"{methodName}: ต้องใช้ while loop จริงอย่างน้อย {minLoops} ลูป (ห้าม hardcode พิมพ์ทีละบรรทัด)");
-            }
             else
-            {
                 Assert.GreaterOrEqual(forCount + foreachCount + whileCount, minLoops,
                     $"{methodName}: ต้องใช้ลูป (for/while) จริงอย่างน้อย {minLoops} ลูป (ห้าม hardcode พิมพ์ทีละบรรทัด)");
-            }
         }
 
-        private static void AssertBodyContains(string methodName, string needle, string reason)
+        protected static void AssertBodyContains(string methodName, string needle, string reason)
         {
-            string body = GetStudentMethodBody(methodName);
-            StringAssert.Contains(needle, body, $"{methodName}: {reason}");
+            StringAssert.Contains(needle, GetStudentMethodBody(methodName), $"{methodName}: {reason}");
         }
+    }
 
+    public class Exercises : TestBase
+    {
         // ================= Array (ข้อ 1-6) =================
 
         [Test]
@@ -124,7 +109,7 @@ namespace Week03
             foreach (var s in new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI", "Mark VII" })
                 sb.AppendLine(s);
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex01_IronManSuit");
         }
 
@@ -143,7 +128,7 @@ namespace Week03
             foreach (var s in new[] { "Classic BatMan", "Dark Knight", "Batman Beyond", "The Batman" })
                 sb.AppendLine(s);
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex02_SpiderManAndBatMan", minLoops: 2);
         }
 
@@ -169,7 +154,7 @@ namespace Week03
             sim[last] -= damage; exp.AppendLine($"LastEnemy hp :{sim[last]}");
             sim[target] -= damage; exp.AppendLine($"TargetEnemy {target} hp :{sim[target]}");
 
-            AssertOutput(exp.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(exp.ToString(), SimpleDebugConsole.GetOutput());
         }
 
         [Test]
@@ -180,26 +165,25 @@ namespace Week03
 
             for (int seed = 1; seed <= 25; seed++)
             {
-                AssignmentDebugConsole.Clear();
+                SimpleDebugConsole.Clear();
                 Random.InitState(seed);
                 var items = new GameObject[names.Length];
                 for (int i = 0; i < names.Length; i++) items[i] = new GameObject(names[i]);
 
                 assignment.Ex04_RandomItemDrop(items);
 
-                string output = AssignmentDebugConsole.GetOutput().Trim();
+                string output = SimpleDebugConsole.GetOutput().Trim();
                 Assert.IsTrue(output.StartsWith("Got item: "), $"seed {seed}: ต้องขึ้นต้นด้วย 'Got item: ' แต่ได้ '{output}'");
-                string picked = output.Substring("Got item: ".Length);
-                CollectionAssert.Contains(names, picked, $"seed {seed}: ชื่อไอเทมไม่อยู่ใน array");
-                picks.Add(picked);
+                CollectionAssert.Contains(names, output.Substring("Got item: ".Length), $"seed {seed}: ชื่อไอเทมไม่อยู่ใน array");
+                picks.Add(output.Substring("Got item: ".Length));
 
                 foreach (var go in items) Object.DestroyImmediate(go);
                 foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
                     if (go.name.Contains("(Clone)")) Object.DestroyImmediate(go);
             }
 
-            Assert.Greater(picks.Count, 1, "สุ่ม 25 รอบได้ผลเดิมทุกครั้ง — น่าจะ hardcode index ไม่ได้สุ่มจริง");
-            AssertBodyContains("Ex04_RandomItemDrop", "Random.Range", "ต้องใช้ Random.Range ในการสุ่ม");
+            Assert.Greater(picks.Count, 1, "สุ่ม 25 รอบได้ผลเดิมทุกครั้ง — น่าจะ hardcode index");
+            AssertBodyContains("Ex04_RandomItemDrop", "Random.Range", "ต้องใช้ Random.Range");
             AssertBodyContains("Ex04_RandomItemDrop", "Instantiate", "ต้อง Instantiate ไอเทมที่สุ่มได้");
         }
 
@@ -224,7 +208,7 @@ namespace Week03
             sim[last] += heal; exp.AppendLine($"LastEnemy hp :{sim[last]}");
             sim[target] += heal; exp.AppendLine($"TargetEnemy {target} hp :{sim[target]}");
 
-            AssertOutput(exp.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(exp.ToString(), SimpleDebugConsole.GetOutput());
         }
 
         [Test]
@@ -242,15 +226,15 @@ namespace Week03
 
             for (int seed = 1; seed <= 25; seed++)
             {
-                AssignmentDebugConsole.Clear();
+                SimpleDebugConsole.Clear();
                 Random.InitState(seed);
                 assignment.Ex06_RandomDialogue(dialogues);
-                string output = AssignmentDebugConsole.GetOutput().Trim();
+                string output = SimpleDebugConsole.GetOutput().Trim();
                 CollectionAssert.Contains(dialogues, output, $"seed {seed}: บทสนทนาไม่อยู่ใน array");
                 seen.Add(output);
             }
 
-            Assert.Greater(seen.Count, 1, "สุ่ม 25 รอบได้บทสนทนาเดิมทุกครั้ง — น่าจะไม่ได้สุ่มจริง");
+            Assert.Greater(seen.Count, 1, "สุ่ม 25 รอบได้บทสนทนาเดิมทุกครั้ง");
             AssertBodyContains("Ex06_RandomDialogue", "Random.Range", "ต้องใช้ Random.Range");
         }
 
@@ -266,7 +250,7 @@ namespace Week03
             sb.AppendLine("======================");
             for (int i = 1; i <= 10; i++) sb.AppendLine($"<=10 : {i}");
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex07_ForLoopBasic", minLoops: 2);
         }
 
@@ -282,7 +266,7 @@ namespace Week03
             var sb = new StringBuilder();
             for (int i = 0; i < n; i++) sb.AppendLine(i.ToString());
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             if (n > 0) AssertUsesRealLoop("Ex08_ForLoopN");
         }
 
@@ -298,7 +282,7 @@ namespace Week03
         public void Ex09_ForLoopStep(string[] suites)
         {
             assignment.Ex09_ForLoopStep(suites);
-            AssertOutput(ExpectedStepOutput(suites), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(ExpectedStepOutput(suites), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex09_ForLoopStep", minLoops: 2);
         }
 
@@ -315,7 +299,7 @@ namespace Week03
             var sb = new StringBuilder();
             for (int i = 1; i <= 12; i++) sb.AppendLine($"{n} x {i} = {n * i}");
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex10_MultiplicationTable");
         }
 
@@ -329,7 +313,7 @@ namespace Week03
             var sb = new StringBuilder();
             for (int i = 0; i < 10; i++) sb.AppendLine($"while loop : {i}");
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex11_WhileLoopBasic", requireWhile: true);
         }
 
@@ -345,7 +329,7 @@ namespace Week03
             var sb = new StringBuilder();
             for (int i = 0; i < n; i++) sb.AppendLine(i.ToString());
 
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             if (n > 0) AssertUsesRealLoop("Ex12_WhileLoopN", requireWhile: true);
         }
 
@@ -353,10 +337,12 @@ namespace Week03
         public void Ex13_WhileLoopStep(string[] suites)
         {
             assignment.Ex13_WhileLoopStep(suites);
-            AssertOutput(ExpectedStepOutput(suites), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(ExpectedStepOutput(suites), SimpleDebugConsole.GetOutput());
             AssertUsesRealLoop("Ex13_WhileLoopStep", requireWhile: true, minLoops: 2);
         }
 
+        // Ex14 output เป็นภาษาไทย ("ผลรวมของ n จาก 0 ถึง ... คือ ...") ตาม Instruction-th.md
+        // ตาม main เขาข้ามการตรวจ string ไทย -> เช็คแค่ค่า sum + ต้องใช้ while loop จริง
         [TestCase(0, 0)]
         [TestCase(1, 1)]
         [TestCase(5, 15)]
@@ -365,7 +351,9 @@ namespace Week03
         public void Ex14_WhileLoopSum(int n, int expectedSum)
         {
             assignment.Ex14_WhileLoopSum(n);
-            AssertOutput($"ผลรวมของ n จาก 0 ถึง {n} คือ {expectedSum}", AssignmentDebugConsole.GetOutput());
+            string output = SimpleDebugConsole.GetOutput().Trim();
+            Assert.IsTrue(output.EndsWith(expectedSum.ToString()),
+                $"n={n}: output ควรลงท้ายด้วยผลรวม {expectedSum} แต่ได้ '{output}'");
             AssertUsesRealLoop("Ex14_WhileLoopSum", requireWhile: true);
         }
 
@@ -389,7 +377,7 @@ namespace Week03
             var sb = new StringBuilder();
             for (int i = 0; i < hpEnemy.Length; i++)
                 sb.AppendLine($"new enemy at position x = {i + 1}");
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
 
             var xs = new System.Collections.Generic.List<float>();
             foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
@@ -416,7 +404,6 @@ namespace Week03
 
             assignment.Ex16_MoveToTarget(target.transform, speed);
 
-            // จำลอง float accumulation แบบเดียวกับที่ student ทำ
             var sb = new StringBuilder();
             float x = 0f;
             int steps = 0;
@@ -428,15 +415,13 @@ namespace Week03
             }
 
             Assert.AreEqual(expectedSteps, steps, "จำนวนรอบที่จำลองไม่ตรงกับที่คาด (เช็คค่า test case)");
-            AssertOutput(sb.ToString(), AssignmentDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
             Assert.GreaterOrEqual(testGo.transform.position.x, targetX);
 
             Object.DestroyImmediate(target);
             AssertUsesRealLoop("Ex16_MoveToTarget");
             AssertBodyContains("Ex16_MoveToTarget", "Translate", "ต้องเคลื่อนที่ด้วย transform.Translate");
         }
-
-        // ---------- shared ----------
 
         private static string ExpectedStepOutput(string[] suites)
         {
@@ -446,6 +431,18 @@ namespace Week03
             sb.AppendLine("======Log by Two======");
             for (int i = 0; i < suites.Length; i += 2) sb.AppendLine(suites[i]);
             return sb.ToString();
+        }
+    }
+
+    public class TestUtils
+    {
+        internal static void AssertMultilineEqual(string expected, string actual, string message = null)
+        {
+            string normExpected = expected.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
+            string normActual = actual.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
+            if (message == null)
+                message = $"Expected output:\n{normExpected}\n----\nActual output:\n{normActual}";
+            Assert.AreEqual(normExpected, normActual, message);
         }
     }
 }
