@@ -47,7 +47,7 @@ namespace Week02
         #region Examples
 
         public void As01_SyntaxIf(bool isSixoClock)
-        { 
+        {
             // Guideline: ทดสอบการเขียน if เบื้องต้น เช็คเงื่อนไข isSixoClock ว่าเป็นจริงหรือไม่
             // ถ้าเป็นจริงให้พิมพ์ "You can get in" และให้มีพิมพ์ "Crack Crack!!!!" ออกมาเสมอ
             
