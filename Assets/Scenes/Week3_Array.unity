@@ -128,8 +128,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 145990486}
+  - component: {fileID: 145990487}
   m_Layer: 0
-  m_Name: Assiment
+  m_Name: Assingment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,6 +151,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &145990487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145990485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b99db491d587488ca0a4a873e5337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Workspace::Assignment_Submitter_Week03
+  studentID: "\u0E23\u0E2B\u0E31\u0E2A\u0E19\u0E31\u0E01\u0E28\u0E36\u0E01\u0E29\u0E32"
+  studentName: "\u0E0A\u0E37\u0E48\u0E2D-\u0E19\u0E32\u0E21\u0E2A\u0E01\u0E38\u0E25"
+  section: 0
+  customSection: 
+  weekName: Week03
 --- !u!1 &489496628
 GameObject:
   m_ObjectHideFlags: 0
