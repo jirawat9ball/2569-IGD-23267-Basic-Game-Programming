@@ -5,8 +5,6 @@ using UnityEditor.TestTools.TestRunner.Api;
 [CustomEditor(typeof(Assignment_Submitter_Week03))]
 public class Assignment_SubmitterEditor_Week03 : Editor
 {
-    private const string TestAssemblyName = "Workspace.Editor.Week03";
-
     [MenuItem("Assignment/Submit Score Week 03 %#g")]
     public static void SubmitScoreFromMenu()
     {
@@ -89,7 +87,8 @@ public class Assignment_SubmitterEditor_Week03 : Editor
         api.Execute(new ExecutionSettings(new Filter()
         {
             testMode = TestMode.EditMode,
-            assemblyNames = new string[] { TestAssemblyName }
+            assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+            groupNames = new string[] { submitter.weekName }
         }));
     }
 }
