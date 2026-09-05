@@ -96,11 +96,11 @@ namespace Week02
 
             if (guessingNumber == randomNumber)
             {
-                Debug.Log("Congratulations! You guessed the correct number.");
+                Debug.Log("Correct!");
             }
             else
             {
-                Debug.Log("I guess we can just agree to disagree.");
+                Debug.Log("Wrong!");
             }
         }
 
