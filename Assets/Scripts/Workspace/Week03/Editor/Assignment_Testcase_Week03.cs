@@ -458,20 +458,61 @@ namespace Week03_Loop
             AssertUsesRealLoop("Lv06_ForLoopReverse");
         }
 
+        [TestCase(3)]
+        [TestCase(5)]
+        [TestCase(1)]
+        [TestCase(0)]
+        [TestCase(-3)]
+        public void Lv07_Countdown(int start)
+        {
+            assignment.Lv07_Countdown(start);
+
+            var sb = new StringBuilder();
+            for (int i = start; i >= 1; i--)
+            {
+                sb.AppendLine(i.ToString());
+            }
+            sb.AppendLine("Start!");
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            if (start > 0) AssertUsesRealLoop("Lv07_Countdown");
+        }
+
+        static readonly TestCaseData[] TotalScoreCases =
+        {
+            new TestCaseData((object)new[] { 10, 20, 30 }).SetName("Lv08_CalculateTotalScore([10, 20, 30])"),
+            new TestCaseData((object)new[] { 100, 200, 300, 400 }).SetName("Lv08_CalculateTotalScore([100, 200, 300, 400])"),
+            new TestCaseData((object)new[] { 5 }).SetName("Lv08_CalculateTotalScore([5])"),
+            new TestCaseData((object)new[] { 0, 0, 0 }).SetName("Lv08_CalculateTotalScore([0, 0, 0])"),
+            new TestCaseData((object)new[] { -10, 20, 30 }).SetName("Lv08_CalculateTotalScore([-10, 20, 30])"),
+        };
+
+        [TestCaseSource(nameof(TotalScoreCases))]
+        public void Lv08_CalculateTotalScore(int[] scores)
+        {
+            assignment.Lv08_CalculateTotalScore(scores);
+
+            int total = 0;
+            for (int i = 0; i < scores.Length; i++) total += scores[i];
+
+            TestUtils.AssertMultilineEqual("Total score : " + total, SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Lv08_CalculateTotalScore");
+        }
+
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(5)]
         [TestCase(50)]
         [TestCase(137)]
-        public void Lv07_WhileLoopN(int n)
+        public void Lv09_WhileLoopN(int n)
         {
-            assignment.Lv07_WhileLoopN(n);
+            assignment.Lv09_WhileLoopN(n);
 
             var sb = new StringBuilder();
             for (int i = 0; i < n; i++) sb.AppendLine(i.ToString());
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            if (n > 0) AssertUsesRealLoop("Lv07_WhileLoopN", requireWhile: true);
+            if (n > 0) AssertUsesRealLoop("Lv09_WhileLoopN", requireWhile: true);
         }
 
         // ================= Level 2: Moderate (Ex01 - Ex05) =================

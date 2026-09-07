@@ -2,7 +2,7 @@
 
 ## 📋 ภาพรวมของ Assignment
 
-เรียนรู้การจัดการชุดข้อมูลด้วย **Array**, การควบคุมการทำงานซ้ำด้วย **For Loop** และ **While Loop**, การสร้างวัตถุในเกมแบบ Dynamic ด้วย **Instantiate** ตลอดจนการสร้างการเคลื่อนที่ด้วย **Coroutine** โดยการ implement 21 methods ที่ใช้งานจริงในกระบวนการสร้างเกม Assignment นี้เน้นการฝึกทักษะการคำนวณ Index, การวนลูปเข้าถึงสมาชิกใน Array, การจัดการเงื่อนไขการทำงานซ้ำ และการโต้ตอบกับ Game Objects ใน Unity แต่ละ method จะแสดงผลลัพธ์ผ่าน `Debug.Log()` และต้องตรงกับผลลัพธ์ที่คาดหวังจาก Test Cases อย่างแม่นยำ
+เรียนรู้การจัดการชุดข้อมูลด้วย **Array**, การควบคุมการทำงานซ้ำด้วย **For Loop** และ **While Loop**, การสร้างวัตถุในเกมแบบ Dynamic ด้วย **Instantiate** ตลอดจนการสร้างการเคลื่อนที่ด้วย **Coroutine** โดยการ implement 23 methods ที่ใช้งานจริงในกระบวนการสร้างเกม Assignment นี้เน้นการฝึกทักษะการคำนวณ Index, การวนลูปเข้าถึงสมาชิกใน Array, การจัดการเงื่อนไขการทำงานซ้ำ และการโต้ตอบกับ Game Objects ใน Unity แต่ละ method จะแสดงผลลัพธ์ผ่าน `Debug.Log()` และต้องตรงกับผลลัพธ์ที่คาดหวังจาก Test Cases อย่างแม่นยำ
 
 ---
 
@@ -21,7 +21,7 @@
 ## 📚 โครงสร้างของ Assignment
 
 - **Lecture Methods (9 methods: As01 – As09)** - การฝึกเขียนโค้ดเพื่อเรียนรู้พื้นฐานร่วมกันในชั้นเรียน
-- **Level 1: Simple (7 methods: Lv01 – Lv07)** - การบ้านระดับพื้นฐาน เน้นความเข้าใจ Array และ Loop
+- **Level 1: Simple (9 methods: Lv01 – Lv09)** - การบ้านระดับพื้นฐาน เน้นความเข้าใจ Array และ Loop
 - **Level 2: Moderate (5 methods: Ex01 – Ex05)** - การบ้านระดับท้าทาย ผสมผสาน Loop, Array และ Game Mechanics
 
 ---
@@ -493,13 +493,85 @@ void Lv06_ForLoopReverse(string[] suiteNames)
 
 ---
 
-### 16. Lv07_WhileLoopN (5 test cases)
+### 16. Lv07_Countdown (5 test cases)
+
+**วัตถุประสงค์:** ฝึกการใช้ For Loop นับถอยหลังจากค่า `start` ลงมาถึง 1 และแสดงข้อความเมื่อสิ้นสุดการนับ
+
+**Method Signature:**
+```csharp
+void Lv07_Countdown(int start)
+```
+
+**Logic ที่ต้อง implement:**
+1. วนลูป For นับถอยหลังจาก `start` ลงมาถึง `1` (ทีละ 1 ด้วย `i--`)
+2. แสดงผลตัวเลข `i` ในแต่ละรอบ
+3. เมื่อลูปสิ้นสุด ให้แสดงผล: `Start!`
+4. (หาก `start <= 0` ลูปจะไม่ทำงาน และจะพิมพ์ `Start!` ทันที)
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ตั้งค่าตัวนับรอบเริ่มจาก `i = start`
+- กำหนดเงื่อนไขตราบใดที่ยังมากกว่าหรือเท่ากับ 1 (`i >= 1`) และปรับลดค่าด้วย `i--`
+- คำสั่งพิมพ์ `"Start!"` ให้อยู่นอกลูป เพื่อให้ทำงานหลังจากตัวเลขถูกพิมพ์ครบทั้งหมดแล้ว
+
+**ตัวอย่าง Input/Output:**
+- Input: `start = 3`
+  ```
+  3
+  2
+  1
+  Start!
+  ```
+- Input: `start = 0`
+  ```
+  Start!
+  ```
+
+**Game Context:** ระบบนับถอยหลังก่อนเริ่มการแข่งขัน (Race Countdown) หรือการนับเวลาก่อนเริ่มเวฟศัตรู
+
+---
+
+### 17. Lv08_CalculateTotalScore (5 test cases)
+
+**วัตถุประสงค์:** ฝึกการใช้ For Loop วนลูปผ่าน Array เพื่อคำนวณผลรวมของคะแนนทั้งหมด (Array Accumulation)
+
+**Method Signature:**
+```csharp
+void Lv08_CalculateTotalScore(int[] scores)
+```
+
+**Logic ที่ต้อง implement:**
+1. ประกาศตัวแปรสะสมผลรวม `int total = 0;`
+2. วนลูป For ตั้งแต่ `i = 0` จนถึง `scores.Length - 1`
+3. นำค่าคะแนนในแต่ละช่อง `scores[i]` มาบวกสะสมเข้าใน `total`
+4. แสดงผลลัพธ์: `Total score : <total>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ประกาศตัวแปรผลรวม `int total = 0;` ไว้นอกลูป For เสมอ
+- ใช้ For Loop ปกติวนตั้งแต่ `i = 0` ถึง `i < scores.Length`
+- ภายในลูป ใช้เครื่องหมาย `+=` เพื่อนำค่า `scores[i]` มาบวกสะสม
+- สั่งพิมพ์ผลลัพธ์ผ่าน `Debug.Log` นอกลูปหลังจากบวกครบทุกช่องแล้ว ระวังการเว้นวรรค `"Total score : "`
+
+**ตัวอย่าง Input/Output:**
+- Input: `scores = [10, 20, 30]`
+  ```
+  Total score : 60
+  ```
+- Input: `scores = [100, 200, 300, 400]`
+  ```
+  Total score : 1000
+  ```
+
+**Game Context:** การคำนวณคะแนนรวมของผู้เล่นหลังจบด่าน หรือการรวม EXP จากการทำเควสต์
+
+---
+
+### 18. Lv09_WhileLoopN (5 test cases)
 
 **วัตถุประสงค์:** ฝึกการเขียน While Loop ควบคุมการวนซ้ำตามจำนวนรอบที่ระบุ
 
 **Method Signature:**
 ```csharp
-void Lv07_WhileLoopN(int n)
+void Lv09_WhileLoopN(int n)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -526,7 +598,7 @@ void Lv07_WhileLoopN(int n)
 
 ## 🟡 Level 2: Moderate (การบ้านระดับท้าทาย)
 
-### 17. Ex01_HealTarget (6 test cases)
+### 19. Ex01_HealTarget (6 test cases)
 
 **วัตถุประสงค์:** การฟื้นฟูค่า HP ของศัตรูในตำแหน่งต่างๆ โดยมีระบบป้องกัน Overheal ด้วย `Mathf.Min`
 
@@ -559,7 +631,7 @@ void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP)
 
 ---
 
-### 18. Ex02_DialogueInteraction (1 test case)
+### 20. Ex02_DialogueInteraction (1 test case)
 
 **วัตถุประสงค์:** ระบบสุ่มบทสนทนาโต้ตอบแบบ 2 ทางระหว่างตัวละคร NPC 2 ตัว
 
@@ -586,7 +658,7 @@ NPC2 : Yes, it's a great day for an adventure!
 
 ---
 
-### 19. Ex03_SpawnEnemiesWithSpacing (4 test cases)
+### 21. Ex03_SpawnEnemiesWithSpacing (4 test cases)
 
 **วัตถุประสงค์:** การใช้วงลูปสร้างวัตถุจำนวนมากพร้อมคำนวณตำแหน่งแบบกระจายตัวตามระยะห่าง (Spacing)
 
@@ -619,7 +691,7 @@ void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)
 
 ---
 
-### 20. Ex04_WhileLoopStep (4 test cases)
+### 22. Ex04_WhileLoopStep (4 test cases)
 
 **วัตถุประสงค์:** การควบคุม Step การวนซ้ำใน While Loop เพื่อข้ามสมาชิกใน Array
 
@@ -657,7 +729,7 @@ void Ex04_WhileLoopStep(string[] suiteNames)
 
 ---
 
-### 21. Ex05_WhileLoopSum (5 test cases)
+### 23. Ex05_WhileLoopSum (5 test cases)
 
 **วัตถุประสงค์:** การใช้ While Loop ในการคำนวณผลรวมสะสมทางคณิตศาสตร์ (Accumulative Sum)
 

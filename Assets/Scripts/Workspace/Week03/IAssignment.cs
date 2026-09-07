@@ -47,7 +47,11 @@ namespace Week03
 
         void Lv06_ForLoopReverse(string[] suiteNames);
 
-        void Lv07_WhileLoopN(int n);
+        void Lv07_Countdown(int start);
+
+        void Lv08_CalculateTotalScore(int[] scores);
+
+        void Lv09_WhileLoopN(int n);
 
         #endregion
 

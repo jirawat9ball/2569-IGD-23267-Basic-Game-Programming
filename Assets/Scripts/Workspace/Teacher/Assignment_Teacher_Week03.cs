@@ -199,7 +199,26 @@ namespace Week03
             }
         }
 
-        public void Lv07_WhileLoopN(int n)
+        public void Lv07_Countdown(int start)
+        {
+            for (int i = start; i >= 1; i--)
+            {
+                Debug.Log(i);
+            }
+            Debug.Log("Start!");
+        }
+
+        public void Lv08_CalculateTotalScore(int[] scores)
+        {
+            int total = 0;
+            for (int i = 0; i < scores.Length; i++)
+            {
+                total += scores[i];
+            }
+            Debug.Log("Total score : " + total);
+        }
+
+        public void Lv09_WhileLoopN(int n)
         {
             int i = 0;
             while (i < n)

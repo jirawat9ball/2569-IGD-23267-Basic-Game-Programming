@@ -13,7 +13,7 @@ namespace Week03
         [Header("As03 Variables")]
         public GameObject[] items;
 
-        [Header("As05 / Lv05 / Lv07 / Ex05 Variables")]
+        [Header("As05 / Lv05 / Lv09 / Ex05 Variables")]
         public int n = 5;
 
         [Header("As06 & Lv06 & Ex04 Variables")]
@@ -48,6 +48,12 @@ namespace Week03
         public int[] enemyHP = { 100, 80, 60, 40 };
         public int damage = 10;
         public int target = 2;
+
+        [Header("Lv07 Variables")]
+        public int countdownStart = 3;
+
+        [Header("Lv08 Variables")]
+        public int[] scores = { 10, 20, 30, 40, 50 };
 
         #endregion
 
@@ -90,7 +96,9 @@ namespace Week03
             Lv04_AttackTarget(enemyHP, damage, target);
             Lv05_MultiplicationTable(n);
             Lv06_ForLoopReverse(suiteNames);
-            Lv07_WhileLoopN(n);
+            Lv07_Countdown(countdownStart);
+            Lv08_CalculateTotalScore(scores);
+            Lv09_WhileLoopN(n);
 
             Ex01_HealTarget(enemyHP, heal, target, maxHP);
             Ex02_DialogueInteraction(npc1Dialogues, npc2Dialogues);
@@ -224,7 +232,22 @@ namespace Week03
             // 2. วนลูป For ย้อนกลับพิมพ์สมาชิกตั้งแต่ index ตัวสุดท้ายลงมาถึง index 0
         }
 
-        public void Lv07_WhileLoopN(int n)
+        public void Lv07_Countdown(int start)
+        {
+            // Guideline:
+            // 1. วนลูป For นับถอยหลังจาก start ลงมาถึง 1 (i--) แสดงตัวเลขทีละบรรทัด
+            // 2. เมื่อลูปสิ้นสุด ให้พิมพ์ "Start!"
+        }
+
+        public void Lv08_CalculateTotalScore(int[] scores)
+        {
+            // Guideline:
+            // 1. ประกาศตัวแปร int total = 0; ไว้นอกลูป
+            // 2. วนลูป For นำค่าใน scores แต่ละช่องมาบวกสะสมเข้าใน total
+            // 3. แสดงผลลัพธ์ "Total score : " + total
+        }
+
+        public void Lv09_WhileLoopN(int n)
         {
             // Guideline:
             // วนลูป While พิมพ์ตัวเลขตั้งแต่ 0 ถึง n - 1
