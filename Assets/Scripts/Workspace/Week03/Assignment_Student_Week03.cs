@@ -49,11 +49,8 @@ namespace Week03
         public int damage = 10;
         public int target = 2;
 
-        [Header("Lv07 Variables")]
-        public int countdownStart = 3;
-
-        [Header("Lv08 Variables")]
-        public int[] scores = { 10, 20, 30, 40, 50 };
+        [Header("Lv07 & Lv08 Variables")]
+        public int[] scores = { 10, 50, 30, 90, 40 };
 
         #endregion
 
@@ -96,7 +93,7 @@ namespace Week03
             Lv04_AttackTarget(enemyHP, damage, target);
             Lv05_MultiplicationTable(n);
             Lv06_ForLoopReverse(suiteNames);
-            Lv07_Countdown(countdownStart);
+            Lv07_FindHighestScore(scores);
             Lv08_CalculateTotalScore(scores);
             Lv09_WhileLoopN(n);
 
@@ -232,11 +229,13 @@ namespace Week03
             // 2. วนลูป For ย้อนกลับพิมพ์สมาชิกตั้งแต่ index ตัวสุดท้ายลงมาถึง index 0
         }
 
-        public void Lv07_Countdown(int start)
+        public void Lv07_FindHighestScore(int[] scores)
         {
             // Guideline:
-            // 1. วนลูป For นับถอยหลังจาก start ลงมาถึง 1 (i--) แสดงตัวเลขทีละบรรทัด
-            // 2. เมื่อลูปสิ้นสุด ให้พิมพ์ "Start!"
+            // 1. ตรวจสอบหาก scores ว่าง ให้ return
+            // 2. กำหนดตัวแปร int highest = scores[0]; เก็บค่าแรกไว้เปรียบเทียบ
+            // 3. วนลูป For ตั้งแต่ index 1 ถึงตัวสุดท้าย หาก scores[i] > highest ให้ปรับ highest = scores[i]
+            // 4. เมื่อจบลูป ให้พิมพ์ "Highest score : " + highest
         }
 
         public void Lv08_CalculateTotalScore(int[] scores)

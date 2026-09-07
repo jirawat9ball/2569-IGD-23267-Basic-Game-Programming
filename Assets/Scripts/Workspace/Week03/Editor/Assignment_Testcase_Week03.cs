@@ -458,24 +458,28 @@ namespace Week03_Loop
             AssertUsesRealLoop("Lv06_ForLoopReverse");
         }
 
-        [TestCase(3)]
-        [TestCase(5)]
-        [TestCase(1)]
-        [TestCase(0)]
-        [TestCase(-3)]
-        public void Lv07_Countdown(int start)
+        static readonly TestCaseData[] HighestScoreCases =
         {
-            assignment.Lv07_Countdown(start);
+            new TestCaseData((object)new[] { 10, 50, 30, 90, 40 }).SetName("Lv07_FindHighestScore([10, 50, 30, 90, 40])"),
+            new TestCaseData((object)new[] { 100, 20, 50 }).SetName("Lv07_FindHighestScore([100, 20, 50])"),
+            new TestCaseData((object)new[] { 5 }).SetName("Lv07_FindHighestScore([5])"),
+            new TestCaseData((object)new[] { -10, -50, -5, -20 }).SetName("Lv07_FindHighestScore([-10, -50, -5, -20])"),
+            new TestCaseData((object)new[] { 70, 70, 70 }).SetName("Lv07_FindHighestScore([70, 70, 70])"),
+        };
 
-            var sb = new StringBuilder();
-            for (int i = start; i >= 1; i--)
+        [TestCaseSource(nameof(HighestScoreCases))]
+        public void Lv07_FindHighestScore(int[] scores)
+        {
+            assignment.Lv07_FindHighestScore(scores);
+
+            int highest = scores[0];
+            for (int i = 1; i < scores.Length; i++)
             {
-                sb.AppendLine(i.ToString());
+                if (scores[i] > highest) highest = scores[i];
             }
-            sb.AppendLine("Start!");
 
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            if (start > 0) AssertUsesRealLoop("Lv07_Countdown");
+            TestUtils.AssertMultilineEqual("Highest score : " + highest, SimpleDebugConsole.GetOutput());
+            if (scores.Length > 1) AssertUsesRealLoop("Lv07_FindHighestScore");
         }
 
         static readonly TestCaseData[] TotalScoreCases =

@@ -199,13 +199,19 @@ namespace Week03
             }
         }
 
-        public void Lv07_Countdown(int start)
+        public void Lv07_FindHighestScore(int[] scores)
         {
-            for (int i = start; i >= 1; i--)
+            if (scores == null || scores.Length == 0) return;
+
+            int highest = scores[0];
+            for (int i = 1; i < scores.Length; i++)
             {
-                Debug.Log(i);
+                if (scores[i] > highest)
+                {
+                    highest = scores[i];
+                }
             }
-            Debug.Log("Start!");
+            Debug.Log("Highest score : " + highest);
         }
 
         public void Lv08_CalculateTotalScore(int[] scores)
