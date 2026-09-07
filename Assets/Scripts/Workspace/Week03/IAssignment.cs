@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Week03
@@ -22,7 +23,11 @@ namespace Week03
 
         void As06_ForLoopWithArray(string[] suiteNames);
 
-        void As07_WhileLoopBasic();
+        void As07_InstantiateEnemies(GameObject Enemy, int[] HpEnemy);
+
+        void As08_WhileLoopBasic();
+
+        IEnumerator As09_MoveToTarget(Transform character, Transform target, float speed);
 
         #endregion
 
@@ -30,27 +35,33 @@ namespace Week03
 
         #region Level 1: Simple
 
-        void Lv01_AttackTarget(int[] enemyHP, int damage, int target);
+        void Lv01_SetArrayValues();
 
-        void Lv02_MultiplicationTable(int n);
+        void Lv02_InspectArray(string[] items);
 
-        void Lv03_WhileLoopN(int n);
+        void Lv03_RandomDialogue(string[] npc1Dialogues);
 
-        void Lv04_WhileLoopStep(string[] suiteNames);
+        void Lv04_AttackTarget(int[] enemyHP, int damage, int target);
 
-        void Lv05_WhileLoopSum(int n);
+        void Lv05_MultiplicationTable(int n);
+
+        void Lv06_WhileLoopN(int n);
+
+        void Lv07_ForLoopReverse(string[] suiteNames);
 
         #endregion
 
         #region Level 2: Moderate
 
-        void Ex01_HealTarget(int[] enemyHP, int heal, int target);
+        void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP);
 
-        void Ex02_RandomDialogue(string[] npc1Dialogues);
+        void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues);
 
-        void Ex03_InstantiateEnemies(GameObject Enemy, int[] HpEnemy);
+        void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing);
 
-        void Ex04_MoveToTarget(Transform positionToMove, float speed);
+        void Ex04_WhileLoopStep(string[] suiteNames);
+
+        void Ex05_WhileLoopSum(int n);
 
         #endregion
         #endregion
