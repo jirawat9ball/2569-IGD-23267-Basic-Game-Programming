@@ -257,8 +257,17 @@ namespace Week03
             int rounds = Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length);
             for (int i = 0; i < rounds; i++)
             {
-                Debug.Log("NPC1 : " + npc1Dialogues[i]);
-                Debug.Log("NPC2 : " + npc2Dialogues[i]);
+                Debug.Log("[Round " + (i + 1) + "]");
+                if (i % 2 == 0)
+                {
+                    Debug.Log("NPC1 : " + npc1Dialogues[i]);
+                    Debug.Log("NPC2 : " + npc2Dialogues[i]);
+                }
+                else
+                {
+                    Debug.Log("NPC2 : " + npc2Dialogues[i]);
+                    Debug.Log("NPC1 : " + npc1Dialogues[i]);
+                }
             }
         }
 

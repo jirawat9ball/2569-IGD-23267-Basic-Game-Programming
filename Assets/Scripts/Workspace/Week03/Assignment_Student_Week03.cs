@@ -39,9 +39,9 @@ namespace Week03
         public string[] npc1Dialogues =
         {
             "Nice weather today, isn't it?",
-            "I heard there are monsters in the cave.",
+            "Yes, I heard there are monsters inside!",
             "Welcome, traveler!",
-            "Have you seen my cat?"
+            "No, I haven't seen any cats around."
         };
 
         [Header("Lv04 Variables")]
@@ -64,9 +64,9 @@ namespace Week03
         public string[] npc2Dialogues =
         {
             "Yes, it's a great day for an adventure!",
-            "I will prepare my sword and shield.",
+            "Are you ready to explore the cave?",
             "Thank you, good to see you!",
-            "No, I haven't seen any cats around."
+            "Have you seen my cat?"
         };
 
         [Header("Ex03 Variables")]
@@ -270,9 +270,11 @@ namespace Week03
             // Guideline:
             // 1. หาจำนวนรอบของบทสนทนา เช่น int rounds = Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length);
             // 2. วนลูป For ตั้งแต่ i = 0 ถึง rounds - 1
-            // 3. ในแต่ละรอบ พิมพ์บทสนทนาโต้ตอบ:
-            //    - "NPC1 : " + npc1Dialogues[i]
-            //    - "NPC2 : " + npc2Dialogues[i]
+            // 3. ในแต่ละรอบ:
+            //    - แสดงหัวข้อรอบ: "[Round " + (i + 1) + "]"
+            //    - ตรวจสอบเงื่อนไขการสลับคนพูด (เช่น i % 2 == 0):
+            //      - ถ้ารอบคู่ (i = 0, 2, ...): NPC1 พูดก่อน แล้วตามด้วย NPC2
+            //      - ถ้ารอบคี่ (i = 1, 3, ...): NPC2 พูดก่อน แล้วตามด้วย NPC1
         }
 
         public void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)

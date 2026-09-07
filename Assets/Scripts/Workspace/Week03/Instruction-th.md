@@ -632,7 +632,7 @@ void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP)
 
 ### 20. Ex02_DialogueInteraction (4 test cases)
 
-**วัตถุประสงค์:** การประยุกต์ใช้ For Loop แสดงบทสนทนาโต้ตอบแบบ 2 ทางระหว่างตัวละคร NPC 2 ตัวตามลำดับของ Array
+**วัตถุประสงค์:** การประยุกต์ใช้ For Loop ร่วมกับคำสั่งเงื่อนไข `if` เพื่อแสดงบทสนทนาโต้ตอบแบบสลับคนเริ่มพูดตามรอบ (Alternating Turn) พร้อมหัวข้อระบุรอบ
 
 **Method Signature:**
 ```csharp
@@ -642,28 +642,39 @@ void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
 **Logic ที่ต้อง implement:**
 1. หาจำนวนรอบที่สามารถโต้ตอบกันได้จากความยาวของทั้งสอง Array โดยเลือกค่าที่น้อยกว่า (เช่น ใช้ `Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length)`) เพื่อป้องกัน Index Out of Range หาก Array มีขนาดไม่เท่ากัน
 2. วนลูป For ตั้งแต่รอบแรก (`i = 0`) จนถึงรอบสุดท้ายตามจำนวนรอบที่หาได้
-3. ในแต่ละรอบของการวนลูป ให้พิมพ์บทสนทนาโต้ตอบตามลำดับ:
-   - `NPC1 : <ข้อความของ npc1Dialogues[i]>`
-   - `NPC2 : <ข้อความของ npc2Dialogues[i]>`
+3. ในแต่ละรอบ ให้ดำเนินการดังนี้:
+   - แสดงหัวข้อระบุรอบ: `[Round <i + 1>]` (เช่น รอบแรก `i = 0` จะแสดง `[Round 1]`)
+   - ตรวจสอบเงื่อนไขว่ารอบนี้ใครเริ่มพูดก่อน (ใช้ modulo `i % 2 == 0`):
+     - **ถ้ารอบคู่ (`i = 0, 2, ...`)**: NPC1 เป็นฝ่ายเริ่มพูดก่อน แล้วตามด้วย NPC2 ตอบ
+       - `NPC1 : <ข้อความของ npc1Dialogues[i]>`
+       - `NPC2 : <ข้อความของ npc2Dialogues[i]>`
+     - **ถ้ารอบคี่ (`i = 1, 3, ...`)**: NPC2 เป็นฝ่ายเริ่มพูดก่อน แล้วตามด้วย NPC1 ตอบ
+       - `NPC2 : <ข้อความของ npc2Dialogues[i]>`
+       - `NPC1 : <ข้อความของ npc1Dialogues[i]>`
 
 **💡 แนวทางการเขียนโค้ด (Guideline):**
 - ใช้ `Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length)` เพื่อหาขอบเขตจำนวนรอบ (Rounds) ที่ปลอดภัย
 - สร้าง For Loop วนตั้งแต่ `i = 0` จนถึง `i < rounds`
-- ในแต่ละรอบ พิมพ์ Debug.Log สองบรรทัดตามลำดับ โดยขึ้นต้นด้วย `"NPC1 : "` และ `"NPC2 : "` ตามด้วยประโยคของรอบนั้นๆ
+- ในแต่ละรอบ พิมพ์หัวข้อ `"[Round " + (i + 1) + "]"` ก่อน
+- ใช้คำสั่ง `if (i % 2 == 0)` เพื่อแยกว่ารอบนั้น NPC1 พูดก่อน (`NPC1` แล้ว `NPC2`) หรือ NPC2 พูดก่อน (`NPC2` แล้ว `NPC1`)
 
 **ตัวอย่าง Output:**
 ```
+[Round 1]
 NPC1 : Nice weather today, isn't it?
 NPC2 : Yes, it's a great day for an adventure!
-NPC1 : I heard there are monsters in the cave.
-NPC2 : I will prepare my sword and shield.
+[Round 2]
+NPC2 : Are you ready to explore the cave?
+NPC1 : Yes, I heard there are monsters inside!
+[Round 3]
 NPC1 : Welcome, traveler!
 NPC2 : Thank you, good to see you!
-NPC1 : Have you seen my cat?
-NPC2 : No, I haven't seen any cats around.
+[Round 4]
+NPC2 : Have you seen my cat?
+NPC1 : No, I haven't seen any cats around.
 ```
 
-**Game Context:** บทสนทนา Ambient Dialogue ระหว่าง NPC ในเมืองที่พูดคุยโต้ตอบกันเป็นฉากเนื้อเรื่อง (Cutscene) เพื่อเพิ่มชีวิตชีวาให้โลกของเกม
+**Game Context:** บทสนทนา Ambient Dialogue ระหว่าง NPC ในเมืองที่มีการผลัดกันเปิดประเด็นคุยอย่างเป็นธรรมชาติในฉาก Cutscene
 
 ---
 

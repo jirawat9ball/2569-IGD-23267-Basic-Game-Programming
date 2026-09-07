@@ -549,8 +549,8 @@ namespace Week03_Loop
         static readonly TestCaseData[] DialogueCases =
         {
             new TestCaseData(
-                new[] { "Nice weather today, isn't it?", "I heard there are monsters in the cave.", "Welcome, traveler!", "Have you seen my cat?" },
-                new[] { "Yes, it's a great day for an adventure!", "I will prepare my sword and shield.", "Thank you, good to see you!", "No, I haven't seen any cats around." }
+                new[] { "Nice weather today, isn't it?", "Yes, I heard there are monsters inside!", "Welcome, traveler!", "No, I haven't seen any cats around." },
+                new[] { "Yes, it's a great day for an adventure!", "Are you ready to explore the cave?", "Thank you, good to see you!", "Have you seen my cat?" }
             ).SetName("Ex02_DialogueInteraction(Equal length: 4 pairs)"),
 
             new TestCaseData(
@@ -578,8 +578,17 @@ namespace Week03_Loop
             int rounds = Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length);
             for (int i = 0; i < rounds; i++)
             {
-                sb.AppendLine($"NPC1 : {npc1Dialogues[i]}");
-                sb.AppendLine($"NPC2 : {npc2Dialogues[i]}");
+                sb.AppendLine($"[Round {i + 1}]");
+                if (i % 2 == 0)
+                {
+                    sb.AppendLine($"NPC1 : {npc1Dialogues[i]}");
+                    sb.AppendLine($"NPC2 : {npc2Dialogues[i]}");
+                }
+                else
+                {
+                    sb.AppendLine($"NPC2 : {npc2Dialogues[i]}");
+                    sb.AppendLine($"NPC1 : {npc1Dialogues[i]}");
+                }
             }
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
