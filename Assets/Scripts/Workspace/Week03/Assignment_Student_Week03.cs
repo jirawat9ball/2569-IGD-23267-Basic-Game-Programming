@@ -13,10 +13,10 @@ namespace Week03
         [Header("As03 Variables")]
         public GameObject[] items;
 
-        [Header("As05 / Lv05 / Lv06 / Ex05 Variables")]
+        [Header("As05 / Lv05 / Lv07 / Ex05 Variables")]
         public int n = 5;
 
-        [Header("As06 & Lv07 & Ex04 Variables")]
+        [Header("As06 & Lv06 & Ex04 Variables")]
         public string[] suiteNames = { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" };
 
         [Header("As07 Variables")]
@@ -89,8 +89,8 @@ namespace Week03
             Lv03_RandomDialogue(npc1Dialogues);
             Lv04_AttackTarget(enemyHP, damage, target);
             Lv05_MultiplicationTable(n);
-            Lv06_WhileLoopN(n);
-            Lv07_ForLoopReverse(suiteNames);
+            Lv06_ForLoopReverse(suiteNames);
+            Lv07_WhileLoopN(n);
 
             Ex01_HealTarget(enemyHP, heal, target, maxHP);
             Ex02_DialogueInteraction(npc1Dialogues, npc2Dialogues);
@@ -217,17 +217,17 @@ namespace Week03
             // วนลูป For พิมพ์สูตรคูณแม่ n ตั้งแต่ 1 ถึง 12 ในรูปแบบ "{n} x {i} = {n * i}"
         }
 
-        public void Lv06_WhileLoopN(int n)
-        {
-            // Guideline:
-            // วนลูป While พิมพ์ตัวเลขตั้งแต่ 0 ถึง n - 1
-        }
-
-        public void Lv07_ForLoopReverse(string[] suiteNames)
+        public void Lv06_ForLoopReverse(string[] suiteNames)
         {
             // Guideline:
             // 1. พิมพ์ "======Log Reverse======"
             // 2. วนลูป For ย้อนกลับพิมพ์สมาชิกตั้งแต่ index ตัวสุดท้ายลงมาถึง index 0
+        }
+
+        public void Lv07_WhileLoopN(int n)
+        {
+            // Guideline:
+            // วนลูป While พิมพ์ตัวเลขตั้งแต่ 0 ถึง n - 1
         }
 
         #endregion

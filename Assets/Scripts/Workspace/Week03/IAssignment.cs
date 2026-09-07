@@ -45,9 +45,9 @@ namespace Week03
 
         void Lv05_MultiplicationTable(int n);
 
-        void Lv06_WhileLoopN(int n);
+        void Lv06_ForLoopReverse(string[] suiteNames);
 
-        void Lv07_ForLoopReverse(string[] suiteNames);
+        void Lv07_WhileLoopN(int n);
 
         #endregion
 

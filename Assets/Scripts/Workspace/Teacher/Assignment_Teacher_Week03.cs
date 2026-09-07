@@ -190,22 +190,22 @@ namespace Week03
             }
         }
 
-        public void Lv06_WhileLoopN(int n)
+        public void Lv06_ForLoopReverse(string[] suiteNames)
+        {
+            Debug.Log("======Log Reverse======");
+            for (int i = suiteNames.Length - 1; i >= 0; i--)
+            {
+                Debug.Log(suiteNames[i]);
+            }
+        }
+
+        public void Lv07_WhileLoopN(int n)
         {
             int i = 0;
             while (i < n)
             {
                 Debug.Log(i);
                 i++;
-            }
-        }
-
-        public void Lv07_ForLoopReverse(string[] suiteNames)
-        {
-            Debug.Log("======Log Reverse======");
-            for (int i = suiteNames.Length - 1; i >= 0; i--)
-            {
-                Debug.Log(suiteNames[i]);
             }
         }
 

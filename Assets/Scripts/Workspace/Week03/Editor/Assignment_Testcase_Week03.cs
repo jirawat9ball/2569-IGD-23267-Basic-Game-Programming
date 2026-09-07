@@ -434,34 +434,18 @@ namespace Week03_Loop
             AssertUsesRealLoop("Lv05_MultiplicationTable");
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(5)]
-        [TestCase(50)]
-        [TestCase(137)]
-        public void Lv06_WhileLoopN(int n)
-        {
-            assignment.Lv06_WhileLoopN(n);
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < n; i++) sb.AppendLine(i.ToString());
-
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            if (n > 0) AssertUsesRealLoop("Lv06_WhileLoopN", requireWhile: true);
-        }
-
         static readonly TestCaseData[] ReverseCases =
         {
-            new TestCaseData((object)new[] { "A", "B", "C", "D" }).SetName("Lv07_ForLoopReverse(\"A\", \"B\", \"C\", \"D\")"),
-            new TestCaseData((object)new[] { "A", "B", "C", "D", "E" }).SetName("Lv07_ForLoopReverse(\"A\", \"B\", \"C\", \"D\", \"E\")"),
-            new TestCaseData((object)new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" }).SetName("Lv07_ForLoopReverse(\"Mark I\", \"Mark II\", \"Mark III\", \"Mark IV\", \"Mark V\", \"Mark VI\")"),
-            new TestCaseData((object)new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" }).SetName("Lv07_ForLoopReverse(\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\")"),
+            new TestCaseData((object)new[] { "A", "B", "C", "D" }).SetName("Lv06_ForLoopReverse(\"A\", \"B\", \"C\", \"D\")"),
+            new TestCaseData((object)new[] { "A", "B", "C", "D", "E" }).SetName("Lv06_ForLoopReverse(\"A\", \"B\", \"C\", \"D\", \"E\")"),
+            new TestCaseData((object)new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" }).SetName("Lv06_ForLoopReverse(\"Mark I\", \"Mark II\", \"Mark III\", \"Mark IV\", \"Mark V\", \"Mark VI\")"),
+            new TestCaseData((object)new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" }).SetName("Lv06_ForLoopReverse(\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\")"),
         };
 
         [TestCaseSource(nameof(ReverseCases))]
-        public void Lv07_ForLoopReverse(string[] suites)
+        public void Lv06_ForLoopReverse(string[] suites)
         {
-            assignment.Lv07_ForLoopReverse(suites);
+            assignment.Lv06_ForLoopReverse(suites);
 
             var sb = new StringBuilder();
             sb.AppendLine("======Log Reverse======");
@@ -471,7 +455,23 @@ namespace Week03_Loop
             }
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv07_ForLoopReverse");
+            AssertUsesRealLoop("Lv06_ForLoopReverse");
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(5)]
+        [TestCase(50)]
+        [TestCase(137)]
+        public void Lv07_WhileLoopN(int n)
+        {
+            assignment.Lv07_WhileLoopN(n);
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < n; i++) sb.AppendLine(i.ToString());
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            if (n > 0) AssertUsesRealLoop("Lv07_WhileLoopN", requireWhile: true);
         }
 
         // ================= Level 2: Moderate (Ex01 - Ex05) =================

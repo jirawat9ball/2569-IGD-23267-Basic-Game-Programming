@@ -461,44 +461,13 @@ void Lv05_MultiplicationTable(int n)
 
 ---
 
-### 15. Lv06_WhileLoopN (5 test cases)
-
-**วัตถุประสงค์:** ฝึกการเขียน While Loop ควบคุมการวนซ้ำตามจำนวนรอบที่ระบุ
-
-**Method Signature:**
-```csharp
-void Lv06_WhileLoopN(int n)
-```
-
-**Logic ที่ต้อง implement:**
-- ประกาศตัวแปรนับรอบ `int i = 0;`
-- วนลูป While ตราบใดที่ `i < n`
-- แสดงผล `i` ออกมาทีละบรรทัด พร้อม `i++`
-
-**💡 แนวทางการเขียนโค้ด (Guideline):**
-- กำหนดตัวแปรนับรอบ `int i = 0;` ไว้นอกลูป
-- เงื่อนไขใน While คือ `i < n` ซึ่งถ้าค่า `n <= 0` ลูปจะไม่ทำงาน
-- ต้องเพิ่มค่า `i++` ภายในลูปเสมอ
-
-**ตัวอย่าง Input/Output:**
-- Input: `n = 3`
-  ```
-  0
-  1
-  2
-  ```
-
-**Game Context:** การประมวลผล Queue ของคำสั่งตามจำนวนที่มีอยู่ในคิว
-
----
-
-### 16. Lv07_ForLoopReverse (4 test cases)
+### 15. Lv06_ForLoopReverse (4 test cases)
 
 **วัตถุประสงค์:** ฝึกการวนลูป For แบบย้อนกลับ (Reverse Loop) จาก Index สุดท้ายมายัง Index 0
 
 **Method Signature:**
 ```csharp
-void Lv07_ForLoopReverse(string[] suiteNames)
+void Lv06_ForLoopReverse(string[] suiteNames)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -521,6 +490,37 @@ void Lv07_ForLoopReverse(string[] suiteNames)
   ```
 
 **Game Context:** การแสดงผลประวัติการแชทย้อนหลัง (Chat Log) หรือระบบ Replay ย้อนเวลา
+
+---
+
+### 16. Lv07_WhileLoopN (5 test cases)
+
+**วัตถุประสงค์:** ฝึกการเขียน While Loop ควบคุมการวนซ้ำตามจำนวนรอบที่ระบุ
+
+**Method Signature:**
+```csharp
+void Lv07_WhileLoopN(int n)
+```
+
+**Logic ที่ต้อง implement:**
+- ประกาศตัวแปรนับรอบ `int i = 0;`
+- วนลูป While ตราบใดที่ `i < n`
+- แสดงผล `i` ออกมาทีละบรรทัด พร้อม `i++`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- กำหนดตัวแปรนับรอบ `int i = 0;` ไว้นอกลูป
+- เงื่อนไขใน While คือ `i < n` ซึ่งถ้าค่า `n <= 0` ลูปจะไม่ทำงาน
+- ต้องเพิ่มค่า `i++` ภายในลูปเสมอ
+
+**ตัวอย่าง Input/Output:**
+- Input: `n = 3`
+  ```
+  0
+  1
+  2
+  ```
+
+**Game Context:** การประมวลผล Queue ของคำสั่งตามจำนวนที่มีอยู่ในคิว
 
 ---
 
