@@ -268,8 +268,11 @@ namespace Week03
         public void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
         {
             // Guideline:
-            // 1. สุ่ม index จาก npc1Dialogues แล้วพิมพ์ "NPC1 : " + npc1Dialogues[index1]
-            // 2. สุ่ม index จาก npc2Dialogues แล้วพิมพ์ "NPC2 : " + npc2Dialogues[index2]
+            // 1. หาจำนวนรอบของบทสนทนา เช่น int rounds = Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length);
+            // 2. วนลูป For ตั้งแต่ i = 0 ถึง rounds - 1
+            // 3. ในแต่ละรอบ พิมพ์บทสนทนาโต้ตอบ:
+            //    - "NPC1 : " + npc1Dialogues[i]
+            //    - "NPC2 : " + npc2Dialogues[i]
         }
 
         public void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)

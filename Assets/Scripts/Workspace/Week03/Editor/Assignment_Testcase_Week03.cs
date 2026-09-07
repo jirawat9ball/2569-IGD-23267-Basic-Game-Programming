@@ -546,48 +546,44 @@ namespace Week03_Loop
             TestUtils.AssertMultilineEqual(exp.ToString(), SimpleDebugConsole.GetOutput());
         }
 
-        [Test]
-        public void Ex02_DialogueInteraction_ActuallyRandom()
+        static readonly TestCaseData[] DialogueCases =
         {
-            string[] dialogues1 =
-            {
-                "Nice weather today, isn't it?",
-                "I heard there are monsters in the cave.",
-                "Welcome, traveler!",
-                "Have you seen my cat?",
-                "The blacksmith needs more coal."
-            };
-            string[] dialogues2 =
-            {
-                "Yes, it's a great day for an adventure!",
-                "I will prepare my sword and shield.",
-                "Thank you, good to see you!",
-                "No, I haven't seen any cats around.",
-                "I can bring some iron ore too."
-            };
-            var seen1 = new System.Collections.Generic.HashSet<string>();
-            var seen2 = new System.Collections.Generic.HashSet<string>();
+            new TestCaseData(
+                new[] { "Nice weather today, isn't it?", "I heard there are monsters in the cave.", "Welcome, traveler!", "Have you seen my cat?" },
+                new[] { "Yes, it's a great day for an adventure!", "I will prepare my sword and shield.", "Thank you, good to see you!", "No, I haven't seen any cats around." }
+            ).SetName("Ex02_DialogueInteraction(Equal length: 4 pairs)"),
 
-            for (int seed = 1; seed <= 25; seed++)
+            new TestCaseData(
+                new[] { "Hello", "How are you?", "Goodbye" },
+                new[] { "Hi!", "I'm fine, thanks!" }
+            ).SetName("Ex02_DialogueInteraction(npc1: 3, npc2: 2 -> 2 pairs)"),
+
+            new TestCaseData(
+                new[] { "Are you ready?" },
+                new[] { "Yes!", "Let's go!", "Charge!" }
+            ).SetName("Ex02_DialogueInteraction(npc1: 1, npc2: 3 -> 1 pair)"),
+
+            new TestCaseData(
+                new string[0],
+                new[] { "Hello?" }
+            ).SetName("Ex02_DialogueInteraction(Empty array -> 0 pairs)")
+        };
+
+        [TestCaseSource(nameof(DialogueCases))]
+        public void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
+        {
+            assignment.Ex02_DialogueInteraction(npc1Dialogues, npc2Dialogues);
+
+            var sb = new StringBuilder();
+            int rounds = Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length);
+            for (int i = 0; i < rounds; i++)
             {
-                SimpleDebugConsole.Clear();
-                Random.InitState(seed);
-                assignment.Ex02_DialogueInteraction(dialogues1, dialogues2);
-                string[] lines = SimpleDebugConsole.GetOutput().Trim().Split(new[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
-                Assert.AreEqual(2, lines.Length, "ต้อง Log 2 บรรทัด (NPC1 และ NPC2)");
-                Assert.IsTrue(lines[0].StartsWith("NPC1 : "), "บรรทัดแรกต้องขึ้นต้นด้วย 'NPC1 : '");
-                Assert.IsTrue(lines[1].StartsWith("NPC2 : "), "บรรทัดสองต้องขึ้นต้นด้วย 'NPC2 : '");
-                string msg1 = lines[0].Substring("NPC1 : ".Length);
-                string msg2 = lines[1].Substring("NPC2 : ".Length);
-                CollectionAssert.Contains(dialogues1, msg1, $"seed {seed}: บทสนทนา NPC1 ไม่อยู่ใน array npc1Dialogues");
-                CollectionAssert.Contains(dialogues2, msg2, $"seed {seed}: บทสนทนา NPC2 ไม่อยู่ใน array npc2Dialogues");
-                seen1.Add(msg1);
-                seen2.Add(msg2);
+                sb.AppendLine($"NPC1 : {npc1Dialogues[i]}");
+                sb.AppendLine($"NPC2 : {npc2Dialogues[i]}");
             }
 
-            Assert.Greater(seen1.Count, 1, "สุ่ม NPC1 25 รอบได้บทสนทนาเดิมทุกครั้ง");
-            Assert.Greater(seen2.Count, 1, "สุ่ม NPC2 25 รอบได้บทสนทนาเดิมทุกครั้ง");
-            AssertBodyContains("Ex02_DialogueInteraction", "Random.Range", "ต้องใช้ Random.Range");
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Ex02_DialogueInteraction");
         }
 
         static readonly TestCaseData[] SpawnSpacingCases =

@@ -254,11 +254,12 @@ namespace Week03
 
         public void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
         {
-            int index1 = Random.Range(0, npc1Dialogues.Length);
-            Debug.Log("NPC1 : " + npc1Dialogues[index1]);
-
-            int index2 = Random.Range(0, npc2Dialogues.Length);
-            Debug.Log("NPC2 : " + npc2Dialogues[index2]);
+            int rounds = Mathf.Min(npc1Dialogues.Length, npc2Dialogues.Length);
+            for (int i = 0; i < rounds; i++)
+            {
+                Debug.Log("NPC1 : " + npc1Dialogues[i]);
+                Debug.Log("NPC2 : " + npc2Dialogues[i]);
+            }
         }
 
         public void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)
