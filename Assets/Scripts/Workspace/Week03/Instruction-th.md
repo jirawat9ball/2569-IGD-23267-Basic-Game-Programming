@@ -45,6 +45,12 @@ void As01_IronManSuit()
 5. แสดงหัวข้อ: `===All suit in collection===`
 6. ใช้ For Loop แสดงชุดเกราะทั้งหมดออกมาทีละบรรทัด
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ประกาศ Array พร้อมกำหนดค่าทันทีด้วยวงเล็บปีกกา `{ ... }` หรือระบุขนาด `new string[4]`
+- สมาชิกตัวแรกของ Array จะอยู่ที่ Index `[0]` เสมอ
+- เรียกใช้ Property `.Length` ของ Array เพื่อตรวจสอบจำนวนช่องทั้งหมด
+- ตั้ง For Loop ให้ตัวนับรอบเริ่มจาก `i = 0` และวนตราบใดที่ `i < IronManSuit.Length`
+
 **Output ที่คาดหวัง:**
 ```
 TonyStark Wear : Mark I
@@ -74,6 +80,11 @@ void As02_SpiderManAndBatMan()
 2. สร้าง Array `BatMan` ขนาด 4 ช่อง บรรจุ: `"Classic BatMan"`, `"Dark Knight"`, `"Batman Beyond"`, `"The Batman"`
 3. แสดงผล `Room size spiderMan : <ความยาว>` ตามด้วย `===All spiderMan in collection===` และวนลูปแสดงชื่อทั้งหมด
 4. แสดงผล `Room size BatMan : <ความยาว>` ตามด้วย `===All BatMan in collection===` และวนลูปแสดงชื่อทั้งหมด
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ชุดแรกประกาศแบบย่อ `string[] spiderMan = { ... };` และชุดสองประกาศแบบระบุขนาด `string[] BatMan = new string[4] { ... };`
+- แสดงข้อความหัวข้อให้เรียบร้อยก่อนเริ่มวนลูปในแต่ละชุด
+- วนลูปแยก 2 ลูป โดยลูปแรกใช้อ้างอิง `spiderMan.Length` และลูปที่สองใช้อ้างอิง `BatMan.Length`
 
 **Output ที่คาดหวัง:**
 ```
@@ -109,6 +120,11 @@ void As03_RandomItemDrop(GameObject[] items)
 3. สั่ง `Instantiate(picked, new Vector3(0, 3, 0), Quaternion.identity)`
 4. แสดงผลชื่อไอเทมที่ได้รับ: `Got item : <picked.name>`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- `Random.Range(min, max)` ของเลขจำนวนเต็ม (int) ค่าขอบบน `max` จะเป็น Exclusive (ไม่นำมารวม) ดังนั้นการใส่ `items.Length` จะได้ค่าสุ่มตั้งแต่ `0` ถึง `Length - 1` ซึ่งปลอดภัยจาก Index หลุดขอบ
+- นำ index ที่ได้มาดึงสมาชิกใส่ตัวแปร GameObject ก่อนส่งเข้าฟังก์ชัน `Instantiate`
+- ดึงชื่อไอเทมผ่าน Property `.name` ของ GameObject
+
 **ตัวอย่าง Output:**
 ```
 Got item : Coin
@@ -131,6 +147,10 @@ void As04_ForLoopBasic()
 1. ลูปแรก: วนลูปตั้งแต่ `i = 0` ถึง `9` (`i < 10`) พิมพ์ `<10 : <i>`
 2. พิมพ์เส้นคั่น: `======================`
 3. ลูปสอง: วนลูปตั้งแต่ `i = 1` ถึง `10` (`i <= 10`) พิมพ์ `<=10 : <i>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สังเกตความแตกต่างของเงื่อนไขการหยุดลูป: ลูปแรกใช้ `< 10` ตัวเลขจะหยุดที่ 9, ลูปสองใช้ `<= 10` ตัวเลขจะวิ่งไปถึง 10
+- ตรวจสอบรูปแบบการเว้นวรรค string ให้ถูกต้อง เช่น `"<10 : "` และ `"<=10 : "`
 
 **Output ที่คาดหวัง:**
 ```
@@ -163,6 +183,10 @@ void As05_ForLoopN(int n)
 - วนลูป For ตั้งแต่ `i = 0` ถึง `n - 1`
 - แสดงผลตัวเลข `i` ออกมาทีละบรรทัด (ถ้า `n <= 0` จะไม่แสดงผลใดๆ)
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- กำหนดเงื่อนไข `i < n` ซึ่งถ้าค่า `n <= 0` เงื่อนไขจะเป็นเท็จตั้งแต่เริ่มต้นและลูปจะไม่ทำงานโดยอัตโนมัติ ไม่จำเป็นต้องเขียน `if` ดักแยก
+- พิมพ์เฉพาะค่าของตัวแปร `i` ออกมาโดยตรง
+
 **ตัวอย่าง Input/Output:**
 - Input: `n = 5`
   ```
@@ -189,6 +213,11 @@ void As06_ForLoopWithArray(string[] suiteNames)
 **Logic ที่ต้อง implement:**
 1. พิมพ์ `======Log by One======` แล้ววนลูป For ทีละ 1 (`i++`) แสดงสมาชิกทั้งหมด
 2. พิมพ์ `======Log by Two======` แล้ววนลูป For ข้ามทีละ 2 (`i += 2`) แสดงเฉพาะสมาชิกใน index คู่
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ลูปชุดแรกใช้ตัวนับรอบแบบปกติ `i++`
+- ลูปชุดที่สองเปลี่ยนส่วนการเพิ่มค่าใน For Loop จาก `i++` เป็น `i += 2` เพื่อให้ค่า index ข้ามทีละ 2 ช่อง (0, 2, 4, ...)
+- สมาชิกที่นำมาแสดงผลคือ `suiteNames[i]`
 
 **ตัวอย่าง Input/Output:**
 - Input: `["Mark I", "Mark II", "Mark III", "Mark IV"]`
@@ -222,6 +251,11 @@ void As07_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)
 3. กำหนดตำแหน่ง `spawned.transform.position = new Vector3(i + 1, 0f, 0f)`
 4. แสดงผล: `new enemy at position x = <i + 1>`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- จำนวนรอบของลูปยึดตาม `HpEnemy.Length`
+- ฟังก์ชัน `Instantiate(Enemy)` จะคืนค่า GameObject ตัวที่เพิ่งถูกสร้างขึ้นมา สามารถเก็บใส่ตัวแปรเพื่อนำไปกำหนดตำแหน่ง `.transform.position` ต่อได้
+- พิกัดบนแกน X เริ่มต้นที่ 1 และเพิ่มขึ้นทีละ 1 ตามลำดับรอบของลูป (`i + 1`)
+
 **Game Context:** การ Spawn กองทัพศัตรูเป็นแถวหน้ากระดานตามตำแหน่งที่กำหนด
 
 ---
@@ -239,6 +273,10 @@ void As08_WhileLoopBasic()
 1. ประกาศตัวแปร `int i = 0;`
 2. วนลูป While ตราบใดที่ `i < 10`
 3. แสดงผล `while loop : <i>` และเพิ่มค่า `i++`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ตัวแปรนับรอบ (Counter) ของ While Loop จะต้องถูกประกาศไว้ *นอกลูป* เสมอ
+- ในแต่ละรอบของ While Loop ต้องมีคำสั่งเพิ่มค่า `i++` อยู่ภายในบล็อก เพื่อให้ตัวเลขเพิ่มขึ้นจนเงื่อนไขเป็นเท็จและหลุดจากลูปได้
 
 **Output ที่คาดหวัง:**
 ```
@@ -270,6 +308,11 @@ IEnumerator As09_MoveToTarget(Transform character, Transform target, float speed
 6. หน่วงการทำงานแต่ละเฟรมด้วย `yield return null;`
 7. เมื่อถึงเป้าหมายให้พิมพ์: `Time : <timer>`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ฟังก์ชันประเภท `IEnumerator` ต้องมีคำสั่ง `yield return` อยู่ภายในเสมอ เพื่อบอกให้ Unity หยุดรอจังหวะเวลาที่กำหนดก่อนกลับมาทำงานต่อในเฟรมถัดไป
+- `yield return null;` หมายถึงการรอจนกว่าจะถึงเฟรมถัดไป
+- ใช้ `.ToString("F2")` เพื่อจัดฟอร์แมตตัวเลขทศนิยมให้แสดงผล 2 ตำแหน่งอย่างแน่นอน
+
 **Game Context:** ระบบ Cutscene ตัวละครเดินไปหา NPC หรือการเคลื่อนที่ของศัตรูแบบ Patrol
 
 ---
@@ -293,6 +336,11 @@ void Lv01_SetArrayValues()
    - `Axe damage : 200`
    - `Bow damage : 300`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สร้าง Array ขนาด 3 ช่องด้วยคีย์เวิร์ด `new string[3]` และ `new int[3]`
+- กำหนดค่าลงในแต่ละช่องโดยตรงผ่านเครื่องหมายก้ามปู เช่น `weapons[0] = "Sword";`
+- สั่ง `Debug.Log` โดยนำค่าจาก `weapons[i]` และ `damage[i]` มาเชื่อมต่อ String ด้วย `" damage : "`
+
 **Game Context:** ตารางข้อมูลค่าสเตตัสของอาวุธประเภทต่างๆ ในเกม RPG
 
 ---
@@ -311,6 +359,11 @@ void Lv02_InspectArray(string[] items)
 - แสดงไอเทมตัวแรก (index `0`): `First item : <items[0]>`
 - แสดงไอเทมตรงกลาง (index `items.Length / 2`): `Middle item : <items[items.Length / 2]>`
 - แสดงไอเทมตัวสุดท้าย (index `items.Length - 1`): `Last item : <items[items.Length - 1]>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- เข้าถึงความยาวทั้งหมดของ Array ด้วย Property `.Length`
+- การหาตำแหน่งตรงกลาง สามารถนำความยาวหารด้วย 2 (`items.Length / 2`) ซึ่งในภาษา C# การหารจำนวนเต็มจะปัดเศษทิ้งให้อัตโนมัติ
+- สมาชิกตัวสุดท้ายจะอยู่ที่ตำแหน่งความยาวลบหนึ่งเสมอ (`items.Length - 1`)
 
 **ตัวอย่าง Input/Output:**
 - Input: `["Potion", "Sword", "Bow", "Shield"]`
@@ -338,6 +391,10 @@ void Lv03_RandomDialogue(string[] npc1Dialogues)
 1. สุ่ม Index ของบทสนทนาในช่วง `0` ถึง `npc1Dialogues.Length - 1` โดยใช้ `Random.Range(0, npc1Dialogues.Length)`
 2. แสดงผลข้อความบทสนทนานั้นออกมาทาง Console
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สุ่มตัวเลข Index โดยระบุช่วงตั้งแต่ 0 ถึงความยาวของ Array (`npc1Dialogues.Length`)
+- นำ Index ที่ได้ไปดึง String ออกจาก Array แล้วส่งเข้าคำสั่ง `Debug.Log` โดยตรง
+
 **Game Context:** ระบบ NPC ประชาชนพูดคุยแบบสุ่มเมื่อผู้เล่นเดินผ่าน
 
 ---
@@ -356,6 +413,11 @@ void Lv04_AttackTarget(int[] enemyHP, int damage, int target)
 - ลดเลือดศัตรูตัวสุดท้าย (index `enemyHP.Length - 1`) ด้วย `damage` แล้วพิมพ์: `LastEnemy hp : <hp ที่เหลือ>`
 - ลดเลือดศัตรูเป้าหมาย (index `target`) ด้วย `damage` แล้วพิมพ์: `TargetEnemy <target> hp : <hp ที่เหลือ>`
 - *(ลำดับการทำงานต้องเป็น ตัวแรก ➔ ตัวสุดท้าย ➔ ตัวเป้าหมาย)*
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- หาตำแหน่งตัวสุดท้ายไว้ในตัวแปร เช่น `int last = enemyHP.Length - 1;`
+- ปรับลดค่าเลือดใน Array โดยตรงด้วยเครื่องหมาย `-=` เช่น `enemyHP[0] -= damage;`
+- พิมพ์ผลลัพธ์ทันทีหลังจากลดเลือดในแต่ละตำแหน่ง โดยระวังการเว้นวรรค `"FirstEnemy hp : "`
 
 **ตัวอย่าง Input/Output:**
 - Input: `enemyHP = [100, 80, 60, 40], damage = 10, target = 2`
@@ -381,6 +443,10 @@ void Lv05_MultiplicationTable(int n)
 **Logic ที่ต้อง implement:**
 - วนลูป For ตั้งแต่ `i = 1` ถึง `12`
 - แสดงผลในรูปแบบ: `<n> x <i> = <n * i>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- กำหนดให้ตัวนับรอบเริ่มจาก 1 (`int i = 1`) และสิ้นสุดที่ 12 (`i <= 12`)
+- นำค่า `n` มาคูณกับ `i` ภายในลูป และจัดรูปแบบการแสดงผลด้วยเครื่องหมาย `x` และ `=` ให้ถูกต้อง
 
 **ตัวอย่าง Input/Output:**
 - Input: `n = 2`
@@ -409,6 +475,11 @@ void Lv06_WhileLoopN(int n)
 - วนลูป While ตราบใดที่ `i < n`
 - แสดงผล `i` ออกมาทีละบรรทัด พร้อม `i++`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- กำหนดตัวแปรนับรอบ `int i = 0;` ไว้นอกลูป
+- เงื่อนไขใน While คือ `i < n` ซึ่งถ้าค่า `n <= 0` ลูปจะไม่ทำงาน
+- ต้องเพิ่มค่า `i++` ภายในลูปเสมอ
+
 **ตัวอย่าง Input/Output:**
 - Input: `n = 3`
   ```
@@ -434,6 +505,11 @@ void Lv07_ForLoopReverse(string[] suiteNames)
 1. แสดงหัวข้อ: `======Log Reverse======`
 2. วนลูป For เริ่มจาก `i = suiteNames.Length - 1` ถอยหลังลงมาจนถึง `i >= 0` ด้วย `i--`
 3. แสดงสมาชิกใน Array ออกมาทีละบรรทัด
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ค่าเริ่มต้นของตัวนับรอบต้องเริ่มที่ตำแหน่งสุดท้ายคือ `suiteNames.Length - 1`
+- เงื่อนไขการวนลูปคือต้องยังมากกว่าหรือเท่ากับ 0 (`i >= 0`) เพื่อให้วนถึงสมาชิกตัวแรกที่ index 0
+- ส่วนการปรับค่าให้ใช้ `i--` เพื่อลดค่าลงทีละ 1 ในทุกรอบ
 
 **ตัวอย่าง Input/Output:**
 - Input: `["Mark I", "Mark II", "Mark III"]`
@@ -467,6 +543,10 @@ void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP)
   - `LastEnemy hp : <hp หลังจาก heal>`
   - `TargetEnemy <target> hp : <hp หลังจาก heal>`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- นำค่าเดิมมาบวกกับ `heal` ก่อน แล้วใช้ฟังก์ชัน `Mathf.Min(hp + heal, maxHP)` เพื่อเลือกค่าที่น้อยกว่า ถ้าบวกแล้วเกิน `maxHP` ตัวฟังก์ชันจะคืนค่า `maxHP` ออกมาให้ทันที
+- ดำเนินการตามลำดับ 3 ตำแหน่ง: ตัวแรก `[0]`, ตัวท้าย `[last]`, และเป้าหมาย `[target]`
+
 **ตัวอย่าง Input/Output:**
 - Input: `enemyHP = [95, 80, 60, 40], heal = 10, target = 1, maxHP = 100`
   ```
@@ -491,6 +571,10 @@ void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
 **Logic ที่ต้อง implement:**
 1. สุ่ม Index จาก `npc1Dialogues` แล้วพิมพ์: `NPC1 : <ข้อความของ NPC1>`
 2. สุ่ม Index จาก `npc2Dialogues` แล้วพิมพ์: `NPC2 : <ข้อความของ NPC2>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สุ่ม index สองรอบแยกกัน: ตัวแรกใช้ช่วง `npc1Dialogues.Length` และตัวที่สองใช้ช่วง `npc2Dialogues.Length`
+- พิมพ์ข้อความทีละบรรทัด โดยใส่คำนำหน้า `"NPC1 : "` และ `"NPC2 : "` ให้ตรงตามรูปแบบ
 
 **ตัวอย่าง Output:**
 ```
@@ -518,6 +602,11 @@ void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)
 4. กำหนดตำแหน่ง `spawned.transform.position = new Vector3(posX, 0f, 0f);`
 5. แสดงผลข้อความ: `Spawn enemy at position x : <posX>`
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้ For Loop เริ่มที่ `i = 0` จนถึง `i < count`
+- คำนวณระยะห่างด้วยสูตร `float posX = (i + 1) * spacing;` เพื่อให้ตัวแรกอยู่ที่ตำแหน่ง `1 * spacing`
+- เรียก `Instantiate(Enemy)` แล้วนำผลลัพธ์ไปกำหนดพิกัด X ผ่าน `new Vector3(posX, 0f, 0f)`
+
 **ตัวอย่าง Input/Output:**
 - Input: `count = 3, spacing = 2f`
   ```
@@ -544,6 +633,12 @@ void Ex04_WhileLoopStep(string[] suiteNames)
 2. วนลูป While แสดงสมาชิกทั้งหมดทีละ 1 ตัว (`i++`)
 3. พิมพ์ `======Log by Two======`
 4. วนลูป While แสดงสมาชิกข้ามทีละ 2 ตัว (`i += 2`)
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- แบ่งการทำงานเป็น 2 ส่วนชัดเจน โดยแสดงหัวข้อก่อนเริ่มลูปของแต่ละส่วน
+- ในส่วนแรก ให้ใช้ `i++` เพื่อขยับทีละช่อง
+- อย่าลืมรีเซ็ตค่าตัวแปรนับรอบให้กลับเป็น `0` ก่อนเริ่มลูปชุดที่สอง
+- ในส่วนที่สอง ให้ใช้ `i += 2` เพื่อข้ามทีละ 2 ช่อง
 
 **ตัวอย่าง Input/Output:**
 - Input: `["A", "B", "C", "D"]`
@@ -575,6 +670,11 @@ void Ex05_WhileLoopSum(int n)
 1. กำหนดตัวแปร `int i = 1;` และ `int sum = 0;`
 2. วนลูป While ตราบใดที่ `i <= n` นำค่า `i` มาบวกสะสมเข้าใน `sum` แล้วเพิ่ม `i++`
 3. เมื่อลูปเสร็จสิ้น ให้แสดงผล: `Sum of n from 0 to <n> is <sum>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สร้างตัวแปรสะสมผลรวม `int sum = 0;` และตัวนับ `int i = 1;` ไว้นอกลูป While
+- ภายในลูป ใช้คำสั่ง `sum += i;` และ `i++;` เพื่อสะสมค่าจาก 1 ไปเรื่อยๆ จนถึง `n`
+- สั่งแสดงผลด้วย `Debug.Log` ภายนอกลูปหลังจากคำนวณเสร็จสิ้นแล้วเท่านั้น
 
 **ตัวอย่าง Input/Output:**
 - Input: `n = 5`

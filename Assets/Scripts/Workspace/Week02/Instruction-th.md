@@ -2,7 +2,7 @@
 
 ## 📋 ภาพรวมของ Assignment
 
-เรียนรู้พื้นฐานของ conditional statements และ decision-making logic โดยการ implement 17 methods ที่ใช้งานจริง Assignment นี้เน้นที่ if-else statements, switch-case structures และการรวม conditions หลายตัวเพื่อสร้าง scenarios แบบเกม แต่ละ method จะแสดงผลลัพธ์โดยใช้ `Debug.Log()` (alias ของ`AssignmentDebugConsole.Log()`) และต้องตรงกับผลลัพธ์ที่คาดหวังจาก test cases อย่างแม่นยำ
+เรียนรู้พื้นฐานของ conditional statements และ decision-making logic โดยการ implement 18 methods ที่ใช้งานจริง Assignment นี้เน้นที่ if-else statements, switch-case structures และการรวม conditions หลายตัวเพื่อสร้าง scenarios แบบเกม แต่ละ method จะแสดงผลลัพธ์โดยใช้ `Debug.Log()` (alias ของ`AssignmentDebugConsole.Log()`) และต้องตรงกับผลลัพธ์ที่คาดหวังจาก test cases อย่างแม่นยำ
 
 ## 🎯 จุดประสงค์การเรียนรู้
 
@@ -40,6 +40,11 @@ void SyntaxIf(bool isSixoClock)
 - ถ้า isSixoClock เป็นจริง ให้แสดงข้อความ "You can get in"
 - แสดงข้อความ "Crack Crack!!!!" เสมอ
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้คำสั่ง `if` ตรวจสอบเงื่อนไขตัวแปร boolean `isSixoClock`
+- ข้อความแรกให้อยู่ภายในบล็อก `{ ... }` ของคำสั่ง `if` เพื่อให้ทำงานเฉพาะเมื่อเงื่อนไขเป็นจริง
+- ส่วนข้อความ "Crack Crack!!!!" ให้อยู่นอกบล็อก `if` เพื่อให้ทำงานเสมอในทุกกรณี
+
 **Test Cases:**
 
 ```
@@ -68,6 +73,11 @@ void StringComparisonExample(string password)
 - แสดงข้อความที่เหมาะสมสำหรับ password ที่ถูกต้อง/ผิด
 - แสดงผลลัพธ์การเปรียบเทียบ boolean
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้เครื่องหมายเปรียบเทียบ `==` เพื่อตรวจดูว่าค่า `password` ตรงกับข้อความที่กำหนดหรือไม่
+- ใช้โครงสร้าง `if ... else` ในการแยกกรณีรหัสผ่านถูกต้อง และรหัสผ่านผิด
+- การเปรียบเทียบข้อความ (string) ใน C# มีความอ่อนไหวต่อตัวพิมพ์เล็ก-ใหญ่ (Case-sensitive)
+
 **Test Cases:**
 
 ```
@@ -93,6 +103,11 @@ void NumberComparisonExample(int number)
 
 - เปรียบเทียบ number กับ 10 โดยใช้ comparison operators ทั้งหมด
 - โดยที่ลำดับการเขียนตรวจสอบแต่ละเครื่องหมายจะเรียงลำดับดังนี้ `>, <, ==, >=, <=, !=` แสดงผลลัพธ์สำหรับการเปรียบเทียบแต่ละตัวที่เป็น true
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- เขียนคำสั่ง `if` แบบอิสระแยกจากกัน 6 บล็อก (ไม่ใช้ `else if`) เพื่อให้สามารถตรวจสอบได้ครบทุกเครื่องหมาย
+- เรียงลำดับเงื่อนไขตามที่โจทย์กำหนด: `>`, `<`, `==`, `>=`, `<=`, `!=`
+- ในแต่ละบล็อก เปรียบเทียบตัวแปร `number` กับเลข `10` และพิมพ์ข้อความตามรูปแบบที่กำหนด
 
 **Test Cases:**
 
@@ -129,6 +144,11 @@ void AndOrOperatorExample(int number)
 - ตรวจสอบว่า number ตรงกับเงื่อนไข OR (> 8 OR < 12)
 - แสดงข้อความที่เหมาะสม
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- บล็อกแรกใช้ตรรกะแบบ AND (`&&`) เพื่อตรวจสอบว่าตัวเลขอยู่ในช่วงที่กำหนด (ค่ามากกว่า 8 และน้อยกว่า 12 พร้อมกัน)
+- บล็อกที่สองใช้ตรรกะแบบ OR (`||`) เพื่อตรวจสอบว่าตัวเลขอยู่นอกช่วง (ค่าน้อยกว่า 8 หรือมากกว่า 12)
+- แยกตรวจสอบด้วยคำสั่ง `if` ให้ครอบคลุมทั้งสองเงื่อนไข
+
 **Test Cases:**
 
 ```
@@ -159,7 +179,12 @@ void GuessingNumberExample(int guessingNumber, int randomNumber)
 - แสดงข้อความชนะหรือแพ้
 - ชนะ : Correct!
 - แพ้ : Incorrect!
-  **Test Cases:**
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- เปรียบเทียบค่าระหว่าง `guessingNumber` และ `randomNumber` ด้วยเครื่องหมาย `==`
+- ใช้โครงสร้าง `if ... else` เพื่อพิมพ์ข้อความแสดงผลกรณีทายถูกและทายผิด
+
+**Test Cases:**
 
 ```
 AS01.E4: Input: 5, 5 → Output:
@@ -187,7 +212,13 @@ void GuessingNumberMoreOrLessExample(int guessingNumber, int randomNumber)
 - ต่ำเกินไป : Too low!
 - สูงเกินไป : Too high!
 - ถูกต้อง : Correct!
-  **Test Cases:**
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้โครงสร้าง `if ... else if ... else` เพื่อแบ่งการตัดสินใจออกเป็น 3 กรณี
+- ตรวจสอบกรณีค่าน้อยกว่าเป้าหมาย (`<`), ค่ามากกว่าเป้าหมาย (`>`), และกรณีสุดท้ายคือค่าเท่ากัน
+- ให้ข้อความตอบรับที่ตรงตามเงื่อนไขที่โจทย์ระบุ
+
+**Test Cases:**
 
 ```
 AS01.E5: Input: 3, 5 → Output:
@@ -221,6 +252,11 @@ void VerifyIdentityExample(string username, string password, int age, bool isPai
 - จากนั้นอายุสำหรับการเข้าถึงเนื้อหาเพิ่มเติม
   - ถ้า age มีค่ามากกว่า 18 จะแสดงข้อความ "Exclusive content"
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ขั้นแรก: ตรวจสอบ `username` และ `password` โดยใช้ `if (username == "user" && password == "user123")` พร้อมบล็อก `else` สำหรับ "Guest access"
+- ขั้นที่สอง (เขียนอยู่ภายในบล็อกเมื่อข้อมูลผู้ใช้ถูกต้อง): นำตัวแปร boolean `isPaid` มาตรวจสอบสถานะสมาชิก VIP หรือ Free
+- ขั้นที่สาม: ตรวจสอบเงื่อนไขอายุ `age > 18` เพื่อแสดงสิทธิ์เข้าถึงเนื้อหาพิเศษ
+
 **Test Cases:**
 
 ```
@@ -243,8 +279,6 @@ Guest access
 
 **Game Context:** การ authentication ผู้ใช้, การเข้าถึงเนื้อหา premium, การตรวจสอบอายุ
 
-**Game Context:** Mini-games, random events, mechanics ผู้เล่นต่อสู้ AI
-
 ---
 
 ## Level 1: Simple (7 methods)
@@ -263,6 +297,10 @@ void CheckNumberSign(int number)
 
 - ใช้ if-else-if chain เพื่อตรวจสอบเครื่องหมายของตัวเลข
 - แสดง "Positive", "Negative" หรือ "Zero"
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้โครงสร้าง `if ... else if ... else` ตรวจสอบเครื่องหมายของตัวเลข
+- ตรวจสอบกรณีค่ามากกว่าศูนย์ (`> 0`) สำหรับ "Positive", ค่าน้อยกว่าศูนย์ (`< 0`) สำหรับ "Negative", และกรณีที่เหลือ (`else`) สำหรับ "Zero"
 
 **Test Cases:**
 
@@ -291,6 +329,10 @@ void GetDayName(int day)
 - ใช้ if-else-if หรือ switch-case เพื่อแมปตัวเลขกับชื่อวัน
 - จัดการ input ที่ไม่ถูกต้องด้วย "Invalid day"
 - โดยกำหนดให้ 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday, 7=Sunday, other=Invalid day
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สามารถใช้โครงสร้าง `switch(day)` หรือ `if ... else if` เพื่อจับคู่ตัวเลข 1 ถึง 7 เข้ากับชื่อวันภาษาอังกฤษ
+- อย่าลืมใส่กรณี `default` (หรือ `else`) เพื่อจัดการค่าตัวเลขที่อยู่นอกเหนือช่วง 1-7 โดยแสดงผลเป็น "Invalid day"
 
 **Test Cases:**
 
@@ -325,6 +367,10 @@ void ValidatePassword(string inputPassword, string correctPassword)
 - แสดง "True" หรือ "False"
 - โดย testcase กำหนดให้ correctPassword มีค่า "secret123"
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- เปรียบเทียบตัวแปร `inputPassword` กับ `correctPassword` ด้วยเครื่องหมาย `==`
+- แสดงผลข้อความ `"True"` หรือ `"False"` ตามผลลัพธ์ของการเปรียบเทียบ (ระวังตัวอักษรตัวใหญ่ตัวเล็กของผลลัพธ์ให้ตรงกับ Test case)
+
 **Test Cases:**
 
 ```
@@ -353,6 +399,11 @@ void GetGrade(int score)
 
 - ใช้ if-else chain กับ score thresholds
 - A:80, B:70, C:60, D:50, F: อื่นๆ
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้โครงสร้าง `if ... else if ... else` โดยตรวจสอบช่วงคะแนนจากค่าสูงลงมาหาค่าต่ำ (Descending Order)
+- เริ่มจากตรวจสอบ `>= 80` (เกรด A), `>= 70` (เกรด B), `>= 60` (เกรด C), `>= 50` (เกรด D) และคะแนนอื่นๆ เป็นเกรด F
+- วิธีนี้ทำให้ไม่จำเป็นต้องเขียนเงื่อนไขช่วงซ้อนกัน เช่น `score >= 70 && score < 80`
 
 **Test Cases:**
 
@@ -392,6 +443,11 @@ void IsLeapYear(int year)
 - หารด้วย 4 ลงตัว (แต่ไม่หาร 100 ลงตัว): ปีอธิกสุรทิน
 - อื่นๆ: ไม่ใช่ปีอธิกสุรทิน
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ใช้เครื่องหมาย Modulo (`%`) เพื่อตรวจสอบการหารลงตัว (เศษเท่ากับ 0 เช่น `year % 4 == 0`)
+- เงื่อนไขของปีอธิกสุรทินคือ: หารด้วย 400 ลงตัว **หรือ** (หารด้วย 4 ลงตัว **และ** หารด้วย 100 ไม่ลงตัว)
+- พิมพ์ผลลัพธ์เป็น `"True"` หรือ `"False"` ตามเงื่อนไข
+
 **Test Cases:**
 
 ```
@@ -424,6 +480,12 @@ void Calculate(double num1, char op, double num2)
 - จัดการการหารด้วยศูนย์ จะต้องแสดงข้อความ `Error: Cannot divide by zero.`
 - จัดรูปแบบตัวเลขโดยไม่มีทศนิยมที่ไม่จำเป็น
 - ตรวจสอบ operator input
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สามารถใช้ `switch(op)` ในการแยกการคำนวณตามเครื่องหมาย `+`, `-`, `*`, `/`
+- ในกรณีของการหาร (`/`) ให้เพิ่มการตรวจสอบ `num2 == 0` ก่อนเพื่อป้องกัน Error โดยพิมพ์ข้อความแจ้งเตือนตามที่โจทย์กำหนด
+- จัดการเครื่องหมายอื่นๆ ที่ไม่ถูกต้องผ่านกรณี `default`
+- การแสดงผลตัวเลข สามารถใช้ string interpolation หรือเชื่อมข้อความตามฟอร์แมต `"Result: "`
 
 **Test Cases:**
 
@@ -462,6 +524,10 @@ void GetSeason(int month)
 - Fall: September (9) ถึง November (11)
 - Invalid: เดือนนอกช่วง 1-12
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ขั้นแรก: ตรวจสอบความถูกต้องของเดือนก่อน โดยถ้า `month < 1 || month > 12` ให้แสดงข้อความแจ้งเตือนเดือนไม่ถูกต้อง
+- ขั้นที่สอง: จัดกลุ่มเดือนตามฤดูกาล เช่น 12, 1, 2 คือ Winter, 3-5 คือ Spring, 6-8 คือ Summer, 9-11 คือ Fall โดยสามารถใช้ตัวดำเนินการตรรกะ `||` หรือ `switch` แบบจัดกลุ่มเคส
+
 **Test Cases:**
 
 ```
@@ -487,7 +553,7 @@ AS01.07p: Input: 100 → Output: Invalid month number. Please enter a number bet
 
 ---
 
-## EX Level 2: Moderate (2 methods)
+## EX Level 2: Moderate (4 methods)
 
 ### 1. PurchasingSystemExample (4 test cases)
 
@@ -505,6 +571,12 @@ void PurchasingSystemExample(int quantity, int price, int payment)
 - ถ้ามี เช็ค payment ว่าพอจ่าย price หรือไม่
 - ถ้าพอ คำนวณเงินทอนและแสดงข้อความ "Item purchased successfully" และถ้ามีเงินทอน ให้แสดงข้อความ "Your change is {change} baht"
 - ถ้าไม่พอ ให้พิมพ์ "Not enough money"
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ตรวจสอบสินค้าในสต็อกก่อนเป็นอันดับแรก (`quantity <= 0`)
+- หากมีสินค้า ให้ตรวจสอบยอดเงินชำระว่าเพียงพอหรือไม่ (`payment >= price`)
+- หากเงินพอ คำนวณเงินทอน (`payment - price`) แสดงข้อความสำเร็จ และถ้ามีเงินทอน (`change > 0`) ให้แสดงจำนวนเงินทอนเพิ่มเติม
+- หากเงินไม่พอ ให้แสดงข้อความแจ้งเตือนตามที่กำหนด
 
 **Test Cases:**
 
@@ -539,6 +611,12 @@ void RockPaperScissorsExample(int userChoice, int computerChoice)
 - (อย่าลืมจัดการกรณี userChoice ไม่อยู่ใน 0-2 ให้พิมพ์ "Please select a valid number")
 - computerChoice จะถูกส่งมาจาก Test Case
 
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ตรวจสอบความถูกต้องของตัวเลือกผู้เล่นก่อน หากไม่อยู่ในช่วง 0 ถึง 2 (`userChoice < 0 || userChoice > 2`) ให้พิมพ์แจ้งเตือนและไม่ต้องประมวลผลต่อ
+- ตรวจสอบกรณีเสมอ (`userChoice == computerChoice`)
+- ตรวจสอบเงื่อนไขที่ผู้เล่นจะชนะทั้ง 3 รูปแบบ (ค้อน 0 ชนะ กรรไกร 2, กระดาษ 1 ชนะ ค้อน 0, กรรไกร 2 ชนะ กระดาษ 1)
+- กรณีอื่นๆ นอกเหนือจากนี้คือผู้เล่นแพ้
+
 **Test Cases:**
 
 ```
@@ -565,6 +643,11 @@ void CalculateWeaponDamage(string weaponType, int baseDamage)
 - ใช้ damage multipliers ตามประเภทอาวุธ
 - จัดการ weapon type input แบบไม่คำนึงถึงตัวใหญ่เล็ก
 - แสดงความเสียหายสุดท้ายเป็น integer
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- แปลงข้อความประเภทอาวุธให้เป็นตัวพิมพ์เล็กทั้งหมดก่อนด้วย `.ToLower()` เพื่อรองรับตัวพิมพ์ใหญ่-เล็กทุกแบบ
+- ใช้ `switch` หรือ `if-else` กำหนดค่าตัวคูณความเสียหาย (Multiplier) เช่น sword = 1.3, axe = 1.4
+- นำ `baseDamage` คูณกับตัวคูณ แล้วทำการแปลงชนิดข้อมูล (Type Casting) เป็นจำนวนเต็ม `(int)` ก่อนนำไปแสดงผล
 
 **Weapon Type Multipliers:**
 
@@ -604,6 +687,13 @@ void DeterminePlayerRank(int score, int completionTime)
 - กำหนดอันดับตาม score thresholds
 - คำนวณ base coins + time bonus
 - แสดงข้อความอันดับและรางวัลที่จัดรูปแบบ
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- ตรวจสอบความถูกต้องของ Input ก่อน หาก `score < 0 || completionTime < 0` ให้พิมพ์ "Invalid score or time"
+- แบ่งการคำนวณออกเป็น 2 ส่วน:
+  1. หาชื่ออันดับและ Base Coins จากคะแนน (ใช้ `if-else` ตรวจสอบตามลำดับจากคะแนนสูง 8000, 6000, 4000 ลงมา)
+  2. หา Time Bonus เพิ่มเติมจากเวลาที่ใช้ (`completionTime` `<= 30`, `<= 60`, หรือมากกว่า)
+- นำ Base Coins รวมกับ Time Bonus แล้วพิมพ์ข้อความผลลัพธ์ในรูปแบบ `"{rank} Rank - {totalCoins} coins earned!"`
 
 **Rank Thresholds:**
 
@@ -681,7 +771,7 @@ AS01.09l: Input: 8500, 45 → Output: Gold Rank - 110 coins earned!
 
 ## 📝 ข้อกำหนดการส่งงาน
 
-- เสร็จสิ้น 17 methods ทั้งหมดใน `StudentSolution.cs`
+- เสร็จสิ้น 18 methods ทั้งหมดใน `StudentSolution.cs`
 - ให้แน่ใจว่า test cases ทั้งหมดผ่าน
 - Code ควรมี comments และปฏิบัติตาม best practices
 - ใช้เฉพาะ `Debug.Log()` สำหรับ output
