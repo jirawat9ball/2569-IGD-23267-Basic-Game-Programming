@@ -309,6 +309,14 @@ namespace Week03_Loop
             if (n > 0) AssertUsesRealLoop("Lv03_WhileLoopN", requireWhile: true);
         }
 
+        static readonly object[] StepCases =
+        {
+            new object[] { new[] { "A", "B", "C", "D" } },
+            new object[] { new[] { "A", "B", "C", "D", "E" } },
+            new object[] { new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" } },
+            new object[] { new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" } },
+        };
+
         [TestCaseSource(nameof(StepCases))]
         public void Lv04_WhileLoopStep(string[] suites)
         {
