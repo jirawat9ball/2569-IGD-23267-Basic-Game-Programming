@@ -2,7 +2,7 @@
 
 ## 📋 ภาพรวมของ Assignment
 
-เรียนรู้การจัดการชุดข้อมูลด้วย **Array**, การควบคุมการทำงานซ้ำด้วย **For Loop** และ **While Loop**, การสร้างวัตถุในเกมแบบ Dynamic ด้วย **Instantiate** ตลอดจนการสร้างการเคลื่อนที่ด้วย **Coroutine** โดยการ implement 23 methods ที่ใช้งานจริงในกระบวนการสร้างเกม Assignment นี้เน้นการฝึกทักษะการคำนวณ Index, การวนลูปเข้าถึงสมาชิกใน Array, การจัดการเงื่อนไขการทำงานซ้ำ และการโต้ตอบกับ Game Objects ใน Unity แต่ละ method จะแสดงผลลัพธ์ผ่าน `Debug.Log()` และต้องตรงกับผลลัพธ์ที่คาดหวังจาก Test Cases อย่างแม่นยำ
+เรียนรู้การจัดการชุดข้อมูลด้วย **Array**, การควบคุมการทำงานซ้ำด้วย **For Loop** และ **While Loop**, การควบคุมลูปด้วย **Break** และ **Continue**, การสร้างวัตถุในเกมแบบ Dynamic ด้วย **Instantiate** ตลอดจนการสร้างการเคลื่อนที่ด้วย **Coroutine** โดยการ implement 25 methods ที่ใช้งานจริงในกระบวนการสร้างเกม Assignment นี้เน้นการฝึกทักษะการคำนวณ Index, การวนลูปเข้าถึงสมาชิกใน Array, การจัดการเงื่อนไขการทำงานซ้ำ และการโต้ตอบกับ Game Objects ใน Unity แต่ละ method จะแสดงผลลัพธ์ผ่าน `Debug.Log()` และต้องตรงกับผลลัพธ์ที่คาดหวังจาก Test Cases อย่างแม่นยำ
 
 ---
 
@@ -11,6 +11,7 @@
 - เข้าใจหลักการทำงาน โครงสร้าง และการเข้าถึงข้อมูลของ **Array** (0-based Indexing, `.Length`)
 - สามารถประยุกต์ใช้ **For Loop** ในการเข้าถึงข้อมูลทั้งแบบเรียงลำดับ, ก้าวกระโดด (Step), และย้อนกลับ (Reverse)
 - สามารถประยุกต์ใช้ **While Loop** ในการทำงานตามเงื่อนไข และการคำนวณผลรวมสะสม
+- เข้าใจการควบคุมลูปด้วยคำสั่ง **Break** (หยุดการทำงานทันที) และ **Continue** (ข้ามรอบปัจจุบัน)
 - เข้าใจการสุ่มค่าด้วย `UnityEngine.Random.Range` ร่วมกับ Index ของ Array
 - สามารถใช้ `Instantiate` เพื่อสร้าง GameObject ขึ้นในฉากตามตำแหน่งและระยะห่างที่คำนวณได้
 - เข้าใจการเขียน Coroutine (`IEnumerator`, `yield return null`) เพื่อจัดการการเคลื่อนที่แบบ Frame-by-Frame
@@ -22,7 +23,7 @@
 
 - **Lecture Methods (9 methods: As01 – As09)** - การฝึกเขียนโค้ดเพื่อเรียนรู้พื้นฐานร่วมกันในชั้นเรียน
 - **Level 1: Simple (9 methods: Lv01 – Lv09)** - การบ้านระดับพื้นฐาน เน้นความเข้าใจ Array และ Loop
-- **Level 2: Moderate (5 methods: Ex01 – Ex05)** - การบ้านระดับท้าทาย ผสมผสาน Loop, Array และ Game Mechanics
+- **Level 2: Moderate (7 methods: Ex01 – Ex07)** - การบ้านระดับท้าทาย ผสมผสาน Loop, Array, Break, Continue และ Game Mechanics
 
 ---
 
@@ -779,6 +780,79 @@ void Ex05_WhileLoopSum(int n)
   ```
 
 **Game Context:** การคำนวณค่าประสบการณ์รวม (Total EXP Required) สำหรับการอัปเลเวลในเกม
+
+---
+
+### 24. Ex06_FindItemOrBreak (5 test cases)
+
+**วัตถุประสงค์:** การประยุกต์ใช้คำสั่ง `break` เพื่อหยุดการค้นหาข้อมูลใน Array ทันทีเมื่อพบเป้าหมาย (Early Exit Search Pattern)
+
+**Method Signature:**
+```csharp
+void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+```
+
+**Logic ที่ต้อง implement:**
+1. สร้างตัวแปร boolean เช่น `bool found = false;` เพื่อบันทึกสถานะการพบไอเทม
+2. วนลูป For ตรวจสอบสมาชิกใน `inventory` ทีละช่อง (index `0` ถึง `inventory.Length - 1`)
+3. ถ้าพบว่าช่องใดตรงกับ `targetItem` (`inventory[i] == targetItem`):
+   - แสดงผล: `Found <targetItem> at slot <i>`
+   - ปรับค่า `found = true;`
+   - ใช้คำสั่ง `break;` เพื่อหยุดการทำงานของลูปทันที (ไม่ตรวจสอบช่องที่เหลือ)
+4. เมื่อจบลูปแล้ว หากตรวจสอบพบว่าไม่เจอไอเทม (`!found`):
+   - แสดงผล: `Item <targetItem> not found`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- การค้นหาแบบ Early Exit ช่วยให้โปรแกรมไม่ต้องประมวลผลต่อเมื่อได้ผลลัพธ์ที่ต้องการแล้ว
+- กำหนด `bool found = false;` ไว้นอกลูป และเมื่อเจอของให้เปลี่ยนเป็น `true` ก่อนสั่ง `break;`
+- เช็คเงื่อนไข `if (!found)` หลังจบลูปเพื่อจัดการกรณีที่ไม่มีไอเทมชิ้นนั้นในกระเป๋า
+
+**ตัวอย่าง Input/Output:**
+- Input: `inventory = ["Potion", "Shield", "Key", "Herb", "Key"], targetItem = "Key"`
+  ```
+  Found Key at slot 2
+  ```
+  *(สังเกตว่าลูปจะหยุดที่ช่อง 2 ทันทีและไม่ประมวลผลไปถึงช่อง 4)*
+- Input: `inventory = ["Potion", "Sword", "Shield"], targetItem = "Axe"`
+  ```
+  Item Axe not found
+  ```
+
+**Game Context:** ระบบค้นหาไอเทมเควสต์ในกระเป๋าเป้ของผู้เล่น เมื่อพบไอเทมชิ้นแรกที่ตรงกันจะหยุดค้นหาทันทีเพื่อประหยัดทรัพยากรการประมวลผล
+
+---
+
+### 25. Ex07_SkipDefeatedEnemies (4 test cases)
+
+**วัตถุประสงค์:** การประยุกต์ใช้คำสั่ง `continue` เพื่อข้ามการประมวลผลสมาชิกที่ไม่ตรงเงื่อนไข (Filtering Pattern)
+
+**Method Signature:**
+```csharp
+void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+```
+
+**Logic ที่ต้อง implement:**
+1. วนลูป For ตรวจสอบค่า HP ของศัตรูทีละตัวใน Array `enemyHPs` (index `0` ถึง `enemyHPs.Length - 1`)
+2. ในแต่ละรอบ ให้ตรวจสอบว่าศัตรูตัวนั้นพ่ายแพ้ไปแล้วหรือไม่ (`enemyHPs[i] <= 0`):
+   - หาก `enemyHPs[i] <= 0` ให้ใช้คำสั่ง `continue;` เพื่อข้ามการทำงานที่เหลือในรอบนี้ และเริ่มรอบถัดไปทันที
+3. หากศัตรูยังมีชีวิตอยู่ (`HP > 0`) ให้แสดงผล:
+   - `Enemy <i> HP : <enemyHPs[i]>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- คำสั่ง `continue` จะสั่งให้ลูปกระโดดข้ามคำสั่งที่อยู่ด้านล่างทั้งหมดในรอบนั้น แล้วไปเริ่มรอบถัดไป (เพิ่มค่า `i++`) ทันที
+- ใช้เงื่อนไข `if (enemyHPs[i] <= 0)` ร่วมกับ `continue;` วางไว้เป็นคำสั่งแรกๆ ภายในลูป
+- คำสั่ง `Debug.Log` จะถูกเรียกเฉพาะศัตรูที่รอดชีวิตเท่านั้น
+
+**ตัวอย่าง Input/Output:**
+- Input: `enemyHPs = [100, 0, 50, -10, 80]`
+  ```
+  Enemy 0 HP : 100
+  Enemy 2 HP : 50
+  Enemy 4 HP : 80
+  ```
+  *(ช่อง index 1 ที่มี HP = 0 และ index 3 ที่มี HP = -10 จะถูกข้ามไป ไม่ถูกพิมพ์ออกมา)*
+
+**Game Context:** ระบบการประมวลผลสกิลโจมตีหมู่ (AOE) หรือการจัดการเทิร์นของ AI ศัตรู โดยจะข้ามศัตรูที่ HP หมดไปแล้วในสนามรบ
 
 ---
 

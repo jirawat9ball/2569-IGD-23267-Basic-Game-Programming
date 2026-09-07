@@ -313,6 +313,38 @@ namespace Week03
             Debug.Log("Sum of n from 0 to " + n + " is " + sum);
         }
 
+        public void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+        {
+            bool found = false;
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                if (inventory[i] == targetItem)
+                {
+                    Debug.Log("Found " + targetItem + " at slot " + i);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                Debug.Log("Item " + targetItem + " not found");
+            }
+        }
+
+        public void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+        {
+            for (int i = 0; i < enemyHPs.Length; i++)
+            {
+                if (enemyHPs[i] <= 0)
+                {
+                    continue;
+                }
+
+                Debug.Log("Enemy " + i + " HP : " + enemyHPs[i]);
+            }
+        }
+
         #endregion
 
         #endregion // End Homework

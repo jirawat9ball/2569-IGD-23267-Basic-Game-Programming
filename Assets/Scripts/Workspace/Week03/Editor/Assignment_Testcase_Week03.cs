@@ -657,6 +657,76 @@ namespace Week03_Loop
             AssertUsesRealLoop("Ex05_WhileLoopSum", requireWhile: true);
         }
 
+        static readonly TestCaseData[] FindItemCases =
+        {
+            new TestCaseData((object)new[] { "Potion", "Shield", "Key", "Herb", "Key" }, "Key")
+                .SetName("Ex06_FindItemOrBreak(Duplicate Key at 2 and 4 -> breaks at 2)"),
+            new TestCaseData((object)new[] { "Bow", "Sword", "Shield" }, "Bow")
+                .SetName("Ex06_FindItemOrBreak(First element at 0)"),
+            new TestCaseData((object)new[] { "Potion", "Sword", "Shield" }, "Shield")
+                .SetName("Ex06_FindItemOrBreak(Last element at 2)"),
+            new TestCaseData((object)new[] { "Potion", "Sword", "Shield" }, "Axe")
+                .SetName("Ex06_FindItemOrBreak(Item not found)"),
+            new TestCaseData((object)new string[0], "Key")
+                .SetName("Ex06_FindItemOrBreak(Empty inventory -> not found)"),
+        };
+
+        [TestCaseSource(nameof(FindItemCases))]
+        public void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+        {
+            assignment.Ex06_FindItemOrBreak(inventory, targetItem);
+
+            string expected = "";
+            bool found = false;
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                if (inventory[i] == targetItem)
+                {
+                    expected = $"Found {targetItem} at slot {i}";
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                expected = $"Item {targetItem} not found";
+            }
+
+            TestUtils.AssertMultilineEqual(expected, SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Ex06_FindItemOrBreak");
+            AssertBodyContains("Ex06_FindItemOrBreak", "break", "ต้องใช้คำสั่ง break เพื่อหยุดการค้นหา");
+        }
+
+        static readonly TestCaseData[] SkipEnemiesCases =
+        {
+            new TestCaseData((object)new[] { 100, 0, 50, -10, 80 })
+                .SetName("Ex07_SkipDefeatedEnemies(Mixed active and dead -> skips 0 and negative)"),
+            new TestCaseData((object)new[] { 30, 45, 60 })
+                .SetName("Ex07_SkipDefeatedEnemies(All active)"),
+            new TestCaseData((object)new[] { 0, -5, -20 })
+                .SetName("Ex07_SkipDefeatedEnemies(All dead -> no output)"),
+            new TestCaseData((object)new[] { -1, 99, 0 })
+                .SetName("Ex07_SkipDefeatedEnemies(First and last dead, middle active)"),
+        };
+
+        [TestCaseSource(nameof(SkipEnemiesCases))]
+        public void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+        {
+            assignment.Ex07_SkipDefeatedEnemies(enemyHPs);
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < enemyHPs.Length; i++)
+            {
+                if (enemyHPs[i] <= 0) continue;
+                sb.AppendLine($"Enemy {i} HP : {enemyHPs[i]}");
+            }
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Ex07_SkipDefeatedEnemies");
+            AssertBodyContains("Ex07_SkipDefeatedEnemies", "continue", "ต้องใช้คำสั่ง continue เพื่อข้ามศัตรูที่ตายแล้ว");
+        }
+
         private static string ExpectedStepOutput(string[] suites)
         {
             var sb = new StringBuilder();

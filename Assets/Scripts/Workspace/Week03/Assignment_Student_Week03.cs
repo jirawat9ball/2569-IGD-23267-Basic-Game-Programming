@@ -73,6 +73,13 @@ namespace Week03
         public int spawnCount = 3;
         public float spawnSpacing = 2f;
 
+        [Header("Ex06 Variables")]
+        public string searchTarget = "Key";
+        public string[] backpack = { "Potion", "Shield", "Key", "Herb", "Key" };
+
+        [Header("Ex07 Variables")]
+        public int[] battleEnemiesHP = { 100, 0, 50, -10, 80 };
+
         #endregion
 
         void Start()
@@ -102,6 +109,8 @@ namespace Week03
             Ex03_SpawnEnemiesWithSpacing(Enemy, spawnCount, spawnSpacing);
             Ex04_WhileLoopStep(suiteNames);
             Ex05_WhileLoopSum(n);
+            Ex06_FindItemOrBreak(backpack, searchTarget);
+            Ex07_SkipDefeatedEnemies(battleEnemiesHP);
         }
 
         #region Lecture
@@ -298,6 +307,27 @@ namespace Week03
             // Guideline:
             // ใช้ While Loop คำนวณผลรวมของตัวเลขตั้งแต่ 1 ถึง n
             // แล้วพิมพ์ "Sum of n from 0 to " + n + " is " + sum
+        }
+
+        public void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+        {
+            // Guideline:
+            // 1. สร้างตัวแปร bool found = false; เพื่อเช็คว่าเจอไอเทมหรือไม่
+            // 2. วนลูป For ตรวจสอบ inventory ทีละช่อง (i = 0 ถึง Length - 1):
+            //    - ถ้าพบ inventory[i] == targetItem ให้พิมพ์:
+            //      "Found " + targetItem + " at slot " + i
+            //      เปลี่ยน found = true; แล้วใช้คำสั่ง break; เพื่อหยุดการวนลูปทันที
+            // 3. ภายนอกลูป ถ้า !found (หาไม่เจอ) ให้พิมพ์:
+            //    "Item " + targetItem + " not found"
+        }
+
+        public void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+        {
+            // Guideline:
+            // วนลูป For ตรวจสอบศัตรูทีละตัว (i = 0 ถึง Length - 1):
+            // 1. ถ้า enemyHPs[i] <= 0 (ศัตรูตายแล้ว) ให้ใช้คำสั่ง continue; เพื่อข้ามรอบนี้ทันที
+            // 2. ถ้าศัตรูยังมีชีวิต ให้พิมพ์:
+            //    "Enemy " + i + " HP : " + enemyHPs[i]
         }
 
         #endregion

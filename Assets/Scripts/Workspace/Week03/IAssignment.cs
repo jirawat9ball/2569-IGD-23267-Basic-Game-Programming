@@ -67,6 +67,10 @@ namespace Week03
 
         void Ex05_WhileLoopSum(int n);
 
+        void Ex06_FindItemOrBreak(string[] inventory, string targetItem);
+
+        void Ex07_SkipDefeatedEnemies(int[] enemyHPs);
+
         #endregion
         #endregion
     }
