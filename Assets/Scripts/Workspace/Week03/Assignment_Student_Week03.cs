@@ -103,125 +103,73 @@ namespace Week03
 
         public void As01_IronManSuit()
         {
-            string[] IronManSuit = new string[4]
-            {
-                "Mark I", "Mark II", "Mark III", "Mark IV"
-            };
-
-            string TonyStarkWear = IronManSuit[0];
-            Debug.Log("TonyStark Wear : " + TonyStarkWear);
-            Debug.Log("Room size IronManSuit : " + IronManSuit.Length);
-            Debug.Log("===All suit in collection===");
-
-            for (int i = 0; i < IronManSuit.Length; i++)
-            {
-                Debug.Log(IronManSuit[i]);
-            }
+            // Guideline: 
+            // 1. สร้าง Array string[] IronManSuit ขนาด 4 เก็บ "Mark I", "Mark II", "Mark III", "Mark IV"
+            // 2. นำชุดแรกมาใส่ (index 0) เก็บในตัวแปร TonyStarkWear แล้วพิมพ์ "TonyStark Wear : " + TonyStarkWear
+            // 3. พิมพ์ขนาดของ Array "Room size IronManSuit : " + IronManSuit.Length
+            // 4. พิมพ์ "===All suit in collection===" แล้วใช้ For Loop พิมพ์ชุดทั้งหมดออกมา
         }
 
         public void As02_SpiderManAndBatMan()
         {
-            string[] spiderMan =
-            {
-                "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider"
-            };
-            string[] BatMan = new string[4]
-            {
-                "Classic BatMan", "Dark Knight", "Batman Beyond", "The Batman"
-            };
-
-            Debug.Log("Room size spiderMan : " + spiderMan.Length);
-            Debug.Log("===All spiderMan in collection===");
-            for (int i = 0; i < spiderMan.Length; i++)
-            {
-                Debug.Log(spiderMan[i]);
-            }
-
-            Debug.Log("Room size BatMan : " + BatMan.Length);
-            Debug.Log("===All BatMan in collection===");
-            for (int i = 0; i < BatMan.Length; i++)
-            {
-                Debug.Log(BatMan[i]);
-            }
+            // Guideline:
+            // 1. สร้าง Array spiderMan เก็บ "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider"
+            // 2. สร้าง Array BatMan ขนาด 4 เก็บ "Classic BatMan", "Dark Knight", "Batman Beyond", "The Batman"
+            // 3. พิมพ์ "Room size spiderMan : " + spiderMan.Length ตามด้วย "===All spiderMan in collection===" และ For Loop แสดงทั้งหมด
+            // 4. พิมพ์ "Room size BatMan : " + BatMan.Length ตามด้วย "===All BatMan in collection===" และ For Loop แสดงทั้งหมด
         }
 
         public void As03_RandomItemDrop(GameObject[] items)
         {
-            int index = Random.Range(0, items.Length);
-            GameObject picked = items[index];
-            Instantiate(picked,new Vector3(0, 3, 0), Quaternion.identity);
-            Debug.Log("Got item : " + picked.name);
+            // Guideline:
+            // 1. สุ่ม index จาก items โดยใช้ Random.Range(0, items.Length)
+            // 2. สั่ง Instantiate ไอเทมที่สุ่มได้ที่ตำแหน่ง (0, 3, 0) ด้วย Quaternion.identity
+            // 3. พิมพ์ "Got item : " + picked.name
         }
 
         public void As04_ForLoopBasic()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Debug.Log("<10 : " + i);
-            }
-
-            Debug.Log("======================");
-
-            for (int i = 1; i <= 10; i++)
-            {
-                Debug.Log("<=10 : " + i);
-            }
+            // Guideline:
+            // 1. วนลูป For ตั้งแต่ i = 0 ถึง 9 พิมพ์ "<10 : " + i
+            // 2. พิมพ์ "======================"
+            // 3. วนลูป For ตั้งแต่ i = 1 ถึง 10 พิมพ์ "<=10 : " + i
         }
 
         public void As05_ForLoopN(int n)
         {
-            for (int i = 0; i < n; i++)
-            {
-                Debug.Log(i);
-            }
+            // Guideline:
+            // วนลูป For ตั้งแต่ i = 0 ถึง n - 1 แล้วพิมพ์ค่า i ออกมา
         }
 
         public void As06_ForLoopWithArray(string[] suiteNames)
         {
-            Debug.Log("======Log by One======");
-            for (int i = 0; i < suiteNames.Length; i++)
-            {
-                Debug.Log(suiteNames[i]);
-            }
-
-            Debug.Log("======Log by Two======");
-            for (int i = 0; i < suiteNames.Length; i += 2)
-            {
-                Debug.Log(suiteNames[i]);
-            }
+            // Guideline:
+            // 1. พิมพ์ "======Log by One======" แล้ววนลูป For พิมพ์สมาชิกทีละ 1 ตัว (i++)
+            // 2. พิมพ์ "======Log by Two======" แล้ววนลูป For ข้ามทีละ 2 ตัว (i += 2)
         }
 
         public void As07_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)
         {
-            for (int i = 0; i < HpEnemy.Length; i++)
-            {
-                GameObject spawned = Instantiate(Enemy);
-                spawned.transform.position = new Vector3(i + 1, 0f, 0f);
-                Debug.Log("new enemy at position x = " + (i + 1));
-            }
+            // Guideline:
+            // วนลูป For ตามจำนวนของ HpEnemy:
+            // - Instantiate(Enemy) ที่ตำแหน่ง x = i + 1 (new Vector3(i + 1, 0f, 0f))
+            // - พิมพ์ "new enemy at position x = " + (i + 1)
         }
 
         public void As08_WhileLoopBasic()
         {
-            int i = 0;
-            while (i < 10)
-            {
-                Debug.Log("while loop : " + i);
-                i++;
-            }
+            // Guideline:
+            // วนลูป While ตั้งแต่ i = 0 ถึง 9 แล้วพิมพ์ "while loop : " + i
         }
 
         public IEnumerator As09_MoveToTarget(Transform character, Transform target, float speed)
         {
-            float timer = 0f;
-            while (character.position.x < target.position.x)
-            {
-                character.Translate(Vector3.right * speed * 0.1f);
-                Debug.Log(character.position.x.ToString("F2"));
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            Debug.Log("Time : " + timer);
+            // Guideline:
+            // 1. ใช้ Coroutine เลื่อน character ไปหา target โดยวนลูป While ตราบใดที่ character.position.x < target.position.x
+            // 2. เลื่อนตำแหน่ง character ด้วย character.Translate(Vector3.right * speed * 0.1f)
+            // 3. พิมพ์ตำแหน่ง x ปัจจุบันด้วย character.position.x.ToString("F2") และสะสมเวลา timer += Time.deltaTime
+            // 4. yield return null ในแต่ละเฟรม และเมื่อถึงเป้าหมายให้พิมพ์ "Time : " + timer
+            yield break;
         }
 
         #endregion
@@ -232,74 +180,54 @@ namespace Week03
 
         public void Lv01_SetArrayValues()
         {
-            string[] weapons = new string[3];
-            weapons[0] = "Sword";
-            weapons[1] = "Axe";
-            weapons[2] = "Bow";
-
-            int[] damage = new int[3];
-            damage[0] = 100;
-            damage[1] = 200;
-            damage[2] = 300;
-
-            Debug.Log(weapons[0] + " damage : " + damage[0]);
-            Debug.Log(weapons[1] + " damage : " + damage[1]);
-            Debug.Log(weapons[2] + " damage : " + damage[2]);
+            // Guideline:
+            // 1. สร้าง Array string[] weapons ขนาด 3 เก็บ "Sword", "Axe", "Bow"
+            // 2. สร้าง Array int[] damage ขนาด 3 แล้วกำหนดค่าทีละ index: [0] = 100, [1] = 200, [2] = 300
+            // 3. พิมพ์จับคู่กัน เช่น "Sword damage : 100", "Axe damage : 200", "Bow damage : 300"
         }
 
         public void Lv02_InspectArray(string[] items)
         {
-            Debug.Log("Total items : " + items.Length);
-            Debug.Log("First item : " + items[0]);
-            Debug.Log("Middle item : " + items[items.Length / 2]);
-            Debug.Log("Last item : " + items[items.Length - 1]);
+            // Guideline: ตรวจสอบและพิมพ์ข้อมูลของ Array items:
+            // - จำนวนไอเทมทั้งหมด: "Total items : " + items.Length
+            // - ไอเทมตัวแรก (index 0): "First item : " + items[0]
+            // - ไอเทมตรงกลาง (index Length / 2): "Middle item : " + items[items.Length / 2]
+            // - ไอเทมตัวสุดท้าย (index Length - 1): "Last item : " + items[items.Length - 1]
         }
 
         public void Lv03_RandomDialogue(string[] npc1Dialogues)
         {
-            int index = Random.Range(0, npc1Dialogues.Length);
-            Debug.Log(npc1Dialogues[index]);
+            // Guideline:
+            // สุ่ม Index ของบทสนทนาจาก npc1Dialogues ด้วย Random.Range(0, npc1Dialogues.Length)
+            // แล้วพิมพ์บทสนทนานั้นออกมาทาง Console
         }
 
         public void Lv04_AttackTarget(int[] enemyHP, int damage, int target)
         {
-            int last = enemyHP.Length - 1;
-
-            enemyHP[0] -= damage;
-            Debug.Log("FirstEnemy hp : " + enemyHP[0]);
-
-            enemyHP[last] -= damage;
-            Debug.Log("LastEnemy hp : " + enemyHP[last]);
-
-            enemyHP[target] -= damage;
-            Debug.Log("TargetEnemy " + target + " hp : " + enemyHP[target]);
+            // Guideline:
+            // ลดเลือด enemyHP ด้วย damage ตามลำดับ:
+            // 1. ศัตรูตัวแรก (index 0) แล้วพิมพ์ "FirstEnemy hp : " + enemyHP[0]
+            // 2. ศัตรูตัวสุดท้าย (index Length - 1) แล้วพิมพ์ "LastEnemy hp : " + enemyHP[last]
+            // 3. ศัตรูเป้าหมาย (index target) แล้วพิมพ์ "TargetEnemy " + target + " hp : " + enemyHP[target]
         }
 
         public void Lv05_MultiplicationTable(int n)
         {
-            for (int i = 1; i <= 12; i++)
-            {
-                Debug.Log(n + " x " + i + " = " + (n * i));
-            }
+            // Guideline:
+            // วนลูป For พิมพ์สูตรคูณแม่ n ตั้งแต่ 1 ถึง 12 ในรูปแบบ "{n} x {i} = {n * i}"
         }
 
         public void Lv06_WhileLoopN(int n)
         {
-            int i = 0;
-            while (i < n)
-            {
-                Debug.Log(i);
-                i++;
-            }
+            // Guideline:
+            // วนลูป While พิมพ์ตัวเลขตั้งแต่ 0 ถึง n - 1
         }
 
         public void Lv07_ForLoopReverse(string[] suiteNames)
         {
-            Debug.Log("======Log Reverse======");
-            for (int i = suiteNames.Length - 1; i >= 0; i--)
-            {
-                Debug.Log(suiteNames[i]);
-            }
+            // Guideline:
+            // 1. พิมพ์ "======Log Reverse======"
+            // 2. วนลูป For ย้อนกลับพิมพ์สมาชิกตั้งแต่ index ตัวสุดท้ายลงมาถึง index 0
         }
 
         #endregion
@@ -308,67 +236,41 @@ namespace Week03
 
         public void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP)
         {
-            int last = enemyHP.Length - 1;
-
-            enemyHP[0] = Mathf.Min(enemyHP[0] + heal, maxHP);
-            Debug.Log("FirstEnemy hp : " + enemyHP[0]);
-
-            enemyHP[last] = Mathf.Min(enemyHP[last] + heal, maxHP);
-            Debug.Log("LastEnemy hp : " + enemyHP[last]);
-
-            enemyHP[target] = Mathf.Min(enemyHP[target] + heal, maxHP);
-            Debug.Log("TargetEnemy " + target + " hp : " + enemyHP[target]);
+            // Guideline:
+            // เพิ่มเลือด enemyHP ด้วย heal โดยจำกัดไม่ให้เกิน maxHP (เช่น ใช้ Mathf.Min(hp + heal, maxHP))
+            // 1. ศัตรูตัวแรก (index 0) แล้วพิมพ์ "FirstEnemy hp : " + enemyHP[0]
+            // 2. ศัตรูตัวสุดท้าย (index Length - 1) แล้วพิมพ์ "LastEnemy hp : " + enemyHP[last]
+            // 3. ศัตรูเป้าหมาย (index target) แล้วพิมพ์ "TargetEnemy " + target + " hp : " + enemyHP[target]
         }
 
         public void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
         {
-            int index1 = Random.Range(0, npc1Dialogues.Length);
-            Debug.Log("NPC1 : " + npc1Dialogues[index1]);
-
-            int index2 = Random.Range(0, npc2Dialogues.Length);
-            Debug.Log("NPC2 : " + npc2Dialogues[index2]);
+            // Guideline:
+            // 1. สุ่ม index จาก npc1Dialogues แล้วพิมพ์ "NPC1 : " + npc1Dialogues[index1]
+            // 2. สุ่ม index จาก npc2Dialogues แล้วพิมพ์ "NPC2 : " + npc2Dialogues[index2]
         }
 
         public void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)
         {
-            for (int i = 0; i < count; i++)
-            {
-                float posX = (i + 1) * spacing;
-                GameObject spawned = Instantiate(Enemy);
-                spawned.transform.position = new Vector3(posX, 0f, 0f);
-                Debug.Log("Spawn enemy at position x : " + posX);
-            }
+            // Guideline:
+            // วนลูป For จำนวน count รอบ (i = 0 ถึง count - 1):
+            // 1. คำนวณตำแหน่ง posX = (i + 1) * spacing
+            // 2. Instantiate(Enemy) และตั้งตำแหน่ง transform.position = new Vector3(posX, 0f, 0f)
+            // 3. พิมพ์ "Spawn enemy at position x : " + posX
         }
 
         public void Ex04_WhileLoopStep(string[] suiteNames)
         {
-            Debug.Log("======Log by One======");
-            int i = 0;
-            while (i < suiteNames.Length)
-            {
-                Debug.Log(suiteNames[i]);
-                i++;
-            }
-
-            Debug.Log("======Log by Two======");
-            i = 0;
-            while (i < suiteNames.Length)
-            {
-                Debug.Log(suiteNames[i]);
-                i += 2;
-            }
+            // Guideline:
+            // 1. พิมพ์ "======Log by One======" แล้ววนลูป While พิมพ์ทีละ 1 (i++)
+            // 2. พิมพ์ "======Log by Two======" แล้ววนลูป While พิมพ์ข้ามทีละ 2 (i += 2)
         }
 
         public void Ex05_WhileLoopSum(int n)
         {
-            int i = 1;
-            int sum = 0;
-            while (i <= n)
-            {
-                sum += i;
-                i++;
-            }
-            Debug.Log("Sum of n from 0 to " + n + " is " + sum);
+            // Guideline:
+            // ใช้ While Loop คำนวณผลรวมของตัวเลขตั้งแต่ 1 ถึง n
+            // แล้วพิมพ์ "Sum of n from 0 to " + n + " is " + sum
         }
 
         #endregion

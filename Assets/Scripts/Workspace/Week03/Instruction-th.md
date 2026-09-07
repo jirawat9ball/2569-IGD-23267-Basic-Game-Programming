@@ -1,182 +1,602 @@
-# คู่มือแบบฝึกหัด Week 03: Arrays, Loops, and Instantiation
+# Assignment 03: การเรียนรู้ Array, Loop (For, While), Instantiate และการเคลื่อนที่ สำหรับ Game Development
 
-เอกสารฉบับนี้อธิบายโจทย์ทั้ง 16 ข้อสำหรับ Week 03 ให้นักศึกษาทำความเข้าใจและเขียนโค้ดในไฟล์ `Assignment_Student_Week03.cs` ให้ผ่านเงื่อนไขที่กำหนด
+## 📋 ภาพรวมของ Assignment
+
+เรียนรู้การจัดการชุดข้อมูลด้วย **Array**, การควบคุมการทำงานซ้ำด้วย **For Loop** และ **While Loop**, การสร้างวัตถุในเกมแบบ Dynamic ด้วย **Instantiate** ตลอดจนการสร้างการเคลื่อนที่ด้วย **Coroutine** โดยการ implement 21 methods ที่ใช้งานจริงในกระบวนการสร้างเกม Assignment นี้เน้นการฝึกทักษะการคำนวณ Index, การวนลูปเข้าถึงสมาชิกใน Array, การจัดการเงื่อนไขการทำงานซ้ำ และการโต้ตอบกับ Game Objects ใน Unity แต่ละ method จะแสดงผลลัพธ์ผ่าน `Debug.Log()` และต้องตรงกับผลลัพธ์ที่คาดหวังจาก Test Cases อย่างแม่นยำ
+
+---
+
+## 🎯 จุดประสงค์การเรียนรู้
+
+- เข้าใจหลักการทำงาน โครงสร้าง และการเข้าถึงข้อมูลของ **Array** (0-based Indexing, `.Length`)
+- สามารถประยุกต์ใช้ **For Loop** ในการเข้าถึงข้อมูลทั้งแบบเรียงลำดับ, ก้าวกระโดด (Step), และย้อนกลับ (Reverse)
+- สามารถประยุกต์ใช้ **While Loop** ในการทำงานตามเงื่อนไข และการคำนวณผลรวมสะสม
+- เข้าใจการสุ่มค่าด้วย `UnityEngine.Random.Range` ร่วมกับ Index ของ Array
+- สามารถใช้ `Instantiate` เพื่อสร้าง GameObject ขึ้นในฉากตามตำแหน่งและระยะห่างที่คำนวณได้
+- เข้าใจการเขียน Coroutine (`IEnumerator`, `yield return null`) เพื่อจัดการการเคลื่อนที่แบบ Frame-by-Frame
+- พัฒนาโค้ดที่ถูกต้องตาม Clean Code และ Best Practices ของการพัฒนาเกม
+
+---
 
 ## 📚 โครงสร้างของ Assignment
-- **Lecture / Example Methods (9 ข้อ):** `As01` ถึง `As09` — เรียนรู้และฝึกปฏิบัติพร้อมกันในห้องเรียน
-- **Homework - Level 1: Simple (5 ข้อ):** `Lv01` ถึง `Lv05` — แบบฝึกหัดพื้นฐาน
-- **Homework - Level 2: Moderate (2 ข้อ):** `Ex01` ถึง `Ex02` — แบบฝึกหัดประยุกต์ร่วมกับ Game Mechanics
+
+- **Lecture Methods (9 methods: As01 – As09)** - การฝึกเขียนโค้ดเพื่อเรียนรู้พื้นฐานร่วมกันในชั้นเรียน
+- **Level 1: Simple (7 methods: Lv01 – Lv07)** - การบ้านระดับพื้นฐาน เน้นความเข้าใจ Array และ Loop
+- **Level 2: Moderate (5 methods: Ex01 – Ex05)** - การบ้านระดับท้าทาย ผสมผสาน Loop, Array และ Game Mechanics
 
 ---
 
-## 📖 Lecture (ตัวอย่างในห้องเรียน)
+## 🔵 Lecture Methods (ในห้องเรียน)
 
-### 1. ประกาศและใช้งาน Array พื้นฐาน
-**Method Signature:** `void As01_IronManSuit()`
-**โจทย์:**
-- ประกาศ `string[] IronManSuit` ขนาด 4 ช่อง และกำหนดค่า "Mark I" ถึง "Mark IV" ตามลำดับ
-- เก็บค่าช่องแรกไว้ในตัวแปร `TonyStarkWear` แล้วพิมพ์ `TonyStark Wear : <ค่าตัวแปร>`
-- พิมพ์ขนาดของ Array `Room size IronManSuit : <ขนาด>`
-- พิมพ์ `===All suit in collection===` และตามด้วยชื่อชุดทั้งหมดใน Array (แนะนำให้ใช้ for loop)
+### 1. As01_IronManSuit (1 test case)
 
-### 2. รูปแบบการประกาศ Array
-**Method Signature:** `void As02_SpiderManAndBatMan()`
-**โจทย์:**
-- สร้าง Array ชื่อ `spiderMan` แบบไม่ระบุขนาด ({"Classic SpiderMan", ...}) รวม 3 ชุด
-- สร้าง Array ชื่อ `BatMan` แบบใช้คำว่า new (new string[4] {...}) รวม 4 ชุด
-- พิมพ์ขนาดและเนื้อหาของทั้งสอง Array ออกมาตามรูปแบบที่กำหนด (ดูตัวอย่างในโค้ด)
+**วัตถุประสงค์:** แสดงความเข้าใจการประกาศ Array, การกำหนดค่าเริ่มต้น, การเข้าถึงสมาชิกตัวแรก และการวนลูป For เพื่อแสดงผลสมาชิกทั้งหมด
 
-### 3. สุ่มดรอปไอเทม
-**Method Signature:** `void As03_RandomItemDrop(GameObject[] items)`
-**โจทย์:**
-- สุ่มไอเทมจาก Array `items` โดยใช้ `UnityEngine.Random.Range`
-- สร้างไอเทมนั้นในฉากด้วยคำสั่ง `Instantiate`
-- พิมพ์ข้อความ `Got item : <ชื่อไอเทม>`
+**Method Signature:**
+```csharp
+void As01_IronManSuit()
+```
 
-### 4. การใช้งาน For Loop พื้นฐาน
-**Method Signature:** `void As04_ForLoopBasic()`
-**โจทย์:**
-- ลูปที่ 1: i จาก 0 ถึง 9 พิมพ์ `<10 : i`
-- คั่นด้วย `======================`
-- ลูปที่ 2: i จาก 1 ถึง 10 พิมพ์ `<=10 : i`
+**Logic ที่ต้อง implement:**
+1. สร้าง Array ประเภท `string[]` ชื่อ `IronManSuit` ขนาด 4 ช่อง บรรจุ: `"Mark I"`, `"Mark II"`, `"Mark III"`, `"Mark IV"`
+2. ดึงชุดตัวแรก (index 0) มาเก็บในตัวแปร `string TonyStarkWear`
+3. แสดงผลชุดที่สวมใส่: `TonyStark Wear : <TonyStarkWear>`
+4. แสดงผลขนาดของ Array: `Room size IronManSuit : <IronManSuit.Length>`
+5. แสดงหัวข้อ: `===All suit in collection===`
+6. ใช้ For Loop แสดงชุดเกราะทั้งหมดออกมาทีละบรรทัด
 
-### 5. For Loop ตามจำนวน Input
-**Method Signature:** `void As05_ForLoopN(int n)`
-**โจทย์:**
-- วนลูป For จำนวน n ครั้ง (จาก 0 ถึง n-1)
-- พิมพ์ตัวเลขรอบนั้นๆ ออกมา
+**Output ที่คาดหวัง:**
+```
+TonyStark Wear : Mark I
+Room size IronManSuit : 4
+===All suit in collection===
+Mark I
+Mark II
+Mark III
+Mark IV
+```
 
-### 6. การปรับค่า Step ของ For Loop ร่วมกับ Array
-**Method Signature:** `void As06_ForLoopWithArray(string[] suiteNames)`
-**โจทย์:**
-- พิมพ์ `======Log by One======` วนลูปพิมพ์ทุกชุดใน Array
-- พิมพ์ `======Log by Two======` วนลูปพิมพ์แบบข้ามทีละ 2 ชุด (index 0, 2, 4...)
-
-### 7. สร้างศัตรูเรียงกัน
-**Method Signature:** `void As07_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)`
-**โจทย์:**
-- วนลูป For ตามจำนวนของ HpEnemy
-- Instantiate ศัตรู โดยให้ตำแหน่งแกน X ขยับเพิ่มขึ้นทีละ 1 (เริ่มจาก x=1)
-- พิมพ์ `new enemy at position x = <ค่า x>`
-
-### 8. การใช้งาน While Loop พื้นฐาน
-**Method Signature:** `void As08_WhileLoopBasic()`
-**โจทย์:**
-- วนลูป While จาก 0 ถึง 9 และพิมพ์ `while loop : i`
-
-### 9. การเคลื่อนที่ด้วย Coroutine
-**Method Signature:** `IEnumerator As09_MoveToTarget(Transform character, Transform target, float speed)`
-**โจทย์:**
-- เขียน Coroutine (IEnumerator) เพื่อเคลื่อนที่ตัวละคร `character` ไปยังปลายทาง `target` ด้วย While Loop จนกว่าค่า x ของ character จะ >= target.position.x
-- เคลื่อนที่ตัวละคร: `character.Translate(Vector3.right * speed * 0.1f)`
-- พิมพ์ค่า x ของ character ทุกรอบด้วย `character.position.x.ToString("F2")`
-- รอ 1 เฟรมในแต่ละรอบด้วย `yield return null;`
-- เรียกใช้งานใน `Start()` ด้วยคำสั่ง `StartCoroutine(As09_MoveToTarget(character, positionToMove, speed));`
+**Game Context:** ระบบ Equipment สวมใส่ไอเทมเริ่มต้น และระบบ Inventory ตรวจสอบชุดเกราะทั้งหมดของผู้เล่น
 
 ---
 
-## 📝 Homework
+### 2. As02_SpiderManAndBatMan (1 test case)
 
-### 🟢 Level 1: Simple
+**วัตถุประสงค์:** ฝึกการประกาศ Array 2 รูปแบบ (แบบกำหนดค่าทันที และแบบระบุขนาด `new string[4]`) พร้อมทั้งเข้าถึงข้อมูลผ่านลูป
 
-### 10. กำหนดค่าตัวแปร Array ตามคำสั่ง
-**Method Signature:** `void Lv01_SetArrayValues()`
-**โจทย์:**
-- สร้าง Array ชนิดข้อความ `string[] weapons = new string[3];`
-- กำหนดค่าตาม Index ดังนี้: `weapons[0] = "Sword"`, `weapons[1] = "Axe"`, `weapons[2] = "Bow"`
-- สร้าง Array ชนิดตัวเลขจำนวนเต็ม `int[] damage = new int[3];`
-- กำหนดค่าตาม Index ดังนี้: `damage[0] = 100`, `damage[1] = 200`, `damage[2] = 300`
-- พิมพ์ข้อมูลอาวุธจับคู่กับ Damage แต่ละตัว:
-  - `Sword damage : 100`
-  - `Axe damage : 200`
-  - `Bow damage : 300`
+**Method Signature:**
+```csharp
+void As02_SpiderManAndBatMan()
+```
 
-### 11. การตรวจสอบข้อมูลพื้นฐานของ Array
-**Method Signature:** `void Lv02_InspectArray(string[] items)`
-**โจทย์:**
-- ตรวจสอบและพิมพ์จำนวนไอเทมทั้งหมดใน Array ด้วย `.Length`:
-  - `Total items : <ความยาว array>`
-- ตรวจสอบและพิมพ์ไอเทมตัวแรก (index 0):
-  - `First item : <ไอเทมตัวแรก>`
-- ตรวจสอบและพิมพ์ไอเทมตรงกลาง (index `Length / 2`):
-  - `Middle item : <ไอเทมตรงกลาง>`
-- ตรวจสอบและพิมพ์ไอเทมตัวสุดท้าย (index `Length - 1`):
-  - `Last item : <ไอเทมตัวสุดท้าย>`
+**Logic ที่ต้อง implement:**
+1. สร้าง Array `spiderMan` บรรจุ: `"Classic SpiderMan"`, `"Symbiote SpiderMan"`, `"Iron Spider"`
+2. สร้าง Array `BatMan` ขนาด 4 ช่อง บรรจุ: `"Classic BatMan"`, `"Dark Knight"`, `"Batman Beyond"`, `"The Batman"`
+3. แสดงผล `Room size spiderMan : <ความยาว>` ตามด้วย `===All spiderMan in collection===` และวนลูปแสดงชื่อทั้งหมด
+4. แสดงผล `Room size BatMan : <ความยาว>` ตามด้วย `===All BatMan in collection===` และวนลูปแสดงชื่อทั้งหมด
 
-### 12. ระบบสุ่มบทสนทนา
-**Method Signature:** `void Lv03_RandomDialogue(string[] npc1Dialogues)`
-**โจทย์:**
-- ใช้ `UnityEngine.Random.Range` สุ่ม Index ของบทสนทนาจาก `npc1Dialogues`
-- พิมพ์บทสนทนานั้นออกมาทาง Console
+**Output ที่คาดหวัง:**
+```
+Room size spiderMan : 3
+===All spiderMan in collection===
+Classic SpiderMan
+Symbiote SpiderMan
+Iron Spider
+Room size BatMan : 4
+===All BatMan in collection===
+Classic BatMan
+Dark Knight
+Batman Beyond
+The Batman
+```
 
-### 13. การโจมตีเป้าหมายใน Array
-**Method Signature:** `void Lv04_AttackTarget(int[] enemyHP, int damage, int target)`
-**โจทย์:**
-- โจมตีศัตรูตัวแรก: พิมพ์ `FirstEnemy hp : <hp ที่เหลือ>`
-- โจมตีศัตรูตัวสุดท้าย: พิมพ์ `LastEnemy hp : <hp ที่เหลือ>`
-- โจมตีศัตรูเป้าหมาย: พิมพ์ `TargetEnemy <target> hp : <hp ที่เหลือ>`
-- (ลำดับการโจมตีต้องเรียงจาก ตัวแรก -> ตัวสุดท้าย -> ตัวเป้าหมาย)
-
-### 14. สูตรคูณ
-**Method Signature:** `void Lv05_MultiplicationTable(int n)`
-**โจทย์:**
-- วนลูป For พิมพ์สูตรคูณแม่ n ตั้งแต่ 1 ถึง 12
-- รูปแบบ `n x i = (n*i)`
-
-### 15. While Loop ตามจำนวน Input
-**Method Signature:** `void Lv06_WhileLoopN(int n)`
-**โจทย์:**
-- วนลูป While พิมพ์ตัวเลขตั้งแต่ 0 ถึง n-1
-
-### 16. วนลูป Array แบบย้อนกลับ (Reverse Loop)
-**Method Signature:** `void Lv07_ForLoopReverse(string[] suiteNames)`
-**โจทย์:**
-- พิมพ์ `======Log Reverse======`
-- วนลูป For พิมพ์สมาชิกใน Array จาก index ตัวสุดท้ายย้อนกลับมายัง index ตัวแรก (index 0)
+**Game Context:** ระบบคอลเลกชันตัวละครหรือสกินที่ผู้เล่นสามารถปลดล็อกได้ในเกม
 
 ---
 
-### 🟡 Level 2: Moderate
+### 3. As03_RandomItemDrop (1 test case)
 
-### 17. การฟื้นฟู (Heal) เป้าหมายพร้อมจำกัด HP สูงสุด
-**Method Signature:** `void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP)`
-**โจทย์:**
-- ทำการเพิ่ม HP ด้วยค่า `heal` ให้กับ:
-  1. ศัตรูตัวแรก (index `0`)
-  2. ศัตรูตัวสุดท้าย (index `enemyHP.Length - 1`)
-  3. ศัตรูตัวที่ระบุด้วย `target`
-- โดยมีเงื่อนไขว่า **เลือดหลังฟื้นฟูต้องไม่เกินค่า `maxHP`** (เช่น ใช้ `Mathf.Min(hp + heal, maxHP)`)
+**วัตถุประสงค์:** สุ่มเลือก GameObject จาก Array ด้วย `Random.Range` และทำการ Instantiate ในฉาก
+
+**Method Signature:**
+```csharp
+void As03_RandomItemDrop(GameObject[] items)
+```
+
+**Logic ที่ต้อง implement:**
+1. สุ่ม Index ของไอเทมในช่วง `[0, items.Length)` โดยใช้ `Random.Range(0, items.Length)`
+2. ดึง GameObject ที่สุ่มได้จาก Array
+3. สั่ง `Instantiate(picked, new Vector3(0, 3, 0), Quaternion.identity)`
+4. แสดงผลชื่อไอเทมที่ได้รับ: `Got item : <picked.name>`
+
+**ตัวอย่าง Output:**
+```
+Got item : Coin
+```
+
+**Game Context:** ระบบ Loot Drop จากศัตรู หรือกล่องสุ่มกาชา (Gacha Box)
+
+---
+
+### 4. As04_ForLoopBasic (1 test case)
+
+**วัตถุประสงค์:** ฝึกการใช้งาน For Loop ขั้นพื้นฐาน ทั้งแบบ index เริ่มจาก 0 (เงื่อนไข `<`) และ index เริ่มจาก 1 (เงื่อนไข `<=`)
+
+**Method Signature:**
+```csharp
+void As04_ForLoopBasic()
+```
+
+**Logic ที่ต้อง implement:**
+1. ลูปแรก: วนลูปตั้งแต่ `i = 0` ถึง `9` (`i < 10`) พิมพ์ `<10 : <i>`
+2. พิมพ์เส้นคั่น: `======================`
+3. ลูปสอง: วนลูปตั้งแต่ `i = 1` ถึง `10` (`i <= 10`) พิมพ์ `<=10 : <i>`
+
+**Output ที่คาดหวัง:**
+```
+<10 : 0
+<10 : 1
+<10 : 2
+...
+<10 : 9
+======================
+<=10 : 1
+<=10 : 2
+...
+<=10 : 10
+```
+
+**Game Context:** การสร้างตาราง Loop และการนับรอบเวลานับถอยหลังของเกม
+
+---
+
+### 5. As05_ForLoopN (3 test cases)
+
+**วัตถุประสงค์:** ฝึกการใช้ For Loop แบบ Dynamic ตามตัวเลขที่ส่งเข้ามาผ่าน parameter `n`
+
+**Method Signature:**
+```csharp
+void As05_ForLoopN(int n)
+```
+
+**Logic ที่ต้อง implement:**
+- วนลูป For ตั้งแต่ `i = 0` ถึง `n - 1`
+- แสดงผลตัวเลข `i` ออกมาทีละบรรทัด (ถ้า `n <= 0` จะไม่แสดงผลใดๆ)
+
+**ตัวอย่าง Input/Output:**
+- Input: `n = 5`
+  ```
+  0
+  1
+  2
+  3
+  4
+  ```
+
+**Game Context:** การทำกระบวนการซ้ำตามจำนวนครั้ง เช่น การโจมตีต่อเนื่อง n ครั้ง หรือการสร้าง Wave ศัตรู
+
+---
+
+### 6. As06_ForLoopWithArray (3 test cases)
+
+**วัตถุประสงค์:** ควบคุมการเพิ่มค่า Step ของตัวแปรนับรอบใน For Loop เพื่อข้ามสมาชิกใน Array
+
+**Method Signature:**
+```csharp
+void As06_ForLoopWithArray(string[] suiteNames)
+```
+
+**Logic ที่ต้อง implement:**
+1. พิมพ์ `======Log by One======` แล้ววนลูป For ทีละ 1 (`i++`) แสดงสมาชิกทั้งหมด
+2. พิมพ์ `======Log by Two======` แล้ววนลูป For ข้ามทีละ 2 (`i += 2`) แสดงเฉพาะสมาชิกใน index คู่
+
+**ตัวอย่าง Input/Output:**
+- Input: `["Mark I", "Mark II", "Mark III", "Mark IV"]`
+  ```
+  ======Log by One======
+  Mark I
+  Mark II
+  Mark III
+  Mark IV
+  ======Log by Two======
+  Mark I
+  Mark III
+  ```
+
+**Game Context:** การแสดงผลข้อมูลในตารางแบบสลับแถว (Zebra striping) หรือการเลือกยูนิตฝั่งใดฝั่งหนึ่ง
+
+---
+
+### 7. As07_InstantiateEnemies (2 test cases)
+
+**วัตถุประสงค์:** วนลูปสร้างศัตรูตามจำนวนสมาชิกใน Array และวางตำแหน่งบนแกน X อัตโนมัติ
+
+**Method Signature:**
+```csharp
+void As07_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)
+```
+
+**Logic ที่ต้อง implement:**
+1. วนลูปตามความยาวของ `HpEnemy`
+2. สร้างศัตรูด้วย `Instantiate(Enemy)`
+3. กำหนดตำแหน่ง `spawned.transform.position = new Vector3(i + 1, 0f, 0f)`
+4. แสดงผล: `new enemy at position x = <i + 1>`
+
+**Game Context:** การ Spawn กองทัพศัตรูเป็นแถวหน้ากระดานตามตำแหน่งที่กำหนด
+
+---
+
+### 8. As08_WhileLoopBasic (1 test case)
+
+**วัตถุประสงค์:** แสดงโครงสร้าง While Loop พื้นฐาน การกำหนดตัวแปรนับ และการเพิ่มค่าเพื่อป้องกัน Infinite Loop
+
+**Method Signature:**
+```csharp
+void As08_WhileLoopBasic()
+```
+
+**Logic ที่ต้อง implement:**
+1. ประกาศตัวแปร `int i = 0;`
+2. วนลูป While ตราบใดที่ `i < 10`
+3. แสดงผล `while loop : <i>` และเพิ่มค่า `i++`
+
+**Output ที่คาดหวัง:**
+```
+while loop : 0
+while loop : 1
+...
+while loop : 9
+```
+
+**Game Context:** การรอลูปตรวจจับสถานะของระบบเครือข่าย หรือกระบวนการโหลดข้อมูล
+
+---
+
+### 9. As09_MoveToTarget (3 test cases)
+
+**วัตถุประสงค์:** การเขียน Coroutine ควบคุมการเคลื่อนที่ของตัวละครไปยังเป้าหมายอย่างต่อเนื่องในแต่ละเฟรม
+
+**Method Signature:**
+```csharp
+IEnumerator As09_MoveToTarget(Transform character, Transform target, float speed)
+```
+
+**Logic ที่ต้อง implement:**
+1. สร้างตัวแปรจับเวลา `float timer = 0f;`
+2. วนลูป While ตราบใดที่ตำแหน่ง `character.position.x < target.position.x`
+3. ขยับตัวละคร: `character.Translate(Vector3.right * speed * 0.1f)`
+4. แสดงผลตำแหน่งปัจจุบันด้วยทศนิยม 2 ตำแหน่ง: `Debug.Log(character.position.x.ToString("F2"))`
+5. สะสมเวลา `timer += Time.deltaTime;`
+6. หน่วงการทำงานแต่ละเฟรมด้วย `yield return null;`
+7. เมื่อถึงเป้าหมายให้พิมพ์: `Time : <timer>`
+
+**Game Context:** ระบบ Cutscene ตัวละครเดินไปหา NPC หรือการเคลื่อนที่ของศัตรูแบบ Patrol
+
+---
+
+## 🟢 Level 1: Simple (การบ้านระดับพื้นฐาน)
+
+### 10. Lv01_SetArrayValues (1 test case)
+
+**วัตถุประสงค์:** แสดงการสร้าง Array 2 ชุด และกำหนดค่าทีละ index จากนั้นนำมาแสดงผลจับคู่กัน
+
+**Method Signature:**
+```csharp
+void Lv01_SetArrayValues()
+```
+
+**Logic ที่ต้อง implement:**
+1. สร้าง Array `string[] weapons = new string[3];` กำหนด `[0] = "Sword"`, `[1] = "Axe"`, `[2] = "Bow"`
+2. สร้าง Array `int[] damage = new int[3];` กำหนด `[0] = 100`, `[1] = 200`, `[2] = 300`
+3. แสดงผลการจับคู่อาวุธและพลังโจมตีผ่าน Debug.Log ตามลำดับ:
+   - `Sword damage : 100`
+   - `Axe damage : 200`
+   - `Bow damage : 300`
+
+**Game Context:** ตารางข้อมูลค่าสเตตัสของอาวุธประเภทต่างๆ ในเกม RPG
+
+---
+
+### 11. Lv02_InspectArray (2 test cases)
+
+**วัตถุประสงค์:** ตรวจสอบโครงสร้างและดึงข้อมูลตำแหน่งสำคัญของ Array ได้แก่ สมาชิกตัวแรก, ตัวกลาง, และตัวสุดท้าย
+
+**Method Signature:**
+```csharp
+void Lv02_InspectArray(string[] items)
+```
+
+**Logic ที่ต้อง implement:**
+- แสดงจำนวนไอเทมทั้งหมด: `Total items : <items.Length>`
+- แสดงไอเทมตัวแรก (index `0`): `First item : <items[0]>`
+- แสดงไอเทมตรงกลาง (index `items.Length / 2`): `Middle item : <items[items.Length / 2]>`
+- แสดงไอเทมตัวสุดท้าย (index `items.Length - 1`): `Last item : <items[items.Length - 1]>`
+
+**ตัวอย่าง Input/Output:**
+- Input: `["Potion", "Sword", "Bow", "Shield"]`
+  ```
+  Total items : 4
+  First item : Potion
+  Middle item : Bow
+  Last item : Shield
+  ```
+
+**Game Context:** ระบบช่องสวมใส่ Quick Slots และการตรวจสอบไอเทมในกระเป๋า
+
+---
+
+### 12. Lv03_RandomDialogue (1 test case)
+
+**วัตถุประสงค์:** การสุ่มเลือกข้อความบทสนทนาจาก Array โดยใช้ `UnityEngine.Random.Range`
+
+**Method Signature:**
+```csharp
+void Lv03_RandomDialogue(string[] npc1Dialogues)
+```
+
+**Logic ที่ต้อง implement:**
+1. สุ่ม Index ของบทสนทนาในช่วง `0` ถึง `npc1Dialogues.Length - 1` โดยใช้ `Random.Range(0, npc1Dialogues.Length)`
+2. แสดงผลข้อความบทสนทนานั้นออกมาทาง Console
+
+**Game Context:** ระบบ NPC ประชาชนพูดคุยแบบสุ่มเมื่อผู้เล่นเดินผ่าน
+
+---
+
+### 13. Lv04_AttackTarget (6 test cases)
+
+**วัตถุประสงค์:** การแก้ไขค่าข้อมูลใน Array ผ่าน Index เพื่อจำลองการลด HP ของศัตรู
+
+**Method Signature:**
+```csharp
+void Lv04_AttackTarget(int[] enemyHP, int damage, int target)
+```
+
+**Logic ที่ต้อง implement:**
+- ลดเลือดศัตรูตัวแรก (index 0) ด้วย `damage` แล้วพิมพ์: `FirstEnemy hp : <hp ที่เหลือ>`
+- ลดเลือดศัตรูตัวสุดท้าย (index `enemyHP.Length - 1`) ด้วย `damage` แล้วพิมพ์: `LastEnemy hp : <hp ที่เหลือ>`
+- ลดเลือดศัตรูเป้าหมาย (index `target`) ด้วย `damage` แล้วพิมพ์: `TargetEnemy <target> hp : <hp ที่เหลือ>`
+- *(ลำดับการทำงานต้องเป็น ตัวแรก ➔ ตัวสุดท้าย ➔ ตัวเป้าหมาย)*
+
+**ตัวอย่าง Input/Output:**
+- Input: `enemyHP = [100, 80, 60, 40], damage = 10, target = 2`
+  ```
+  FirstEnemy hp : 90
+  LastEnemy hp : 30
+  TargetEnemy 2 hp : 50
+  ```
+
+**Game Context:** สกิลการโจมตีแบบ AoE (Area of Effect) ที่โดนตัวหน้าสุด ตัวหลังสุด และตัวที่เล็งไว้
+
+---
+
+### 14. Lv05_MultiplicationTable (6 test cases)
+
+**วัตถุประสงค์:** ฝึกฝนการใช้ For Loop คำนวณสูตรคูณแม่ n ตั้งแต่ 1 ถึง 12
+
+**Method Signature:**
+```csharp
+void Lv05_MultiplicationTable(int n)
+```
+
+**Logic ที่ต้อง implement:**
+- วนลูป For ตั้งแต่ `i = 1` ถึง `12`
+- แสดงผลในรูปแบบ: `<n> x <i> = <n * i>`
+
+**ตัวอย่าง Input/Output:**
+- Input: `n = 2`
+  ```
+  2 x 1 = 2
+  2 x 2 = 4
+  ...
+  2 x 12 = 24
+  ```
+
+**Game Context:** การคำนวณอัตราความเสียหายตามระดับเลเวล (Level Multiplier)
+
+---
+
+### 15. Lv06_WhileLoopN (5 test cases)
+
+**วัตถุประสงค์:** ฝึกการเขียน While Loop ควบคุมการวนซ้ำตามจำนวนรอบที่ระบุ
+
+**Method Signature:**
+```csharp
+void Lv06_WhileLoopN(int n)
+```
+
+**Logic ที่ต้อง implement:**
+- ประกาศตัวแปรนับรอบ `int i = 0;`
+- วนลูป While ตราบใดที่ `i < n`
+- แสดงผล `i` ออกมาทีละบรรทัด พร้อม `i++`
+
+**ตัวอย่าง Input/Output:**
+- Input: `n = 3`
+  ```
+  0
+  1
+  2
+  ```
+
+**Game Context:** การประมวลผล Queue ของคำสั่งตามจำนวนที่มีอยู่ในคิว
+
+---
+
+### 16. Lv07_ForLoopReverse (4 test cases)
+
+**วัตถุประสงค์:** ฝึกการวนลูป For แบบย้อนกลับ (Reverse Loop) จาก Index สุดท้ายมายัง Index 0
+
+**Method Signature:**
+```csharp
+void Lv07_ForLoopReverse(string[] suiteNames)
+```
+
+**Logic ที่ต้อง implement:**
+1. แสดงหัวข้อ: `======Log Reverse======`
+2. วนลูป For เริ่มจาก `i = suiteNames.Length - 1` ถอยหลังลงมาจนถึง `i >= 0` ด้วย `i--`
+3. แสดงสมาชิกใน Array ออกมาทีละบรรทัด
+
+**ตัวอย่าง Input/Output:**
+- Input: `["Mark I", "Mark II", "Mark III"]`
+  ```
+  ======Log Reverse======
+  Mark III
+  Mark II
+  Mark I
+  ```
+
+**Game Context:** การแสดงผลประวัติการแชทย้อนหลัง (Chat Log) หรือระบบ Replay ย้อนเวลา
+
+---
+
+## 🟡 Level 2: Moderate (การบ้านระดับท้าทาย)
+
+### 17. Ex01_HealTarget (6 test cases)
+
+**วัตถุประสงค์:** การฟื้นฟูค่า HP ของศัตรูในตำแหน่งต่างๆ โดยมีระบบป้องกัน Overheal ด้วย `Mathf.Min`
+
+**Method Signature:**
+```csharp
+void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP)
+```
+
+**Logic ที่ต้อง implement:**
+- เพิ่ม HP ด้วยค่า `heal` ให้กับศัตรูตัวแรก (index 0), ตัวสุดท้าย (index `enemyHP.Length - 1`), และตัวเป้าหมาย (index `target`)
+- **เงื่อนไขสำคัญ:** เลือดหลังฮีลต้องไม่เกิน `maxHP` (ใช้สูตร `enemyHP[index] = Mathf.Min(enemyHP[index] + heal, maxHP)`)
 - แสดงผลลัพธ์ผ่าน Debug.Log ตามลำดับ:
   - `FirstEnemy hp : <hp หลังจาก heal>`
   - `LastEnemy hp : <hp หลังจาก heal>`
   - `TargetEnemy <target> hp : <hp หลังจาก heal>`
 
-### 18. ระบบบทสนทนาโต้ตอบระหว่าง 2 NPC
-**Method Signature:** `void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)`
-**โจทย์:**
-- ใช้ `UnityEngine.Random.Range` สุ่ม Index บทสนทนาจาก `npc1Dialogues` แล้วพิมพ์:
-  - `NPC1 : <บทสนทนาที่สุ่มได้>`
-- ใช้ `UnityEngine.Random.Range` สุ่ม Index บทสนทนาจาก `npc2Dialogues` แล้วพิมพ์:
-  - `NPC2 : <บทสนทนาที่สุ่มได้>`
+**ตัวอย่าง Input/Output:**
+- Input: `enemyHP = [95, 80, 60, 40], heal = 10, target = 1, maxHP = 100`
+  ```
+  FirstEnemy hp : 100
+  LastEnemy hp : 50
+  TargetEnemy 1 hp : 90
+  ```
 
-### 19. การสร้างศัตรูพร้อมกำหนดระยะห่าง (Spacing)
-**Method Signature:** `void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)`
-**โจทย์:**
-- วนลูป For จำนวน `count` รอบ (ตั้งแต่ `i = 0` ถึง `count - 1`)
-- คำนวณตำแหน่งแกน X ด้วยสูตร `posX = (i + 1) * spacing`
-- สั่ง `Instantiate(Enemy)` และกำหนดตำแหน่ง `transform.position = new Vector3(posX, 0f, 0f)`
-- พิมพ์ `Spawn enemy at position x : <ค่า posX>`
-
-### 20. การปรับค่า Step ของ While Loop
-**Method Signature:** `void Ex04_WhileLoopStep(string[] suiteNames)`
-**โจทย์:**
-- เหมือนข้อ 6 (ข้ามทีละ 2) แต่ใช้ While Loop แทน For Loop
-
-### 21. ผลรวมสะสมด้วย While Loop
-**Method Signature:** `void Ex05_WhileLoopSum(int n)`
-**โจทย์:**
-- หาผลรวมของตัวเลขตั้งแต่ 1 ถึง n ด้วย While Loop
-- พิมพ์ `Sum of n from 0 to <n> is <sum>`
+**Game Context:** สกิลฟื้นฟูพลังชีวิตของ Paladin / Priest ที่ฮีลเพื่อนร่วมทีมและจำกัดไม่ให้เกิน Max HP
 
 ---
-**ขอให้โชคดี! 👨‍💻**
+
+### 18. Ex02_DialogueInteraction (1 test case)
+
+**วัตถุประสงค์:** ระบบสุ่มบทสนทนาโต้ตอบแบบ 2 ทางระหว่างตัวละคร NPC 2 ตัว
+
+**Method Signature:**
+```csharp
+void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues)
+```
+
+**Logic ที่ต้อง implement:**
+1. สุ่ม Index จาก `npc1Dialogues` แล้วพิมพ์: `NPC1 : <ข้อความของ NPC1>`
+2. สุ่ม Index จาก `npc2Dialogues` แล้วพิมพ์: `NPC2 : <ข้อความของ NPC2>`
+
+**ตัวอย่าง Output:**
+```
+NPC1 : Nice weather today, isn't it?
+NPC2 : Yes, it's a great day for an adventure!
+```
+
+**Game Context:** บทสนทนา Ambient Dialogue ระหว่าง NPC ในเมืองเพื่อเพิ่มชีวิตชีวาให้โลกของเกม
+
+---
+
+### 19. Ex03_SpawnEnemiesWithSpacing (4 test cases)
+
+**วัตถุประสงค์:** การใช้วงลูปสร้างวัตถุจำนวนมากพร้อมคำนวณตำแหน่งแบบกระจายตัวตามระยะห่าง (Spacing)
+
+**Method Signature:**
+```csharp
+void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)
+```
+
+**Logic ที่ต้อง implement:**
+1. วนลูป For จำนวน `count` รอบ (ตั้งแต่ `i = 0` ถึง `count - 1`)
+2. คำนวณตำแหน่งพิกัดแกน X ด้วยสูตร: `posX = (i + 1) * spacing`
+3. สั่ง `GameObject spawned = Instantiate(Enemy);`
+4. กำหนดตำแหน่ง `spawned.transform.position = new Vector3(posX, 0f, 0f);`
+5. แสดงผลข้อความ: `Spawn enemy at position x : <posX>`
+
+**ตัวอย่าง Input/Output:**
+- Input: `count = 3, spacing = 2f`
+  ```
+  Spawn enemy at position x : 2
+  Spawn enemy at position x : 4
+  Spawn enemy at position x : 6
+  ```
+
+**Game Context:** ระบบ Procedural Generation ในการจัดเรียงไอเทม สิ่งกีดขวาง หรือกองทหาร
+
+---
+
+### 20. Ex04_WhileLoopStep (4 test cases)
+
+**วัตถุประสงค์:** การควบคุม Step การวนซ้ำใน While Loop เพื่อข้ามสมาชิกใน Array
+
+**Method Signature:**
+```csharp
+void Ex04_WhileLoopStep(string[] suiteNames)
+```
+
+**Logic ที่ต้อง implement:**
+1. พิมพ์ `======Log by One======`
+2. วนลูป While แสดงสมาชิกทั้งหมดทีละ 1 ตัว (`i++`)
+3. พิมพ์ `======Log by Two======`
+4. วนลูป While แสดงสมาชิกข้ามทีละ 2 ตัว (`i += 2`)
+
+**ตัวอย่าง Input/Output:**
+- Input: `["A", "B", "C", "D"]`
+  ```
+  ======Log by One======
+  A
+  B
+  C
+  D
+  ======Log by Two======
+  A
+  C
+  ```
+
+**Game Context:** การวนลูปดึงข้อมูลเฉพาะบางประเภท หรือการข้าม Frame Animation
+
+---
+
+### 21. Ex05_WhileLoopSum (5 test cases)
+
+**วัตถุประสงค์:** การใช้ While Loop ในการคำนวณผลรวมสะสมทางคณิตศาสตร์ (Accumulative Sum)
+
+**Method Signature:**
+```csharp
+void Ex05_WhileLoopSum(int n)
+```
+
+**Logic ที่ต้อง implement:**
+1. กำหนดตัวแปร `int i = 1;` และ `int sum = 0;`
+2. วนลูป While ตราบใดที่ `i <= n` นำค่า `i` มาบวกสะสมเข้าใน `sum` แล้วเพิ่ม `i++`
+3. เมื่อลูปเสร็จสิ้น ให้แสดงผล: `Sum of n from 0 to <n> is <sum>`
+
+**ตัวอย่าง Input/Output:**
+- Input: `n = 5`
+  ```
+  Sum of n from 0 to 5 is 15
+  ```
+- Input: `n = 10`
+  ```
+  Sum of n from 0 to 10 is 55
+  ```
+
+**Game Context:** การคำนวณค่าประสบการณ์รวม (Total EXP Required) สำหรับการอัปเลเวลในเกม
+
+---
+
+## 💡 ข้อควรระวังและ Best Practices
+
+1. **Zero-based Indexing:** สมาชิกตัวแรกของ Array จะอยู่ที่ Index `0` เสมอ และสมาชิกตัวสุดท้ายจะอยู่ที่ Index `Array.Length - 1`
+2. **IndexOutOfRangeException:** ห้ามเข้าถึง Index ที่น้อยกว่า 0 หรือมากกว่า/เท่ากับ `Array.Length`
+3. **รูปแบบ String และการเว้นวรรค:** สังเกตช่องว่างรอบเครื่องหมายโคลอน `" : "` ให้ถูกต้อง เช่น `"FirstEnemy hp : " + hp`
+4. **การป้องกัน Infinite Loop ใน While:** ต้องมั่นใจเสมอว่ามีการปรับค่าตัวแปรเงื่อนไข (เช่น `i++` หรือ `i += 2`) ในทุกรอบของ While Loop
+5. **การใช้ Mathf.Min:** ใช้ `Mathf.Min(currentVal, maxVal)` เพื่อควบคุมไม่ให้ค่าเกินเพดานที่กำหนดอย่างมีประสิทธิภาพ
+
+---
+**ขอให้สนุกกับการเขียนโค้ดและสร้างสรรค์เกม! 🎮👨‍💻**
