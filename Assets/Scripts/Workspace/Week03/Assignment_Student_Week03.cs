@@ -48,9 +48,9 @@ namespace Week03
 
         public void As01_IronManSuit()
         {
-            string[] IronManSuit = new string[7]
+            string[] IronManSuit = new string[4]
             {
-                "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI", "Mark VII"
+                "Mark I", "Mark II", "Mark III", "Mark IV"
             };
 
             string TonyStarkWear = IronManSuit[0];
