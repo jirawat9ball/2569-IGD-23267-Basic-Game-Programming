@@ -194,12 +194,12 @@ namespace Week03_Loop
             if (n > 0) AssertUsesRealLoop("As05_ForLoopN");
         }
 
-        static readonly object[] StepCases =
+        static readonly TestCaseData[] StepCases =
         {
-            new object[] { new[] { "A", "B", "C", "D" } },
-            new object[] { new[] { "A", "B", "C", "D", "E" } },
-            new object[] { new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" } },
-            new object[] { new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" } },
+            new TestCaseData((object)new[] { "A", "B", "C", "D" }).SetName("As06_ForLoopWithArray(\"A\", \"B\", \"C\", \"D\")"),
+            new TestCaseData((object)new[] { "A", "B", "C", "D", "E" }).SetName("As06_ForLoopWithArray(\"A\", \"B\", \"C\", \"D\", \"E\")"),
+            new TestCaseData((object)new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" }).SetName("As06_ForLoopWithArray(\"Mark I\", \"Mark II\", \"Mark III\", \"Mark IV\", \"Mark V\", \"Mark VI\")"),
+            new TestCaseData((object)new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" }).SetName("As06_ForLoopWithArray(\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\")"),
         };
 
         [TestCaseSource(nameof(StepCases))]
@@ -251,14 +251,14 @@ namespace Week03_Loop
     {
         // ================= Level 1: Simple (Lv01 - Lv05) =================
 
-        static readonly object[] AttackCases =
+        static readonly TestCaseData[] AttackCases =
         {
-            new object[] { new[] { 100, 80, 60, 40 }, 10, 2 },
-            new object[] { new[] { 50, 50, 50 }, 5, 1 },
-            new object[] { new[] { 200, 150, 120, 90, 30 }, 25, 3 },
-            new object[] { new[] { 10, 10 }, 3, 0 },
-            new object[] { new[] { 1000 }, 100, 0 },
-            new object[] { new[] { 7, 8, 9, 10, 11, 12, 13 }, 4, 5 },
+            new TestCaseData(new[] { 100, 80, 60, 40 }, 10, 2).SetName("Lv01_AttackTarget([100, 80, 60, 40], damage: 10, target: 2)"),
+            new TestCaseData(new[] { 50, 50, 50 }, 5, 1).SetName("Lv01_AttackTarget([50, 50, 50], damage: 5, target: 1)"),
+            new TestCaseData(new[] { 200, 150, 120, 90, 30 }, 25, 3).SetName("Lv01_AttackTarget([200, 150, 120, 90, 30], damage: 25, target: 3)"),
+            new TestCaseData(new[] { 10, 10 }, 3, 0).SetName("Lv01_AttackTarget([10, 10], damage: 3, target: 0)"),
+            new TestCaseData(new[] { 1000 }, 100, 0).SetName("Lv01_AttackTarget([1000], damage: 100, target: 0)"),
+            new TestCaseData(new[] { 7, 8, 9, 10, 11, 12, 13 }, 4, 5).SetName("Lv01_AttackTarget([7, 8, 9, 10, 11, 12, 13], damage: 4, target: 5)"),
         };
 
         [TestCaseSource(nameof(AttackCases))]
@@ -309,12 +309,12 @@ namespace Week03_Loop
             if (n > 0) AssertUsesRealLoop("Lv03_WhileLoopN", requireWhile: true);
         }
 
-        static readonly object[] StepCases =
+        static readonly TestCaseData[] StepCases =
         {
-            new object[] { new[] { "A", "B", "C", "D" } },
-            new object[] { new[] { "A", "B", "C", "D", "E" } },
-            new object[] { new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" } },
-            new object[] { new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" } },
+            new TestCaseData((object)new[] { "A", "B", "C", "D" }).SetName("Lv04_WhileLoopStep(\"A\", \"B\", \"C\", \"D\")"),
+            new TestCaseData((object)new[] { "A", "B", "C", "D", "E" }).SetName("Lv04_WhileLoopStep(\"A\", \"B\", \"C\", \"D\", \"E\")"),
+            new TestCaseData((object)new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" }).SetName("Lv04_WhileLoopStep(\"Mark I\", \"Mark II\", \"Mark III\", \"Mark IV\", \"Mark V\", \"Mark VI\")"),
+            new TestCaseData((object)new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" }).SetName("Lv04_WhileLoopStep(\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\")"),
         };
 
         [TestCaseSource(nameof(StepCases))]
@@ -339,13 +339,13 @@ namespace Week03_Loop
 
         // ================= Level 2: Moderate (Ex01 - Ex04) =================
 
-        static readonly object[] HealCases =
+        static readonly TestCaseData[] HealCases =
         {
-            new object[] { new[] { 100, 80, 60, 40 }, 10, 1 },
-            new object[] { new[] { 50, 50, 50 }, 5, 2 },
-            new object[] { new[] { 1, 1, 1, 1, 1 }, 99, 3 },
-            new object[] { new[] { 500 }, 250, 0 },
-            new object[] { new[] { 20, 30, 40, 50, 60, 70 }, 15, 4 },
+            new TestCaseData(new[] { 100, 80, 60, 40 }, 10, 1).SetName("Ex01_HealTarget([100, 80, 60, 40], heal: 10, target: 1)"),
+            new TestCaseData(new[] { 50, 50, 50 }, 5, 2).SetName("Ex01_HealTarget([50, 50, 50], heal: 5, target: 2)"),
+            new TestCaseData(new[] { 1, 1, 1, 1, 1 }, 99, 3).SetName("Ex01_HealTarget([1, 1, 1, 1, 1], heal: 99, target: 3)"),
+            new TestCaseData(new[] { 500 }, 250, 0).SetName("Ex01_HealTarget([500], heal: 250, target: 0)"),
+            new TestCaseData(new[] { 20, 30, 40, 50, 60, 70 }, 15, 4).SetName("Ex01_HealTarget([20, 30, 40, 50, 60, 70], heal: 15, target: 4)"),
         };
 
         [TestCaseSource(nameof(HealCases))]
@@ -390,12 +390,12 @@ namespace Week03_Loop
             AssertBodyContains("Ex02_RandomDialogue", "Random.Range", "ต้องใช้ Random.Range");
         }
 
-        static readonly object[] SpawnCases =
+        static readonly TestCaseData[] SpawnCases =
         {
-            new object[] { new[] { 10, 20, 30 } },
-            new object[] { new[] { 5 } },
-            new object[] { new[] { 1, 2, 3, 4, 5 } },
-            new object[] { new[] { 100, 90, 80, 70, 60, 50 } },
+            new TestCaseData((object)new[] { 10, 20, 30 }).SetName("Ex03_InstantiateEnemies([10, 20, 30])"),
+            new TestCaseData((object)new[] { 5 }).SetName("Ex03_InstantiateEnemies([5])"),
+            new TestCaseData((object)new[] { 1, 2, 3, 4, 5 }).SetName("Ex03_InstantiateEnemies([1, 2, 3, 4, 5])"),
+            new TestCaseData((object)new[] { 100, 90, 80, 70, 60, 50 }).SetName("Ex03_InstantiateEnemies([100, 90, 80, 70, 60, 50])"),
         };
 
         [TestCaseSource(nameof(SpawnCases))]
