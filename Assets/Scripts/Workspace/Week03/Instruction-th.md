@@ -712,84 +712,13 @@ void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing)
 
 ---
 
-### 22. Ex04_WhileLoopStep (4 test cases)
-
-**วัตถุประสงค์:** การควบคุม Step การวนซ้ำใน While Loop เพื่อข้ามสมาชิกใน Array
-
-**Method Signature:**
-```csharp
-void Ex04_WhileLoopStep(string[] suiteNames)
-```
-
-**Logic ที่ต้อง implement:**
-1. พิมพ์ `======Log by One======`
-2. วนลูป While แสดงสมาชิกทั้งหมดทีละ 1 ตัว (`i++`)
-3. พิมพ์ `======Log by Two======`
-4. วนลูป While แสดงสมาชิกข้ามทีละ 2 ตัว (`i += 2`)
-
-**💡 แนวทางการเขียนโค้ด (Guideline):**
-- แบ่งการทำงานเป็น 2 ส่วนชัดเจน โดยแสดงหัวข้อก่อนเริ่มลูปของแต่ละส่วน
-- ในส่วนแรก ให้ใช้ `i++` เพื่อขยับทีละช่อง
-- อย่าลืมรีเซ็ตค่าตัวแปรนับรอบให้กลับเป็น `0` ก่อนเริ่มลูปชุดที่สอง
-- ในส่วนที่สอง ให้ใช้ `i += 2` เพื่อข้ามทีละ 2 ช่อง
-
-**ตัวอย่าง Input/Output:**
-- Input: `["A", "B", "C", "D"]`
-  ```
-  ======Log by One======
-  A
-  B
-  C
-  D
-  ======Log by Two======
-  A
-  C
-  ```
-
-**Game Context:** การวนลูปดึงข้อมูลเฉพาะบางประเภท หรือการข้าม Frame Animation
-
----
-
-### 23. Ex05_WhileLoopSum (5 test cases)
-
-**วัตถุประสงค์:** การใช้ While Loop ในการคำนวณผลรวมสะสมทางคณิตศาสตร์ (Accumulative Sum)
-
-**Method Signature:**
-```csharp
-void Ex05_WhileLoopSum(int n)
-```
-
-**Logic ที่ต้อง implement:**
-1. กำหนดตัวแปร `int i = 1;` และ `int sum = 0;`
-2. วนลูป While ตราบใดที่ `i <= n` นำค่า `i` มาบวกสะสมเข้าใน `sum` แล้วเพิ่ม `i++`
-3. เมื่อลูปเสร็จสิ้น ให้แสดงผล: `Sum of n from 0 to <n> is <sum>`
-
-**💡 แนวทางการเขียนโค้ด (Guideline):**
-- สร้างตัวแปรสะสมผลรวม `int sum = 0;` และตัวนับ `int i = 1;` ไว้นอกลูป While
-- ภายในลูป ใช้คำสั่ง `sum += i;` และ `i++;` เพื่อสะสมค่าจาก 1 ไปเรื่อยๆ จนถึง `n`
-- สั่งแสดงผลด้วย `Debug.Log` ภายนอกลูปหลังจากคำนวณเสร็จสิ้นแล้วเท่านั้น
-
-**ตัวอย่าง Input/Output:**
-- Input: `n = 5`
-  ```
-  Sum of n from 0 to 5 is 15
-  ```
-- Input: `n = 10`
-  ```
-  Sum of n from 0 to 10 is 55
-  ```
-
-**Game Context:** การคำนวณค่าประสบการณ์รวม (Total EXP Required) สำหรับการอัปเลเวลในเกม
-
----
-
-### 24. Ex06_FindItemOrBreak (5 test cases)
+### 22. Ex04_FindItemOrBreak (5 test cases)
 
 **วัตถุประสงค์:** การประยุกต์ใช้คำสั่ง `break` เพื่อหยุดการค้นหาข้อมูลใน Array ทันทีเมื่อพบเป้าหมาย (Early Exit Search Pattern)
 
 **Method Signature:**
 ```csharp
-void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+void Ex04_FindItemOrBreak(string[] inventory, string targetItem)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -822,13 +751,13 @@ void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
 
 ---
 
-### 25. Ex07_SkipDefeatedEnemies (4 test cases)
+### 23. Ex05_SkipDefeatedEnemies (4 test cases)
 
 **วัตถุประสงค์:** การประยุกต์ใช้คำสั่ง `continue` เพื่อข้ามการประมวลผลสมาชิกที่ไม่ตรงเงื่อนไข (Filtering Pattern)
 
 **Method Signature:**
 ```csharp
-void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+void Ex05_SkipDefeatedEnemies(int[] enemyHPs)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -853,6 +782,77 @@ void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
   *(ช่อง index 1 ที่มี HP = 0 และ index 3 ที่มี HP = -10 จะถูกข้ามไป ไม่ถูกพิมพ์ออกมา)*
 
 **Game Context:** ระบบการประมวลผลสกิลโจมตีหมู่ (AOE) หรือการจัดการเทิร์นของ AI ศัตรู โดยจะข้ามศัตรูที่ HP หมดไปแล้วในสนามรบ
+
+---
+
+### 24. Ex06_WhileLoopStep (4 test cases)
+
+**วัตถุประสงค์:** การควบคุม Step การวนซ้ำใน While Loop เพื่อข้ามสมาชิกใน Array
+
+**Method Signature:**
+```csharp
+void Ex06_WhileLoopStep(string[] suiteNames)
+```
+
+**Logic ที่ต้อง implement:**
+1. พิมพ์ `======Log by One======`
+2. วนลูป While แสดงสมาชิกทั้งหมดทีละ 1 ตัว (`i++`)
+3. พิมพ์ `======Log by Two======`
+4. วนลูป While แสดงสมาชิกข้ามทีละ 2 ตัว (`i += 2`)
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- แบ่งการทำงานเป็น 2 ส่วนชัดเจน โดยแสดงหัวข้อก่อนเริ่มลูปของแต่ละส่วน
+- ในส่วนแรก ให้ใช้ `i++` เพื่อขยับทีละช่อง
+- อย่าลืมรีเซ็ตค่าตัวแปรนับรอบให้กลับเป็น `0` ก่อนเริ่มลูปชุดที่สอง
+- ในส่วนที่สอง ให้ใช้ `i += 2` เพื่อข้ามทีละ 2 ช่อง
+
+**ตัวอย่าง Input/Output:**
+- Input: `["A", "B", "C", "D"]`
+  ```
+  ======Log by One======
+  A
+  B
+  C
+  D
+  ======Log by Two======
+  A
+  C
+  ```
+
+**Game Context:** การวนลูปดึงข้อมูลเฉพาะบางประเภท หรือการข้าม Frame Animation
+
+---
+
+### 25. Ex07_WhileLoopSum (5 test cases)
+
+**วัตถุประสงค์:** การใช้ While Loop ในการคำนวณผลรวมสะสมทางคณิตศาสตร์ (Accumulative Sum)
+
+**Method Signature:**
+```csharp
+void Ex07_WhileLoopSum(int n)
+```
+
+**Logic ที่ต้อง implement:**
+1. กำหนดตัวแปร `int i = 1;` และ `int sum = 0;`
+2. วนลูป While ตราบใดที่ `i <= n` นำค่า `i` มาบวกสะสมเข้าใน `sum` แล้วเพิ่ม `i++`
+3. เมื่อลูปเสร็จสิ้น ให้แสดงผล: `Sum of n from 0 to <n> is <sum>`
+
+**💡 แนวทางการเขียนโค้ด (Guideline):**
+- สร้างตัวแปรสะสมผลรวม `int sum = 0;` และตัวนับ `int i = 1;` ไว้นอกลูป While
+- ภายในลูป ใช้คำสั่ง `sum += i;` และ `i++;` เพื่อสะสมค่าจาก 1 ไปเรื่อยๆ จนถึง `n`
+- สั่งแสดงผลด้วย `Debug.Log` ภายนอกลูปหลังจากคำนวณเสร็จสิ้นแล้วเท่านั้น
+
+**ตัวอย่าง Input/Output:**
+- Input: `n = 5`
+  ```
+  Sum of n from 0 to 5 is 15
+  ```
+- Input: `n = 10`
+  ```
+  Sum of n from 0 to 10 is 55
+  ```
+
+**Game Context:** การคำนวณค่าประสบการณ์รวม (Total EXP Required) สำหรับการอัปเลเวลในเกม
 
 ---
 

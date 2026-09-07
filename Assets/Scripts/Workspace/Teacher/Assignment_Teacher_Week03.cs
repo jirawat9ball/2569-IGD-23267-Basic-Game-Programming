@@ -282,38 +282,7 @@ namespace Week03
             }
         }
 
-        public void Ex04_WhileLoopStep(string[] suiteNames)
-        {
-            Debug.Log("======Log by One======");
-            int i = 0;
-            while (i < suiteNames.Length)
-            {
-                Debug.Log(suiteNames[i]);
-                i++;
-            }
-
-            Debug.Log("======Log by Two======");
-            i = 0;
-            while (i < suiteNames.Length)
-            {
-                Debug.Log(suiteNames[i]);
-                i += 2;
-            }
-        }
-
-        public void Ex05_WhileLoopSum(int n)
-        {
-            int i = 1;
-            int sum = 0;
-            while (i <= n)
-            {
-                sum += i;
-                i++;
-            }
-            Debug.Log("Sum of n from 0 to " + n + " is " + sum);
-        }
-
-        public void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+        public void Ex04_FindItemOrBreak(string[] inventory, string targetItem)
         {
             bool found = false;
             for (int i = 0; i < inventory.Length; i++)
@@ -332,7 +301,7 @@ namespace Week03
             }
         }
 
-        public void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+        public void Ex05_SkipDefeatedEnemies(int[] enemyHPs)
         {
             for (int i = 0; i < enemyHPs.Length; i++)
             {
@@ -343,6 +312,37 @@ namespace Week03
 
                 Debug.Log("Enemy " + i + " HP : " + enemyHPs[i]);
             }
+        }
+
+        public void Ex06_WhileLoopStep(string[] suiteNames)
+        {
+            Debug.Log("======Log by One======");
+            int i = 0;
+            while (i < suiteNames.Length)
+            {
+                Debug.Log(suiteNames[i]);
+                i++;
+            }
+
+            Debug.Log("======Log by Two======");
+            i = 0;
+            while (i < suiteNames.Length)
+            {
+                Debug.Log(suiteNames[i]);
+                i += 2;
+            }
+        }
+
+        public void Ex07_WhileLoopSum(int n)
+        {
+            int i = 1;
+            int sum = 0;
+            while (i <= n)
+            {
+                sum += i;
+                i++;
+            }
+            Debug.Log("Sum of n from 0 to " + n + " is " + sum);
         }
 
         #endregion

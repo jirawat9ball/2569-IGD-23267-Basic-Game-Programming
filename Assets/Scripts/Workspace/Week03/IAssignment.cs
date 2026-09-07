@@ -63,13 +63,13 @@ namespace Week03
 
         void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing);
 
-        void Ex04_WhileLoopStep(string[] suiteNames);
+        void Ex04_FindItemOrBreak(string[] inventory, string targetItem);
 
-        void Ex05_WhileLoopSum(int n);
+        void Ex05_SkipDefeatedEnemies(int[] enemyHPs);
 
-        void Ex06_FindItemOrBreak(string[] inventory, string targetItem);
+        void Ex06_WhileLoopStep(string[] suiteNames);
 
-        void Ex07_SkipDefeatedEnemies(int[] enemyHPs);
+        void Ex07_WhileLoopSum(int n);
 
         #endregion
         #endregion

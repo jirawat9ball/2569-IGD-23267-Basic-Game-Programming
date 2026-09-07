@@ -73,11 +73,11 @@ namespace Week03
         public int spawnCount = 3;
         public float spawnSpacing = 2f;
 
-        [Header("Ex06 Variables")]
+        [Header("Ex04 Variables")]
         public string searchTarget = "Key";
         public string[] backpack = { "Potion", "Shield", "Key", "Herb", "Key" };
 
-        [Header("Ex07 Variables")]
+        [Header("Ex05 Variables")]
         public int[] battleEnemiesHP = { 100, 0, 50, -10, 80 };
 
         #endregion
@@ -107,10 +107,10 @@ namespace Week03
             Ex01_HealTarget(enemyHP, heal, target, maxHP);
             Ex02_DialogueInteraction(npc1Dialogues, npc2Dialogues);
             Ex03_SpawnEnemiesWithSpacing(Enemy, spawnCount, spawnSpacing);
-            Ex04_WhileLoopStep(suiteNames);
-            Ex05_WhileLoopSum(n);
-            Ex06_FindItemOrBreak(backpack, searchTarget);
-            Ex07_SkipDefeatedEnemies(battleEnemiesHP);
+            Ex04_FindItemOrBreak(backpack, searchTarget);
+            Ex05_SkipDefeatedEnemies(battleEnemiesHP);
+            Ex06_WhileLoopStep(suiteNames);
+            Ex07_WhileLoopSum(n);
         }
 
         #region Lecture
@@ -295,21 +295,7 @@ namespace Week03
             // 3. พิมพ์ "Spawn enemy at position x : " + posX
         }
 
-        public void Ex04_WhileLoopStep(string[] suiteNames)
-        {
-            // Guideline:
-            // 1. พิมพ์ "======Log by One======" แล้ววนลูป While พิมพ์ทีละ 1 (i++)
-            // 2. พิมพ์ "======Log by Two======" แล้ววนลูป While พิมพ์ข้ามทีละ 2 (i += 2)
-        }
-
-        public void Ex05_WhileLoopSum(int n)
-        {
-            // Guideline:
-            // ใช้ While Loop คำนวณผลรวมของตัวเลขตั้งแต่ 1 ถึง n
-            // แล้วพิมพ์ "Sum of n from 0 to " + n + " is " + sum
-        }
-
-        public void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+        public void Ex04_FindItemOrBreak(string[] inventory, string targetItem)
         {
             // Guideline:
             // 1. สร้างตัวแปร bool found = false; เพื่อเช็คว่าเจอไอเทมหรือไม่
@@ -321,13 +307,27 @@ namespace Week03
             //    "Item " + targetItem + " not found"
         }
 
-        public void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+        public void Ex05_SkipDefeatedEnemies(int[] enemyHPs)
         {
             // Guideline:
             // วนลูป For ตรวจสอบศัตรูทีละตัว (i = 0 ถึง Length - 1):
             // 1. ถ้า enemyHPs[i] <= 0 (ศัตรูตายแล้ว) ให้ใช้คำสั่ง continue; เพื่อข้ามรอบนี้ทันที
             // 2. ถ้าศัตรูยังมีชีวิต ให้พิมพ์:
             //    "Enemy " + i + " HP : " + enemyHPs[i]
+        }
+
+        public void Ex06_WhileLoopStep(string[] suiteNames)
+        {
+            // Guideline:
+            // 1. พิมพ์ "======Log by One======" แล้ววนลูป While พิมพ์ทีละ 1 (i++)
+            // 2. พิมพ์ "======Log by Two======" แล้ววนลูป While พิมพ์ข้ามทีละ 2 (i += 2)
+        }
+
+        public void Ex07_WhileLoopSum(int n)
+        {
+            // Guideline:
+            // ใช้ While Loop คำนวณผลรวมของตัวเลขตั้งแต่ 1 ถึง n
+            // แล้วพิมพ์ "Sum of n from 0 to " + n + " is " + sum
         }
 
         #endregion

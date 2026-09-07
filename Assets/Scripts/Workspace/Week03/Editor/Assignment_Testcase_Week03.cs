@@ -629,52 +629,24 @@ namespace Week03_Loop
             AssertBodyContains("Ex03_SpawnEnemiesWithSpacing", "Instantiate", "ต้อง Instantiate ศัตรูจริง");
         }
 
-        static readonly TestCaseData[] StepCases =
-        {
-            new TestCaseData((object)new[] { "A", "B", "C", "D" }).SetName("Ex04_WhileLoopStep(\"A\", \"B\", \"C\", \"D\")"),
-            new TestCaseData((object)new[] { "A", "B", "C", "D", "E" }).SetName("Ex04_WhileLoopStep(\"A\", \"B\", \"C\", \"D\", \"E\")"),
-            new TestCaseData((object)new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" }).SetName("Ex04_WhileLoopStep(\"Mark I\", \"Mark II\", \"Mark III\", \"Mark IV\", \"Mark V\", \"Mark VI\")"),
-            new TestCaseData((object)new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" }).SetName("Ex04_WhileLoopStep(\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\")"),
-        };
-
-        [TestCaseSource(nameof(StepCases))]
-        public void Ex04_WhileLoopStep(string[] suites)
-        {
-            assignment.Ex04_WhileLoopStep(suites);
-            TestUtils.AssertMultilineEqual(ExpectedStepOutput(suites), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Ex04_WhileLoopStep", requireWhile: true, minLoops: 2);
-        }
-
-        [TestCase(0, 0)]
-        [TestCase(1, 1)]
-        [TestCase(5, 15)]
-        [TestCase(10, 55)]
-        [TestCase(100, 5050)]
-        public void Ex05_WhileLoopSum(int n, int expectedSum)
-        {
-            assignment.Ex05_WhileLoopSum(n);
-            TestUtils.AssertMultilineEqual($"Sum of n from 0 to {n} is {expectedSum}", SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Ex05_WhileLoopSum", requireWhile: true);
-        }
-
         static readonly TestCaseData[] FindItemCases =
         {
             new TestCaseData((object)new[] { "Potion", "Shield", "Key", "Herb", "Key" }, "Key")
-                .SetName("Ex06_FindItemOrBreak(Duplicate Key at 2 and 4 -> breaks at 2)"),
+                .SetName("Ex04_FindItemOrBreak(Duplicate Key at 2 and 4 -> breaks at 2)"),
             new TestCaseData((object)new[] { "Bow", "Sword", "Shield" }, "Bow")
-                .SetName("Ex06_FindItemOrBreak(First element at 0)"),
+                .SetName("Ex04_FindItemOrBreak(First element at 0)"),
             new TestCaseData((object)new[] { "Potion", "Sword", "Shield" }, "Shield")
-                .SetName("Ex06_FindItemOrBreak(Last element at 2)"),
+                .SetName("Ex04_FindItemOrBreak(Last element at 2)"),
             new TestCaseData((object)new[] { "Potion", "Sword", "Shield" }, "Axe")
-                .SetName("Ex06_FindItemOrBreak(Item not found)"),
+                .SetName("Ex04_FindItemOrBreak(Item not found)"),
             new TestCaseData((object)new string[0], "Key")
-                .SetName("Ex06_FindItemOrBreak(Empty inventory -> not found)"),
+                .SetName("Ex04_FindItemOrBreak(Empty inventory -> not found)"),
         };
 
         [TestCaseSource(nameof(FindItemCases))]
-        public void Ex06_FindItemOrBreak(string[] inventory, string targetItem)
+        public void Ex04_FindItemOrBreak(string[] inventory, string targetItem)
         {
-            assignment.Ex06_FindItemOrBreak(inventory, targetItem);
+            assignment.Ex04_FindItemOrBreak(inventory, targetItem);
 
             string expected = "";
             bool found = false;
@@ -694,26 +666,26 @@ namespace Week03_Loop
             }
 
             TestUtils.AssertMultilineEqual(expected, SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Ex06_FindItemOrBreak");
-            AssertBodyContains("Ex06_FindItemOrBreak", "break", "ต้องใช้คำสั่ง break เพื่อหยุดการค้นหา");
+            AssertUsesRealLoop("Ex04_FindItemOrBreak");
+            AssertBodyContains("Ex04_FindItemOrBreak", "break", "ต้องใช้คำสั่ง break เพื่อหยุดการค้นหา");
         }
 
         static readonly TestCaseData[] SkipEnemiesCases =
         {
             new TestCaseData((object)new[] { 100, 0, 50, -10, 80 })
-                .SetName("Ex07_SkipDefeatedEnemies(Mixed active and dead -> skips 0 and negative)"),
+                .SetName("Ex05_SkipDefeatedEnemies(Mixed active and dead -> skips 0 and negative)"),
             new TestCaseData((object)new[] { 30, 45, 60 })
-                .SetName("Ex07_SkipDefeatedEnemies(All active)"),
+                .SetName("Ex05_SkipDefeatedEnemies(All active)"),
             new TestCaseData((object)new[] { 0, -5, -20 })
-                .SetName("Ex07_SkipDefeatedEnemies(All dead -> no output)"),
+                .SetName("Ex05_SkipDefeatedEnemies(All dead -> no output)"),
             new TestCaseData((object)new[] { -1, 99, 0 })
-                .SetName("Ex07_SkipDefeatedEnemies(First and last dead, middle active)"),
+                .SetName("Ex05_SkipDefeatedEnemies(First and last dead, middle active)"),
         };
 
         [TestCaseSource(nameof(SkipEnemiesCases))]
-        public void Ex07_SkipDefeatedEnemies(int[] enemyHPs)
+        public void Ex05_SkipDefeatedEnemies(int[] enemyHPs)
         {
-            assignment.Ex07_SkipDefeatedEnemies(enemyHPs);
+            assignment.Ex05_SkipDefeatedEnemies(enemyHPs);
 
             var sb = new StringBuilder();
             for (int i = 0; i < enemyHPs.Length; i++)
@@ -723,8 +695,36 @@ namespace Week03_Loop
             }
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Ex07_SkipDefeatedEnemies");
-            AssertBodyContains("Ex07_SkipDefeatedEnemies", "continue", "ต้องใช้คำสั่ง continue เพื่อข้ามศัตรูที่ตายแล้ว");
+            AssertUsesRealLoop("Ex05_SkipDefeatedEnemies");
+            AssertBodyContains("Ex05_SkipDefeatedEnemies", "continue", "ต้องใช้คำสั่ง continue เพื่อข้ามศัตรูที่ตายแล้ว");
+        }
+
+        static readonly TestCaseData[] StepCases =
+        {
+            new TestCaseData((object)new[] { "A", "B", "C", "D" }).SetName("Ex06_WhileLoopStep(\"A\", \"B\", \"C\", \"D\")"),
+            new TestCaseData((object)new[] { "A", "B", "C", "D", "E" }).SetName("Ex06_WhileLoopStep(\"A\", \"B\", \"C\", \"D\", \"E\")"),
+            new TestCaseData((object)new[] { "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI" }).SetName("Ex06_WhileLoopStep(\"Mark I\", \"Mark II\", \"Mark III\", \"Mark IV\", \"Mark V\", \"Mark VI\")"),
+            new TestCaseData((object)new[] { "s0", "s1", "s2", "s3", "s4", "s5", "s6" }).SetName("Ex06_WhileLoopStep(\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\")"),
+        };
+
+        [TestCaseSource(nameof(StepCases))]
+        public void Ex06_WhileLoopStep(string[] suites)
+        {
+            assignment.Ex06_WhileLoopStep(suites);
+            TestUtils.AssertMultilineEqual(ExpectedStepOutput(suites), SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Ex06_WhileLoopStep", requireWhile: true, minLoops: 2);
+        }
+
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(5, 15)]
+        [TestCase(10, 55)]
+        [TestCase(100, 5050)]
+        public void Ex07_WhileLoopSum(int n, int expectedSum)
+        {
+            assignment.Ex07_WhileLoopSum(n);
+            TestUtils.AssertMultilineEqual($"Sum of n from 0 to {n} is {expectedSum}", SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Ex07_WhileLoopSum", requireWhile: true);
         }
 
         private static string ExpectedStepOutput(string[] suites)
