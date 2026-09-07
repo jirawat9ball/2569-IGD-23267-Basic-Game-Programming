@@ -100,7 +100,7 @@ namespace Week02
             }
             else
             {
-                Debug.Log("Wrong!");
+                Debug.Log("Incorrect!");
             }
         }
 

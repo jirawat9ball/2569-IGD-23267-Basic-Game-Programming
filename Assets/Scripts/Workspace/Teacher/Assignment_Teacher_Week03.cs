@@ -5,13 +5,13 @@ namespace Week03
 {
     public class Assignment_Teacher_Week03 : MonoBehaviour, IAssignment
     {
-        #region Array (ข้อ 1-6)
+        #region Lecture
 
-        public void Ex01_IronManSuit()
+        public void As01_IronManSuit()
         {
-            string[] IronManSuit = new string[7]
+            string[] IronManSuit = new string[4]
             {
-                "Mark I", "Mark II", "Mark III", "Mark IV", "Mark V", "Mark VI", "Mark VII"
+                "Mark I", "Mark II", "Mark III", "Mark IV"
             };
 
             string TonyStarkWear = IronManSuit[0];
@@ -25,11 +25,11 @@ namespace Week03
             }
         }
 
-        public void Ex02_SpiderManAndBatMan()
+        public void As02_SpiderManAndBatMan()
         {
             string[] spiderMan =
             {
-                "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider", "Miles Morales", "Spider-Man 2099"
+                "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider"
             };
             string[] BatMan = new string[4]
             {
@@ -51,21 +51,7 @@ namespace Week03
             }
         }
 
-        public void Ex03_AttackTarget(int[] enemyHP, int damage, int target)
-        {
-            int last = enemyHP.Length - 1;
-
-            enemyHP[0] -= damage;
-            Debug.Log("FirstEnemy hp :" + enemyHP[0]);
-
-            enemyHP[last] -= damage;
-            Debug.Log("LastEnemy hp :" + enemyHP[last]);
-
-            enemyHP[target] -= damage;
-            Debug.Log("TargetEnemy " + target + " hp :" + enemyHP[target]);
-        }
-
-        public void Ex04_RandomItemDrop(GameObject[] items)
+        public void As03_RandomItemDrop(GameObject[] items)
         {
             int index = Random.Range(0, items.Length);
             GameObject picked = items[index];
@@ -73,31 +59,7 @@ namespace Week03
             Debug.Log("Got item: " + picked.name);
         }
 
-        public void Ex05_HealTarget(int[] enemyHP, int heal, int target)
-        {
-            int last = enemyHP.Length - 1;
-
-            enemyHP[0] += heal;
-            Debug.Log("FirstEnemy hp :" + enemyHP[0]);
-
-            enemyHP[last] += heal;
-            Debug.Log("LastEnemy hp :" + enemyHP[last]);
-
-            enemyHP[target] += heal;
-            Debug.Log("TargetEnemy " + target + " hp :" + enemyHP[target]);
-        }
-
-        public void Ex06_RandomDialogue(string[] npc1Dialogues)
-        {
-            int index = Random.Range(0, npc1Dialogues.Length);
-            Debug.Log(npc1Dialogues[index]);
-        }
-
-        #endregion
-
-        #region For Loop (ข้อ 7-10)
-
-        public void Ex07_ForLoopBasic()
+        public void As04_ForLoopBasic()
         {
             for (int i = 0; i < 10; i++)
             {
@@ -112,7 +74,7 @@ namespace Week03
             }
         }
 
-        public void Ex08_ForLoopN(int n)
+        public void As05_ForLoopN(int n)
         {
             for (int i = 0; i < n; i++)
             {
@@ -120,7 +82,7 @@ namespace Week03
             }
         }
 
-        public void Ex09_ForLoopStep(string[] suiteNames)
+        public void As06_ForLoopWithArray(string[] suiteNames)
         {
             Debug.Log("======Log by One======");
             for (int i = 0; i < suiteNames.Length; i++)
@@ -135,19 +97,7 @@ namespace Week03
             }
         }
 
-        public void Ex10_MultiplicationTable(int n)
-        {
-            for (int i = 1; i <= 12; i++)
-            {
-                Debug.Log(n + " x " + i + " = " + (n * i));
-            }
-        }
-
-        #endregion
-
-        #region While Loop (ข้อ 11-14)
-
-        public void Ex11_WhileLoopBasic()
+        public void As07_WhileLoopBasic()
         {
             int i = 0;
             while (i < 10)
@@ -157,7 +107,35 @@ namespace Week03
             }
         }
 
-        public void Ex12_WhileLoopN(int n)
+        #endregion
+
+        #region Homework
+
+        #region Level 1: Simple
+
+        public void Lv01_AttackTarget(int[] enemyHP, int damage, int target)
+        {
+            int last = enemyHP.Length - 1;
+
+            enemyHP[0] -= damage;
+            Debug.Log("FirstEnemy hp :" + enemyHP[0]);
+
+            enemyHP[last] -= damage;
+            Debug.Log("LastEnemy hp :" + enemyHP[last]);
+
+            enemyHP[target] -= damage;
+            Debug.Log("TargetEnemy " + target + " hp :" + enemyHP[target]);
+        }
+
+        public void Lv02_MultiplicationTable(int n)
+        {
+            for (int i = 1; i <= 12; i++)
+            {
+                Debug.Log(n + " x " + i + " = " + (n * i));
+            }
+        }
+
+        public void Lv03_WhileLoopN(int n)
         {
             int i = 0;
             while (i < n)
@@ -167,7 +145,7 @@ namespace Week03
             }
         }
 
-        public void Ex13_WhileLoopStep(string[] suiteNames)
+        public void Lv04_WhileLoopStep(string[] suiteNames)
         {
             Debug.Log("======Log by One======");
             int i = 0;
@@ -186,7 +164,7 @@ namespace Week03
             }
         }
 
-        public void Ex14_WhileLoopSum(int n)
+        public void Lv05_WhileLoopSum(int n)
         {
             int i = 1;
             int sum = 0;
@@ -195,14 +173,34 @@ namespace Week03
                 sum += i;
                 i++;
             }
-            Debug.Log("ผลรวมของ n จาก 0 ถึง " + n + " คือ " + sum);
+            Debug.Log("Sum of n from 0 to " + n + " is " + sum);
         }
 
         #endregion
 
-        #region Instantiate & Translate (ข้อ 15-16)
+        #region Level 2: Moderate
 
-        public void Ex15_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)
+        public void Ex01_HealTarget(int[] enemyHP, int heal, int target)
+        {
+            int last = enemyHP.Length - 1;
+
+            enemyHP[0] += heal;
+            Debug.Log("FirstEnemy hp :" + enemyHP[0]);
+
+            enemyHP[last] += heal;
+            Debug.Log("LastEnemy hp :" + enemyHP[last]);
+
+            enemyHP[target] += heal;
+            Debug.Log("TargetEnemy " + target + " hp :" + enemyHP[target]);
+        }
+
+        public void Ex02_RandomDialogue(string[] npc1Dialogues)
+        {
+            int index = Random.Range(0, npc1Dialogues.Length);
+            Debug.Log(npc1Dialogues[index]);
+        }
+
+        public void Ex03_InstantiateEnemies(GameObject Enemy, int[] HpEnemy)
         {
             for (int i = 0; i < HpEnemy.Length; i++)
             {
@@ -212,7 +210,7 @@ namespace Week03
             }
         }
 
-        public void Ex16_MoveToTarget(Transform positionToMove, float speed)
+        public void Ex04_MoveToTarget(Transform positionToMove, float speed)
         {
             int safety = 0;
             while (transform.position.x < positionToMove.position.x && safety < 10000)
@@ -224,5 +222,7 @@ namespace Week03
         }
 
         #endregion
+
+        #endregion // End Homework
     }
 }

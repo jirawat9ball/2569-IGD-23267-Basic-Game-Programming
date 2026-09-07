@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Workspace.Core;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
@@ -50,26 +50,6 @@ namespace Week02
 
         void Start()
         {
-            // สามารถเปิด-ปิด คอมเมนต์เพื่อทดสอบทีละข้อได้
-            As01_SyntaxIf(isSixoClock);
-            As02_StringComparisonExample(stringPassword);
-            As03_NumberComparisonExample(comparisonNumber);
-            As04_AndOrOperatorExample(comparisonNumber);
-        }
-
-        void Update()
-        {
-            // กดปุ่ม Enter (Return) เพื่อรันข้อ 5-7
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                As05_GuessingNumberExample(guessingNumber, randomNumber);
-                As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
-                As07_VerifyIdentityExample(username, identityPassword, age, isPaid);
-            }
-
-            // กดปุ่ม Space เพื่อรันโจทย์ Level 1 และ Level 2
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
                 Lv01_CheckNumberSign(lv01Number);
                 Lv02_GetDayName(lv02Day);
                 Lv03_ValidatePassword(lv03InputPassword, lv03CorrectPassword);
@@ -83,7 +63,23 @@ namespace Week02
                 Ex02_RockPaperScissorsExample(ex02UserChoice, ex02ComputerChoice);
                 Ex03_CalculateWeaponDamage(ex03WeaponType, ex03BaseDamage);
                 Ex04_DeterminePlayerRank(ex04Score, ex04CompletionTime);
+        }
+
+        void Update()
+        {
+            // กดปุ่ม Enter (Return) เพื่อรันข้อ 5-7
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                 // สามารถเปิด-ปิด คอมเมนต์เพื่อทดสอบทีละข้อได้
+                As01_SyntaxIf(isSixoClock);
+                As02_StringComparisonExample(stringPassword);
+                As03_NumberComparisonExample(comparisonNumber);
+                As04_AndOrOperatorExample(comparisonNumber);
+                As05_GuessingNumberExample(guessingNumber, randomNumber);
+                As06_GuessingNumberMoreOrLessExample(guessingNumber, randomNumber);
+                As07_VerifyIdentityExample(username, identityPassword, age, isPaid);
             }
+
         }
 
         #region Examples
@@ -92,6 +88,7 @@ namespace Week02
         { 
             // Guideline: ทดสอบการเขียน if เบื้องต้น เช็คเงื่อนไข isSixoClock ว่าเป็นจริงหรือไม่
             // ถ้าเป็นจริงให้พิมพ์ "You can get in" และให้มีพิมพ์ "Crack Crack!!!!" ออกมาเสมอ
+       
         }
 
         public void As02_StringComparisonExample(string password)
@@ -197,6 +194,26 @@ namespace Week02
             // 2. ถ้ามี เช็ค payment ว่าพอจ่าย price หรือไม่
             // 3. ถ้าพอ คำนวณเงินทอนและแสดงข้อความ "Item purchased successfully" และถ้ามีเงินทอน ให้แสดงข้อความ "Your change is {change} baht"
             // 4. ถ้าไม่พอ ให้พิมพ์ "Not enough money"
+            if (quantity <= 0)
+            {
+                Debug.Log("Out of stock");
+            }
+            else
+            {
+                if (payment >= price)
+                {
+                    Debug.Log("Item purchased successfully");
+                    int change = payment - price;
+                    if (change > 0)
+                    {
+                        Debug.Log($"Your change is {change} baht");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Not enough money");
+                }
+            }
         }
 
         public void Ex02_RockPaperScissorsExample(int userChoice, int computerChoice)
@@ -205,6 +222,26 @@ namespace Week02
             // เช็คผู้ชนะ และพิมพ์ข้อความ:
             // "Draw" สำหรับเสมอ, "You Win!" สำหรับชนะ, "You Lose!" สำหรับแพ้
             // (อย่าลืมจัดการกรณี userChoice ไม่อยู่ใน 0-2 ให้พิมพ์ "Please select a valid number")
+            if (userChoice < 0 || userChoice > 2)
+            {
+                Debug.Log("Please select a valid number");
+                return;
+            }
+
+            if (userChoice == computerChoice)
+            {
+                Debug.Log("Draw");
+            }
+            else if ((userChoice == 0 && computerChoice == 2) ||
+                     (userChoice == 1 && computerChoice == 0) ||
+                     (userChoice == 2 && computerChoice == 1))
+            {
+                Debug.Log("You Win!");
+            }
+            else
+            {
+                Debug.Log("You Lose!");
+            }
         }
 
         public void Ex03_CalculateWeaponDamage(string weaponType, int baseDamage)
@@ -212,6 +249,18 @@ namespace Week02
             // Guideline: คำนวณดาเมจอาวุธ
             // เช็ค weaponType (sword=1.3, axe=1.4, bow=1.2, staff=1.5, dagger=1.1, อื่นๆ=1.0)
             // เอา baseDamage คูณกับตัวคูณและพิมพ์ค่าที่ได้
+            double multiplier = 1.0;
+            switch (weaponType?.ToLower())
+            {
+                case "sword": multiplier = 1.3; break;
+                case "axe": multiplier = 1.4; break;
+                case "bow": multiplier = 1.2; break;
+                case "staff": multiplier = 1.5; break;
+                case "dagger": multiplier = 1.1; break;
+                default: multiplier = 1.0; break;
+            }
+            int totalDamage = (int)(baseDamage * multiplier);
+            Debug.Log(totalDamage.ToString());
         }
 
         public void Ex04_DeterminePlayerRank(int score, int completionTime)
@@ -221,6 +270,26 @@ namespace Week02
             // บวกโบนัสตามเวลาที่ใช้ (<=30นาที: +25, <=60นาที: +10, เกิน60นาที: +0)
             // แสดงผลในรูปแบบ "{rank} Rank - {totalCoins} coins earned!" 
             // (หรือ "Invalid score or time" ถ้าคะแนนหรือเวลาติดลบ)
+            if (score < 0 || completionTime < 0)
+            {
+                Debug.Log("Invalid score or time");
+                return;
+            }
+
+            string rank; 
+            int baseCoins;
+            if (score >= 8000) { rank = "Gold"; baseCoins = 100; }
+            else if (score >= 6000) { rank = "Silver"; baseCoins = 75; }
+            else if (score >= 4000) { rank = "Bronze"; baseCoins = 50; }
+            else { rank = "Participation"; baseCoins = 25; }
+
+            int timeBonus = 0;
+            if (completionTime >= 0 && completionTime <= 30) timeBonus = 25;
+            else if (completionTime >= 31 && completionTime <= 60) timeBonus = 10;
+            else if (completionTime > 60) timeBonus = 0;
+
+            int totalCoins = baseCoins + timeBonus;
+            Debug.Log($"{rank} Rank - {totalCoins} coins earned!");
         }
 
         #endregion

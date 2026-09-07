@@ -8,52 +8,51 @@ namespace Week03
     /// </summary>
     public interface IAssignment
     {
-        #region Array (ข้อ 1-6)
+        #region Lecture
 
-        void Ex01_IronManSuit();
+        void As01_IronManSuit();
 
-        void Ex02_SpiderManAndBatMan();
+        void As02_SpiderManAndBatMan();
 
-        void Ex03_AttackTarget(int[] enemyHP, int damage, int target);
+        void As03_RandomItemDrop(GameObject[] items);
 
-        void Ex04_RandomItemDrop(GameObject[] items);
+        void As04_ForLoopBasic();
 
-        void Ex05_HealTarget(int[] enemyHP, int heal, int target);
+        void As05_ForLoopN(int n);
 
-        void Ex06_RandomDialogue(string[] npc1Dialogues);
+        void As06_ForLoopWithArray(string[] suiteNames);
 
-        #endregion
-
-        #region For Loop (ข้อ 7-10)
-
-        void Ex07_ForLoopBasic();
-
-        void Ex08_ForLoopN(int n);
-
-        void Ex09_ForLoopStep(string[] suiteNames);
-
-        void Ex10_MultiplicationTable(int n);
+        void As07_WhileLoopBasic();
 
         #endregion
 
-        #region While Loop (ข้อ 11-14)
+        #region Homework
 
-        void Ex11_WhileLoopBasic();
+        #region Level 1: Simple
 
-        void Ex12_WhileLoopN(int n);
+        void Lv01_AttackTarget(int[] enemyHP, int damage, int target);
 
-        void Ex13_WhileLoopStep(string[] suiteNames);
+        void Lv02_MultiplicationTable(int n);
 
-        void Ex14_WhileLoopSum(int n);
+        void Lv03_WhileLoopN(int n);
+
+        void Lv04_WhileLoopStep(string[] suiteNames);
+
+        void Lv05_WhileLoopSum(int n);
 
         #endregion
 
-        #region Instantiate & Translate (ข้อ 15-16)
+        #region Level 2: Moderate
 
-        void Ex15_InstantiateEnemies(GameObject Enemy, int[] HpEnemy);
+        void Ex01_HealTarget(int[] enemyHP, int heal, int target);
 
-        void Ex16_MoveToTarget(Transform positionToMove, float speed);
+        void Ex02_RandomDialogue(string[] npc1Dialogues);
 
+        void Ex03_InstantiateEnemies(GameObject Enemy, int[] HpEnemy);
+
+        void Ex04_MoveToTarget(Transform positionToMove, float speed);
+
+        #endregion
         #endregion
     }
 }
