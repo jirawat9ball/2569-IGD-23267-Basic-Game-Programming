@@ -203,16 +203,17 @@ MonoBehaviour:
   - Sword
   - Bow
   - Shield
-  enemyHP: 64000000500000003c00000028000000
-  damage: 10
-  target: 2
-  heal: 10
-  maxHP: 100
   npc1Dialogues:
   - Nice weather today, isn't it?
   - I heard there are monsters in the cave.
   - Welcome, traveler!
   - Have you seen my cat?
+  enemyHP: 64000000500000003c00000028000000
+  damage: 10
+  target: 2
+  scores: 0a000000320000001e0000005a00000028000000
+  heal: 10
+  maxHP: 100
   npc2Dialogues:
   - Yes, it's a great day for an adventure!
   - I will prepare my sword and shield.
@@ -220,6 +221,14 @@ MonoBehaviour:
   - No, I haven't seen any cats around.
   spawnCount: 3
   spawnSpacing: 2
+  searchTarget: Key
+  backpack:
+  - Potion
+  - Shield
+  - Key
+  - Herb
+  - Key
+  battleEnemiesHP: 640000000000000032000000f6ffffff50000000
 --- !u!1 &344146549 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3872528923381787458, guid: be04b8c15a7024f4a84e4c587cd90890, type: 3}

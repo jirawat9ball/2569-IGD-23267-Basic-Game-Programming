@@ -86,9 +86,9 @@ public class Assignment_SubmitterEditor_Week03 : Editor
 
         api.Execute(new ExecutionSettings(new Filter()
         {
-            testMode = TestMode.EditMode,
-            assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
-            groupNames = new string[] { submitter.weekName }
+            testMode = TestMode.EditMode | TestMode.PlayMode,
+            assemblyNames = new string[] { "Workspace", "Workspace.Editor", "Workspace.Editor.Week03", "Assembly-CSharp", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+            groupNames = new string[] { submitter.weekName, "Week03_Loop" }
         }));
     }
 }
