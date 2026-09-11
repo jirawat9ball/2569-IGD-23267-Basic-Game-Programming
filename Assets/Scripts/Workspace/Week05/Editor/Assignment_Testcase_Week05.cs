@@ -12,7 +12,15 @@ namespace Week05_Method
 {
     public class TestBase
     {
+        // =========================================================================================
+        // 🎯 สลับตรวจไฟล์ อ. หรือ นักเรียน: เปลี่ยนเป็น true เมื่อต้องการตรวจไฟล์เฉลยอาจารย์
+        // =========================================================================================
+        protected const bool isTeacherMode = false;
+
         protected const string StudentPath = "Assets/Scripts/Workspace/Week05/Assignment_Student_Week05.cs";
+        protected const string TeacherPath = "Assets/Scripts/Workspace/Teacher/Assignment_Teacher_Week05.cs";
+
+        protected static string CurrentTargetFilePath => isTeacherMode ? TeacherPath : StudentPath;
 
         protected IAssignment assignment;
         protected Assignment_Student_Week05 student;
@@ -73,10 +81,11 @@ namespace Week05_Method
 
         private static string ReadStudentSourceStripped()
         {
-            Assert.IsTrue(File.Exists(StudentPath),
-                $"หาไฟล์ student ไม่เจอที่ '{StudentPath}' (cwd={Directory.GetCurrentDirectory()})");
+            string path = CurrentTargetFilePath;
+            Assert.IsTrue(File.Exists(path),
+                $"หาไฟล์เป้าหมายไม่เจอที่ '{path}' (cwd={Directory.GetCurrentDirectory()})");
 
-            string src = File.ReadAllText(StudentPath);
+            string src = File.ReadAllText(path);
             src = Regex.Replace(src, @"//.*?$", "", RegexOptions.Multiline);
             src = Regex.Replace(src, @"/\*.*?\*/", "", RegexOptions.Singleline);
             src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");
@@ -90,7 +99,7 @@ namespace Week05_Method
             string src = ReadStudentSourceStripped();
 
             int sig = src.IndexOf(signature, System.StringComparison.Ordinal);
-            Assert.Greater(sig, -1, $"ไม่พบเมธอด '{signature}' ในไฟล์ student");
+            Assert.Greater(sig, -1, $"ไม่พบเมธอด '{signature}' ในไฟล์เป้าหมาย");
 
             int open = src.IndexOf('{', sig);
             Assert.Greater(open, -1, $"เมธอด '{signature}' ไม่มี body");
@@ -118,8 +127,9 @@ namespace Week05_Method
 
         protected static void AssertRawSourceContains(string needle, string reason)
         {
-            Assert.IsTrue(File.Exists(StudentPath), $"หาไฟล์ student ไม่เจอที่ '{StudentPath}'");
-            StringAssert.Contains(needle, File.ReadAllText(StudentPath), reason);
+            string path = CurrentTargetFilePath;
+            Assert.IsTrue(File.Exists(path), $"หาไฟล์เป้าหมายไม่เจอที่ '{path}'");
+            StringAssert.Contains(needle, File.ReadAllText(path), reason);
         }
 
         protected static void AssertBodyContains(string signature, string needle, string reason)

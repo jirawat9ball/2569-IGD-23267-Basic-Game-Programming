@@ -12,7 +12,15 @@ namespace Week04_Array2D
 {
     public class TestBase
     {
+        // =========================================================================================
+        // 🎯 สลับตรวจไฟล์ อ. หรือ นักเรียน: เปลี่ยนเป็น true เมื่อต้องการตรวจไฟล์เฉลยอาจารย์
+        // =========================================================================================
+        protected const bool isTeacherMode = false;
+
         protected const string StudentPath = "Assets/Scripts/Workspace/Week04/Assignment_Student_Week04.cs";
+        protected const string TeacherPath = "Assets/Scripts/Workspace/Teacher/Assignment_Teacher_Week04.cs";
+
+        protected static string CurrentTargetFilePath => isTeacherMode ? TeacherPath : StudentPath;
 
         protected IAssignment assignment;
         protected GameObject testGo;
@@ -21,7 +29,10 @@ namespace Week04_Array2D
         public void Setup()
         {
             testGo = new GameObject("Week04_TestRunner");
-            assignment = testGo.AddComponent<Assignment_Student_Week04>();
+            if (isTeacherMode)
+                assignment = testGo.AddComponent<Assignment_Teacher_Week04>();
+            else
+                assignment = testGo.AddComponent<Assignment_Student_Week04>();
             SimpleDebugConsole.Clear();
         }
 
@@ -56,14 +67,13 @@ namespace Week04_Array2D
             }
         }
 
-        // ---- กัน hardcode: อ่าน source ของ student ว่าใช้ loop จริงไหม ----
-
         protected static string GetStudentMethodBody(string methodName)
         {
-            Assert.IsTrue(File.Exists(StudentPath),
-                $"หาไฟล์ student ไม่เจอที่ '{StudentPath}' (cwd={Directory.GetCurrentDirectory()})");
+            string path = CurrentTargetFilePath;
+            Assert.IsTrue(File.Exists(path),
+                $"หาไฟล์เป้าหมายไม่เจอที่ '{path}' (cwd={Directory.GetCurrentDirectory()})");
 
-            string src = File.ReadAllText(StudentPath);
+            string src = File.ReadAllText(path);
             src = Regex.Replace(src, @"//.*?$", "", RegexOptions.Multiline);
             src = Regex.Replace(src, @"/\*.*?\*/", "", RegexOptions.Singleline);
             src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");

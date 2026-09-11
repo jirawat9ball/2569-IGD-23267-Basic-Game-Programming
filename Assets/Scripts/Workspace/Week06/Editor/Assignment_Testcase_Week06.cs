@@ -11,6 +11,11 @@ namespace Week06_OOP
 {
     public class TestBase
     {
+        // =========================================================================================
+        // 🎯 สลับตรวจไฟล์ อ. หรือ นักเรียน: เปลี่ยนเป็น true เมื่อต้องการตรวจไฟล์เฉลยอาจารย์
+        // =========================================================================================
+        protected const bool isTeacherMode = false;
+
         protected IAssignment assignment;
         protected GameObject testGo;
 
@@ -21,7 +26,10 @@ namespace Week06_OOP
         public void Setup()
         {
             testGo = new GameObject("Week06_TestRunner");
-            assignment = testGo.AddComponent<Assignment_Student_Week06>();
+            if (isTeacherMode)
+                assignment = testGo.AddComponent<Week06.Assignment_Teacher_Week06>();
+            else
+                assignment = testGo.AddComponent<Assignment_Student_Week06>();
             SimpleDebugConsole.Clear();
         }
 
