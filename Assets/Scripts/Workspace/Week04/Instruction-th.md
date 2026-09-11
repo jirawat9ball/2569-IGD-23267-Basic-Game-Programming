@@ -7,7 +7,7 @@
 
 ในเกม เราใช้ 2D Array บ่อยมาก เช่น แผนที่ด่าน ตารางช่องเก็บของ (inventory) กระดานหมากรุก หรือกระดาน XO
 
-มีแบบฝึกหัดทั้งหมด **14 ข้อ** ให้เขียนโค้ดในไฟล์ `Assignment_Student_Week04.cs`
+มีแบบฝึกหัดทั้งหมด **22 ข้อ** แบ่งออกเป็นชุดในห้องเรียน (Lecture) และการบ้าน (Homework) ในไฟล์ `Assignment_Student_Week04.cs`
 ทุกข้อแสดงผลด้วย `Debug.Log()` และผลลัพธ์ต้องตรงกับที่ test case กำหนดเป๊ะ ๆ
 
 ## 🎯 จุดประสงค์การเรียนรู้
@@ -20,11 +20,9 @@
 
 ## 📚 โครงสร้างของ Assignment
 
-- **เรื่องที่ 1: รู้จัก 2D Array (ข้อ 1–3)** — ประกาศ, หาขนาด, get/set ค่า
-- **เรื่องที่ 2: 2D Array กับวัตถุในเกม (ข้อ 4–5)** — วางตำแหน่งวัตถุ, สร้างไอเทมจากตาราง
-- **เรื่องที่ 3: วนลูปหาผลรวมในตาราง (ข้อ 6–7)** — รวมค่าตามแถว/คอลัมน์
-- **เรื่องที่ 4: Nested Loop สร้างรูปแบบและแผนที่ (ข้อ 8–13)** — วาดดาว, สร้างพื้น, สร้างกำแพง, สูตรคูณ
-- **เรื่องที่ 5: โปรเจกต์รวม (ข้อ 14)** — เกม XO
+- **Lecture Methods (9 methods: As01 – As09)** — การฝึกเขียนโค้ดเพื่อเรียนรู้พื้นฐานร่วมกันในชั้นเรียน
+- **Homework - Level 1: Simple (10 methods: Lv01 – Lv10)** — การบ้านระดับพื้นฐาน เน้นคำนวณและวนลูปตาราง
+- **Homework - Level 2: Moderate (3 methods: Ex01 – Ex03)** — การบ้านระดับประยุกต์ร่วมกับ Game Objects และ Game Logic
 
 ---
 
@@ -61,20 +59,20 @@ for (int row = 0; row < table.GetLength(0); row++)
 
 ---
 
-# เรื่องที่ 1: รู้จัก 2D Array
+# 🔵 Lecture Methods (ในห้องเรียน)
 
-## ข้อ 1. สร้างและแสดงตาราง 3x3
+## As01. สร้างและแสดงตาราง 3x3
 
 **วัตถุประสงค์:** ประกาศ 2D Array พร้อมค่าเริ่มต้น และใช้ Nested Loop พิมพ์ออกมาเป็นตาราง
 
 **Method Signature:**
 ```csharp
-void Ex01_Create2DArray()
+void As01_Create2DArray()
 ```
 
 **Logic ที่ต้อง implement:**
 - ประกาศ `int[,] my2DArray` ขนาด 3 x 3 ใส่ค่า `{1,2,3}`, `{4,5,6}`, `{7,8,9}`
-- ใช้ Nested Loop วนทีละแถว แล้วพิมพ์ค่าของแถวนั้นออกมา 1 บรรทัด โดยคั่นตัวเลขด้วยช่องว่าง 1 ช่อง
+- ใช้ `Debug.Log()` พิมพ์ค่าของแต่ละแถวออกมาทีละบรรทัด โดยคั่นตัวเลขด้วยช่องว่าง 1 ช่อง (เช่น `my2DArray[0, 0] + " " + ...`)
 
 **ผลลัพธ์ที่ต้องได้:**
 ```text
@@ -85,13 +83,13 @@ void Ex01_Create2DArray()
 
 ---
 
-## ข้อ 2. หาขนาดของตาราง
+## As02. หาขนาดของตาราง
 
 **วัตถุประสงค์:** ใช้ `GetLength()` หาจำนวนแถวและคอลัมน์ของ 2D Array
 
 **Method Signature:**
 ```csharp
-void Ex02_ArraySize(int rows, int cols)
+void As02_ArraySize(int rows, int cols)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -105,21 +103,15 @@ rows = 3
 cols = 5
 ```
 
-ตัวอย่าง `rows = 4`, `cols = 8`
-```text
-rows = 4
-cols = 8
-```
-
 ---
 
-## ข้อ 3. อ่านค่าและเปลี่ยนค่าในตาราง
+## As03. อ่านค่าและเปลี่ยนค่าในตาราง
 
 **วัตถุประสงค์:** เข้าถึงค่า (get) และกำหนดค่าใหม่ (set) ในช่องที่ต้องการ ทั้งตารางตัวเลขและตารางข้อความ
 
 **Method Signature:**
 ```csharp
-void Ex03_GetSet2DArray()
+void As03_GetSet2DArray()
 ```
 
 **Logic ที่ต้อง implement:**
@@ -151,15 +143,83 @@ D E F
 
 ---
 
-# เรื่องที่ 2: 2D Array กับวัตถุในเกม
+## As04. สร้างแถวกำแพง 1 แถว (Create Wall Row)
 
-## ข้อ 4. วางวัตถุตามพิกัดในตาราง
+**วัตถุประสงค์:** ใช้ลูป 1 มิติ สร้างแถวกำแพงแนวนอนตามความยาวที่กำหนด และ Instantiate ลงฉาก
+
+**Method Signature:**
+```csharp
+void As04_CreateWallRow(int columns, GameObject wall)
+```
+
+**Logic ที่ต้อง implement:**
+- วนลูป `x` ตั้งแต่ `0` ถึง `columns - 1`
+- แต่ละช่องให้ `Instantiate(wall, new Vector2(x, 0), Quaternion.identity)`
+- ต่อตัวอักษร `*` ในตัวแปรข้อความ แล้วพิมพ์ออกมา 1 บรรทัดเมื่อจบลูป
+
+**ผลลัพธ์ที่ต้องได้:** (`columns = 5`)
+```text
+*****
+```
+
+---
+
+## As05. สร้างพื้นแผนที่แบบสุ่ม (Create Floor)
+
+**วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุลงทุกช่องของแผนที่ โดยสุ่มชนิดพื้น
+
+**Method Signature:**
+```csharp
+void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
+```
+
+**Logic ที่ต้อง implement:**
+- วน Nested Loop ทีละแถว (`y`) และทีละคอลัมน์ (`x`)
+- แต่ละช่องสุ่มเลือกพื้นจาก `floorTiles` ด้วย `Random.Range` แล้ว `Instantiate` ที่ตำแหน่ง `(x, y)`
+- เก็บชื่อพื้นของแถวนั้นต่อกันเป็นข้อความ แล้วพิมพ์ออกมาบรรทัดละแถว
+
+**ผลลัพธ์ที่ต้องได้:** (`columns = 3`, `rows = 3` และพื้นชื่อ `0`, `1`, `2` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
+```text
+211
+110
+000
+```
+
+---
+
+## As06. สร้างกำแพงล้อมรอบแผนที่ (Create Wall)
+
+**วัตถุประสงค์:** ใช้ Nested Loop พร้อมเงื่อนไข เพื่อวางวัตถุเฉพาะขอบนอก
+
+**Method Signature:**
+```csharp
+void As06_CreateWall(int columns, int rows, GameObject wall)
+```
+
+**Logic ที่ต้อง implement:**
+- วนลูป `x` ตั้งแต่ `-1` ถึง `columns` และ `y` ตั้งแต่ `-1` ถึง `rows` (คือขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
+- ถ้าช่องนั้นอยู่ที่ขอบ (`x == -1 || x == columns || y == -1 || y == rows`) → `Instantiate` กำแพงที่ตำแหน่งนั้น และเก็บอักษร `*`
+- ถ้าไม่ใช่ขอบ → เว้นว่าง เก็บอักษรเป็นช่องว่าง
+- พิมพ์ออกมาบรรทัดละแถว
+
+**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 3` → ได้ตารางกว้าง 7 สูง 5)
+```text
+*******
+*     *
+*     *
+*     *
+*******
+```
+
+---
+
+## As07. วางวัตถุตามพิกัดในตาราง
 
 **วัตถุประสงค์:** แปลงตำแหน่งแถว/คอลัมน์ให้เป็นตำแหน่งจริงของวัตถุในเกม
 
 **Method Signature:**
 ```csharp
-void Ex04_SetItemPosition(Transform item, int itemPosX, int itemPosY)
+void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -171,20 +231,36 @@ void Ex04_SetItemPosition(Transform item, int itemPosX, int itemPosY)
 (1.00, 2.00, 0.00)
 ```
 
-ตัวอย่าง `itemPosX = 11`, `itemPosY = 31`
+---
+
+## As08. สุ่มวางไอเทมลงแผนที่
+
+**วัตถุประสงค์:** สุ่มทั้งชนิดของและตำแหน่ง แล้ววางลงในแผนที่
+
+**Method Signature:**
+```csharp
+void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)
+```
+
+**Logic ที่ต้อง implement:**
+- สุ่มพิกัด `x` ในช่วง `0` ถึง `columns - 1` และ `y` ในช่วง `0` ถึง `rows - 1`
+- สุ่มเลือกของ 1 ชิ้นจาก `foodTiles` แล้ว `Instantiate` ที่พิกัดนั้น
+- พิมพ์ `<ชื่อของ> at x: <x> y: <y>`
+
+**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 5` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
 ```text
-(11.00, 31.00, 0.00)
+Hamburger at x: 0 y: 3
 ```
 
 ---
 
-## ข้อ 5. สร้างไอเทมตามชื่อที่อยู่ในตาราง
+## As09. สร้างไอเทมตามชื่อที่อยู่ในตาราง
 
 **วัตถุประสงค์:** อ่านชื่อไอเทมจากตาราง แล้วหา Prefab ที่ชื่อตรงกันมา Instantiate
 
 **Method Signature:**
 ```csharp
-void Ex05_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
+void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -206,22 +282,17 @@ void Ex05_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
 Create Item Soda at x: 1 y: 0
 ```
 
-ตัวอย่าง `itemPosX = 0`, `itemPosY = 0`
-```text
-No items at x: 0 y: 0
-```
-
 ---
 
-# เรื่องที่ 3: วนลูปหาผลรวมในตาราง
+# 🟢 Homework: Level 1 (Simple)
 
-## ข้อ 6. หาผลรวมของแถวที่กำหนด
+## Lv01. หาผลรวมของแถวที่กำหนด
 
 **วัตถุประสงค์:** ใช้ `for` loop วนตามคอลัมน์ของแถวเดียว เพื่อรวมค่า
 
 **Method Signature:**
 ```csharp
-void Ex06_SumRow(int[,] matrix, int row)
+void Lv01_SumRow(int[,] matrix, int row)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -235,13 +306,13 @@ void Ex06_SumRow(int[,] matrix, int row)
 
 ---
 
-## ข้อ 7. หาผลรวมของคอลัมน์ที่กำหนด
+## Lv02. หาผลรวมของคอลัมน์ที่กำหนด
 
 **วัตถุประสงค์:** ใช้ `for` loop วนตามแถว เพื่อรวมค่าในคอลัมน์เดียว
 
 **Method Signature:**
 ```csharp
-void Ex07_SumColumn(int[,] matrix, int col)
+void Lv02_SumColumn(int[,] matrix, int col)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -255,15 +326,13 @@ void Ex07_SumColumn(int[,] matrix, int col)
 
 ---
 
-# เรื่องที่ 4: Nested Loop สร้างรูปแบบและแผนที่
-
-## ข้อ 8. วาดสี่เหลี่ยมด้วยดาว
+## Lv03. วาดสี่เหลี่ยมด้วยดาว
 
 **วัตถุประสงค์:** ฝึก Nested Loop พื้นฐาน ลูปนอกคุมจำนวนบรรทัด ลูปในคุมจำนวนตัวอักษร
 
 **Method Signature:**
 ```csharp
-void Ex08_StarPattern(int columns, int rows)
+void Lv03_StarPattern(int columns, int rows)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -279,83 +348,13 @@ void Ex08_StarPattern(int columns, int rows)
 
 ---
 
-## ข้อ 9. สร้างพื้นแผนที่แบบสุ่ม
-
-**วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุลงทุกช่องของแผนที่ โดยสุ่มชนิดพื้น
-
-**Method Signature:**
-```csharp
-void Ex09_RandomFloorMap(int columns, int rows, GameObject[] floorTiles)
-```
-
-**Logic ที่ต้อง implement:**
-- วน Nested Loop ทีละแถว (`y`) และทีละคอลัมน์ (`x`)
-- แต่ละช่องสุ่มเลือกพื้นจาก `floorTiles` ด้วย `Random.Range` แล้ว `Instantiate` ที่ตำแหน่ง `(x, y)`
-- เก็บชื่อพื้นของแถวนั้นต่อกันเป็นข้อความ แล้วพิมพ์ออกมาบรรทัดละแถว
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 3`, `rows = 3` และพื้นชื่อ `0`, `1`, `2` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
-```text
-211
-110
-000
-```
-
----
-
-## ข้อ 10. สร้างกำแพงล้อมรอบแผนที่
-
-**วัตถุประสงค์:** ใช้ Nested Loop พร้อมเงื่อนไข เพื่อวางวัตถุเฉพาะขอบนอก
-
-**Method Signature:**
-```csharp
-void Ex10_BuildOuterWall(int columns, int rows, GameObject wall)
-```
-
-**Logic ที่ต้อง implement:**
-- วนลูป `x` ตั้งแต่ `-1` ถึง `columns` และ `y` ตั้งแต่ `-1` ถึง `rows` (คือขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
-- ถ้าช่องนั้นอยู่ที่ขอบ (`x == -1 || x == columns || y == -1 || y == rows`) → `Instantiate` กำแพงที่ตำแหน่งนั้น และเก็บอักษร `*`
-- ถ้าไม่ใช่ขอบ → เว้นว่าง เก็บอักษรเป็นช่องว่าง
-- พิมพ์ออกมาบรรทัดละแถว
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 3` → ได้ตารางกว้าง 7 สูง 5)
-```text
-*******
-*     *
-*     *
-*     *
-*******
-```
-
----
-
-## ข้อ 11. สุ่มวางไอเทมลงแผนที่
-
-**วัตถุประสงค์:** สุ่มทั้งชนิดของและตำแหน่ง แล้ววางลงในแผนที่
-
-**Method Signature:**
-```csharp
-void Ex11_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)
-```
-
-**Logic ที่ต้อง implement:**
-- สุ่มพิกัด `x` ในช่วง `0` ถึง `columns - 1` และ `y` ในช่วง `0` ถึง `rows - 1`
-- สุ่มเลือกของ 1 ชิ้นจาก `foodTiles` แล้ว `Instantiate` ที่พิกัดนั้น
-- พิมพ์ `<ชื่อของ> at x: <x> y: <y>`
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 5` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
-```text
-Hamburger at x: 0 y: 3
-```
-
----
-
-## ข้อ 12. วาดสามเหลี่ยม
+## Lv04. วาดสามเหลี่ยม
 
 **วัตถุประสงค์:** ฝึก Nested Loop ที่ลูปในขึ้นกับค่าของลูปนอก
 
 **Method Signature:**
 ```csharp
-void Ex12_TrianglePattern(int size)
+void Lv04_TrianglePattern(int size)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -372,13 +371,13 @@ void Ex12_TrianglePattern(int size)
 
 ---
 
-## ข้อ 13. ตารางสูตรคูณหลายแม่พร้อมกัน
+## Lv05. ตารางสูตรคูณหลายแม่พร้อมกัน
 
 **วัตถุประสงค์:** ใช้ Nested Loop จัดข้อมูลออกมาเป็นตารางหลายคอลัมน์
 
 **Method Signature:**
 ```csharp
-void Ex13_MultiplicationTableNested(int fromTable, int toTable)
+void Lv05_MultiplicationTableNested(int fromTable, int toTable)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -397,15 +396,127 @@ void Ex13_MultiplicationTableNested(int fromTable, int toTable)
 
 ---
 
-# เรื่องที่ 5: โปรเจกต์รวม
+## Lv06. หาค่าสูงสุดในตาราง
 
-## ข้อ 14. เกม XO (Tic-Tac-Toe)
+**วัตถุประสงค์:** ใช้ Nested Loop วนตรวจหาค่าที่มากที่สุดใน 2D Array พร้อมจำตำแหน่งแถวและคอลัมน์
+
+**Method Signature:**
+```csharp
+void Lv06_FindMaxInMatrix(int[,] matrix)
+```
+
+**Logic ที่ต้อง implement:**
+- ตั้งตัวแปร `max` เริ่มต้นด้วยค่าแรกของตาราง `matrix[0, 0]` และจำตำแหน่ง `maxR = 0`, `maxC = 0`
+- ใช้ Nested Loop วนอ่านทุกแถวและทุกคอลัมน์
+- ถ้าเจอค่าที่มากกว่า `max` ให้บันทึกค่านั้นเป็น `max` ใหม่ พร้อมจำพิกัด `maxR` และ `maxC`
+- พิมพ์ผลลัพธ์ในรูปแบบ: `Max value <max> at [<maxR>, <maxC>]`
+
+**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง Matrix 3x3 ที่มีค่าสูงสุดคือ 9 อยู่ที่แถว 2 คอลัมน์ 2)
+```text
+Max value 9 at [2, 2]
+```
+
+---
+
+## Lv07. นับจำนวนช่องที่มีค่าเป้าหมาย
+
+**วัตถุประสงค์:** ใช้ Nested Loop วนนับจำนวนช่องใน 2D Array ที่มีค่าตรงกับที่กำหนด
+
+**Method Signature:**
+```csharp
+void Lv07_CountTargetValue(int[,] matrix, int target)
+```
+
+**Logic ที่ต้อง implement:**
+- ตั้งตัวแปรตัวนับ `count = 0`
+- ใช้ Nested Loop วนตรวจทุกช่องในตาราง `matrix`
+- ถ้าช่องใดมีค่าเท่ากับ `target` ให้บวก `count` เพิ่ม 1
+- พิมพ์ผลลัพธ์ในรูปแบบ: `Found target <target>: <count> cells`
+
+**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `target = 1` ในตารางที่มีเลข 1 อยู่ 5 ช่อง)
+```text
+Found target 1: 5 cells
+```
+
+---
+
+## Lv08. หาผลรวมของสมาชิกทุกช่องในตาราง
+
+**วัตถุประสงค์:** ใช้ Nested Loop วนบวกค่าทุกช่องใน 2D Array เข้าด้วยกัน
+
+**Method Signature:**
+```csharp
+void Lv08_SumAllElements(int[,] matrix)
+```
+
+**Logic ที่ต้อง implement:**
+- ตั้งตัวแปรผลรวม `int sum = 0`
+- ใช้ Nested Loop วนอ่านทุกแถวและทุกคอลัมน์ของ `matrix`
+- บวกค่าในแต่ละช่องเข้าไปใน `sum`
+- พิมพ์ผลลัพธ์: `Debug.Log(sum)`
+
+**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง Matrix 3x3 ค่า 1 ถึง 9)
+```text
+45
+```
+
+---
+
+## Lv09. วาดสามเหลี่ยมดาวกลับด้าน
+
+**วัตถุประสงค์:** ฝึกการควบคุม Nested Loop โดยให้จำนวนรอบของลูปในลดลงตามแถว
+
+**Method Signature:**
+```csharp
+void Lv09_InvertedTrianglePattern(int size)
+```
+
+**Logic ที่ต้อง implement:**
+- วนแถว `r` จาก `size` ถอยหลังลงมาจนถึง `1`
+- ในแต่ละแถว ให้พิมพ์ดาว `*` จำนวน `r` ตัว
+- พิมพ์ผลลัพธ์ของแต่ละแถวด้วย `Debug.Log()`
+
+**ผลลัพธ์ที่ต้องได้:** (`size = 4`)
+```text
+****
+***
+**
+*
+```
+
+---
+
+## Lv10. อ่านค่าแนวทแยงมุมหลัก
+
+**วัตถุประสงค์:** เข้าถึงข้อมูลในแนวทแยงมุมหลัก (`matrix[i, i]`) ของตาราง 2 มิติ
+
+**Method Signature:**
+```csharp
+void Lv10_PrintMainDiagonal(int[,] matrix)
+```
+
+**Logic ที่ต้อง implement:**
+- หาความยาวแนวทแยงที่อ่านได้: ค่าน้อยสุดระหว่างแถวกับคอลัมน์ `minDim = Mathf.Min(matrix.GetLength(0), matrix.GetLength(1))`
+- วนลูปอ่านค่าที่พิกัด `matrix[i, i]` ตั้งแต่ `i = 0` จนถึง `minDim - 1`
+- รวมค่าให้อยู่ในบรรทัดเดียว คั่นด้วยช่องว่าง 1 ช่อง (เช่น `"1 5 9"`)
+- พิมพ์ผลลัพธ์ด้วย `Debug.Log()`
+
+**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง Matrix 3x3 ที่มีแนวทแยงคือ 1, 5, 9)
+```text
+1 5 9
+```
+
+---
+
+# 🔴 Homework: Level 2 (Moderate)
+
+## Ex01. เกม XO (Tic-Tac-Toe)
 
 **วัตถุประสงค์:** รวมทุกอย่างของสัปดาห์นี้ — 2D Array, Nested Loop, เงื่อนไข — มาทำเป็นเกมจริง
 
 **Method Signature:**
 ```csharp
-void Ex14_TicTacToe(int[,] moves)
+void Ex01_TicTacToe(int[,] moves)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -431,6 +542,56 @@ Player X:
 |   |   |   |
 -------------
 |   |   |   |
+```
+
+---
+
+## Ex02. ตรวจสอบพื้นที่เดินได้ในตารางแผนที่
+
+**วัตถุประสงค์:** ตรวจสอบเงื่อนไขตำแหน่งของตัวละคร (Tile Collision Check) และป้องกันการเดินออกนอกแผนที่
+
+**Method Signature:**
+```csharp
+void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY)
+```
+
+**Logic ที่ต้อง implement:**
+- หาจำนวนแถว `rows = map.GetLength(0)` และจำนวนคอลัมน์ `cols = map.GetLength(1)`
+- ตรวจสอบว่าพิกัดหลุดออกนอกตารางหรือไม่ (`targetX < 0 || targetX >= cols || targetY < 0 || targetY >= rows`):
+  - ถ้าออกนอกขอบเขต → พิมพ์ `Position (<targetX>, <targetY>) is Out of Bounds` แล้ว `return`
+- ถ้าพิกัดอยู่ในแผนที่ (หมายเหตุ: `targetX` คือแกนคอลัมน์, `targetY` คือแกนแถว เข้าถึงด้วย `map[targetY, targetX]`):
+  - ถ้าค่าเป็น `0` → พิมพ์ `Position (<targetX>, <targetY>) is Walkable`
+  - ถ้าค่าเป็น `1` → พิมพ์ `Position (<targetX>, <targetY>) is Blocked by Wall`
+  - ถ้าเป็นค่าอื่น ๆ → พิมพ์ `Position (<targetX>, <targetY>) is Blocked`
+
+**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `targetX = 1`, `targetY = 1` ค่าในตารางคือ 0)
+```text
+Position (1, 1) is Walkable
+```
+
+---
+
+## Ex03. วางหีบสมบัติทั้ง 4 มุมแผนที่
+
+**วัตถุประสงค์:** คำนวณพิกัดมุมของกระดานขนาดใด ๆ และสร้าง Prefab ลงในฉากด้วย `Instantiate`
+
+**Method Signature:**
+```csharp
+void Ex03_SpawnChestsInCorners(int columns, int rows, GameObject chestPrefab)
+```
+
+**Logic ที่ต้อง implement:**
+- คำนวณพิกัดมุมทั้ง 4 ของแผนที่ขนาด `columns` x `rows`:
+  - มุมซ้ายล่าง: `(0, 0)`
+  - มุมขวาล่าง: `(columns - 1, 0)`
+  - มุมซ้ายบน: `(0, rows - 1)`
+  - มุมขวาบน: `(columns - 1, rows - 1)`
+- วนลูปสร้างหีบสมบัติด้วย `Instantiate(chestPrefab, <ตำแหน่ง>, Quaternion.identity)` หาก `chestPrefab != null`
+- พิมพ์ข้อความยืนยัน: `Spawned 4 chests at corners`
+
+**ผลลัพธ์ที่ต้องได้:**
+```text
+Spawned 4 chests at corners
 ```
 
 ---
