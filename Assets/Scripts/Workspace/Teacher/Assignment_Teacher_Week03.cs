@@ -10,25 +10,26 @@ namespace Week03
 
         public void As01_IronManSuit()
         {
-            string[] IronManSuit = new string[4]
-            {
-                "Mark I", "Mark II", "Mark III", "Mark IV"
-            };
+            string[] IronManSuit = new string[4];
+            IronManSuit[0] = "Mark I";
+            IronManSuit[1] = "Mark II";
+            IronManSuit[2] = "Mark III";
+            IronManSuit[3] = "Mark IV";
 
             string TonyStarkWear = IronManSuit[0];
             Debug.Log("TonyStark Wear : " + TonyStarkWear);
             Debug.Log("Room size IronManSuit : " + IronManSuit.Length);
             Debug.Log("===All suit in collection===");
 
-            for (int i = 0; i < IronManSuit.Length; i++)
-            {
-                Debug.Log(IronManSuit[i]);
-            }
+            Debug.Log(IronManSuit[0]);
+            Debug.Log(IronManSuit[1]);
+            Debug.Log(IronManSuit[2]);
+            Debug.Log(IronManSuit[3]);
         }
 
         public void As02_SpiderManAndBatMan()
         {
-            string[] spiderMan =
+            string[] SpiderMan =
             {
                 "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider"
             };
@@ -37,27 +38,25 @@ namespace Week03
                 "Classic BatMan", "Dark Knight", "Batman Beyond", "The Batman"
             };
 
-            Debug.Log("Room size spiderMan : " + spiderMan.Length);
-            Debug.Log("===All spiderMan in collection===");
-            for (int i = 0; i < spiderMan.Length; i++)
-            {
-                Debug.Log(spiderMan[i]);
-            }
+            Debug.Log("Room size SpiderMan : " + SpiderMan.Length);
+            Debug.Log("===All SpiderMan in collection===");
+            Debug.Log(SpiderMan[0]);
+            Debug.Log(SpiderMan[1]);
+            Debug.Log(SpiderMan[2]);
 
             Debug.Log("Room size BatMan : " + BatMan.Length);
             Debug.Log("===All BatMan in collection===");
-            for (int i = 0; i < BatMan.Length; i++)
-            {
-                Debug.Log(BatMan[i]);
-            }
+            Debug.Log(BatMan[0]);
+            Debug.Log(BatMan[1]);
+            Debug.Log(BatMan[2]);
+            Debug.Log(BatMan[3]);
         }
 
         public void As03_RandomItemDrop(GameObject[] items)
         {
             int index = Random.Range(0, items.Length);
-            GameObject picked = items[index];
-            Instantiate(picked);
-            Debug.Log("Got item : " + picked.name);
+            Instantiate(items[index]);
+            Debug.Log("Got item : " + items[index].name);
         }
 
         public void As04_ForLoopBasic()

@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -12,7 +12,15 @@ namespace Week03_Loop
 {
     public class TestBase
     {
+        // =========================================================================================
+        // 🎯 สลับตรวจไฟล์ อ. หรือ นักเรียน: เปลี่ยนเป็น true เมื่อต้องการตรวจไฟล์เฉลยอาจารย์
+        // =========================================================================================
+        protected const bool isTeacherMode = false;
+
         protected const string StudentPath = "Assets/Scripts/Workspace/Week03/Assignment_Student_Week03.cs";
+        protected const string TeacherPath = "Assets/Scripts/Workspace/Teacher/Assignment_Teacher_Week03.cs";
+
+        protected static string CurrentTargetFilePath => isTeacherMode ? TeacherPath : StudentPath;
 
         protected IAssignment assignment;
         protected GameObject testGo;
@@ -21,7 +29,14 @@ namespace Week03_Loop
         public void Setup()
         {
             testGo = new GameObject("Week03_TestRunner");
-            assignment = testGo.AddComponent<Assignment_Student_Week03>();
+            if (isTeacherMode)
+            {
+                assignment = testGo.AddComponent<Assignment_Teacher_Week03>();
+            }
+            else
+            {
+                assignment = testGo.AddComponent<Assignment_Student_Week03>();
+            }
             SimpleDebugConsole.Clear();
         }
 
@@ -38,14 +53,15 @@ namespace Week03_Loop
             }
         }
 
-        // ---- anti hardcode: อ่าน source ของ student ว่าใช้ loop จริงไหม ----
+        // ---- anti hardcode: อ่าน source ของ student หรือ teacher ว่าใช้ loop จริงไหม ----
 
         protected static string GetStudentMethodBody(string methodName)
         {
-            Assert.IsTrue(File.Exists(StudentPath),
-                $"หาไฟล์ student ไม่เจอที่ '{StudentPath}' (cwd={Directory.GetCurrentDirectory()})");
+            string path = CurrentTargetFilePath;
+            Assert.IsTrue(File.Exists(path),
+                $"หาไฟล์เป้าหมายไม่เจอที่ '{path}' (cwd={Directory.GetCurrentDirectory()})");
 
-            string src = File.ReadAllText(StudentPath);
+            string src = File.ReadAllText(path);
             src = Regex.Replace(src, @"//.*?$", "", RegexOptions.Multiline);
             src = Regex.Replace(src, @"/\*.*?\*/", "", RegexOptions.Singleline);
             src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");
@@ -112,7 +128,6 @@ namespace Week03_Loop
                 sb.AppendLine(s);
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("As01_IronManSuit");
         }
 
         [Test]
@@ -121,8 +136,8 @@ namespace Week03_Loop
             assignment.As02_SpiderManAndBatMan();
 
             var sb = new StringBuilder();
-            sb.AppendLine("Room size spiderMan : 3");
-            sb.AppendLine("===All spiderMan in collection===");
+            sb.AppendLine("Room size SpiderMan : 3");
+            sb.AppendLine("===All SpiderMan in collection===");
             foreach (var s in new[] { "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider" })
                 sb.AppendLine(s);
             sb.AppendLine("Room size BatMan : 4");
@@ -131,7 +146,6 @@ namespace Week03_Loop
                 sb.AppendLine(s);
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("As02_SpiderManAndBatMan", minLoops: 2);
         }
 
         [Test]

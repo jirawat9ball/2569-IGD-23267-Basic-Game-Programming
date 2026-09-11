@@ -69,21 +69,21 @@ namespace Week01_Value
         {
             CheckField("timer", typeof(float));
 
-            Type studentType = typeof(Assignment_Student_Week01);
+            Type targetType = TargetType;
             UnityEngine.Object studentScript = null;
 
             foreach (var mb in Resources.FindObjectsOfTypeAll<MonoBehaviour>())
             {
-                if (mb.GetType().Name == "Assignment_Student_Week01" && !PrefabUtility.IsPartOfPrefabAsset(mb))
+                if (mb.GetType().Name == TargetTypeName && !PrefabUtility.IsPartOfPrefabAsset(mb))
                 {
                     studentScript = mb;
                     break;
                 }
             }
 
-            Assert.IsNotNull(studentScript, "❌ ไม่พบ Component 'Assignment_Student_Week01' ใน Scene ปัจจุบัน (เปิด Scene ถูกต้องและลากสคริปต์ใส่ GameObject หรือยัง?)");
+            Assert.IsNotNull(studentScript, $"❌ ไม่พบ Component '{TargetTypeName}' ใน Scene ปัจจุบัน (เปิด Scene ถูกต้องและลากสคริปต์ใส่ GameObject หรือยัง?)");
 
-            var timerField = studentType.GetField("timer", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var timerField = targetType.GetField("timer", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(timerField, "❌ ไม่พบตัวแปรชื่อ 'timer'");
 
             float origTimer = (float)timerField.GetValue(studentScript);
@@ -91,7 +91,7 @@ namespace Week01_Value
             // Set timer to a value >= 3 to trigger reset
             timerField.SetValue(studentScript, 3.5f);
 
-            MethodInfo updateMethod = studentType.GetMethod("Update", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo updateMethod = targetType.GetMethod("Update", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             if (updateMethod != null)
             {
                 try { updateMethod.Invoke(studentScript, null); } catch { }
@@ -162,13 +162,24 @@ namespace Week01_Value
             CheckAssignment("C2", false); // ต้องเป็น Scene Object
         }
 
+        // =========================================================================================
+        // 🎯 สลับตรวจไฟล์ อ. หรือ นักเรียน: เปลี่ยนเป็น true เมื่อต้องการตรวจไฟล์เฉลยอาจารย์
+        // =========================================================================================
+        private const bool isTeacherMode = false;
+
+        private static Type TargetType => isTeacherMode
+            ? typeof(Assignment_Teacher_Week01)
+            : typeof(Assignment_Student_Week01);
+
+        private static string TargetTypeName => TargetType.Name;
+
         private void CheckField(string varName, Type expectedType, bool? shouldBeExposed = null)
         {
-            Type studentType = typeof(Assignment_Student_Week01);
+            Type targetType = TargetType;
 
-            Assert.IsNotNull(studentType, "❌ ไม่พบคลาส 'Assignment_Student_Week01' ในโปรเจกต์ (ลบไฟล์สคริปต์ไปหรือเปล่า?)");
+            Assert.IsNotNull(targetType, $"❌ ไม่พบคลาส '{TargetTypeName}' ในโปรเจกต์ (ลบไฟล์สคริปต์ไปหรือเปล่า?)");
 
-            FieldInfo field = studentType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo field = targetType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             Assert.IsNotNull(field, $"❌ ไม่พบตัวแปรชื่อ '{varName}' (ตรวจสอบตัวพิมพ์เล็ก-พิมพ์ใหญ่ให้ตรงเป๊ะ)");
             Assert.AreEqual(expectedType, field.FieldType, $"❌ ตัวแปร '{varName}' ชนิดผิด! ควรจะเป็น {expectedType.Name} แต่ตอนนี้เป็น {field.FieldType.Name}");
@@ -189,22 +200,22 @@ namespace Week01_Value
 
         private void CheckAssignment(string varName, bool shouldBeAsset)
         {
-            Type studentType = typeof(Assignment_Student_Week01);
-            Assert.IsNotNull(studentType, "❌ ไม่พบคลาส 'Assignment_Student_Week01'");
+            Type targetType = TargetType;
+            Assert.IsNotNull(targetType, $"❌ ไม่พบคลาส '{TargetTypeName}'");
 
             UnityEngine.Object studentScript = null;
             foreach (var mb in Resources.FindObjectsOfTypeAll<MonoBehaviour>())
             {
-                if (mb.GetType().Name == "Assignment_Student_Week01" && !PrefabUtility.IsPartOfPrefabAsset(mb))
+                if (mb.GetType().Name == TargetTypeName && !PrefabUtility.IsPartOfPrefabAsset(mb))
                 {
                     studentScript = mb;
                     break;
                 }
             }
 
-            Assert.IsNotNull(studentScript, "❌ ไม่พบ Component 'Assignment_Student_Week01' ใน Scene ปัจจุบัน (เปิด Scene ถูกต้องและลากสคริปต์ใส่ GameObject หรือยัง?)");
+            Assert.IsNotNull(studentScript, $"❌ ไม่พบ Component '{TargetTypeName}' ใน Scene ปัจจุบัน (เปิด Scene ถูกต้องและลากสคริปต์ใส่ GameObject หรือยัง?)");
 
-            FieldInfo field = studentType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo field = targetType.GetField(varName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(field, $"❌ ไม่พบตัวแปรชื่อ '{varName}'");
 
             object fieldValue = field.GetValue(studentScript);

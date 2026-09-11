@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
@@ -121,7 +121,7 @@ namespace Week03
             // 1. สร้าง Array string[] IronManSuit ขนาด 4 เก็บ "Mark I", "Mark II", "Mark III", "Mark IV"
             // 2. นำชุดแรกมาใส่ (index 0) เก็บในตัวแปร TonyStarkWear แล้วพิมพ์ "TonyStark Wear : " + TonyStarkWear
             // 3. พิมพ์ขนาดของ Array "Room size IronManSuit : " + IronManSuit.Length
-            // 4. พิมพ์ "===All suit in collection===" แล้วใช้ For Loop พิมพ์ชุดทั้งหมดออกมา
+            // 4. พิมพ์ "===All suit in collection===" แล้วใช้ Debug.Log พิมพ์ชุดทั้งหมดออกมาทีละตัว
         }
 
         public void As02_SpiderManAndBatMan()
@@ -129,8 +129,8 @@ namespace Week03
             // Guideline:
             // 1. สร้าง Array spiderMan เก็บ "Classic SpiderMan", "Symbiote SpiderMan", "Iron Spider"
             // 2. สร้าง Array BatMan ขนาด 4 เก็บ "Classic BatMan", "Dark Knight", "Batman Beyond", "The Batman"
-            // 3. พิมพ์ "Room size spiderMan : " + spiderMan.Length ตามด้วย "===All spiderMan in collection===" และ For Loop แสดงทั้งหมด
-            // 4. พิมพ์ "Room size BatMan : " + BatMan.Length ตามด้วย "===All BatMan in collection===" และ For Loop แสดงทั้งหมด
+            // 3. พิมพ์ "Room size spiderMan : " + spiderMan.Length ตามด้วย "===All spiderMan in collection===" และ Debug.Log แสดงทีละตัว
+            // 4. พิมพ์ "Room size BatMan : " + BatMan.Length ตามด้วย "===All BatMan in collection===" และ Debug.Log แสดงทีละตัว
         }
 
         public void As03_RandomItemDrop(GameObject[] items)

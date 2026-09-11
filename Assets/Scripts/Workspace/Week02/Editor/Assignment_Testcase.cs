@@ -10,6 +10,11 @@ namespace Week02_If
 {
     public class TestBase
     {
+        // =========================================================================================
+        // 🎯 สลับตรวจไฟล์ อ. หรือ นักเรียน: เปลี่ยนเป็น true เมื่อต้องการตรวจไฟล์เฉลยอาจารย์
+        // =========================================================================================
+        protected const bool isTeacherMode = false;
+
         protected IAssignment assignment;
         protected UnityEngine.GameObject testGo;
 
@@ -17,7 +22,14 @@ namespace Week02_If
         public void Setup()
         {
             testGo = new UnityEngine.GameObject();
-            assignment = testGo.AddComponent<Assignment_Student_Week02>();
+            if (isTeacherMode)
+            {
+                assignment = testGo.AddComponent<Assignment_Teacher_Week02>();
+            }
+            else
+            {
+                assignment = testGo.AddComponent<Assignment_Student_Week02>();
+            }
             Workspace.Core.SimpleDebugConsole.Clear();
         }
 
