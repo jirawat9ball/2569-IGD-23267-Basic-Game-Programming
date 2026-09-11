@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Week03
@@ -8,52 +9,69 @@ namespace Week03
     /// </summary>
     public interface IAssignment
     {
-        #region Array (ข้อ 1-6)
+        #region Lecture
 
-        void Ex01_IronManSuit();
+        void As01_IronManSuit();
 
-        void Ex02_SpiderManAndBatMan();
+        void As02_SpiderManAndBatMan();
 
-        void Ex03_AttackTarget(int[] enemyHP, int damage, int target);
+        void As03_RandomItemDrop(GameObject[] items);
 
-        void Ex04_RandomItemDrop(GameObject[] items);
+        void As04_ForLoopBasic();
 
-        void Ex05_HealTarget(int[] enemyHP, int heal, int target);
+        void As05_ForLoopN(int n);
 
-        void Ex06_RandomDialogue(string[] npc1Dialogues);
+        void As06_ForLoopWithArray(string[] suiteNames);
 
-        #endregion
+        void As07_InstantiateEnemies(GameObject Enemy, int[] HpEnemy);
 
-        #region For Loop (ข้อ 7-10)
+        void As08_WhileLoopBasic();
 
-        void Ex07_ForLoopBasic();
-
-        void Ex08_ForLoopN(int n);
-
-        void Ex09_ForLoopStep(string[] suiteNames);
-
-        void Ex10_MultiplicationTable(int n);
+        IEnumerator As09_MoveToTarget(Transform character, Transform target, float speed);
 
         #endregion
 
-        #region While Loop (ข้อ 11-14)
+        #region Homework
 
-        void Ex11_WhileLoopBasic();
+        #region Level 1: Simple
 
-        void Ex12_WhileLoopN(int n);
+        void Lv01_SetArrayValues();
 
-        void Ex13_WhileLoopStep(string[] suiteNames);
+        void Lv02_InspectArray(string[] items);
 
-        void Ex14_WhileLoopSum(int n);
+        void Lv03_RandomDialogue(string[] npc1Dialogues);
+
+        void Lv04_AttackTarget(int[] enemyHP, int damage, int target);
+
+        void Lv05_MultiplicationTable(int n);
+
+        void Lv06_ForLoopReverse(string[] suiteNames);
+
+        void Lv07_FindHighestScore(int[] scores);
+
+        void Lv08_CalculateTotalScore(int[] scores);
+
+        void Lv09_WhileLoopN(int n);
 
         #endregion
 
-        #region Instantiate & Translate (ข้อ 15-16)
+        #region Level 2: Moderate
 
-        void Ex15_InstantiateEnemies(GameObject Enemy, int[] HpEnemy);
+        void Ex01_HealTarget(int[] enemyHP, int heal, int target, int maxHP);
 
-        void Ex16_MoveToTarget(Transform positionToMove, float speed);
+        void Ex02_DialogueInteraction(string[] npc1Dialogues, string[] npc2Dialogues);
 
+        void Ex03_SpawnEnemiesWithSpacing(GameObject Enemy, int count, float spacing);
+
+        void Ex04_FindItemOrBreak(string[] inventory, string targetItem);
+
+        void Ex05_SkipDefeatedEnemies(int[] enemyHPs);
+
+        void Ex06_WhileLoopStep(string[] suiteNames);
+
+        void Ex07_WhileLoopSum(int n);
+
+        #endregion
         #endregion
     }
 }

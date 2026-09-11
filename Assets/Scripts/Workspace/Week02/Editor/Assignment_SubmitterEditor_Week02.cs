@@ -37,8 +37,7 @@ public class Assignment_SubmitterEditor_Week02 : Editor
         receiver.sectionString = (submitter.section == Assignment_Submitter_Week02.StudentSection.Other) ? submitter.customSection : submitter.section.ToString().Replace("_", " ");
         receiver.weekName = submitter.weekName;
 
-        var prop = typeof(Assignment_Submitter_Week02).GetProperty("googleSheetWebAppURL", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        receiver.googleSheetWebAppURL = (string)prop.GetValue(submitter);
+        receiver.googleSheetWebAppURL = submitter.googleSheetWebAppURL;
 
         var api = ScriptableObject.CreateInstance<TestRunnerApi>();
         api.RegisterCallbacks(receiver);
@@ -65,17 +64,8 @@ public class Assignment_SubmitterEditor_Week02 : Editor
         
         if (GUILayout.Button("ส่งงานเข้า Google Sheet", buttonStyle))
         {
-            if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "รหัสนักศึกษา" || string.IsNullOrEmpty(submitter.studentName))
-            {
-                Debug.LogError("กรุณาใส่ รหัสนักศึกษา และ ชื่อ-นามสกุล ก่อนส่งงาน");
+            if (!submitter.ValidateStudentInfo())
                 return;
-            }
-
-            if (submitter.section == Assignment_Submitter_Week02.StudentSection.Other && string.IsNullOrEmpty(submitter.customSection))
-            {
-                Debug.LogError("หากเลือก 'Other' กรุณาระบุ Section ในช่อง Custom Section ด้วยครับ");
-                return;
-            }
 
             Debug.Log("กำลังตรวจคะแนนและส่งงาน...");
 
@@ -83,11 +73,10 @@ public class Assignment_SubmitterEditor_Week02 : Editor
             
             receiver.studentID = submitter.studentID;
             receiver.studentName = submitter.studentName;
-            receiver.sectionString = (submitter.section == Assignment_Submitter_Week02.StudentSection.Other) ? submitter.customSection : submitter.section.ToString().Replace("_", " ");
+            receiver.sectionString = submitter.GetSectionString();
             receiver.weekName = submitter.weekName;
 
-            var prop = typeof(Assignment_Submitter_Week02).GetProperty("googleSheetWebAppURL", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            receiver.googleSheetWebAppURL = (string)prop.GetValue(submitter);
+            receiver.googleSheetWebAppURL = submitter.googleSheetWebAppURL;
 
             var api = ScriptableObject.CreateInstance<TestRunnerApi>();
             api.RegisterCallbacks(receiver);

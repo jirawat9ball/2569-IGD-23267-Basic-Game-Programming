@@ -47,20 +47,7 @@ public class Assignment_SubmitterEditor_Week03 : Editor
             return false;
         }
 
-        if (string.IsNullOrEmpty(submitter.studentID) || submitter.studentID == "รหัสนักศึกษา"
-            || string.IsNullOrEmpty(submitter.studentName) || submitter.studentName == "ชื่อ-นามสกุล")
-        {
-            Debug.LogError("❌ กรุณากรอก รหัสนักศึกษา และ ชื่อ-นามสกุล ให้เรียบร้อยก่อนส่งงาน");
-            return false;
-        }
-
-        if (submitter.section == Assignment_Submitter_Week03.StudentSection.Other && string.IsNullOrEmpty(submitter.customSection))
-        {
-            Debug.LogError("❌ คุณเลือกกลุ่มเรียนเป็น 'Other' กรุณาระบุกลุ่มเรียนในช่อง Custom Section");
-            return false;
-        }
-
-        return true;
+        return submitter.ValidateStudentInfo();
     }
 
     private static void RunTestsAndSubmit(Assignment_Submitter_Week03 submitter)
@@ -72,14 +59,10 @@ public class Assignment_SubmitterEditor_Week03 : Editor
 
         receiver.studentID = submitter.studentID;
         receiver.studentName = submitter.studentName;
-        receiver.sectionString = (submitter.section == Assignment_Submitter_Week03.StudentSection.Other)
-            ? submitter.customSection
-            : submitter.section.ToString().Replace("_", " ");
+        receiver.sectionString = submitter.GetSectionString();
         receiver.weekName = submitter.weekName;
 
-        var prop = typeof(Assignment_Submitter_Week03).GetProperty("googleSheetWebAppURL",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        receiver.googleSheetWebAppURL = (string)prop.GetValue(submitter);
+        receiver.googleSheetWebAppURL = submitter.googleSheetWebAppURL;
 
         var api = ScriptableObject.CreateInstance<TestRunnerApi>();
         api.RegisterCallbacks(receiver);
@@ -87,8 +70,8 @@ public class Assignment_SubmitterEditor_Week03 : Editor
         api.Execute(new ExecutionSettings(new Filter()
         {
             testMode = TestMode.EditMode,
-            assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
-            groupNames = new string[] { submitter.weekName }
+            assemblyNames = new string[] { "Workspace.Editor.Week03", "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
+            groupNames = new string[] { submitter.weekName, "Week03_Loop" }
         }));
     }
 }

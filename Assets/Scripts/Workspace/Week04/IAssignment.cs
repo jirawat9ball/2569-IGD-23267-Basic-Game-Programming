@@ -4,51 +4,63 @@ namespace Week04
 {
     public interface IAssignment
     {
-        #region เรื่องที่ 1: รู้จัก 2D Array (ข้อ 1-3)
+        #region Lecture
 
-        void Ex01_Create2DArray();
+        void As01_Create2DArray();
 
-        void Ex02_ArraySize(int rows, int cols);
+        void As02_ArraySize(int rows, int cols);
 
-        void Ex03_GetSet2DArray();
+        void As03_GetSet2DArray();
 
-        #endregion
+        void As04_CreateWallRow(int columns, GameObject wall);
 
-        #region เรื่องที่ 2: 2D Array กับวัตถุในเกม (ข้อ 4-5)
+        void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles);
 
-        void Ex04_SetItemPosition(Transform item, int itemPosX, int itemPosY);
+        void As06_CreateWall(int columns, int rows, GameObject wall);
 
-        void Ex05_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY);
+        void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY);
 
-        #endregion
+        void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles);
 
-        #region เรื่องที่ 3: วนลูปหาผลรวมในตาราง (ข้อ 6-7)
-
-        void Ex06_SumRow(int[,] matrix, int row);
-
-        void Ex07_SumColumn(int[,] matrix, int col);
+        void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY);
 
         #endregion
 
-        #region เรื่องที่ 4: Nested Loop สร้างรูปแบบและแผนที่ (ข้อ 8-13)
+        #region Homework
 
-        void Ex08_StarPattern(int columns, int rows);
+        #region Level 1: Simple
 
-        void Ex09_RandomFloorMap(int columns, int rows, GameObject[] floorTiles);
+        void Lv01_SumRow(int[,] matrix, int row);
 
-        void Ex10_BuildOuterWall(int columns, int rows, GameObject wall);
+        void Lv02_SumColumn(int[,] matrix, int col);
 
-        void Ex11_RandomFoodItem(int columns, int rows, GameObject[] foodTiles);
+        void Lv03_StarPattern(int columns, int rows);
 
-        void Ex12_TrianglePattern(int size);
+        void Lv04_TrianglePattern(int size);
 
-        void Ex13_MultiplicationTableNested(int fromTable, int toTable);
+        void Lv05_MultiplicationTableNested(int fromTable, int toTable);
+
+        void Lv06_FindMaxInMatrix(int[,] matrix);
+
+        void Lv07_CountTargetValue(int[,] matrix, int target);
+
+        void Lv08_SumAllElements(int[,] matrix);
+
+        void Lv09_InvertedTrianglePattern(int size);
+
+        void Lv10_PrintMainDiagonal(int[,] matrix);
 
         #endregion
 
-        #region เรื่องที่ 5: โปรเจกต์รวม (ข้อ 14)
+        #region Level 2: Moderate
 
-        void Ex14_TicTacToe(int[,] moves);
+        void Ex01_TicTacToe(int[,] moves);
+
+        void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY);
+
+        void Ex03_SpawnChestsInCorners(int columns, int rows, GameObject chestPrefab);
+
+        #endregion
 
         #endregion
     }

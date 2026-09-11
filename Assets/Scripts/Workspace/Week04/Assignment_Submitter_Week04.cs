@@ -1,88 +1,15 @@
 using UnityEngine;
-using UnityEngine.Networking;
+using Workspace.Core;
 
-public class Assignment_Submitter_Week04 : MonoBehaviour
+public class Assignment_Submitter_Week04 : Assignment_Submitter_Base
 {
-    [Header("ข้อมูลนักศึกษา (ห้ามเว้นว่าง)")]
-    public string studentID = "รหัสนักศึกษา";
-    public string studentName = "ชื่อ-นามสกุล";
-
-    public enum StudentSection
+    private void Reset()
     {
-        Sec_001,
-        Sec_101,
-        Sec_002,
-        Sec_102,
-        Sec_003,
-        Sec_103,
-        Other
+        weekName = "Week04";
     }
 
-    [Tooltip("เลือกกลุ่มเรียน")]
-    public StudentSection section = StudentSection.Sec_001;
-
-    [Tooltip("หากเลือก Other ให้ระบุกลุ่มเรียนที่นี่")]
-    public string customSection = "";
-
-    [HideInInspector]
-    public string weekName = "Week04";
-
-    // ซ่อนลิงก์ Web App URL ด้วยการเข้ารหัส Base64 (ใช้ปลายทางเดียวกับ Week 01/02 แต่แยกด้วยฟิลด์ week)
-    private string googleSheetWebAppURL
+    public Assignment_Submitter_Week04()
     {
-        get
-        {
-            string _p1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2";
-            string _p2 = "xlLmNvbS9tYWNyb3Mvcy9BS2Z5";
-            string _p3 = "Y2J5VUtWN3BoQUpjbTA0NHA5Z0";
-            string _p4 = "w1MFgxVFFyOFhndlFhS3owQVVi";
-            string _p5 = "UHl6ejRmamxrc1JTS0E0Z2w5TF";
-            string _p6 = "JzcWZhV3hwTlIvZXhlYw==";
-            byte[] _d = System.Convert.FromBase64String(_p1 + _p2 + _p3 + _p4 + _p5 + _p6);
-            return System.Text.Encoding.UTF8.GetString(_d);
-        }
-    }
-
-    /// <summary>
-    /// ถูกเรียกจาก Editor Script หลังจาก NUnit Test Runner รันเสร็จและได้คะแนนแล้ว
-    /// </summary>
-    public void SendScoreToGoogleSheet(string score, string maxScore)
-    {
-        Debug.Log($"⏳ กำลังส่งงาน Week 04... (คะแนนที่ได้ {score}/{maxScore})");
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.CallbackFunction updateCallback = null;
-
-        WWWForm form = new WWWForm();
-        form.AddField("studentId", studentID);
-        form.AddField("studentName", studentName);
-
-        string sectionString = (section == StudentSection.Other) ? customSection : section.ToString().Replace("_", " ");
-        form.AddField("section", sectionString);
-        form.AddField("score", score);
-        form.AddField("maxScore", maxScore);
-        form.AddField("week", weekName);
-
-        UnityWebRequest www = UnityWebRequest.Post(googleSheetWebAppURL, form);
-        www.SendWebRequest();
-
-        updateCallback = () =>
-        {
-            if (www.isDone)
-            {
-                if (www.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogError("❌ การส่งข้อมูลล้มเหลว: " + www.error);
-                }
-                else
-                {
-                    Debug.Log("<color=green>✅ ส่งงานเรียบร้อยแล้ว!</color> ข้อมูลถูกบันทึกลง Google Sheet แท็บ Week04");
-                }
-                www.Dispose();
-                UnityEditor.EditorApplication.update -= updateCallback;
-            }
-        };
-        UnityEditor.EditorApplication.update += updateCallback;
-#endif
+        weekName = "Week04";
     }
 }
