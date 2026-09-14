@@ -23,6 +23,9 @@ namespace Week04
         public int ItemPosY = 0;
 
         [Header("As08 Variables")]
+        public GameObject[] foodTiles;
+
+        [Header("As09 Variables")]
         public GameObject[] Items;
         public int foodPosX = 1;
         public int foodPosY = 0;
@@ -38,9 +41,13 @@ namespace Week04
         [Header("Lv03 Variables")]
         public int starColumns = 5;
         public int starRows = 3;
+        public GameObject villageTile;
 
-        [Header("Lv04 & Lv05 Variables")]
+        [Header("Lv04 & Lv09 Variables")]
         public int size = 5;
+        public GameObject riverTile;
+
+        [Header("Lv05 Variables")]
         public int fromTable = 2;
         public int toTable = 4;
 
@@ -51,14 +58,11 @@ namespace Week04
 
         #region Level 2 Variables
 
-        [Header("Ex01 Variables")]
-        public GameObject[] foodTiles;
-
-        [Header("Ex03 Variables")]
+        [Header("Ex02 Variables")]
         public int targetX = 1;
         public int targetY = 1;
 
-        [Header("Ex04 Variables")]
+        [Header("Ex03 Variables")]
         public GameObject chestPrefab;
 
         #endregion
@@ -66,31 +70,81 @@ namespace Week04
         private const string LineSeparator = "============================";
         private const string BoardSeparator = "-------------";
 
+        /// <summary>
+        /// เช็คว่าช่อง Prefab ใน Inspector ใส่มาครบหรือยัง ถ้ายังไม่ครบจะบอกเหตุผลใน Console
+        /// (ไม่ใช่ส่วนของโจทย์ แค่กันไม่ให้ Play แล้ว error ตอนยังตั้งค่าไม่เสร็จ)
+        /// </summary>
+        private static bool HasPrefabs(GameObject[] prefabs, string fieldName, string methodName)
+        {
+            if (prefabs == null || prefabs.Length == 0)
+            {
+                Debug.Log("ข้าม " + methodName + " เพราะช่อง '" + fieldName + "' ใน Inspector ยังว่างอยู่");
+                return false;
+            }
+
+            for (int i = 0; i < prefabs.Length; i++)
+            {
+                if (prefabs[i] == null)
+                {
+                    Debug.Log("ข้าม " + methodName + " เพราะช่อง '" + fieldName + "' Element " + i +
+                              " ยังว่างอยู่ — ลด Size เหลือ " + i + " หรือใส่ Prefab ให้ครบ");
+                    return false;
+                }
+            }
+            return true;
+        }
+
         void Start()
         {
             As01_Create2DArray();
             As02_ArraySize(rows, cols);
             As03_GetSet2DArray();
             As04_CreateWallRow(columns, wall);
-            As05_CreateFloor(columns, mapRows, floorTiles);
-            As06_CreateWall(columns, mapRows, wall);
+
+            if (HasPrefabs(floorTiles, "Floor Tiles", "As05_CreateFloor"))
+            {
+                As05_CreateFloor(columns, mapRows, floorTiles);
+            }
+
+            if (wall != null)
+            {
+                As06_CreateWall(columns, mapRows, wall);
+            }
+            else
+            {
+                Debug.Log("ข้าม As06_CreateWall เพราะช่อง 'Wall' ใน Inspector ยังว่างอยู่");
+            }
+
             if (Item != null)
             {
                 As07_SetItemPosition(Item, ItemPosX, ItemPosY);
             }
-            As08_RandomFoodItem(columns, mapRows, foodTiles);
-            As09_CreateItemFromArray(Items, foodPosX, foodPosY);
+            else
+            {
+                Debug.Log("ข้าม As07_SetItemPosition เพราะช่อง 'Item' ยังว่างอยู่ " +
+                          "— ช่องนี้ต้องลาก GameObject ที่อยู่ในซีนมาใส่ ไม่ใช่ Prefab");
+            }
+
+            if (HasPrefabs(foodTiles, "Food Tiles", "As08_RandomFoodItem"))
+            {
+                As08_RandomFoodItem(columns, mapRows, foodTiles);
+            }
+
+            if (HasPrefabs(Items, "Items", "As09_CreateItemFromArray"))
+            {
+                As09_CreateItemFromArray(Items, foodPosX, foodPosY);
+            }
 
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
             Lv01_SumRow(sampleMatrix, row);
             Lv02_SumColumn(sampleMatrix, col);
-            Lv03_StarPattern(starColumns, starRows);
-            Lv04_TrianglePattern(size);
+            Lv03_BuildVillage(starColumns, starRows, villageTile);
+            Lv04_BuildRiver(size, riverTile);
             Lv05_MultiplicationTableNested(fromTable, toTable);
             Lv06_FindMaxInMatrix(sampleMatrix);
             Lv07_CountTargetValue(sampleMatrix, targetValue);
             Lv08_SumAllElements(sampleMatrix);
-            Lv09_InvertedTrianglePattern(size);
+            Lv09_BuildInvertedRiver(size, riverTile);
             Lv10_PrintMainDiagonal(sampleMatrix);
 
             int[,] moves = new int[,] { { 1, 0, 2 }, { 0, 1, 0 }, { 2, 0, 1 } };
@@ -279,26 +333,42 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv03_StarPattern(int columns, int rows)
+        public void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
         {
+            // Guideline:
+            // 1. ใช้ Nested Loop วนทุกช่องของพื้นที่หมู่บ้าน (กว้าง columns สูง rows)
+            // 2. แต่ละช่องให้ Instantiate villageTile ลงไปที่ตำแหน่ง (x, y)
+            // 3. เก็บสัญลักษณ์ * ของแถวนั้นไว้ แล้วพิมพ์ผังออกมาบรรทัดละแถว
             for (int y = 0; y < rows; y++)
             {
                 string line = "";
                 for (int x = 0; x < columns; x++)
                 {
+                    if (villageTile != null)
+                    {
+                        Instantiate(villageTile, new Vector2(x, y), Quaternion.identity);
+                    }
                     line += "*";
                 }
                 Debug.Log(line);
             }
         }
 
-        public void Lv04_TrianglePattern(int size)
+        public void Lv04_BuildRiver(int size, GameObject riverTile)
         {
+            // Guideline:
+            // 1. แม่น้ำเป็นรูปสามเหลี่ยม แถวล่างสุดมี 1 ช่อง แถวถัดขึ้นไปเพิ่มทีละ 1 จนถึง size
+            // 2. แถวที่ r จะมี r ช่อง ให้ Instantiate riverTile ที่ตำแหน่ง (i, r - 1)
+            // 3. พิมพ์ผังออกมาบรรทัดละแถว
             for (int r = 1; r <= size; r++)
             {
                 string line = "";
                 for (int i = 0; i < r; i++)
                 {
+                    if (riverTile != null)
+                    {
+                        Instantiate(riverTile, new Vector2(i, r - 1), Quaternion.identity);
+                    }
                     line += "*";
                 }
                 Debug.Log(line);
@@ -377,21 +447,26 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv09_InvertedTrianglePattern(int size)
+        public void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
         {
-            // TODO: วาดสามเหลี่ยมดาวกลับด้าน (size แถว โดยแถวแรกลดจาก size ตัวลงมาถึง 1 ตัว)
-            // ตัวอย่าง size = 3:
-            // ***
-            // **
-            // *
+            // Guideline:
+            // 1. เหมือนข้อ Lv04 แต่กลับหัว แถวแรกกว้าง size แล้วลดลงทีละ 1 จนเหลือ 1
+            // 2. ใช้ตัวแปร y นับแถวที่วางไปแล้ว เพื่อใช้เป็นตำแหน่งแกน Y
+            // 3. พิมพ์ผังออกมาบรรทัดละแถว
+            int y = 0;
             for (int r = size; r >= 1; r--)
             {
                 string line = "";
                 for (int i = 0; i < r; i++)
                 {
+                    if (riverTile != null)
+                    {
+                        Instantiate(riverTile, new Vector2(i, y), Quaternion.identity);
+                    }
                     line += "*";
                 }
                 Debug.Log(line);
+                y++;
             }
         }
 
@@ -419,6 +494,15 @@ namespace Week04
 
         public void Ex01_TicTacToe(int[,] moves)
         {
+            // Guideline:
+            // 1. สร้างกระดาน char[3,3] เติมช่องว่าง ' ' ให้ครบทุกช่อง
+            // 2. ไล่การเดินใน moves ทีละตา (แต่ละแถวคือ { แถว, คอลัมน์ }) เริ่มที่ผู้เล่น 'X'
+            // 3. แต่ละตา: พิมพ์ "Player <X/O>:" แล้วพิมพ์พิกัดที่เดิน
+            //    - ถ้าช่องนั้นมีคนลงแล้ว พิมพ์ "cannot set <แถว> <คอลัมน์>" แล้วข้ามไปตาถัดไป
+            //    - ถ้าลงได้ ให้ใส่สัญลักษณ์ลงกระดาน แล้วพิมพ์กระดานออกมา
+            // 4. หลังลงทุกครั้ง ให้เรียก Ex01_CheckWinner(board) เพื่อดูผล
+            //    'X'/'O' -> พิมพ์ "<ผู้ชนะ> wins!" แล้วจบเกม · 'D' -> พิมพ์ "Draw!" แล้วจบเกม
+            // 5. ถ้ายังไม่จบ ให้สลับตาเป็นอีกฝ่าย
             char[,] board = new char[3, 3];
             for (int r = 0; r < 3; r++)
             {
@@ -429,7 +513,6 @@ namespace Week04
             }
 
             char current = 'X';
-            int placed = 0;
 
             for (int m = 0; m < moves.GetLength(0); m++)
             {
@@ -446,16 +529,15 @@ namespace Week04
                 }
 
                 board[moveRow, moveCol] = current;
-                placed++;
                 PrintBoard(board);
 
-                if (HasWinner(board, current))
+                char result = Ex01_CheckWinner(board);
+                if (result == 'X' || result == 'O')
                 {
-                    Debug.Log(current + " wins!");
+                    Debug.Log(result + " wins!");
                     return;
                 }
-
-                if (placed == 9)
+                if (result == 'D')
                 {
                     Debug.Log("Draw!");
                     return;
@@ -463,6 +545,49 @@ namespace Week04
 
                 current = (current == 'X') ? 'O' : 'X';
             }
+        }
+
+        public char Ex01_CheckWinner(char[,] board)
+        {
+            // Guideline:
+            // 1. เช็ค 8 แนวที่ชนะได้ — แนวนอน 3 แนว, แนวตั้ง 3 แนว, แนวทแยง 2 แนว
+            //    ช่องว่าง ' ' ไม่นับว่าชนะ ต้องเช็คก่อนว่าช่องแรกไม่ใช่ช่องว่าง
+            // 2. ถ้าเจอผู้ชนะ ให้ return สัญลักษณ์ของคนนั้น ('X' หรือ 'O')
+            // 3. ถ้ายังไม่มีใครชนะ แต่กระดานเต็มหมดแล้ว ให้ return 'D' (Draw = เสมอ)
+            // 4. ถ้ายังมีช่องว่างเหลือ แปลว่าเกมยังไม่จบ ให้ return ' '
+            for (int i = 0; i < 3; i++)
+            {
+                if (board[i, 0] != ' ' && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
+                {
+                    return board[i, 0];
+                }
+                if (board[0, i] != ' ' && board[0, i] == board[1, i] && board[1, i] == board[2, i])
+                {
+                    return board[0, i];
+                }
+            }
+
+            if (board[0, 0] != ' ' && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
+            {
+                return board[0, 0];
+            }
+            if (board[0, 2] != ' ' && board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
+            {
+                return board[0, 2];
+            }
+
+            for (int r = 0; r < 3; r++)
+            {
+                for (int c = 0; c < 3; c++)
+                {
+                    if (board[r, c] == ' ')
+                    {
+                        return ' ';
+                    }
+                }
+            }
+
+            return 'D';
         }
 
         private void PrintBoard(char[,] board)
@@ -473,60 +598,55 @@ namespace Week04
                 Debug.Log("| " + board[r, 0] + " | " + board[r, 1] + " | " + board[r, 2] + " |");
             }
         }
-
-        private bool HasWinner(char[,] board, char player)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (board[i, 0] == player && board[i, 1] == player && board[i, 2] == player)
-                {
-                    return true;
-                }
-                if (board[0, i] == player && board[1, i] == player && board[2, i] == player)
-                {
-                    return true;
-                }
-            }
-
-            if (board[0, 0] == player && board[1, 1] == player && board[2, 2] == player)
-            {
-                return true;
-            }
-            if (board[0, 2] == player && board[1, 1] == player && board[2, 0] == player)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY)
         {
+            // Guideline:
+            // 1. พิมพ์หัวข้อว่ากำลังตรวจรอบตำแหน่งไหน: "Check around (x, y)"
+            // 2. ตรวจ 4 ทิศรอบตัว ตามลำดับ Up, Down, Left, Right
+            //    Up = y+1, Down = y-1, Left = x-1, Right = x+1
+            // 3. แต่ละทิศพิมพ์ "<ทิศ> (x, y) : <ผล>" โดยผลมี 3 แบบ
+            //    - ออกนอกแผนที่        -> Out of Bounds
+            //    - ค่าในช่องเป็น 0     -> Walkable
+            //    - ค่าในช่องไม่ใช่ 0   -> Blocked
             int rows = map.GetLength(0);
             int cols = map.GetLength(1);
 
-            if (targetX < 0 || targetX >= cols || targetY < 0 || targetY >= rows)
-            {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Out of Bounds");
-                return;
-            }
+            string[] directionNames = { "Up", "Down", "Left", "Right" };
+            int[] offsetX = { 0, 0, -1, 1 };
+            int[] offsetY = { 1, -1, 0, 0 };
 
-            if (map[targetY, targetX] == 0)
+            Debug.Log("Check around (" + targetX + ", " + targetY + ")");
+
+            for (int i = 0; i < directionNames.Length; i++)
             {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Walkable");
-            }
-            else if (map[targetY, targetX] == 1)
-            {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Blocked by Wall");
-            }
-            else
-            {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Blocked");
+                int nextX = targetX + offsetX[i];
+                int nextY = targetY + offsetY[i];
+
+                string result;
+                if (nextX < 0 || nextX >= cols || nextY < 0 || nextY >= rows)
+                {
+                    result = "Out of Bounds";
+                }
+                else if (map[nextY, nextX] == 0)
+                {
+                    result = "Walkable";
+                }
+                else
+                {
+                    result = "Blocked";
+                }
+
+                Debug.Log(directionNames[i] + " (" + nextX + ", " + nextY + ") : " + result);
             }
         }
 
         public void Ex03_SpawnChestsInCorners(int columns, int rows, GameObject chestPrefab)
         {
+            // Guideline:
+            // 1. หีบสมบัติวางที่ 4 มุมของแผนที่ คือ (0,0), (columns-1,0), (0,rows-1), (columns-1,rows-1)
+            // 2. Instantiate chestPrefab ที่ทุกมุม
+            // 3. พิมพ์ผังแผนที่ออกมา มุมที่มีหีบใช้ C ช่องอื่นใช้ . (พิมพ์จากแถวบนลงล่าง)
+            // 4. ปิดท้ายด้วยข้อความ "Spawned 4 chests at corners"
             Vector2[] corners = new Vector2[]
             {
                 new Vector2(0, 0),
@@ -541,6 +661,17 @@ namespace Week04
                 {
                     Instantiate(chestPrefab, corners[i], Quaternion.identity);
                 }
+            }
+
+            for (int y = rows - 1; y >= 0; y--)
+            {
+                string line = "";
+                for (int x = 0; x < columns; x++)
+                {
+                    bool isCorner = (x == 0 || x == columns - 1) && (y == 0 || y == rows - 1);
+                    line += isCorner ? "C" : ".";
+                }
+                Debug.Log(line);
             }
 
             Debug.Log("Spawned 4 chests at corners");

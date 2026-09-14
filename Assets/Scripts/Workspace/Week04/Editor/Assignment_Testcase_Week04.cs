@@ -408,36 +408,58 @@ namespace Week04_Array2D
         [TestCase(1, 1)]
         [TestCase(5, 2)]
         [TestCase(7, 7)]
-        public void Lv03_StarPattern(int columns, int rows)
+        public void Lv03_BuildVillage(int columns, int rows)
         {
-            assignment.Lv03_StarPattern(columns, rows);
+            var tile = new GameObject("VillageTile");
+
+            assignment.Lv03_BuildVillage(columns, rows, tile);
 
             var sb = new StringBuilder();
             for (int y = 0; y < rows; y++)
             {
                 sb.AppendLine(new string('*', columns));
             }
-
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv03_StarPattern", minLoops: 2);
+
+            Assert.AreEqual(columns * rows, CountClones(), "ต้องสร้างบ้านให้ครบทุกช่องของหมู่บ้าน");
+            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                if (go == null || !go.name.Contains("(Clone)")) continue;
+                float x = go.transform.position.x;
+                float y = go.transform.position.y;
+                Assert.IsTrue(x >= 0 && x <= columns - 1, $"บ้านอยู่นอกพื้นที่ (x = {x})");
+                Assert.IsTrue(y >= 0 && y <= rows - 1, $"บ้านอยู่นอกพื้นที่ (y = {y})");
+            }
+
+            Object.DestroyImmediate(tile);
+            DestroyAllClones();
+            AssertUsesRealLoop("Lv03_BuildVillage", minLoops: 2);
+            AssertBodyContains("Lv03_BuildVillage", "Instantiate", "ต้อง Instantiate บ้านลงในฉากจริง");
         }
 
         [TestCase(5)]
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(8)]
-        public void Lv04_TrianglePattern(int size)
+        public void Lv04_BuildRiver(int size)
         {
-            assignment.Lv04_TrianglePattern(size);
+            var tile = new GameObject("RiverTile");
+
+            assignment.Lv04_BuildRiver(size, tile);
 
             var sb = new StringBuilder();
             for (int r = 1; r <= size; r++)
             {
                 sb.AppendLine(new string('*', r));
             }
-
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv04_TrianglePattern", minLoops: 2);
+
+            Assert.AreEqual(size * (size + 1) / 2, CountClones(), "จำนวนช่องแม่น้ำต้องเท่ากับพื้นที่สามเหลี่ยม");
+
+            Object.DestroyImmediate(tile);
+            DestroyAllClones();
+            AssertUsesRealLoop("Lv04_BuildRiver", minLoops: 2);
+            AssertBodyContains("Lv04_BuildRiver", "Instantiate", "ต้อง Instantiate แม่น้ำลงในฉากจริง");
         }
 
         [TestCase(2, 4)]
@@ -522,18 +544,25 @@ namespace Week04_Array2D
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(5)]
-        public void Lv09_InvertedTrianglePattern(int size)
+        public void Lv09_BuildInvertedRiver(int size)
         {
-            assignment.Lv09_InvertedTrianglePattern(size);
+            var tile = new GameObject("RiverTile");
+
+            assignment.Lv09_BuildInvertedRiver(size, tile);
 
             var sb = new StringBuilder();
             for (int r = size; r >= 1; r--)
             {
                 sb.AppendLine(new string('*', r));
             }
-
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv09_InvertedTrianglePattern", minLoops: 2);
+
+            Assert.AreEqual(size * (size + 1) / 2, CountClones(), "จำนวนช่องแม่น้ำต้องเท่ากับพื้นที่สามเหลี่ยม");
+
+            Object.DestroyImmediate(tile);
+            DestroyAllClones();
+            AssertUsesRealLoop("Lv09_BuildInvertedRiver", minLoops: 2);
+            AssertBodyContains("Lv09_BuildInvertedRiver", "Instantiate", "ต้อง Instantiate แม่น้ำลงในฉากจริง");
         }
 
         static readonly object[] DiagonalCases =
@@ -631,6 +660,71 @@ namespace Week04_Array2D
             return sb.ToString();
         }
 
+
+        static char[,] MakeBoard(string r0, string r1, string r2)
+        {
+            string[] rowsText = { r0, r1, r2 };
+            var b = new char[3, 3];
+            for (int r = 0; r < 3; r++)
+                for (int c = 0; c < 3; c++)
+                    b[r, c] = rowsText[r][c];
+            return b;
+        }
+
+        static readonly object[] WinnerCases =
+        {
+            // แนวนอน
+            new object[] { "XXX", "OO ", "   ", 'X' },
+            new object[] { "OO ", "XXX", "   ", 'X' },
+            new object[] { "XX ", "   ", "OOO", 'O' },
+            // แนวตั้ง
+            new object[] { "X O", "X O", "X  ", 'X' },
+            new object[] { "OX ", "OX ", " X ", 'X' },
+            new object[] { "XXO", "  O", " XO", 'O' },
+            // แนวทแยง
+            new object[] { "X O", "OX ", "  X", 'X' },
+            new object[] { "XXO", " O ", "O  ", 'O' },
+            // ยังเล่นต่อได้
+            new object[] { "X  ", " O ", "   ", ' ' },
+            new object[] { "XOX", "XO ", "O X", ' ' },
+            new object[] { "   ", "   ", "   ", ' ' },
+            // เสมอ (เต็มกระดาน ไม่มีใครชนะ)
+            new object[] { "XOX", "XXO", "OXO", 'D' },
+            new object[] { "OXO", "XXO", "XOX", 'D' },
+        };
+
+        [TestCaseSource(nameof(WinnerCases))]
+        public void Ex01_CheckWinner(string r0, string r1, string r2, char expected)
+        {
+            var board = MakeBoard(r0, r1, r2);
+
+            char actual = assignment.Ex01_CheckWinner(board);
+
+            Assert.AreEqual(expected, actual,
+                "board [" + r0 + "][" + r1 + "][" + r2 + "] expected '" + expected + "' but got '" + actual + "'");
+        }
+
+        [Test]
+        public void Ex01_CheckWinner_DoesNotTreatEmptyLineAsWin()
+        {
+            var board = MakeBoard("   ", "   ", "   ");
+            Assert.AreEqual(' ', assignment.Ex01_CheckWinner(board),
+                "กระดานว่างทั้งหมดต้องไม่นับว่ามีผู้ชนะ (ช่องว่าง 3 ช่องเรียงกันไม่ใช่การชนะ)");
+        }
+
+        [Test]
+        public void Ex01_CheckWinner_DoesNotModifyBoard()
+        {
+            var board = MakeBoard("XOX", "XXO", "OXO");
+            var copy = MakeBoard("XOX", "XXO", "OXO");
+
+            assignment.Ex01_CheckWinner(board);
+
+            for (int r = 0; r < 3; r++)
+                for (int c = 0; c < 3; c++)
+                    Assert.AreEqual(copy[r, c], board[r, c], "Ex01_CheckWinner ต้องไม่แก้ค่าในกระดาน");
+        }
+
         private static bool HasWinner(char[,] board, char p)
         {
             for (int i = 0; i < 3; i++)
@@ -651,20 +745,37 @@ namespace Week04_Array2D
             { 1, 1, 1, 1 }
         };
 
-        [TestCase(1, 1, "Position (1, 1) is Walkable")]
-        [TestCase(2, 1, "Position (2, 1) is Walkable")]
-        [TestCase(0, 0, "Position (0, 0) is Blocked by Wall")]
-        [TestCase(3, 2, "Position (3, 2) is Blocked by Wall")]
-        [TestCase(1, 2, "Position (1, 2) is Blocked")]
-        [TestCase(-1, 0, "Position (-1, 0) is Out of Bounds")]
-        [TestCase(4, 1, "Position (4, 1) is Out of Bounds")]
-        [TestCase(1, -1, "Position (1, -1) is Out of Bounds")]
-        [TestCase(1, 4, "Position (1, 4) is Out of Bounds")]
-        public void Ex02_CheckWalkableTile(int targetX, int targetY, string expectedOutput)
+        [TestCase(1, 1)]
+        [TestCase(2, 1)]
+        [TestCase(1, 2)]
+        [TestCase(0, 0)]
+        [TestCase(3, 3)]
+        [TestCase(2, 2)]
+        public void Ex02_CheckWalkableTile(int targetX, int targetY)
         {
             assignment.Ex02_CheckWalkableTile(SampleMap, targetX, targetY);
 
-            TestUtils.AssertMultilineEqual(expectedOutput, SimpleDebugConsole.GetOutput());
+            int rows = SampleMap.GetLength(0);
+            int cols = SampleMap.GetLength(1);
+            string[] names = { "Up", "Down", "Left", "Right" };
+            int[] dx = { 0, 0, -1, 1 };
+            int[] dy = { 1, -1, 0, 0 };
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Check around ({targetX}, {targetY})");
+            for (int i = 0; i < names.Length; i++)
+            {
+                int nx = targetX + dx[i];
+                int ny = targetY + dy[i];
+                string result;
+                if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) result = "Out of Bounds";
+                else if (SampleMap[ny, nx] == 0) result = "Walkable";
+                else result = "Blocked";
+                sb.AppendLine($"{names[i]} ({nx}, {ny}) : {result}");
+            }
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("Ex02_CheckWalkableTile");
         }
 
         [TestCase(5, 5)]
@@ -676,7 +787,19 @@ namespace Week04_Array2D
 
             assignment.Ex03_SpawnChestsInCorners(columns, rows, chest);
 
-            TestUtils.AssertMultilineEqual("Spawned 4 chests at corners", SimpleDebugConsole.GetOutput());
+            var expected = new StringBuilder();
+            for (int y = rows - 1; y >= 0; y--)
+            {
+                var line = new StringBuilder();
+                for (int x = 0; x < columns; x++)
+                {
+                    bool isCorner = (x == 0 || x == columns - 1) && (y == 0 || y == rows - 1);
+                    line.Append(isCorner ? 'C' : '.');
+                }
+                expected.AppendLine(line.ToString());
+            }
+            expected.AppendLine("Spawned 4 chests at corners");
+            TestUtils.AssertMultilineEqual(expected.ToString(), SimpleDebugConsole.GetOutput());
             Assert.AreEqual(4, CountClones(), "ต้อง Instantiate หีบสมบัติทั้ง 4 มุม");
 
             var clones = new System.Collections.Generic.List<Vector2>();

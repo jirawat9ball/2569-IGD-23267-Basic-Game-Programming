@@ -326,19 +326,21 @@ void Lv02_SumColumn(int[,] matrix, int col)
 
 ---
 
-## Lv03. วาดสี่เหลี่ยมด้วยดาว
+## Lv03. สร้างหมู่บ้านรูปสี่เหลี่ยม
 
-**วัตถุประสงค์:** ฝึก Nested Loop พื้นฐาน ลูปนอกคุมจำนวนบรรทัด ลูปในคุมจำนวนตัวอักษร
+**วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุจริงลงในฉากเป็นพื้นที่สี่เหลี่ยม (หมู่บ้าน) พร้อมพิมพ์ผังออกมาด้วย
 
 **Method Signature:**
 ```csharp
-void Lv03_StarPattern(int columns, int rows)
+void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
 ```
 
 **Logic ที่ต้อง implement:**
-- พิมพ์ดาว `*` ออกมาเป็นสี่เหลี่ยม กว้าง `columns` ตัว สูง `rows` บรรทัด
+- ใช้ Nested Loop วนทุกช่องของพื้นที่ กว้าง `columns` สูง `rows`
+- แต่ละช่องให้ `Instantiate(villageTile, new Vector2(x, y), Quaternion.identity)`
+- เก็บสัญลักษณ์ `*` ของแถวนั้นไว้ แล้วพิมพ์ผังออกมาบรรทัดละแถว
 
-**ผลลัพธ์ที่ต้องได้:** (`columns = 3`, `rows = 4`)
+**ผลลัพธ์ที่ต้องได้:** (`columns = 3`, `rows = 4`) — และในฉากต้องมีบ้านเกิดขึ้น 3 × 4 = 12 หลัง
 ```text
 ***
 ***
@@ -348,19 +350,21 @@ void Lv03_StarPattern(int columns, int rows)
 
 ---
 
-## Lv04. วาดสามเหลี่ยม
+## Lv04. สร้างแม่น้ำรูปสามเหลี่ยม
 
-**วัตถุประสงค์:** ฝึก Nested Loop ที่ลูปในขึ้นกับค่าของลูปนอก
+**วัตถุประสงค์:** ใช้ Nested Loop ที่ลูปในขึ้นกับลูปนอก เพื่อวางพื้นที่แม่น้ำรูปสามเหลี่ยมลงในฉาก
 
 **Method Signature:**
 ```csharp
-void Lv04_TrianglePattern(int size)
+void Lv04_BuildRiver(int size, GameObject riverTile)
 ```
 
 **Logic ที่ต้อง implement:**
-- บรรทัดที่ 1 พิมพ์ดาว 1 ตัว บรรทัดที่ 2 พิมพ์ 2 ตัว ไปเรื่อย ๆ จนถึงบรรทัดที่ `size`
+- แถวที่ `r` (เริ่มจาก 1 ถึง `size`) จะมีช่องแม่น้ำ `r` ช่อง
+- แต่ละช่องให้ `Instantiate(riverTile, new Vector2(i, r - 1), Quaternion.identity)`
+- พิมพ์ผังออกมาบรรทัดละแถว
 
-**ผลลัพธ์ที่ต้องได้:** (`size = 5`)
+**ผลลัพธ์ที่ต้องได้:** (`size = 5`) — และในฉากต้องมีช่องแม่น้ำ 1+2+3+4+5 = 15 ช่อง
 ```text
 *
 **
@@ -462,21 +466,21 @@ void Lv08_SumAllElements(int[,] matrix)
 
 ---
 
-## Lv09. วาดสามเหลี่ยมดาวกลับด้าน
+## Lv09. สร้างแม่น้ำสามเหลี่ยมกลับด้าน
 
-**วัตถุประสงค์:** ฝึกการควบคุม Nested Loop โดยให้จำนวนรอบของลูปในลดลงตามแถว
+**วัตถุประสงค์:** ฝึกควบคุม Nested Loop ที่จำนวนรอบของลูปในลดลงตามแถว พร้อมวางวัตถุลงฉาก
 
 **Method Signature:**
 ```csharp
-void Lv09_InvertedTrianglePattern(int size)
+void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
 ```
 
 **Logic ที่ต้อง implement:**
-- วนแถว `r` จาก `size` ถอยหลังลงมาจนถึง `1`
-- ในแต่ละแถว ให้พิมพ์ดาว `*` จำนวน `r` ตัว
-- พิมพ์ผลลัพธ์ของแต่ละแถวด้วย `Debug.Log()`
+- วนแถว `r` จาก `size` ถอยหลังลงมาจนถึง `1` แต่ละแถวมีช่องแม่น้ำ `r` ช่อง
+- ใช้ตัวแปร `y` นับแถวที่วางไปแล้ว เพื่อใช้เป็นตำแหน่งแกน Y ของ `Instantiate`
+- พิมพ์ผังออกมาบรรทัดละแถว
 
-**ผลลัพธ์ที่ต้องได้:** (`size = 4`)
+**ผลลัพธ์ที่ต้องได้:** (`size = 4`) — และในฉากต้องมีช่องแม่น้ำ 4+3+2+1 = 10 ช่อง
 ```text
 ****
 ***
@@ -546,9 +550,43 @@ Player X:
 
 ---
 
-## Ex02. ตรวจสอบพื้นที่เดินได้ในตารางแผนที่
 
-**วัตถุประสงค์:** ตรวจสอบเงื่อนไขตำแหน่งของตัวละคร (Tile Collision Check) และป้องกันการเดินออกนอกแผนที่
+### เพิ่มเติม: เมธอดตัดสินผู้ชนะ
+
+**Method Signature:**
+```csharp
+char Ex01_CheckWinner(char[,] board)
+```
+
+**Logic ที่ต้อง implement:**
+- เช็ค **8 แนวที่ชนะได้** — แนวนอน 3 แนว, แนวตั้ง 3 แนว, แนวทแยง 2 แนว
+  - ระวัง: ช่องว่าง `' '` 3 ช่องเรียงกัน **ไม่นับว่าชนะ** ต้องเช็คก่อนว่าช่องแรกไม่ใช่ช่องว่าง
+- ถ้าเจอผู้ชนะ → `return` สัญลักษณ์ของคนนั้น (`'X'` หรือ `'O'`)
+- ถ้ายังไม่มีใครชนะ แต่กระดานเต็มหมดแล้ว → `return 'D'` (Draw = เสมอ)
+- ถ้ายังมีช่องว่างเหลือ แปลว่าเกมยังไม่จบ → `return ' '`
+
+> เมธอดนี้ต้อง **ไม่แก้ค่าในกระดาน** แค่ดูแล้วตอบผลกลับไป
+
+**ตัวอย่าง:**
+
+| กระดาน | ผลที่ return |
+|---|---|
+| `XXX` / `OO ` / `   ` | `'X'` (ชนะแนวนอน) |
+| `X O` / `X O` / `X  ` | `'X'` (ชนะแนวตั้ง) |
+| `XXO` / ` O ` / `O  ` | `'O'` (ชนะแนวทแยง) |
+| `XOX` / `XXO` / `OXO` | `'D'` (เต็มกระดาน เสมอ) |
+| `X  ` / ` O ` / `   ` | `' '` (ยังเล่นต่อได้) |
+
+`Ex01_TicTacToe` ให้เรียกใช้เมธอดนี้ในการตัดสินผลแต่ละตา
+
+> 🎮 **ซีนเกม XO:** เมธอด `Ex01_CheckWinner` ที่เขียนนี้ถูกนำไปใช้จริงในซีนที่คลิกเมาส์เล่นได้
+> (`Week04_TicTacToeDemo`) — ถ้าเขียนถูก เกมจะตัดสินผู้ชนะถูก ถ้าเขียนผิด เกมจะตัดสินผิดตามไปด้วย
+
+---
+
+## Ex02. ตรวจสอบว่ารอบตัวเดินไปทางไหนได้บ้าง
+
+**วัตถุประสงค์:** ตรวจ 4 ทิศรอบตัวละครว่าเดินไปได้ไหม (Tile Collision Check) และกันการเดินออกนอกแผนที่
 
 **Method Signature:**
 ```csharp
@@ -556,17 +594,29 @@ void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY)
 ```
 
 **Logic ที่ต้อง implement:**
-- หาจำนวนแถว `rows = map.GetLength(0)` และจำนวนคอลัมน์ `cols = map.GetLength(1)`
-- ตรวจสอบว่าพิกัดหลุดออกนอกตารางหรือไม่ (`targetX < 0 || targetX >= cols || targetY < 0 || targetY >= rows`):
-  - ถ้าออกนอกขอบเขต → พิมพ์ `Position (<targetX>, <targetY>) is Out of Bounds` แล้ว `return`
-- ถ้าพิกัดอยู่ในแผนที่ (หมายเหตุ: `targetX` คือแกนคอลัมน์, `targetY` คือแกนแถว เข้าถึงด้วย `map[targetY, targetX]`):
-  - ถ้าค่าเป็น `0` → พิมพ์ `Position (<targetX>, <targetY>) is Walkable`
-  - ถ้าค่าเป็น `1` → พิมพ์ `Position (<targetX>, <targetY>) is Blocked by Wall`
-  - ถ้าเป็นค่าอื่น ๆ → พิมพ์ `Position (<targetX>, <targetY>) is Blocked`
+- พิมพ์หัวข้อว่ากำลังตรวจรอบตำแหน่งไหน: `Check around (<x>, <y>)`
+- ตรวจ **4 ทิศรอบตัว** ตามลำดับ **Up → Down → Left → Right**
+  - `Up` = `y + 1` · `Down` = `y - 1` · `Left` = `x - 1` · `Right` = `x + 1`
+- แต่ละทิศพิมพ์ `<ทิศ> (<x>, <y>) : <ผล>` โดยผลมี 3 แบบ
+  - ออกนอกแผนที่ → `Out of Bounds`
+  - ค่าในช่องเป็น `0` → `Walkable`
+  - ค่าในช่องไม่ใช่ `0` → `Blocked`
 
-**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `targetX = 1`, `targetY = 1` ค่าในตารางคือ 0)
+> **หมายเหตุ:** `targetX` คือแกนคอลัมน์ `targetY` คือแกนแถว เข้าถึงด้วย `map[targetY, targetX]`
+
+**ผลลัพธ์ที่ต้องได้:** (แผนที่ตัวอย่างด้านล่าง ตรวจรอบตำแหน่ง `(1, 1)`)
+```csharp
+{ 1, 1, 1, 1 },
+{ 1, 0, 0, 1 },
+{ 1, 2, 0, 1 },
+{ 1, 1, 1, 1 }
+```
 ```text
-Position (1, 1) is Walkable
+Check around (1, 1)
+Up (1, 2) : Blocked
+Down (1, 0) : Blocked
+Left (0, 1) : Blocked
+Right (2, 1) : Walkable
 ```
 
 ---
@@ -587,6 +637,16 @@ void Ex03_SpawnChestsInCorners(int columns, int rows, GameObject chestPrefab)
   - มุมซ้ายบน: `(0, rows - 1)`
   - มุมขวาบน: `(columns - 1, rows - 1)`
 - วนลูปสร้างหีบสมบัติด้วย `Instantiate(chestPrefab, <ตำแหน่ง>, Quaternion.identity)` หาก `chestPrefab != null`
+- พิมพ์ผังแผนที่ออกมา (จากแถวบนลงล่าง) มุมที่มีหีบใช้ `C` ช่องอื่นใช้ `.`
+- ปิดท้ายด้วยข้อความ `Spawned 4 chests at corners`
+
+**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 3`)
+```text
+C...C
+.....
+C...C
+Spawned 4 chests at corners
+```
 - พิมพ์ข้อความยืนยัน: `Spawned 4 chests at corners`
 
 **ผลลัพธ์ที่ต้องได้:**

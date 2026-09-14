@@ -187,26 +187,34 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv03_StarPattern(int columns, int rows)
+        public void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
         {
             for (int y = 0; y < rows; y++)
             {
                 string line = "";
                 for (int x = 0; x < columns; x++)
                 {
+                    if (villageTile != null)
+                    {
+                        Instantiate(villageTile, new Vector2(x, y), Quaternion.identity);
+                    }
                     line += "*";
                 }
                 Debug.Log(line);
             }
         }
 
-        public void Lv04_TrianglePattern(int size)
+        public void Lv04_BuildRiver(int size, GameObject riverTile)
         {
             for (int r = 1; r <= size; r++)
             {
                 string line = "";
                 for (int i = 0; i < r; i++)
                 {
+                    if (riverTile != null)
+                    {
+                        Instantiate(riverTile, new Vector2(i, r - 1), Quaternion.identity);
+                    }
                     line += "*";
                 }
                 Debug.Log(line);
@@ -283,16 +291,22 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv09_InvertedTrianglePattern(int size)
+        public void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
         {
+            int y = 0;
             for (int r = size; r >= 1; r--)
             {
                 string line = "";
                 for (int i = 0; i < r; i++)
                 {
+                    if (riverTile != null)
+                    {
+                        Instantiate(riverTile, new Vector2(i, y), Quaternion.identity);
+                    }
                     line += "*";
                 }
                 Debug.Log(line);
+                y++;
             }
         }
 
@@ -328,7 +342,6 @@ namespace Week04
             }
 
             char current = 'X';
-            int placed = 0;
 
             for (int m = 0; m < moves.GetLength(0); m++)
             {
@@ -345,16 +358,15 @@ namespace Week04
                 }
 
                 board[moveRow, moveCol] = current;
-                placed++;
                 PrintBoard(board);
 
-                if (HasWinner(board, current))
+                char result = Ex01_CheckWinner(board);
+                if (result == 'X' || result == 'O')
                 {
-                    Debug.Log(current + " wins!");
+                    Debug.Log(result + " wins!");
                     return;
                 }
-
-                if (placed == 9)
+                if (result == 'D')
                 {
                     Debug.Log("Draw!");
                     return;
@@ -362,6 +374,43 @@ namespace Week04
 
                 current = (current == 'X') ? 'O' : 'X';
             }
+        }
+
+        public char Ex01_CheckWinner(char[,] board)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (board[i, 0] != ' ' && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
+                {
+                    return board[i, 0];
+                }
+                if (board[0, i] != ' ' && board[0, i] == board[1, i] && board[1, i] == board[2, i])
+                {
+                    return board[0, i];
+                }
+            }
+
+            if (board[0, 0] != ' ' && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
+            {
+                return board[0, 0];
+            }
+            if (board[0, 2] != ' ' && board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
+            {
+                return board[0, 2];
+            }
+
+            for (int r = 0; r < 3; r++)
+            {
+                for (int c = 0; c < 3; c++)
+                {
+                    if (board[r, c] == ' ')
+                    {
+                        return ' ';
+                    }
+                }
+            }
+
+            return 'D';
         }
 
         private void PrintBoard(char[,] board)
@@ -372,55 +421,37 @@ namespace Week04
                 Debug.Log("| " + board[r, 0] + " | " + board[r, 1] + " | " + board[r, 2] + " |");
             }
         }
-
-        private bool HasWinner(char[,] board, char player)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (board[i, 0] == player && board[i, 1] == player && board[i, 2] == player)
-                {
-                    return true;
-                }
-                if (board[0, i] == player && board[1, i] == player && board[2, i] == player)
-                {
-                    return true;
-                }
-            }
-
-            if (board[0, 0] == player && board[1, 1] == player && board[2, 2] == player)
-            {
-                return true;
-            }
-            if (board[0, 2] == player && board[1, 1] == player && board[2, 0] == player)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY)
         {
             int rows = map.GetLength(0);
             int cols = map.GetLength(1);
 
-            if (targetX < 0 || targetX >= cols || targetY < 0 || targetY >= rows)
-            {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Out of Bounds");
-                return;
-            }
+            string[] directionNames = { "Up", "Down", "Left", "Right" };
+            int[] offsetX = { 0, 0, -1, 1 };
+            int[] offsetY = { 1, -1, 0, 0 };
 
-            if (map[targetY, targetX] == 0)
+            Debug.Log("Check around (" + targetX + ", " + targetY + ")");
+
+            for (int i = 0; i < directionNames.Length; i++)
             {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Walkable");
-            }
-            else if (map[targetY, targetX] == 1)
-            {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Blocked by Wall");
-            }
-            else
-            {
-                Debug.Log("Position (" + targetX + ", " + targetY + ") is Blocked");
+                int nextX = targetX + offsetX[i];
+                int nextY = targetY + offsetY[i];
+
+                string result;
+                if (nextX < 0 || nextX >= cols || nextY < 0 || nextY >= rows)
+                {
+                    result = "Out of Bounds";
+                }
+                else if (map[nextY, nextX] == 0)
+                {
+                    result = "Walkable";
+                }
+                else
+                {
+                    result = "Blocked";
+                }
+
+                Debug.Log(directionNames[i] + " (" + nextX + ", " + nextY + ") : " + result);
             }
         }
 
@@ -440,6 +471,17 @@ namespace Week04
                 {
                     Instantiate(chestPrefab, corners[i], Quaternion.identity);
                 }
+            }
+
+            for (int y = rows - 1; y >= 0; y--)
+            {
+                string line = "";
+                for (int x = 0; x < columns; x++)
+                {
+                    bool isCorner = (x == 0 || x == columns - 1) && (y == 0 || y == rows - 1);
+                    line += isCorner ? "C" : ".";
+                }
+                Debug.Log(line);
             }
 
             Debug.Log("Spawned 4 chests at corners");

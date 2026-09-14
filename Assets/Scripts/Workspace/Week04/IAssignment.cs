@@ -34,9 +34,9 @@ namespace Week04
 
         void Lv02_SumColumn(int[,] matrix, int col);
 
-        void Lv03_StarPattern(int columns, int rows);
+        void Lv03_BuildVillage(int columns, int rows, GameObject villageTile);
 
-        void Lv04_TrianglePattern(int size);
+        void Lv04_BuildRiver(int size, GameObject riverTile);
 
         void Lv05_MultiplicationTableNested(int fromTable, int toTable);
 
@@ -46,7 +46,7 @@ namespace Week04
 
         void Lv08_SumAllElements(int[,] matrix);
 
-        void Lv09_InvertedTrianglePattern(int size);
+        void Lv09_BuildInvertedRiver(int size, GameObject riverTile);
 
         void Lv10_PrintMainDiagonal(int[,] matrix);
 
@@ -55,6 +55,8 @@ namespace Week04
         #region Level 2: Moderate
 
         void Ex01_TicTacToe(int[,] moves);
+
+        char Ex01_CheckWinner(char[,] board);
 
         void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY);
 

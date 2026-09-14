@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1196133066
+--- !u!1 &1294224161
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,10 +127,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1196133069}
-  - component: {fileID: 1196133068}
-  - component: {fileID: 1196133067}
-  - component: {fileID: 1196133070}
+  - component: {fileID: 1294224164}
+  - component: {fileID: 1294224163}
+  - component: {fileID: 1294224162}
+  - component: {fileID: 1294224165}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -138,21 +138,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1196133067
+--- !u!81 &1294224162
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196133066}
+  m_GameObject: {fileID: 1294224161}
   m_Enabled: 1
---- !u!20 &1196133068
+--- !u!20 &1294224163
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196133066}
+  m_GameObject: {fileID: 1294224161}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
@@ -197,13 +197,13 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &1196133069
+--- !u!4 &1294224164
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196133066}
+  m_GameObject: {fileID: 1294224161}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
@@ -212,13 +212,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1196133070
+--- !u!114 &1294224165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196133066}
+  m_GameObject: {fileID: 1294224161}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
@@ -256,7 +256,7 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1 &2130644978
+--- !u!1 &1920622426
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -264,38 +264,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2130644979}
-  - component: {fileID: 2130644981}
-  - component: {fileID: 2130644980}
+  - component: {fileID: 1920622429}
+  - component: {fileID: 1920622428}
+  - component: {fileID: 1920622427}
   m_Layer: 0
-  m_Name: Assingment
+  m_Name: XO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2130644979
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130644978}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2130644980
+--- !u!114 &1920622427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130644978}
+  m_GameObject: {fileID: 1920622426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba61c8cb659f21e4dab38afde29fb5ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Workspace::Week04.Demo.Week04_TicTacToeDemo
+  student: {fileID: 1920622428}
+  boardColor: {r: 0.18, g: 0.2, b: 0.24, a: 1}
+  cellColor: {r: 0.92, g: 0.92, b: 0.88, a: 1}
+  xColor: {r: 0.85, g: 0.22, b: 0.22, a: 1}
+  oColor: {r: 0.2, g: 0.45, b: 0.85, a: 1}
+--- !u!114 &1920622428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920622426}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6eb7ed451cc76440a68b30a3f65282a, type: 3}
@@ -305,51 +307,46 @@ MonoBehaviour:
   cols: 5
   columns: 5
   mapRows: 5
-  floorTiles:
-  - {fileID: 4938895029239773948, guid: 15898d66c0cfe9147b1a7ea00631e2cf, type: 3}
-  wall: {fileID: 4384586123403362036, guid: 5b7c82b1d02064f40829116426541f33, type: 3}
+  floorTiles: []
+  wall: {fileID: 0}
   Item: {fileID: 0}
   ItemPosX: 1
   ItemPosY: 0
-  foodTiles:
-  - {fileID: 3994931958034430155, guid: adbf4587b9b9c7946a26047d0c3316c6, type: 3}
-  Items:
-  - {fileID: 5897735330702997142, guid: 53d76e67ccb5b3f45b7b5d503d453f2d, type: 3}
+  Items: []
   foodPosX: 1
   foodPosY: 0
   row: 0
   col: 0
-  starColumns: 3
-  starRows: 2
-  villageTile: {fileID: 4451247651283441546, guid: a1ba90467595c384fac58b2aa11a02d5, type: 3}
-  size: 4
-  riverTile: {fileID: 3361512766818361391, guid: 8dc9e64ec9758234e8b66edec94dcd93, type: 3}
+  starColumns: 5
+  starRows: 3
+  villageTile: {fileID: 0}
+  riverTile: {fileID: 0}
+  size: 5
   fromTable: 2
   toTable: 4
   targetValue: 5
+  foodTiles: []
   targetX: 1
   targetY: 1
-  chestPrefab: {fileID: 6286102635055484034, guid: b6a580cfbafdd3d42ad06f8144b309b7, type: 3}
---- !u!114 &2130644981
-MonoBehaviour:
+  chestPrefab: {fileID: 0}
+--- !u!4 &1920622429
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130644978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 728d8fb4ee9955e4bb66ddff3f43b7da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Workspace::Assignment_Submitter_Week04
-  studentID: 54021037
-  studentName: a
-  section: 0
-  customSection: 
-  weekName: Week04
+  m_GameObject: {fileID: 1920622426}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.3261, y: -0, z: 4.00416}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1196133069}
-  - {fileID: 2130644979}
+  - {fileID: 1294224164}
+  - {fileID: 1920622429}
