@@ -15,7 +15,7 @@ namespace Week04
         public int columns = 5;
         public int mapRows = 5;
         public GameObject[] floorTiles;
-        public GameObject wall;
+        public GameObject[] wall;
 
         [Header("As07 Variables")]
         public Transform Item;
@@ -99,20 +99,19 @@ namespace Week04
             As01_Create2DArray();
             As02_ArraySize(rows, cols);
             As03_GetSet2DArray();
-            As04_CreateWallRow(columns, wall);
+            if (HasPrefabs(wall, "Wall", "As04_CreateWallRow"))
+            {
+                As04_CreateWallRow(columns, wall);
+            }
 
             if (HasPrefabs(floorTiles, "Floor Tiles", "As05_CreateFloor"))
             {
                 As05_CreateFloor(columns, mapRows, floorTiles);
             }
 
-            if (wall != null)
+            if (HasPrefabs(wall, "Wall", "As06_CreateWall"))
             {
                 As06_CreateWall(columns, mapRows, wall);
-            }
-            else
-            {
-                Debug.Log("ข้าม As06_CreateWall เพราะช่อง 'Wall' ใน Inspector ยังว่างอยู่");
             }
 
             if (Item != null)
@@ -231,6 +230,24 @@ namespace Week04
             Debug.Log(line);
         }
 
+        public void As04_CreateWallRow(int columns, GameObject[] walls)
+        {
+            string line = "";
+            for (int x = 0; x < columns; x++)
+            {
+                if (walls != null && walls.Length > 0)
+                {
+                    GameObject tileChoice = walls[Random.Range(0, walls.Length)];
+                    if (tileChoice != null)
+                    {
+                        Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity);
+                    }
+                }
+                line += "*";
+            }
+            Debug.Log(line);
+        }
+
         public void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
         {
             for (int y = 0; y < rows; y++)
@@ -256,6 +273,34 @@ namespace Week04
                     if (x == -1 || x == columns || y == -1 || y == rows)
                     {
                         Instantiate(wall, new Vector2(x, y), Quaternion.identity);
+                        line += "*";
+                    }
+                    else
+                    {
+                        line += " ";
+                    }
+                }
+                Debug.Log(line);
+            }
+        }
+
+        public void As06_CreateWall(int columns, int rows, GameObject[] walls)
+        {
+            for (int y = -1; y <= rows; y++)
+            {
+                string line = "";
+                for (int x = -1; x <= columns; x++)
+                {
+                    if (x == -1 || x == columns || y == -1 || y == rows)
+                    {
+                        if (walls != null && walls.Length > 0)
+                        {
+                            GameObject tileChoice = walls[Random.Range(0, walls.Length)];
+                            if (tileChoice != null)
+                            {
+                                Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
+                            }
+                        }
                         line += "*";
                     }
                     else

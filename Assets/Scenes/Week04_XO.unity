@@ -308,7 +308,7 @@ MonoBehaviour:
   columns: 5
   mapRows: 5
   floorTiles: []
-  wall: {fileID: 0}
+  wall: []
   Item: {fileID: 0}
   ItemPosX: 1
   ItemPosY: 0
