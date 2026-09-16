@@ -121,10 +121,13 @@ namespace Week04
             }
         }
 
-        public void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY)
+        public void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
         {
-            item.position = new Vector2(itemPosX, itemPosY);
-            Debug.Log(item.position);
+            if (item != null)
+            {
+                GameObject spawned = Instantiate(item, new Vector2(itemPosX, itemPosY), Quaternion.identity);
+                Debug.Log(spawned.transform.position);
+            }
         }
 
         public void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)

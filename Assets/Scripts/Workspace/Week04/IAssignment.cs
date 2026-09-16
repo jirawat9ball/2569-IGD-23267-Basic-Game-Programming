@@ -18,7 +18,7 @@ namespace Week04
 
         void As06_CreateWall(int columns, int rows, GameObject wall);
 
-        void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY);
+        void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY);
 
         void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles);
 

@@ -87,11 +87,11 @@ D E F
 ## ข้อ 4: เซ็ตตำแหน่งวัตถุในเกมให้ตรงกับตาราง
 **โจทย์:** ให้นักศึกษาเซ็ตตำแหน่งวัตถุในเกมให้ตรงกับในตาราง โดยกำหนดตัวแปร 3 ตัวดังนี้:
 ```csharp
-public Transform Item;
+public GameObject Item;
 public int ItemPosX;
 public int ItemPosY;
 ```
-กำหนดค่าใหม่ให้ `Item.transform.position` ด้วย `new Vector2(ItemPosX, ItemPosY)` และ Log ค่าออกมาที่หน้าจอ
+สร้างวัตถุจาก Prefab `Item` ด้วย `Instantiate` ที่ตำแหน่ง `new Vector2(ItemPosX, ItemPosY)` และ Log ตำแหน่งออกมาที่หน้าจอ
 
 **ตัวอย่างผลลัพธ์:**
 ```text

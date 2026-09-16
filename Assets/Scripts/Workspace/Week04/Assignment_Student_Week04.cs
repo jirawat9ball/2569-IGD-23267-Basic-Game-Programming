@@ -18,7 +18,7 @@ namespace Week04
         public GameObject[] wall;
 
         [Header("As07 Variables")]
-        public Transform Item;
+        public GameObject Item;
         public int ItemPosX = 1;
         public int ItemPosY = 0;
 
@@ -120,8 +120,7 @@ namespace Week04
             }
             else
             {
-                Debug.Log("ข้าม As07_SetItemPosition เพราะช่อง 'Item' ยังว่างอยู่ " +
-                          "— ช่องนี้ต้องลาก GameObject ที่อยู่ในซีนมาใส่ ไม่ใช่ Prefab");
+                Debug.Log("ข้าม As07_SetItemPosition เพราะช่อง 'Item' ใน Inspector ยังว่างอยู่");
             }
 
             if (HasPrefabs(foodTiles, "Food Tiles", "As08_RandomFoodItem"))
@@ -236,11 +235,12 @@ namespace Week04
             // 4. พิมพ์แต่ละแถวออกมาทาง Console
         }
 
-        public void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY)
+        public void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
         {
             // Guideline:
-            // 1. ตั้งค่า item.position เป็น new Vector2(itemPosX, itemPosY)
-            // 2. พิมพ์พิกัด item.position ออกมาทาง Console
+            // 1. ตรวจสอบว่า prefab item ไม่เป็น null
+            // 2. สั่ง Instantiate item ที่ตำแหน่ง new Vector2(itemPosX, itemPosY) ด้วย Quaternion.identity
+            // 3. พิมพ์ตำแหน่งของ GameObject ที่สร้างขึ้นมา (เช่น newItem.transform.position) ออกมาทาง Console
         }
 
         public void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)

@@ -215,16 +215,17 @@ void As06_CreateWall(int columns, int rows, GameObject wall)
 
 ## As07. วางวัตถุตามพิกัดในตาราง
 
-**วัตถุประสงค์:** แปลงตำแหน่งแถว/คอลัมน์ให้เป็นตำแหน่งจริงของวัตถุในเกม
+**วัตถุประสงค์:** สร้าง GameObject จาก Prefab และวางตามตำแหน่งพิกัดในเกม
 
 **Method Signature:**
 ```csharp
-void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY)
+void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
 ```
 
 **Logic ที่ต้อง implement:**
-- กำหนดตำแหน่งของ `item` ให้เป็น `new Vector2(itemPosX, itemPosY)`
-- พิมพ์ค่า `item.position` ออกมา
+- ตรวจสอบว่า `item` ไม่เป็น `null`
+- สร้างวัตถุด้วย `Instantiate(item, new Vector2(itemPosX, itemPosY), Quaternion.identity)`
+- พิมพ์ตำแหน่งของวัตถุที่สร้างขึ้นมา (เช่น `newItem.transform.position`) ออกมาทาง Console
 
 **ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `itemPosX = 1`, `itemPosY = 2`)
 ```text

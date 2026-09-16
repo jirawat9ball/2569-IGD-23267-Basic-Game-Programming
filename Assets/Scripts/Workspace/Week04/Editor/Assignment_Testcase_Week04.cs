@@ -280,13 +280,14 @@ namespace Week04_Array2D
         {
             var item = new GameObject("Item");
 
-            assignment.As07_SetItemPosition(item.transform, x, y);
+            assignment.As07_SetItemPosition(item, x, y);
 
             TestUtils.AssertMultilineEqual(new Vector3(x, y, 0f).ToString(), SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(x, item.transform.position.x, 0.0001f);
-            Assert.AreEqual(y, item.transform.position.y, 0.0001f);
+            Assert.AreEqual(1, CountClones(), "ต้อง Instantiate item 1 ชิ้น");
 
             Object.DestroyImmediate(item);
+            DestroyAllClones();
+            AssertBodyContains("As07_SetItemPosition", "Instantiate", "ต้อง Instantiate จาก Prefab");
         }
 
         [Test]
