@@ -5,8 +5,152 @@ namespace Week04
 {
     public class Assignment_Teacher_Week04 : MonoBehaviour, IAssignment
     {
+        #region Lecture Variables
+
+        [Header("As02 Variables")]
+        public int rows = 3;
+        public int cols = 5;
+
+        [Header("As04 - As06 Variables")]
+        public int columns = 5;
+        public int mapRows = 5;
+        public GameObject[] floorTiles;
+        public GameObject[] wall;
+
+        [Header("As07 Variables")]
+        public GameObject Item;
+        public int ItemPosX = 1;
+        public int ItemPosY = 0;
+
+        [Header("As08 Variables")]
+        public GameObject[] foodTiles;
+
+        [Header("As09 Variables")]
+        public GameObject[] Items;
+        public int foodPosX = 1;
+        public int foodPosY = 0;
+
+        #endregion
+
+        #region Level 1 Variables
+
+        [Header("Lv01 & Lv02 Variables")]
+        public int row = 0;
+        public int col = 0;
+
+        [Header("Lv03 Variables")]
+        public int starColumns = 5;
+        public int starRows = 3;
+        public GameObject villageTile;
+
+        [Header("Lv04 & Lv09 Variables")]
+        public int size = 5;
+        public GameObject riverTile;
+
+        [Header("Lv05 Variables")]
+        public int fromTable = 2;
+        public int toTable = 4;
+
+        [Header("Lv07 Variables")]
+        public int targetValue = 5;
+
+        #endregion
+
+        #region Level 2 Variables
+
+        [Header("Ex02 Variables")]
+        public int targetX = 1;
+        public int targetY = 1;
+
+        [Header("Ex03 Variables")]
+        public GameObject chestPrefab;
+
+        #endregion
+
         private const string LineSeparator = "============================";
         private const string BoardSeparator = "-------------";
+
+        /// <summary>
+        /// เช็คว่าช่อง Prefab ใน Inspector ใส่มาครบหรือยัง ถ้ายังไม่ครบจะบอกเหตุผลใน Console
+        /// (ไม่ใช่ส่วนของโจทย์ แค่กันไม่ให้ Play แล้ว error ตอนยังตั้งค่าไม่เสร็จ)
+        /// </summary>
+        private static bool HasPrefabs(GameObject[] prefabs, string fieldName, string methodName)
+        {
+            if (prefabs == null || prefabs.Length == 0)
+            {
+                Debug.Log("ข้าม " + methodName + " เพราะช่อง '" + fieldName + "' ใน Inspector ยังว่างอยู่");
+                return false;
+            }
+
+            for (int i = 0; i < prefabs.Length; i++)
+            {
+                if (prefabs[i] == null)
+                {
+                    Debug.Log("ข้าม " + methodName + " เพราะช่อง '" + fieldName + "' Element " + i +
+                              " ยังว่างอยู่ — ลด Size เหลือ " + i + " หรือใส่ Prefab ให้ครบ");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        void Start()
+        {
+            As01_Create2DArray();
+            As02_ArraySize(rows, cols);
+            As03_GetSet2DArray();
+            if (HasPrefabs(wall, "Wall", "As04_CreateWallRow"))
+            {
+                As04_CreateWallRow(columns, wall);
+            }
+
+            if (HasPrefabs(floorTiles, "Floor Tiles", "As05_CreateFloor"))
+            {
+                As05_CreateFloor(columns, mapRows, floorTiles);
+            }
+
+            if (HasPrefabs(wall, "Wall", "As06_CreateWall"))
+            {
+                As06_CreateWall(columns, mapRows, wall);
+            }
+
+            if (Item != null)
+            {
+                As07_SetItemPosition(Item, ItemPosX, ItemPosY);
+            }
+            else
+            {
+                Debug.Log("ข้าม As07_SetItemPosition เพราะช่อง 'Item' ใน Inspector ยังว่างอยู่");
+            }
+
+            if (HasPrefabs(foodTiles, "Food Tiles", "As08_RandomFoodItem"))
+            {
+                As08_RandomFoodItem(columns, mapRows, foodTiles);
+            }
+
+            if (HasPrefabs(Items, "Items", "As09_CreateItemFromArray"))
+            {
+                As09_CreateItemFromArray(Items, foodPosX, foodPosY);
+            }
+
+            int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+            Lv01_SumRow(sampleMatrix, row);
+            Lv02_SumColumn(sampleMatrix, col);
+            Lv03_BuildVillage(starColumns, starRows, villageTile);
+            Lv04_BuildRiver(size, riverTile);
+            Lv05_MultiplicationTableNested(fromTable, toTable);
+            Lv06_FindMaxInMatrix(sampleMatrix);
+            Lv07_CountTargetValue(sampleMatrix, targetValue);
+            Lv08_SumAllElements(sampleMatrix);
+            Lv09_BuildInvertedRiver(size, riverTile);
+            Lv10_PrintMainDiagonal(sampleMatrix);
+
+            int[,] moves = new int[,] { { 1, 0, 2 }, { 0, 1, 0 }, { 2, 0, 1 } };
+            Ex01_TicTacToe(moves);
+            int[,] mapGrid = new int[,] { { 0, 1, 0 }, { 0, 0, 1 }, { 1, 0, 0 } };
+            Ex02_CheckWalkableTile(mapGrid, targetX, targetY);
+            Ex03_SpawnChestsInCorners(columns, mapRows, chestPrefab);
+        }
 
         #region Lecture
 
@@ -85,6 +229,24 @@ namespace Week04
             Debug.Log(line);
         }
 
+        public void As04_CreateWallRow(int columns, GameObject[] walls)
+        {
+            string line = "";
+            for (int x = 0; x < columns; x++)
+            {
+                if (walls != null && walls.Length > 0)
+                {
+                    GameObject tileChoice = walls[Random.Range(0, walls.Length)];
+                    if (tileChoice != null)
+                    {
+                        Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity);
+                    }
+                }
+                line += "*";
+            }
+            Debug.Log(line);
+        }
+
         public void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
         {
             for (int y = 0; y < rows; y++)
@@ -110,6 +272,34 @@ namespace Week04
                     if (x == -1 || x == columns || y == -1 || y == rows)
                     {
                         Instantiate(wall, new Vector2(x, y), Quaternion.identity);
+                        line += "*";
+                    }
+                    else
+                    {
+                        line += " ";
+                    }
+                }
+                Debug.Log(line);
+            }
+        }
+
+        public void As06_CreateWall(int columns, int rows, GameObject[] walls)
+        {
+            for (int y = -1; y <= rows; y++)
+            {
+                string line = "";
+                for (int x = -1; x <= columns; x++)
+                {
+                    if (x == -1 || x == columns || y == -1 || y == rows)
+                    {
+                        if (walls != null && walls.Length > 0)
+                        {
+                            GameObject tileChoice = walls[Random.Range(0, walls.Length)];
+                            if (tileChoice != null)
+                            {
+                                Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
+                            }
+                        }
                         line += "*";
                     }
                     else
