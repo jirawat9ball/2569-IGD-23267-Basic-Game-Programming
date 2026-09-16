@@ -157,199 +157,112 @@ namespace Week04
 
         public void As01_Create2DArray()
         {
-            int[,] my2DArray = new int[3, 3] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-
-            Debug.Log(my2DArray[0, 0] + " " + my2DArray[0, 1] + " " + my2DArray[0, 2]);
-            Debug.Log(my2DArray[1, 0] + " " + my2DArray[1, 1] + " " + my2DArray[1, 2]);
-            Debug.Log(my2DArray[2, 0] + " " + my2DArray[2, 1] + " " + my2DArray[2, 2]);
+            // Guideline:
+            // 1. สร้าง 2D Array int[,] my2DArray ขนาด 3x3 พร้อมกำหนดค่าเริ่มต้น:
+            //    { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }
+            // 2. ใช้ Debug.Log พิมพ์ค่าออกมาทีละแถว คั่นด้วยเว้นวรรค
+            //    - แถวที่ 0: my2DArray[0, 0] + " " + my2DArray[0, 1] + " " + my2DArray[0, 2]
+            //    - แถวที่ 1: my2DArray[1, 0] + " " + my2DArray[1, 1] + " " + my2DArray[1, 2]
+            //    - แถวที่ 2: my2DArray[2, 0] + " " + my2DArray[2, 1] + " " + my2DArray[2, 2]
         }
 
         public void As02_ArraySize(int rows, int cols)
         {
-            int[,] my2DArray = new int[rows, cols];
-            Debug.Log("rows = " + my2DArray.GetLength(0));
-            Debug.Log("cols = " + my2DArray.GetLength(1));
+            // Guideline:
+            // 1. สร้าง 2D Array int[,] my2DArray ขนาด [rows, cols]
+            // 2. หาจำนวนแถว (มิติที่ 1) ด้วย my2DArray.GetLength(0) แล้วพิมพ์ "rows = " + rows
+            // 3. หาจำนวนคอลัมน์ (มิติที่ 2) ด้วย my2DArray.GetLength(1) แล้วพิมพ์ "cols = " + cols
         }
 
         public void As03_GetSet2DArray()
         {
-            int[,] my2DArray = new int[3, 3] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-            string[,] my2DStringArray = new string[2, 3] { { "A", "B", "C" }, { "D", "E", "F" } };
-
-            Debug.Log("get : " + my2DArray[1, 2]);
-            my2DArray[1, 2] = 70;
-            Debug.Log("set : " + my2DArray[1, 2]);
-            Debug.Log(LineSeparator);
-
-            for (int r = 0; r < my2DArray.GetLength(0); r++)
-            {
-                string line = "";
-                for (int c = 0; c < my2DArray.GetLength(1); c++)
-                {
-                    line += my2DArray[r, c];
-                    if (c < my2DArray.GetLength(1) - 1)
-                    {
-                        line += " ";
-                    }
-                }
-                Debug.Log(line);
-            }
-
-            Debug.Log(LineSeparator);
-            Debug.Log("get : " + my2DStringArray[0, 2]);
-            my2DStringArray[0, 2] = "Cat";
-            Debug.Log("set : " + my2DStringArray[0, 2]);
-            Debug.Log(LineSeparator);
-
-            for (int r = 0; r < my2DStringArray.GetLength(0); r++)
-            {
-                string line = "";
-                for (int c = 0; c < my2DStringArray.GetLength(1); c++)
-                {
-                    line += my2DStringArray[r, c];
-                    if (c < my2DStringArray.GetLength(1) - 1)
-                    {
-                        line += " ";
-                    }
-                }
-                Debug.Log(line);
-            }
+            // Guideline:
+            // 1. สร้าง 2D Array int[,] ขนาด 3x3: { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }
+            //    และ string[,] ขนาด 2x3: { { "A", "B", "C" }, { "D", "E", "F" } }
+            // 2. ดึงค่า (Get) จาก my2DArray แถวที่ 1 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
+            // 3. เปลี่ยนค่า (Set) ใน my2DArray แถวที่ 1 คอลัมน์ที่ 2 ให้เป็น 70 แล้วพิมพ์ "set : 70"
+            // 4. พิมพ์เส้นคั่น LineSeparator ("============================")
+            // 5. ใช้ Nested Loop (for ซ้อน for) วนพิมพ์สมาชิกทั้งหมดของ my2DArray ทีละแถว คั่นด้วยช่องว่าง
+            // 6. พิมพ์เส้นคั่น LineSeparator
+            // 7. ดึงค่า (Get) จาก my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
+            // 8. เปลี่ยนค่า (Set) ใน my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 ให้เป็น "Cat" แล้วพิมพ์ "set : Cat"
+            // 9. พิมพ์เส้นคั่น LineSeparator
+            // 10. ใช้ Nested Loop วนพิมพ์สมาชิกทั้งหมดของ my2DStringArray ทีละแถว คั่นด้วยช่องว่าง
         }
 
         public void As04_CreateWallRow(int columns, GameObject wall)
         {
-            string line = "";
-            for (int x = 0; x < columns; x++)
-            {
-                if (wall != null)
-                {
-                    Instantiate(wall, new Vector2(x, 0), Quaternion.identity);
-                }
-                line += "*";
-            }
-            Debug.Log(line);
+            // Guideline:
+            // 1. ใช้ลูป for วน x ตั้งแต่ 0 ถึง columns - 1
+            // 2. ตรวจสอบว่า wall ไม่เป็น null ให้ Instantiate(wall, new Vector2(x, 0), Quaternion.identity)
+            // 3. สะสมสตริงเครื่องหมาย "*" ของแต่ละช่อง
+            // 4. เมื่อจบลูป ให้พิมพ์สตริงแถวกำแพงออกมา เช่น "*****"
         }
 
         public void As04_CreateWallRow(int columns, GameObject[] walls)
         {
-            string line = "";
-            for (int x = 0; x < columns; x++)
-            {
-                if (walls != null && walls.Length > 0)
-                {
-                    GameObject tileChoice = walls[Random.Range(0, walls.Length)];
-                    if (tileChoice != null)
-                    {
-                        Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity);
-                    }
-                }
-                line += "*";
-            }
-            Debug.Log(line);
+            // Guideline: (Overload สำหรับสุ่มชนิดกำแพง)
+            // 1. วนลูป x ตั้งแต่ 0 ถึง columns - 1
+            // 2. สุ่มเลือก prefab จาก walls ด้วย walls[Random.Range(0, walls.Length)]
+            // 3. Instantiate ที่ตำแหน่ง new Vector2(x, 0)
+            // 4. พิมพ์สตริง "*" ออกมาทาง Console
         }
 
         public void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
         {
-            for (int y = 0; y < rows; y++)
-            {
-                string line = "";
-                for (int x = 0; x < columns; x++)
-                {
-                    GameObject tileChoice = floorTiles[Random.Range(0, floorTiles.Length)];
-                    Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
-                    line += tileChoice.name;
-                }
-                Debug.Log(line);
-            }
+            // Guideline:
+            // 1. ใช้ Nested Loop: ลูปนอกวน y ตั้งแต่ 0 ถึง rows - 1, ลูปในวน x ตั้งแต่ 0 ถึง columns - 1
+            // 2. ในแต่ละช่อง ให้สุ่มเลือกแผ่นพื้นจาก floorTiles ด้วย Random.Range(0, floorTiles.Length)
+            // 3. Instantiate แผ่นพื้นที่สุ่มได้ที่พิกัด new Vector2(x, y)
+            // 4. สะสมชื่อของแผ่นพื้น (tileChoice.name) ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
         }
 
         public void As06_CreateWall(int columns, int rows, GameObject wall)
         {
-            for (int y = -1; y <= rows; y++)
-            {
-                string line = "";
-                for (int x = -1; x <= columns; x++)
-                {
-                    if (x == -1 || x == columns || y == -1 || y == rows)
-                    {
-                        Instantiate(wall, new Vector2(x, y), Quaternion.identity);
-                        line += "*";
-                    }
-                    else
-                    {
-                        line += " ";
-                    }
-                }
-                Debug.Log(line);
-            }
+            // Guideline:
+            // 1. ขอบเขตกำแพงรอบนอกขยายออกไป 1 ช่อง: ลูป y จาก -1 ถึง rows, ลูป x จาก -1 ถึง columns
+            // 2. ตรวจสอบเงื่อนไขว่าเป็นตำแหน่งขอบนอกหรือไม่: (x == -1 || x == columns || y == -1 || y == rows)
+            // 3. ถ้าเป็นขอบ ให้ Instantiate(wall, new Vector2(x, y), Quaternion.identity) และสะสม "*"
+            // 4. ถ้าไม่ใช่ขอบ (พื้นที่ภายใน) ให้สะสมช่องว่าง " "
+            // 5. พิมพ์สตริงแต่ละแถวออกมาทาง Console
         }
 
         public void As06_CreateWall(int columns, int rows, GameObject[] walls)
         {
-            for (int y = -1; y <= rows; y++)
-            {
-                string line = "";
-                for (int x = -1; x <= columns; x++)
-                {
-                    if (x == -1 || x == columns || y == -1 || y == rows)
-                    {
-                        if (walls != null && walls.Length > 0)
-                        {
-                            GameObject tileChoice = walls[Random.Range(0, walls.Length)];
-                            if (tileChoice != null)
-                            {
-                                Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
-                            }
-                        }
-                        line += "*";
-                    }
-                    else
-                    {
-                        line += " ";
-                    }
-                }
-                Debug.Log(line);
-            }
+            // Guideline: (Overload สำหรับสุ่มชนิดกำแพงรอบนอก)
+            // 1. ลูป y จาก -1 ถึง rows และ x จาก -1 ถึง columns
+            // 2. ถ้าเป็นขอบนอก ให้สุ่มเลือก prefab จาก walls แล้ว Instantiate ที่ (x, y) พร้อมสะสม "*"
+            // 3. ถ้าไม่ใช่ขอบ ให้สะสม " "
+            // 4. พิมพ์แต่ละแถวออกมาทาง Console
         }
 
         public void As07_SetItemPosition(Transform item, int itemPosX, int itemPosY)
         {
-            item.position = new Vector2(itemPosX, itemPosY);
-            Debug.Log(item.position);
+            // Guideline:
+            // 1. ตั้งค่า item.position เป็น new Vector2(itemPosX, itemPosY)
+            // 2. พิมพ์พิกัด item.position ออกมาทาง Console
         }
 
         public void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)
         {
-            int x = Random.Range(0, columns);
-            int y = Random.Range(0, rows);
-            GameObject tileChoice = foodTiles[Random.Range(0, foodTiles.Length)];
-            Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
-            Debug.Log(tileChoice.name + " at x: " + x + " y: " + y);
+            // Guideline:
+            // 1. สุ่มพิกัด x จาก 0 ถึง columns - 1 และ y จาก 0 ถึง rows - 1 ด้วย Random.Range
+            // 2. สุ่มเลือกไอเทมอาหารจาก foodTiles ด้วย Random.Range(0, foodTiles.Length)
+            // 3. Instantiate ไอเทมที่สุ่มได้ที่พิกัด (x, y)
+            // 4. พิมพ์ข้อความ "{ชื่อไอเทม} at x: {x} y: {y}"
         }
 
         public void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
         {
-            string[,] my2DStringArray = new string[3, 3] {
-                { " ", "Soda", " " },
-                { " ", " ", " " },
-                { " ", " ", "Food" } };
-
-            string itemName = my2DStringArray[itemPosY, itemPosX];
-
-            if (!string.IsNullOrWhiteSpace(itemName))
-            {
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (items[i] != null && items[i].name == itemName)
-                    {
-                        Instantiate(items[i], new Vector2(itemPosX, itemPosY), Quaternion.identity);
-                        Debug.Log("Create Item " + itemName + " at x: " + itemPosX + " y: " + itemPosY);
-                        return;
-                    }
-                }
-            }
-
-            Debug.Log("No items at x: " + itemPosX + " y: " + itemPosY);
+            // Guideline:
+            // 1. สร้าง 2D String Array my2DStringArray ขนาด 3x3:
+            //    { { " ", "Soda", " " }, { " ", " ", " " }, { " ", " ", "Food" } }
+            // 2. อ่านชื่อไอเทมจาก my2DStringArray ที่พิกัด [itemPosY, itemPosX]
+            // 3. ถ้าพบชื่อไอเทม (ไม่ใช่ช่องว่าง):
+            //    - วนลูปหา prefab ใน items ที่มี name ตรงกับชื่อที่ได้
+            //    - ถ้าพบ ให้ Instantiate ที่พิกัด (itemPosX, itemPosY)
+            //    - พิมพ์ "Create Item " + itemName + " at x: " + itemPosX + " y: " + itemPosY แล้ว return
+            // 4. ถ้าไม่พบไอเทม ให้พิมพ์ "No items at x: " + itemPosX + " y: " + itemPosY
         }
 
         #endregion
@@ -360,177 +273,90 @@ namespace Week04
 
         public void Lv01_SumRow(int[,] matrix, int row)
         {
-            int sum = 0;
-            for (int c = 0; c < matrix.GetLength(1); c++)
-            {
-                sum += matrix[row, c];
-            }
-            Debug.Log(sum);
+            // Guideline:
+            // 1. ประกาศตัวแปร int sum = 0; เพื่อสะสมผลรวม
+            // 2. ใช้ลูป for วนคอลัมน์ c ตั้งแต่ 0 ถึง matrix.GetLength(1) - 1
+            // 3. นำค่า matrix[row, c] มาบวกเข้ากับ sum
+            // 4. เมื่อจบลูป ให้พิมพ์ sum ออกมา
         }
 
         public void Lv02_SumColumn(int[,] matrix, int col)
         {
-            int sum = 0;
-            for (int r = 0; r < matrix.GetLength(0); r++)
-            {
-                sum += matrix[r, col];
-            }
-            Debug.Log(sum);
+            // Guideline:
+            // 1. ประกาศตัวแปร int sum = 0; เพื่อสะสมผลรวม
+            // 2. ใช้ลูป for วนแถว r ตั้งแต่ 0 ถึง matrix.GetLength(0) - 1
+            // 3. นำค่า matrix[r, col] มาบวกเข้ากับ sum
+            // 4. เมื่อจบลูป ให้พิมพ์ sum ออกมา
         }
 
         public void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
         {
             // Guideline:
-            // 1. ใช้ Nested Loop วนทุกช่องของพื้นที่หมู่บ้าน (กว้าง columns สูง rows)
-            // 2. แต่ละช่องให้ Instantiate villageTile ลงไปที่ตำแหน่ง (x, y)
-            // 3. เก็บสัญลักษณ์ * ของแถวนั้นไว้ แล้วพิมพ์ผังออกมาบรรทัดละแถว
-            for (int y = 0; y < rows; y++)
-            {
-                string line = "";
-                for (int x = 0; x < columns; x++)
-                {
-                    if (villageTile != null)
-                    {
-                        Instantiate(villageTile, new Vector2(x, y), Quaternion.identity);
-                    }
-                    line += "*";
-                }
-                Debug.Log(line);
-            }
+            // 1. ใช้ Nested Loop วน y ตั้งแต่ 0 ถึง rows - 1 และ x ตั้งแต่ 0 ถึง columns - 1
+            // 2. แต่ละช่องให้ Instantiate villageTile ที่ตำแหน่ง new Vector2(x, y)
+            // 3. สะสมสตริงสัญลักษณ์ "*" ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
         }
 
         public void Lv04_BuildRiver(int size, GameObject riverTile)
         {
             // Guideline:
-            // 1. แม่น้ำเป็นรูปสามเหลี่ยม แถวล่างสุดมี 1 ช่อง แถวถัดขึ้นไปเพิ่มทีละ 1 จนถึง size
-            // 2. แถวที่ r จะมี r ช่อง ให้ Instantiate riverTile ที่ตำแหน่ง (i, r - 1)
-            // 3. พิมพ์ผังออกมาบรรทัดละแถว
-            for (int r = 1; r <= size; r++)
-            {
-                string line = "";
-                for (int i = 0; i < r; i++)
-                {
-                    if (riverTile != null)
-                    {
-                        Instantiate(riverTile, new Vector2(i, r - 1), Quaternion.identity);
-                    }
-                    line += "*";
-                }
-                Debug.Log(line);
-            }
+            // 1. สร้างแม่น้ำทรงสามเหลี่ยม ลูปแถว r ตั้งแต่ 1 ถึง size
+            // 2. ในแถว r ให้มีจำนวนช่อง r ช่อง (ลูป i ตั้งแต่ 0 ถึง r - 1)
+            // 3. Instantiate riverTile ที่ตำแหน่ง new Vector2(i, r - 1)
+            // 4. สะสมสตริง "*" ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
         }
 
         public void Lv05_MultiplicationTableNested(int fromTable, int toTable)
         {
-            for (int i = 1; i <= 12; i++)
-            {
-                string line = "";
-                for (int table = fromTable; table <= toTable; table++)
-                {
-                    line += table + " x " + i + " = " + (table * i);
-                    if (table < toTable)
-                    {
-                        line += "\t";
-                    }
-                }
-                Debug.Log(line);
-            }
+            // Guideline:
+            // 1. ลูปนอกวนตัวคูณ i ตั้งแต่ 1 ถึง 12
+            // 2. ลูปในวนแม่สูตรคูณ table ตั้งแต่ fromTable ถึง toTable
+            // 3. จัดรูปแบบข้อความ "{table} x {i} = {table * i}" คั่นระหว่างแม่ด้วย Tab "\t"
+            // 4. พิมพ์สูตรคูณออกมาทีละบรรทัด
         }
 
         public void Lv06_FindMaxInMatrix(int[,] matrix)
         {
-            int max = matrix[0, 0];
-            int maxR = 0;
-            int maxC = 0;
-
-            for (int r = 0; r < matrix.GetLength(0); r++)
-            {
-                for (int c = 0; c < matrix.GetLength(1); c++)
-                {
-                    if (matrix[r, c] > max)
-                    {
-                        max = matrix[r, c];
-                        maxR = r;
-                        maxC = c;
-                    }
-                }
-            }
-
-            Debug.Log("Max value " + max + " at [" + maxR + ", " + maxC + "]");
+            // Guideline:
+            // 1. กำหนดตัวแปร int max = matrix[0, 0]; และ int maxR = 0, maxC = 0;
+            // 2. ใช้ Nested Loop วนทุกแถว r และทุกคอลัมน์ c ใน matrix
+            // 3. ถ้า matrix[r, c] > max ให้ปรับค่า max = matrix[r, c], maxR = r, maxC = c
+            // 4. เมื่อจบลูป ให้พิมพ์: "Max value " + max + " at [" + maxR + ", " + maxC + "]"
         }
 
         public void Lv07_CountTargetValue(int[,] matrix, int target)
         {
-            int count = 0;
-            for (int r = 0; r < matrix.GetLength(0); r++)
-            {
-                for (int c = 0; c < matrix.GetLength(1); c++)
-                {
-                    if (matrix[r, c] == target)
-                    {
-                        count++;
-                    }
-                }
-            }
-
-            Debug.Log("Found target " + target + ": " + count + " cells");
+            // Guideline:
+            // 1. กำหนดตัวแปร int count = 0; เพื่อนับจำนวน
+            // 2. ใช้ Nested Loop วนทุกช่องใน matrix
+            // 3. ถ้า matrix[r, c] == target ให้ count++
+            // 4. พิมพ์: "Found target " + target + ": " + count + " cells"
         }
 
         public void Lv08_SumAllElements(int[,] matrix)
         {
-            // TODO: หาผลรวมของสมาชิกทุกช่องใน matrix
-            // แสดงผล: Debug.Log(sum)
-            int sum = 0;
-            for (int r = 0; r < matrix.GetLength(0); r++)
-            {
-                for (int c = 0; c < matrix.GetLength(1); c++)
-                {
-                    sum += matrix[r, c];
-                }
-            }
-
-            Debug.Log(sum);
+            // Guideline:
+            // 1. กำหนดตัวแปร int sum = 0; ไว้นอกลูป
+            // 2. ใช้ Nested Loop วนทุกช่องใน matrix แล้วนำค่ามาบวกสะสมใน sum
+            // 3. พิมพ์ sum ออกมา
         }
 
         public void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
         {
             // Guideline:
-            // 1. เหมือนข้อ Lv04 แต่กลับหัว แถวแรกกว้าง size แล้วลดลงทีละ 1 จนเหลือ 1
-            // 2. ใช้ตัวแปร y นับแถวที่วางไปแล้ว เพื่อใช้เป็นตำแหน่งแกน Y
-            // 3. พิมพ์ผังออกมาบรรทัดละแถว
-            int y = 0;
-            for (int r = size; r >= 1; r--)
-            {
-                string line = "";
-                for (int i = 0; i < r; i++)
-                {
-                    if (riverTile != null)
-                    {
-                        Instantiate(riverTile, new Vector2(i, y), Quaternion.identity);
-                    }
-                    line += "*";
-                }
-                Debug.Log(line);
-                y++;
-            }
+            // 1. สร้างแม่น้ำสามเหลี่ยมกลับหัว แถวแรกกว้าง size แล้วลดลงทีละ 1 จนถึง 1 (ลูป r จาก size ลงมาถึง 1)
+            // 2. ใช้ตัวแปร y นับตำแหน่งแนวตั้ง เริ่มจาก 0 และเพิ่มขึ้นทีละ 1 ทุกแถว
+            // 3. ในแต่ละแถว ลูป i ตั้งแต่ 0 ถึง r - 1 ให้ Instantiate riverTile ที่ (i, y) พร้อมสะสม "*"
+            // 4. พิมพ์สตริงแถวออกมาทีละบรรทัด
         }
 
         public void Lv10_PrintMainDiagonal(int[,] matrix)
         {
-            // TODO: พิมพ์ค่าแนวทแยงมุมหลัก (matrix[0,0], matrix[1,1], ...) ในบรรทัดเดียวคั่นด้วยช่องว่าง
-            // ตัวอย่าง: "1 5 9"
-            int minDim = Mathf.Min(matrix.GetLength(0), matrix.GetLength(1));
-            string line = "";
-            for (int i = 0; i < minDim; i++)
-            {
-                line += matrix[i, i];
-                if (i < minDim - 1)
-                {
-                    line += " ";
-                }
-            }
-
-            Debug.Log(line);
+            // Guideline:
+            // 1. หาขนาดแนวทแยง minDim = Mathf.Min(matrix.GetLength(0), matrix.GetLength(1))
+            // 2. วนลูป i ตั้งแต่ 0 ถึง minDim - 1 ดึงค่าแนวทแยงหลัก matrix[i, i]
+            // 3. นำค่ามาต่อเป็นข้อความบรรทัดเดียว คั่นด้วยช่องว่าง " " เช่น "1 5 9"
+            // 4. พิมพ์ข้อความออกมา
         }
 
         #endregion
@@ -540,99 +366,29 @@ namespace Week04
         public void Ex01_TicTacToe(int[,] moves)
         {
             // Guideline:
-            // 1. สร้างกระดาน char[3,3] เติมช่องว่าง ' ' ให้ครบทุกช่อง
-            // 2. ไล่การเดินใน moves ทีละตา (แต่ละแถวคือ { แถว, คอลัมน์ }) เริ่มที่ผู้เล่น 'X'
-            // 3. แต่ละตา: พิมพ์ "Player <X/O>:" แล้วพิมพ์พิกัดที่เดิน
-            //    - ถ้าช่องนั้นมีคนลงแล้ว พิมพ์ "cannot set <แถว> <คอลัมน์>" แล้วข้ามไปตาถัดไป
-            //    - ถ้าลงได้ ให้ใส่สัญลักษณ์ลงกระดาน แล้วพิมพ์กระดานออกมา
-            // 4. หลังลงทุกครั้ง ให้เรียก Ex01_CheckWinner(board) เพื่อดูผล
-            //    'X'/'O' -> พิมพ์ "<ผู้ชนะ> wins!" แล้วจบเกม · 'D' -> พิมพ์ "Draw!" แล้วจบเกม
-            // 5. ถ้ายังไม่จบ ให้สลับตาเป็นอีกฝ่าย
-            char[,] board = new char[3, 3];
-            for (int r = 0; r < 3; r++)
-            {
-                for (int c = 0; c < 3; c++)
-                {
-                    board[r, c] = ' ';
-                }
-            }
-
-            char current = 'X';
-
-            for (int m = 0; m < moves.GetLength(0); m++)
-            {
-                int moveRow = moves[m, 0];
-                int moveCol = moves[m, 1];
-
-                Debug.Log("Player " + current + ":");
-                Debug.Log(moveRow + " " + moveCol);
-
-                if (board[moveRow, moveCol] != ' ')
-                {
-                    Debug.Log("cannot set " + moveRow + " " + moveCol);
-                    continue;
-                }
-
-                board[moveRow, moveCol] = current;
-                PrintBoard(board);
-
-                char result = Ex01_CheckWinner(board);
-                if (result == 'X' || result == 'O')
-                {
-                    Debug.Log(result + " wins!");
-                    return;
-                }
-                if (result == 'D')
-                {
-                    Debug.Log("Draw!");
-                    return;
-                }
-
-                current = (current == 'X') ? 'O' : 'X';
-            }
+            // 1. สร้างกระดาน char[3, 3] กำหนดค่าเริ่มต้นทุกช่องเป็น ' ' (ช่องว่าง)
+            // 2. กำหนดผู้เล่นเริ่มต้น char current = 'X';
+            // 3. วนลูปเดินตามตาใน moves (moves.GetLength(0))
+            //    - ดึงพิกัด moveRow = moves[m, 0], moveCol = moves[m, 1]
+            //    - พิมพ์ "Player " + current + ":" ตามด้วยพิกัด "moveRow moveCol"
+            //    - ถ้าช่องนั้นไม่ว่าง (board[moveRow, moveCol] != ' ') ให้พิมพ์ "cannot set " + moveRow + " " + moveCol แล้วข้าม (continue)
+            //    - ถ้าว่าง ให้วางหมาก board[moveRow, moveCol] = current แล้วเรียก PrintBoard(board)
+            //    - ตรวจผลด้วย Ex01_CheckWinner(board)
+            //      ถ้าได้ 'X' หรือ 'O' ให้พิมพ์ result + " wins!" แล้ว return
+            //      ถ้าได้ 'D' ให้พิมพ์ "Draw!" แล้ว return
+            //    - ถ้ายังไม่จบ ให้สลับผู้เล่น current = (current == 'X') ? 'O' : 'X';
         }
 
         public char Ex01_CheckWinner(char[,] board)
         {
             // Guideline:
-            // 1. เช็ค 8 แนวที่ชนะได้ — แนวนอน 3 แนว, แนวตั้ง 3 แนว, แนวทแยง 2 แนว
-            //    ช่องว่าง ' ' ไม่นับว่าชนะ ต้องเช็คก่อนว่าช่องแรกไม่ใช่ช่องว่าง
-            // 2. ถ้าเจอผู้ชนะ ให้ return สัญลักษณ์ของคนนั้น ('X' หรือ 'O')
-            // 3. ถ้ายังไม่มีใครชนะ แต่กระดานเต็มหมดแล้ว ให้ return 'D' (Draw = เสมอ)
-            // 4. ถ้ายังมีช่องว่างเหลือ แปลว่าเกมยังไม่จบ ให้ return ' '
-            for (int i = 0; i < 3; i++)
-            {
-                if (board[i, 0] != ' ' && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
-                {
-                    return board[i, 0];
-                }
-                if (board[0, i] != ' ' && board[0, i] == board[1, i] && board[1, i] == board[2, i])
-                {
-                    return board[0, i];
-                }
-            }
-
-            if (board[0, 0] != ' ' && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
-            {
-                return board[0, 0];
-            }
-            if (board[0, 2] != ' ' && board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
-            {
-                return board[0, 2];
-            }
-
-            for (int r = 0; r < 3; r++)
-            {
-                for (int c = 0; c < 3; c++)
-                {
-                    if (board[r, c] == ' ')
-                    {
-                        return ' ';
-                    }
-                }
-            }
-
-            return 'D';
+            // 1. เช็คผู้ชนะ 8 แนว (แนวนอน 3 แถว, แนวตั้ง 3 คอลัมน์, แนวทแยง 2 เส้น)
+            //    โดยช่องแรกต้องไม่เป็นช่องว่าง ' ' และทั้ง 3 ช่องต้องเหมือนกัน
+            //    ถ้ามีแนวที่ตรงกัน ให้ return สัญลักษณ์ของผู้ชนะ ('X' หรือ 'O')
+            // 2. ถ้ายังไม่มีใครชนะ ให้ตรวจว่ายังมีช่องว่าง ' ' เหลืออยู่หรือไม่
+            //    ถ้ามีช่องว่างเหลือ แปลว่าเกมยังไม่จบ ให้ return ' '
+            // 3. ถ้าไม่มีช่องว่างเหลือแล้ว และไม่มีใครชนะ ให้ return 'D' (Draw = เสมอ)
+            return ' ';
         }
 
         private void PrintBoard(char[,] board)
@@ -643,83 +399,28 @@ namespace Week04
                 Debug.Log("| " + board[r, 0] + " | " + board[r, 1] + " | " + board[r, 2] + " |");
             }
         }
+
         public void Ex02_CheckWalkableTile(int[,] map, int targetX, int targetY)
         {
             // Guideline:
-            // 1. พิมพ์หัวข้อว่ากำลังตรวจรอบตำแหน่งไหน: "Check around (x, y)"
-            // 2. ตรวจ 4 ทิศรอบตัว ตามลำดับ Up, Down, Left, Right
-            //    Up = y+1, Down = y-1, Left = x-1, Right = x+1
-            // 3. แต่ละทิศพิมพ์ "<ทิศ> (x, y) : <ผล>" โดยผลมี 3 แบบ
-            //    - ออกนอกแผนที่        -> Out of Bounds
-            //    - ค่าในช่องเป็น 0     -> Walkable
-            //    - ค่าในช่องไม่ใช่ 0   -> Blocked
-            int rows = map.GetLength(0);
-            int cols = map.GetLength(1);
-
-            string[] directionNames = { "Up", "Down", "Left", "Right" };
-            int[] offsetX = { 0, 0, -1, 1 };
-            int[] offsetY = { 1, -1, 0, 0 };
-
-            Debug.Log("Check around (" + targetX + ", " + targetY + ")");
-
-            for (int i = 0; i < directionNames.Length; i++)
-            {
-                int nextX = targetX + offsetX[i];
-                int nextY = targetY + offsetY[i];
-
-                string result;
-                if (nextX < 0 || nextX >= cols || nextY < 0 || nextY >= rows)
-                {
-                    result = "Out of Bounds";
-                }
-                else if (map[nextY, nextX] == 0)
-                {
-                    result = "Walkable";
-                }
-                else
-                {
-                    result = "Blocked";
-                }
-
-                Debug.Log(directionNames[i] + " (" + nextX + ", " + nextY + ") : " + result);
-            }
+            // 1. พิมพ์หัวข้อ "Check around (" + targetX + ", " + targetY + ")"
+            // 2. ตรวจสอบ 4 ทิศรอบตัวตามลำดับ: Up (y + 1), Down (y - 1), Left (x - 1), Right (x + 1)
+            // 3. เงื่อนไขผลลัพธ์ของแต่ละทิศ:
+            //    - ถ้านอกขอบเขตแผนที่ (x < 0 หรือ x >= cols หรือ y < 0 หรือ y >= rows) -> "Out of Bounds"
+            //    - ถ้าค่าในแผนที่เป็น 0 (map[y, x] == 0) -> "Walkable"
+            //    - ถ้าค่าในแผนที่ไม่ใช่ 0 -> "Blocked"
+            // 4. พิมพ์ผลแต่ละทิศในรูปแบบ: "{ทิศ} ({x}, {y}) : {ผลลัพธ์}"
         }
 
         public void Ex03_SpawnChestsInCorners(int columns, int rows, GameObject chestPrefab)
         {
             // Guideline:
-            // 1. หีบสมบัติวางที่ 4 มุมของแผนที่ คือ (0,0), (columns-1,0), (0,rows-1), (columns-1,rows-1)
-            // 2. Instantiate chestPrefab ที่ทุกมุม
-            // 3. พิมพ์ผังแผนที่ออกมา มุมที่มีหีบใช้ C ช่องอื่นใช้ . (พิมพ์จากแถวบนลงล่าง)
-            // 4. ปิดท้ายด้วยข้อความ "Spawned 4 chests at corners"
-            Vector2[] corners = new Vector2[]
-            {
-                new Vector2(0, 0),
-                new Vector2(columns - 1, 0),
-                new Vector2(0, rows - 1),
-                new Vector2(columns - 1, rows - 1)
-            };
-
-            for (int i = 0; i < corners.Length; i++)
-            {
-                if (chestPrefab != null)
-                {
-                    Instantiate(chestPrefab, corners[i], Quaternion.identity);
-                }
-            }
-
-            for (int y = rows - 1; y >= 0; y--)
-            {
-                string line = "";
-                for (int x = 0; x < columns; x++)
-                {
-                    bool isCorner = (x == 0 || x == columns - 1) && (y == 0 || y == rows - 1);
-                    line += isCorner ? "C" : ".";
-                }
-                Debug.Log(line);
-            }
-
-            Debug.Log("Spawned 4 chests at corners");
+            // 1. พิกัด 4 มุมของแผนที่คือ: (0, 0), (columns - 1, 0), (0, rows - 1), (columns - 1, rows - 1)
+            // 2. Instantiate chestPrefab ที่ตำแหน่งทั้ง 4 มุม
+            // 3. วนลูปพิมพ์ผังแผนที่จากแถวบนลงล่าง (y จาก rows - 1 ลงมาถึง 0, x จาก 0 ถึง columns - 1)
+            //    - ถ้าเป็นตำแหน่ง 4 มุม ให้ใช้สัญลักษณ์ "C"
+            //    - ตำแหน่งอื่น ให้ใช้สัญลักษณ์ "."
+            // 4. พิมพ์ผังออกมาทีละแถว และปิดท้ายด้วยข้อความ "Spawned 4 chests at corners"
         }
 
         #endregion
