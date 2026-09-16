@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 using Workspace.Core;
 using Debug = Workspace.Core.SimpleDebugConsole;

@@ -1,4 +1,4 @@
-namespace Workspace.Core
+﻿namespace Workspace.Core
 {
     /// <summary>
     /// การตั้งค่าส่วนกลางสำหรับการส่งคะแนนการบ้าน (Centralized Submission Configuration)

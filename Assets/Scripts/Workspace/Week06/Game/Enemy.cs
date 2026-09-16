@@ -1,4 +1,4 @@
-namespace Week06.Game
+﻿namespace Week06.Game
 {
     public class Enemy : Character
     {

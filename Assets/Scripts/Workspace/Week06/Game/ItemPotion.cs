@@ -1,4 +1,4 @@
-using Debug = Workspace.Core.SimpleDebugConsole;
+﻿using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
 {

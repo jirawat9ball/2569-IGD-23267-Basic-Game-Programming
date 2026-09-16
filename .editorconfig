@@ -1,0 +1,16 @@
+# EditorConfig is awesome: https://EditorConfig.org
+# Top-most EditorConfig file
+root = true
+
+# C# files: Require UTF-8 with BOM so Thai comments and Unicode are properly read by Visual Studio & Unity
+[*.cs]
+charset = utf-8-bom
+end_of_line = crlf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+
+# Documentation & Config
+[*.{md,txt,json,yml,yaml,xml}]
+charset = utf-8
+end_of_line = lf

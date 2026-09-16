@@ -1,4 +1,4 @@
-namespace Week06
+﻿namespace Week06
 {
     public interface IAssignment
     {

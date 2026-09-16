@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week05
