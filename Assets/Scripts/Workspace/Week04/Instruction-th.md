@@ -85,7 +85,7 @@ void As01_Create2DArray()
 
 ## As02. หาขนาดของตาราง
 
-**วัตถุประสงค์:** ใช้ `GetLength()` หาจำนวนแถวและคอลัมน์ของ 2D Array
+**วัตถุประสงค์:** ใช้ `GetLength()` หาจำนวนแถวและคอลัมน์ และใช้ `Length` หาจำนวนช่องทั้งหมดของ 2D Array
 
 **Method Signature:**
 ```csharp
@@ -95,19 +95,21 @@ void As02_ArraySize(int rows, int cols)
 **Logic ที่ต้อง implement:**
 - สร้าง `int[,]` ขนาด `rows` x `cols`
 - หาจำนวนแถวด้วย `GetLength(0)` และจำนวนคอลัมน์ด้วย `GetLength(1)`
-- พิมพ์ออกมาสองบรรทัดตามรูปแบบด้านล่าง
+- หาจำนวนช่องทั้งหมดด้วย `Length` (หรือ `rows * cols`)
+- พิมพ์ออกมาสามบรรทัดตามรูปแบบด้านล่าง
 
 **ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `rows = 3`, `cols = 5`)
 ```text
 rows = 3
 cols = 5
+length = 15
 ```
 
 ---
 
 ## As03. อ่านค่าและเปลี่ยนค่าในตาราง
 
-**วัตถุประสงค์:** เข้าถึงค่า (get) และกำหนดค่าใหม่ (set) ในช่องที่ต้องการ ทั้งตารางตัวเลขและตารางข้อความ
+**วัตถุประสงค์:** เข้าถึงค่า (get) และกำหนดค่าใหม่ (set) ในช่องที่ต้องการของ 2D Array
 
 **Method Signature:**
 ```csharp
@@ -115,15 +117,13 @@ void As03_GetSet2DArray()
 ```
 
 **Logic ที่ต้อง implement:**
-- ประกาศตารางสองตัวนี้
+- ประกาศตารางตัวเลข:
   ```csharp
   int[,] my2DArray = new int[3, 3] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-  string[,] my2DStringArray = new string[2, 3] { { "A", "B", "C" }, { "D", "E", "F" } };
   ```
 - อ่านค่า `my2DArray` แถว 1 คอลัมน์ 2 แล้วพิมพ์ `get : <ค่า>`
 - เปลี่ยนค่าช่องนั้นเป็น `70` แล้วพิมพ์ `set : 70`
-- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว) แล้วพิมพ์ตารางทั้งหมด
-- ทำแบบเดียวกันกับ `my2DStringArray` แถว 0 คอลัมน์ 2 โดยเปลี่ยนค่าเป็น `Cat`
+- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว หรือ `LineSeparator`) แล้วพิมพ์ตารางทั้งหมดโดยเรียกใช้ฟังก์ชัน `Print2DArray(my2DArray)`
 
 **ผลลัพธ์ที่ต้องได้:**
 ```text
@@ -133,28 +133,22 @@ set : 70
 1 2 3
 4 5 70
 7 8 9
-============================
-get : C
-set : Cat
-============================
-A B Cat
-D E F
 ```
 
 ---
 
 ## As04. สร้างแถวกำแพง 1 แถว (Create Wall Row)
 
-**วัตถุประสงค์:** ใช้ลูป 1 มิติ สร้างแถวกำแพงแนวนอนตามความยาวที่กำหนด และ Instantiate ลงฉาก
+**วัตถุประสงค์:** ใช้ลูป 1 มิติ สร้างแถวกำแพงแนวนอนตามความยาวที่กำหนด โดยสุ่มชนิดกำแพงจาก Prefab และ Instantiate ลงฉาก
 
 **Method Signature:**
 ```csharp
-void As04_CreateWallRow(int columns, GameObject wall)
+void As04_CreateWallRow(int columns, GameObject[] walls)
 ```
 
 **Logic ที่ต้อง implement:**
 - วนลูป `x` ตั้งแต่ `0` ถึง `columns - 1`
-- แต่ละช่องให้ `Instantiate(wall, new Vector2(x, 0), Quaternion.identity)`
+- แต่ละช่องให้สุ่มเลือกกำแพงจาก `walls` ด้วย `walls[Random.Range(0, walls.Length)]` แล้ว `Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity)`
 - ต่อตัวอักษร `*` ในตัวแปรข้อความ แล้วพิมพ์ออกมา 1 บรรทัดเมื่อจบลูป
 
 **ผลลัพธ์ที่ต้องได้:** (`columns = 5`)
@@ -166,7 +160,7 @@ void As04_CreateWallRow(int columns, GameObject wall)
 
 ## As05. สร้างพื้นแผนที่แบบสุ่ม (Create Floor)
 
-**วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุลงทุกช่องของแผนที่ โดยสุ่มชนิดพื้น
+**วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุลงทุกช่องของแผนที่ โดยสุ่มชนิดพื้น พร้อมตั้งชื่อแผ่นพื้นตามพิกัด
 
 **Method Signature:**
 ```csharp
@@ -176,6 +170,7 @@ void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
 **Logic ที่ต้อง implement:**
 - วน Nested Loop ทีละแถว (`y`) และทีละคอลัมน์ (`x`)
 - แต่ละช่องสุ่มเลือกพื้นจาก `floorTiles` ด้วย `Random.Range` แล้ว `Instantiate` ที่ตำแหน่ง `(x, y)`
+- ตั้งชื่อให้กับแผ่นพื้นที่สร้างขึ้นมาเป็น `Floor_{x}_{y}` (เช่น `Floor_0_0`, `Floor_1_0`) ผ่าน `.name`
 - เก็บชื่อพื้นของแถวนั้นต่อกันเป็นข้อความ แล้วพิมพ์ออกมาบรรทัดละแถว
 
 **ผลลัพธ์ที่ต้องได้:** (`columns = 3`, `rows = 3` และพื้นชื่อ `0`, `1`, `2` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
@@ -189,16 +184,16 @@ void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
 
 ## As06. สร้างกำแพงล้อมรอบแผนที่ (Create Wall)
 
-**วัตถุประสงค์:** ใช้ Nested Loop พร้อมเงื่อนไข เพื่อวางวัตถุเฉพาะขอบนอก
+**วัตถุประสงค์:** ใช้ Nested Loop พร้อมเงื่อนไข เพื่อวางวัตถุเฉพาะขอบนอก โดยสุ่มชนิดกำแพงจาก Prefab
 
 **Method Signature:**
 ```csharp
-void As06_CreateWall(int columns, int rows, GameObject wall)
+void As06_CreateWall(int columns, int rows, GameObject[] walls)
 ```
 
 **Logic ที่ต้อง implement:**
-- วนลูป `x` ตั้งแต่ `-1` ถึง `columns` และ `y` ตั้งแต่ `-1` ถึง `rows` (คือขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
-- ถ้าช่องนั้นอยู่ที่ขอบ (`x == -1 || x == columns || y == -1 || y == rows`) → `Instantiate` กำแพงที่ตำแหน่งนั้น และเก็บอักษร `*`
+- วนลูป `y` ตั้งแต่ `-1` ถึง `rows` และ `x` ตั้งแต่ `-1` ถึง `columns` (คือขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
+- ถ้าช่องนั้นอยู่ที่ขอบ (`x == -1 || x == columns || y == -1 || y == rows`) → สุ่มเลือกกำแพงจาก `walls` ด้วย `walls[Random.Range(0, walls.Length)]` แล้ว `Instantiate` ที่ตำแหน่งนั้น และเก็บอักษร `*`
 - ถ้าไม่ใช่ขอบ → เว้นว่าง เก็บอักษรเป็นช่องว่าง
 - พิมพ์ออกมาบรรทัดละแถว
 
@@ -255,45 +250,75 @@ Hamburger at x: 0 y: 3
 
 ---
 
-## As09. สร้างไอเทมตามชื่อที่อยู่ในตาราง
+## As09. สร้างไอเทมตามชื่อที่อยู่ในตาราง (Create Item From Array)
 
-**วัตถุประสงค์:** อ่านชื่อไอเทมจากตาราง แล้วหา Prefab ที่ชื่อตรงกันมา Instantiate
+**วัตถุประสงค์:** อ่านชื่อไอเทมจากตาราง 2 มิติ แล้วหา Prefab ที่ชื่อตรงกันมา Instantiate ลงในตำแหน่งตามพิกัดตาราง
 
 **Method Signature:**
 ```csharp
-void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
+void As09_CreateItemFromArray(GameObject[] items)
 ```
 
 **Logic ที่ต้อง implement:**
-- ใช้ตารางนี้ (แถวคือแกน Y คอลัมน์คือแกน X)
+- กำหนดตาราง 2 มิติ (แถวคือแกน Y คอลัมน์คือแกน X)
   ```csharp
   string[,] my2DStringArray = new string[3, 3] {
       { " ", "Soda", " " },
       { " ", " ",    " " },
       { " ", " ",    "Food" } };
   ```
-- อ่านชื่อที่ช่อง `my2DStringArray[itemPosY, itemPosX]`
-- ถ้าช่องนั้นว่าง (เป็นช่องว่าง) → พิมพ์ `No items at x: <x> y: <y>`
-- ถ้ามีชื่อ → วนหาใน `items` ว่ามีตัวไหนชื่อตรงกัน
-  - เจอ → `Instantiate` ที่ตำแหน่ง `(itemPosX, itemPosY)` แล้วพิมพ์ `Create Item <ชื่อ> at x: <x> y: <y>`
-  - ไม่เจอ → พิมพ์ `No items at x: <x> y: <y>`
+- ใช้ Nested Loop วนทีละแถว (`y`) และทีละคอลัมน์ (`x`)
+- ตรวจสอบชื่อไอเทมในแต่ละช่อง `my2DStringArray[y, x]` หากไม่ใช่ช่องว่าง:
+  - วนลูปค้นหาใน `items` ว่ามีตัวไหนที่มีชื่อ (`name`) ตรงกัน
+  - เมื่อพบ ให้ `Instantiate` ที่ตำแหน่ง `new Vector2(x, y)`
+  - พิมพ์ข้อความ `Create Item <ชื่อ> at x: <x> y: <y>`
 
-**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `itemPosX = 1`, `itemPosY = 0`)
+**ผลลัพธ์ที่ต้องได้:**
 ```text
 Create Item Soda at x: 1 y: 0
+Create Item Food at x: 2 y: 2
 ```
 
 ---
 
 # 🟢 Homework: Level 1 (Simple)
 
-## Lv01. หาผลรวมของแถวที่กำหนด
+## Lv01. อ่านค่าและเปลี่ยนค่าในตารางข้อความ (2D String Array)
+
+**วัตถุประสงค์:** เข้าถึงค่า (get) และกำหนดค่าใหม่ (set) ในช่องที่ต้องการของตารางข้อความ (2D String Array)
+
+**Method Signature:**
+```csharp
+void Lv01_GetSet2DStringArray()
+```
+
+**Logic ที่ต้อง implement:**
+- ประกาศตารางข้อความ:
+  ```csharp
+  string[,] my2DStringArray = new string[2, 3] { { "A", "B", "C" }, { "D", "E", "F" } };
+  ```
+- อ่านค่า `my2DStringArray` แถว 0 คอลัมน์ 2 แล้วพิมพ์ `get : <ค่า>`
+- เปลี่ยนค่าช่องนั้นเป็น `"Cat"` แล้วพิมพ์ `set : Cat`
+- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว หรือ `LineSeparator`) แล้วพิมพ์ตารางทั้งหมดโดยเรียกใช้ฟังก์ชัน `Print2DArray(my2DStringArray)`
+
+**ผลลัพธ์ที่ต้องได้:**
+```text
+get : C
+set : Cat
+============================
+A B Cat
+D E F
+```
+
+---
+
+## Lv02. หาผลรวมของแถวที่กำหนด
 
 **วัตถุประสงค์:** ใช้ `for` loop วนตามคอลัมน์ของแถวเดียว เพื่อรวมค่า
 
 **Method Signature:**
 ```csharp
-void Lv01_SumRow(int[,] matrix, int row)
+void Lv02_SumRow(int[,] matrix, int row)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -307,13 +332,13 @@ void Lv01_SumRow(int[,] matrix, int row)
 
 ---
 
-## Lv02. หาผลรวมของคอลัมน์ที่กำหนด
+## Lv03. หาผลรวมของคอลัมน์ที่กำหนด
 
 **วัตถุประสงค์:** ใช้ `for` loop วนตามแถว เพื่อรวมค่าในคอลัมน์เดียว
 
 **Method Signature:**
 ```csharp
-void Lv02_SumColumn(int[,] matrix, int col)
+void Lv03_SumColumn(int[,] matrix, int col)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -327,13 +352,13 @@ void Lv02_SumColumn(int[,] matrix, int col)
 
 ---
 
-## Lv03. สร้างหมู่บ้านรูปสี่เหลี่ยม
+## Lv04. สร้างหมู่บ้านรูปสี่เหลี่ยม
 
 **วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุจริงลงในฉากเป็นพื้นที่สี่เหลี่ยม (หมู่บ้าน) พร้อมพิมพ์ผังออกมาด้วย
 
 **Method Signature:**
 ```csharp
-void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
+void Lv04_BuildVillage(int columns, int rows, GameObject villageTile)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -351,13 +376,13 @@ void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
 
 ---
 
-## Lv04. สร้างแม่น้ำรูปสามเหลี่ยม
+## Lv05. สร้างแม่น้ำรูปสามเหลี่ยม
 
 **วัตถุประสงค์:** ใช้ Nested Loop ที่ลูปในขึ้นกับลูปนอก เพื่อวางพื้นที่แม่น้ำรูปสามเหลี่ยมลงในฉาก
 
 **Method Signature:**
 ```csharp
-void Lv04_BuildRiver(int size, GameObject riverTile)
+void Lv05_BuildRiver(int size, GameObject riverTile)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -376,13 +401,13 @@ void Lv04_BuildRiver(int size, GameObject riverTile)
 
 ---
 
-## Lv05. ตารางสูตรคูณหลายแม่พร้อมกัน
+## Lv06. ตารางสูตรคูณหลายแม่พร้อมกัน
 
 **วัตถุประสงค์:** ใช้ Nested Loop จัดข้อมูลออกมาเป็นตารางหลายคอลัมน์
 
 **Method Signature:**
 ```csharp
-void Lv05_MultiplicationTableNested(int fromTable, int toTable)
+void Lv06_MultiplicationTableNested(int fromTable, int toTable)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -401,13 +426,13 @@ void Lv05_MultiplicationTableNested(int fromTable, int toTable)
 
 ---
 
-## Lv06. หาค่าสูงสุดในตาราง
+## Lv07. หาค่าสูงสุดในตาราง
 
 **วัตถุประสงค์:** ใช้ Nested Loop วนตรวจหาค่าที่มากที่สุดใน 2D Array พร้อมจำตำแหน่งแถวและคอลัมน์
 
 **Method Signature:**
 ```csharp
-void Lv06_FindMaxInMatrix(int[,] matrix)
+void Lv07_FindMaxInMatrix(int[,] matrix)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -423,13 +448,13 @@ Max value 9 at [2, 2]
 
 ---
 
-## Lv07. นับจำนวนช่องที่มีค่าเป้าหมาย
+## Lv08. นับจำนวนช่องที่มีค่าเป้าหมาย
 
 **วัตถุประสงค์:** ใช้ Nested Loop วนนับจำนวนช่องใน 2D Array ที่มีค่าตรงกับที่กำหนด
 
 **Method Signature:**
 ```csharp
-void Lv07_CountTargetValue(int[,] matrix, int target)
+void Lv08_CountTargetValue(int[,] matrix, int target)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -445,13 +470,13 @@ Found target 1: 5 cells
 
 ---
 
-## Lv08. หาผลรวมของสมาชิกทุกช่องในตาราง
+## Lv09. หาผลรวมของสมาชิกทุกช่องในตาราง
 
 **วัตถุประสงค์:** ใช้ Nested Loop วนบวกค่าทุกช่องใน 2D Array เข้าด้วยกัน
 
 **Method Signature:**
 ```csharp
-void Lv08_SumAllElements(int[,] matrix)
+void Lv09_SumAllElements(int[,] matrix)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -467,13 +492,13 @@ void Lv08_SumAllElements(int[,] matrix)
 
 ---
 
-## Lv09. สร้างแม่น้ำสามเหลี่ยมกลับด้าน
+## Lv10. สร้างแม่น้ำสามเหลี่ยมกลับด้าน
 
 **วัตถุประสงค์:** ฝึกควบคุม Nested Loop ที่จำนวนรอบของลูปในลดลงตามแถว พร้อมวางวัตถุลงฉาก
 
 **Method Signature:**
 ```csharp
-void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
+void Lv10_BuildInvertedRiver(int size, GameObject riverTile)
 ```
 
 **Logic ที่ต้อง implement:**
@@ -491,13 +516,13 @@ void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
 
 ---
 
-## Lv10. อ่านค่าแนวทแยงมุมหลัก
+## Lv11. อ่านค่าแนวทแยงมุมหลัก
 
 **วัตถุประสงค์:** เข้าถึงข้อมูลในแนวทแยงมุมหลัก (`matrix[i, i]`) ของตาราง 2 มิติ
 
 **Method Signature:**
 ```csharp
-void Lv10_PrintMainDiagonal(int[,] matrix)
+void Lv11_PrintMainDiagonal(int[,] matrix)
 ```
 
 **Logic ที่ต้อง implement:**

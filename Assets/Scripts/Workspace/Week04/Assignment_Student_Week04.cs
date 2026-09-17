@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week04
@@ -27,31 +27,29 @@ namespace Week04
 
         [Header("As09 Variables")]
         public GameObject[] Items;
-        public int foodPosX = 1;
-        public int foodPosY = 0;
 
         #endregion
 
         #region Level 1 Variables
 
-        [Header("Lv01 & Lv02 Variables")]
+        [Header("Lv02 & Lv03 Variables")]
         public int row = 0;
         public int col = 0;
 
-        [Header("Lv03 Variables")]
+        [Header("Lv04 Variables")]
         public int starColumns = 5;
         public int starRows = 3;
         public GameObject villageTile;
 
-        [Header("Lv04 & Lv09 Variables")]
+        [Header("Lv05 & Lv10 Variables")]
         public int size = 5;
         public GameObject riverTile;
 
-        [Header("Lv05 Variables")]
+        [Header("Lv06 Variables")]
         public int fromTable = 2;
         public int toTable = 4;
 
-        [Header("Lv07 Variables")]
+        [Header("Lv08 Variables")]
         public int targetValue = 5;
 
         #endregion
@@ -130,20 +128,21 @@ namespace Week04
 
             if (HasPrefabs(Items, "Items", "As09_CreateItemFromArray"))
             {
-                As09_CreateItemFromArray(Items, foodPosX, foodPosY);
+                As09_CreateItemFromArray(Items);
             }
 
+            Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-            Lv01_SumRow(sampleMatrix, row);
-            Lv02_SumColumn(sampleMatrix, col);
-            Lv03_BuildVillage(starColumns, starRows, villageTile);
-            Lv04_BuildRiver(size, riverTile);
-            Lv05_MultiplicationTableNested(fromTable, toTable);
-            Lv06_FindMaxInMatrix(sampleMatrix);
-            Lv07_CountTargetValue(sampleMatrix, targetValue);
-            Lv08_SumAllElements(sampleMatrix);
-            Lv09_BuildInvertedRiver(size, riverTile);
-            Lv10_PrintMainDiagonal(sampleMatrix);
+            Lv02_SumRow(sampleMatrix, row);
+            Lv03_SumColumn(sampleMatrix, col);
+            Lv04_BuildVillage(starColumns, starRows, villageTile);
+            Lv05_BuildRiver(size, riverTile);
+            Lv06_MultiplicationTableNested(fromTable, toTable);
+            Lv07_FindMaxInMatrix(sampleMatrix);
+            Lv08_CountTargetValue(sampleMatrix, targetValue);
+            Lv09_SumAllElements(sampleMatrix);
+            Lv10_BuildInvertedRiver(size, riverTile);
+            Lv11_PrintMainDiagonal(sampleMatrix);
 
             int[,] moves = new int[,] { { 1, 0, 2 }, { 0, 1, 0 }, { 2, 0, 1 } };
             Ex01_TicTacToe(moves);
@@ -171,40 +170,60 @@ namespace Week04
             // 1. สร้าง 2D Array int[,] my2DArray ขนาด [rows, cols]
             // 2. หาจำนวนแถว (มิติที่ 1) ด้วย my2DArray.GetLength(0) แล้วพิมพ์ "rows = " + rows
             // 3. หาจำนวนคอลัมน์ (มิติที่ 2) ด้วย my2DArray.GetLength(1) แล้วพิมพ์ "cols = " + cols
+            // 4. หาจำนวนช่องทั้งหมดด้วย my2DArray.Length แล้วพิมพ์ "length = " + my2DArray.Length
         }
 
         public void As03_GetSet2DArray()
         {
             // Guideline:
             // 1. สร้าง 2D Array int[,] ขนาด 3x3: { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }
-            //    และ string[,] ขนาด 2x3: { { "A", "B", "C" }, { "D", "E", "F" } }
             // 2. ดึงค่า (Get) จาก my2DArray แถวที่ 1 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
             // 3. เปลี่ยนค่า (Set) ใน my2DArray แถวที่ 1 คอลัมน์ที่ 2 ให้เป็น 70 แล้วพิมพ์ "set : 70"
             // 4. พิมพ์เส้นคั่น LineSeparator ("============================")
-            // 5. ใช้ Nested Loop (for ซ้อน for) วนพิมพ์สมาชิกทั้งหมดของ my2DArray ทีละแถว คั่นด้วยช่องว่าง
-            // 6. พิมพ์เส้นคั่น LineSeparator
-            // 7. ดึงค่า (Get) จาก my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
-            // 8. เปลี่ยนค่า (Set) ใน my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 ให้เป็น "Cat" แล้วพิมพ์ "set : Cat"
-            // 9. พิมพ์เส้นคั่น LineSeparator
-            // 10. ใช้ Nested Loop วนพิมพ์สมาชิกทั้งหมดของ my2DStringArray ทีละแถว คั่นด้วยช่องว่าง
+            // 5. เรียกใช้ฟังก์ชัน Print2DArray(my2DArray) เพื่อพิมพ์ข้อมูลใน my2DArray
         }
 
-        public void As04_CreateWallRow(int columns, GameObject wall)
+        public void Print2DArray(int[,] array)
         {
-            // Guideline:
-            // 1. ใช้ลูป for วน x ตั้งแต่ 0 ถึง columns - 1
-            // 2. ตรวจสอบว่า wall ไม่เป็น null ให้ Instantiate(wall, new Vector2(x, 0), Quaternion.identity)
-            // 3. สะสมสตริงเครื่องหมาย "*" ของแต่ละช่อง
-            // 4. เมื่อจบลูป ให้พิมพ์สตริงแถวกำแพงออกมา เช่น "*****"
+            for (int r = 0; r < array.GetLength(0); r++)
+            {
+                string line = "";
+                for (int c = 0; c < array.GetLength(1); c++)
+                {
+                    line += array[r, c];
+                    if (c < array.GetLength(1) - 1)
+                    {
+                        line += " ";
+                    }
+                }
+                Debug.Log(line);
+            }
         }
 
+        public void Print2DArray(string[,] array)
+        {
+            for (int r = 0; r < array.GetLength(0); r++)
+            {
+                string line = "";
+                for (int c = 0; c < array.GetLength(1); c++)
+                {
+                    line += array[r, c];
+                    if (c < array.GetLength(1) - 1)
+                    {
+                        line += " ";
+                    }
+                }
+                Debug.Log(line);
+            }
+        }
         public void As04_CreateWallRow(int columns, GameObject[] walls)
         {
-            // Guideline: (Overload สำหรับสุ่มชนิดกำแพง)
+            // Guideline:
             // 1. วนลูป x ตั้งแต่ 0 ถึง columns - 1
             // 2. สุ่มเลือก prefab จาก walls ด้วย walls[Random.Range(0, walls.Length)]
             // 3. Instantiate ที่ตำแหน่ง new Vector2(x, 0)
-            // 4. พิมพ์สตริง "*" ออกมาทาง Console
+            // 4. สะสมสตริงเครื่องหมาย "*" ของแต่ละช่อง
+            // 5. เมื่อจบลูป ให้พิมพ์สตริงแถวกำแพงออกมา เช่น "*****"
         }
 
         public void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
@@ -213,26 +232,18 @@ namespace Week04
             // 1. ใช้ Nested Loop: ลูปนอกวน y ตั้งแต่ 0 ถึง rows - 1, ลูปในวน x ตั้งแต่ 0 ถึง columns - 1
             // 2. ในแต่ละช่อง ให้สุ่มเลือกแผ่นพื้นจาก floorTiles ด้วย Random.Range(0, floorTiles.Length)
             // 3. Instantiate แผ่นพื้นที่สุ่มได้ที่พิกัด new Vector2(x, y)
-            // 4. สะสมชื่อของแผ่นพื้น (tileChoice.name) ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
-        }
-
-        public void As06_CreateWall(int columns, int rows, GameObject wall)
-        {
-            // Guideline:
-            // 1. ขอบเขตกำแพงรอบนอกขยายออกไป 1 ช่อง: ลูป y จาก -1 ถึง rows, ลูป x จาก -1 ถึง columns
-            // 2. ตรวจสอบเงื่อนไขว่าเป็นตำแหน่งขอบนอกหรือไม่: (x == -1 || x == columns || y == -1 || y == rows)
-            // 3. ถ้าเป็นขอบ ให้ Instantiate(wall, new Vector2(x, y), Quaternion.identity) และสะสม "*"
-            // 4. ถ้าไม่ใช่ขอบ (พื้นที่ภายใน) ให้สะสมช่องว่าง " "
-            // 5. พิมพ์สตริงแต่ละแถวออกมาทาง Console
+            // 4. ตั้งชื่อแผ่นพื้นที่สร้างขึ้นมาเป็น $"Floor_{x}_{y}" (เช่น Floor_0_0)
+            // 5. สะสมชื่อของแผ่นพื้น (tileChoice.name) ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
         }
 
         public void As06_CreateWall(int columns, int rows, GameObject[] walls)
         {
-            // Guideline: (Overload สำหรับสุ่มชนิดกำแพงรอบนอก)
-            // 1. ลูป y จาก -1 ถึง rows และ x จาก -1 ถึง columns
-            // 2. ถ้าเป็นขอบนอก ให้สุ่มเลือก prefab จาก walls แล้ว Instantiate ที่ (x, y) พร้อมสะสม "*"
-            // 3. ถ้าไม่ใช่ขอบ ให้สะสม " "
-            // 4. พิมพ์แต่ละแถวออกมาทาง Console
+            // Guideline:
+            // 1. ลูป y จาก -1 ถึง rows และ x จาก -1 ถึง columns (ขอบเขตรอบนอกขยายออกไปด้านละ 1 ช่อง)
+            // 2. ตรวจสอบเงื่อนไขขอบนอก: (x == -1 || x == columns || y == -1 || y == rows)
+            // 3. ถ้าเป็นขอบนอก ให้สุ่มเลือก prefab จาก walls แล้ว Instantiate ที่ new Vector2(x, y) พร้อมสะสม "*"
+            // 4. ถ้าไม่ใช่ขอบ (พื้นที่ภายใน) ให้สะสม " "
+            // 5. พิมพ์แต่ละแถวออกมาทาง Console
         }
 
         public void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
@@ -252,17 +263,17 @@ namespace Week04
             // 4. พิมพ์ข้อความ "{ชื่อไอเทม} at x: {x} y: {y}"
         }
 
-        public void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
+        public void As09_CreateItemFromArray(GameObject[] items)
         {
             // Guideline:
             // 1. สร้าง 2D String Array my2DStringArray ขนาด 3x3:
             //    { { " ", "Soda", " " }, { " ", " ", " " }, { " ", " ", "Food" } }
-            // 2. อ่านชื่อไอเทมจาก my2DStringArray ที่พิกัด [itemPosY, itemPosX]
-            // 3. ถ้าพบชื่อไอเทม (ไม่ใช่ช่องว่าง):
-            //    - วนลูปหา prefab ใน items ที่มี name ตรงกับชื่อที่ได้
-            //    - ถ้าพบ ให้ Instantiate ที่พิกัด (itemPosX, itemPosY)
-            //    - พิมพ์ "Create Item " + itemName + " at x: " + itemPosX + " y: " + itemPosY แล้ว return
-            // 4. ถ้าไม่พบไอเทม ให้พิมพ์ "No items at x: " + itemPosX + " y: " + itemPosY
+            // 2. ใช้ Nested Loop: ลูปนอกวน y จาก 0 ถึง GetLength(0) - 1, ลูปในวน x จาก 0 ถึง GetLength(1) - 1
+            // 3. อ่านชื่อไอเทม itemName = my2DStringArray[y, x]
+            // 4. ถ้าไม่ใช่ช่องว่าง (!string.IsNullOrWhiteSpace(itemName)):
+            //    - วนลูปหาใน items ที่มี name == itemName
+            //    - ถ้าพบ ให้ Instantiate(items[i], new Vector2(x, y), Quaternion.identity)
+            //    - และพิมพ์ "Create Item " + itemName + " at x: " + x + " y: " + y
         }
 
         #endregion
@@ -271,7 +282,17 @@ namespace Week04
 
         #region Level 1: Simple
 
-        public void Lv01_SumRow(int[,] matrix, int row)
+        public void Lv01_GetSet2DStringArray()
+        {
+            // Guideline:
+            // 1. สร้าง 2D Array string[,] ขนาด 2x3: { { "A", "B", "C" }, { "D", "E", "F" } }
+            // 2. ดึงค่า (Get) จาก my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
+            // 3. เปลี่ยนค่า (Set) ใน my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 ให้เป็น "Cat" แล้วพิมพ์ "set : Cat"
+            // 4. พิมพ์เส้นคั่น LineSeparator ("============================")
+            // 5. เรียกใช้ฟังก์ชัน Print2DArray(my2DStringArray) เพื่อพิมพ์ข้อมูลใน my2DStringArray
+        }
+
+        public void Lv02_SumRow(int[,] matrix, int row)
         {
             // Guideline:
             // 1. ประกาศตัวแปร int sum = 0; เพื่อสะสมผลรวม
@@ -280,7 +301,7 @@ namespace Week04
             // 4. เมื่อจบลูป ให้พิมพ์ sum ออกมา
         }
 
-        public void Lv02_SumColumn(int[,] matrix, int col)
+        public void Lv03_SumColumn(int[,] matrix, int col)
         {
             // Guideline:
             // 1. ประกาศตัวแปร int sum = 0; เพื่อสะสมผลรวม
@@ -289,7 +310,7 @@ namespace Week04
             // 4. เมื่อจบลูป ให้พิมพ์ sum ออกมา
         }
 
-        public void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
+        public void Lv04_BuildVillage(int columns, int rows, GameObject villageTile)
         {
             // Guideline:
             // 1. ใช้ Nested Loop วน y ตั้งแต่ 0 ถึง rows - 1 และ x ตั้งแต่ 0 ถึง columns - 1
@@ -297,7 +318,7 @@ namespace Week04
             // 3. สะสมสตริงสัญลักษณ์ "*" ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
         }
 
-        public void Lv04_BuildRiver(int size, GameObject riverTile)
+        public void Lv05_BuildRiver(int size, GameObject riverTile)
         {
             // Guideline:
             // 1. สร้างแม่น้ำทรงสามเหลี่ยม ลูปแถว r ตั้งแต่ 1 ถึง size
@@ -306,7 +327,7 @@ namespace Week04
             // 4. สะสมสตริง "*" ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
         }
 
-        public void Lv05_MultiplicationTableNested(int fromTable, int toTable)
+        public void Lv06_MultiplicationTableNested(int fromTable, int toTable)
         {
             // Guideline:
             // 1. ลูปนอกวนตัวคูณ i ตั้งแต่ 1 ถึง 12
@@ -315,7 +336,7 @@ namespace Week04
             // 4. พิมพ์สูตรคูณออกมาทีละบรรทัด
         }
 
-        public void Lv06_FindMaxInMatrix(int[,] matrix)
+        public void Lv07_FindMaxInMatrix(int[,] matrix)
         {
             // Guideline:
             // 1. กำหนดตัวแปร int max = matrix[0, 0]; และ int maxR = 0, maxC = 0;
@@ -324,7 +345,7 @@ namespace Week04
             // 4. เมื่อจบลูป ให้พิมพ์: "Max value " + max + " at [" + maxR + ", " + maxC + "]"
         }
 
-        public void Lv07_CountTargetValue(int[,] matrix, int target)
+        public void Lv08_CountTargetValue(int[,] matrix, int target)
         {
             // Guideline:
             // 1. กำหนดตัวแปร int count = 0; เพื่อนับจำนวน
@@ -333,7 +354,7 @@ namespace Week04
             // 4. พิมพ์: "Found target " + target + ": " + count + " cells"
         }
 
-        public void Lv08_SumAllElements(int[,] matrix)
+        public void Lv09_SumAllElements(int[,] matrix)
         {
             // Guideline:
             // 1. กำหนดตัวแปร int sum = 0; ไว้นอกลูป
@@ -341,7 +362,7 @@ namespace Week04
             // 3. พิมพ์ sum ออกมา
         }
 
-        public void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
+        public void Lv10_BuildInvertedRiver(int size, GameObject riverTile)
         {
             // Guideline:
             // 1. สร้างแม่น้ำสามเหลี่ยมกลับหัว แถวแรกกว้าง size แล้วลดลงทีละ 1 จนถึง 1 (ลูป r จาก size ลงมาถึง 1)
@@ -350,7 +371,7 @@ namespace Week04
             // 4. พิมพ์สตริงแถวออกมาทีละบรรทัด
         }
 
-        public void Lv10_PrintMainDiagonal(int[,] matrix)
+        public void Lv11_PrintMainDiagonal(int[,] matrix)
         {
             // Guideline:
             // 1. หาขนาดแนวทแยง minDim = Mathf.Min(matrix.GetLength(0), matrix.GetLength(1))

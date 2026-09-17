@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -42,11 +42,7 @@ namespace Week04_Array2D
             if (testGo != null)
                 Object.DestroyImmediate(testGo);
 
-            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
-            {
-                if (go != null && go.name.Contains("(Clone)"))
-                    Object.DestroyImmediate(go);
-            }
+            DestroyAllClones();
         }
 
         protected static int CountClones()
@@ -54,7 +50,7 @@ namespace Week04_Array2D
             int n = 0;
             foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
             {
-                if (go != null && go.name.Contains("(Clone)")) n++;
+                if (go != null && (go.name.Contains("(Clone)") || go.name.StartsWith("Floor_"))) n++;
             }
             return n;
         }
@@ -63,7 +59,7 @@ namespace Week04_Array2D
         {
             foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
             {
-                if (go != null && go.name.Contains("(Clone)")) Object.DestroyImmediate(go);
+                if (go != null && (go.name.Contains("(Clone)") || go.name.StartsWith("Floor_"))) Object.DestroyImmediate(go);
             }
         }
 
@@ -157,7 +153,7 @@ namespace Week04_Array2D
         public void As02_ArraySize(int rows, int cols)
         {
             assignment.As02_ArraySize(rows, cols);
-            TestUtils.AssertMultilineEqual($"rows = {rows}\ncols = {cols}", SimpleDebugConsole.GetOutput());
+            TestUtils.AssertMultilineEqual($"rows = {rows}\ncols = {cols}\nlength = {rows * cols}", SimpleDebugConsole.GetOutput());
         }
 
         [Test]
@@ -173,15 +169,9 @@ namespace Week04_Array2D
             sb.AppendLine("1 2 3");
             sb.AppendLine("4 5 70");
             sb.AppendLine("7 8 9");
-            sb.AppendLine(sep);
-            sb.AppendLine("get : C");
-            sb.AppendLine("set : Cat");
-            sb.AppendLine(sep);
-            sb.AppendLine("A B Cat");
-            sb.AppendLine("D E F");
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("As03_GetSet2DArray", minLoops: 2);
+            AssertBodyContains("As03_GetSet2DArray", "Print2DArray", "ต้องเรียกใช้ Print2DArray ในการแสดงผล 2D Array");
         }
 
         [TestCase(5)]
@@ -190,16 +180,33 @@ namespace Week04_Array2D
         [TestCase(8)]
         public void As04_CreateWallRow(int columns)
         {
-            var wall = new GameObject("Wall");
+            var walls = new GameObject[] { new GameObject("Wall") };
 
-            assignment.As04_CreateWallRow(columns, wall);
+            assignment.As04_CreateWallRow(columns, walls);
 
             TestUtils.AssertMultilineEqual(new string('*', columns), SimpleDebugConsole.GetOutput());
             Assert.AreEqual(columns, CountClones(), $"ต้อง Instantiate กำแพง {columns} ชิ้น");
 
-            Object.DestroyImmediate(wall);
+            foreach (var w in walls) Object.DestroyImmediate(w);
+            DestroyAllClones();
             AssertUsesRealLoop("As04_CreateWallRow", minLoops: 1);
             AssertBodyContains("As04_CreateWallRow", "Instantiate", "ต้อง Instantiate กำแพงจริง");
+            AssertBodyContains("As04_CreateWallRow", "Random.Range", "ต้องสุ่มกำแพงด้วย Random.Range");
+        }
+
+        [Test]
+        public void As04_CreateWallRow_MultipleWallPrefabs()
+        {
+            var walls = MakeItems("Wall_A", "Wall_B", "Wall_C");
+            const int columns = 6;
+
+            assignment.As04_CreateWallRow(columns, walls);
+
+            TestUtils.AssertMultilineEqual(new string('*', columns), SimpleDebugConsole.GetOutput());
+            Assert.AreEqual(columns, CountClones(), $"ต้อง Instantiate กำแพง {columns} ชิ้น");
+
+            DestroyItems(walls);
+            DestroyAllClones();
         }
 
         [Test]
@@ -230,6 +237,15 @@ namespace Week04_Array2D
                 }
                 Assert.AreEqual(columns * rows, CountClones(), $"seed {seed}: ต้อง Instantiate ครบทุกช่อง");
 
+                for (int y = 0; y < rows; y++)
+                {
+                    for (int x = 0; x < columns; x++)
+                    {
+                        var floorObj = GameObject.Find($"Floor_{x}_{y}");
+                        Assert.IsNotNull(floorObj, $"seed {seed}: ต้องมี GameObject ชื่อ 'Floor_{x}_{y}' ที่สร้างขึ้นมา");
+                    }
+                }
+
                 maps.Add(output);
                 DestroyItems(tiles);
                 DestroyAllClones();
@@ -239,6 +255,7 @@ namespace Week04_Array2D
             AssertUsesRealLoop("As05_CreateFloor", minLoops: 2);
             AssertBodyContains("As05_CreateFloor", "Random.Range", "ต้องสุ่มพื้นด้วย Random.Range");
             AssertBodyContains("As05_CreateFloor", "Instantiate", "ต้อง Instantiate พื้นทุกช่อง");
+            AssertBodyContains("As05_CreateFloor", ".name", "ต้องตั้งชื่อให้กับแผ่นพื้นที่สร้างขึ้นมา");
         }
 
         [TestCase(5, 3)]
@@ -247,9 +264,9 @@ namespace Week04_Array2D
         [TestCase(4, 2)]
         public void As06_CreateWall(int columns, int rows)
         {
-            var wall = new GameObject("Wall");
+            var walls = new GameObject[] { new GameObject("Wall") };
 
-            assignment.As06_CreateWall(columns, rows, wall);
+            assignment.As06_CreateWall(columns, rows, walls);
 
             var sb = new StringBuilder();
             for (int y = -1; y <= rows; y++)
@@ -267,9 +284,26 @@ namespace Week04_Array2D
             int expectedWalls = (columns + 2) * (rows + 2) - columns * rows;
             Assert.AreEqual(expectedWalls, CountClones(), "จำนวนกำแพงที่สร้างไม่ตรงกับขอบนอก");
 
-            Object.DestroyImmediate(wall);
+            foreach (var w in walls) Object.DestroyImmediate(w);
+            DestroyAllClones();
             AssertUsesRealLoop("As06_CreateWall", minLoops: 2);
             AssertBodyContains("As06_CreateWall", "Instantiate", "ต้อง Instantiate กำแพงจริง");
+            AssertBodyContains("As06_CreateWall", "Random.Range", "ต้องสุ่มกำแพงด้วย Random.Range");
+        }
+
+        [Test]
+        public void As06_CreateWall_MultipleWallPrefabs()
+        {
+            var walls = MakeItems("Wall_A", "Wall_B", "Wall_C");
+            const int columns = 4, rows = 3;
+
+            assignment.As06_CreateWall(columns, rows, walls);
+
+            int expectedWalls = (columns + 2) * (rows + 2) - columns * rows;
+            Assert.AreEqual(expectedWalls, CountClones(), "จำนวนกำแพงที่สร้างไม่ตรงกับขอบนอก");
+
+            DestroyItems(walls);
+            DestroyAllClones();
         }
 
         [TestCase(1, 2)]
@@ -327,30 +361,52 @@ namespace Week04_Array2D
             AssertBodyContains("As08_RandomFoodItem", "Instantiate", "ต้อง Instantiate ของที่สุ่มได้");
         }
 
-        static readonly object[] As09Cases =
+        [Test]
+        public void As09_CreateItemFromArray_AllItemsFound()
         {
-            new object[] { new string[] { "Soda", "Food", "Water" }, 1, 0, "Create Item Soda at x: 1 y: 0", 1 },
-            new object[] { new string[] { "Soda", "Food", "Water" }, 2, 2, "Create Item Food at x: 2 y: 2", 1 },
-            new object[] { new string[] { "Soda", "Food", "Water" }, 0, 0, "No items at x: 0 y: 0", 0 },
-            new object[] { new string[] { "Water" }, 1, 0, "No items at x: 1 y: 0", 0 },
-        };
+            var items = MakeItems("Soda", "Food", "Water");
 
-        [TestCaseSource(nameof(As09Cases))]
-        public void As09_CreateItemFromArray(string[] itemNames, int x, int y, string expectedOutput, int expectedClones)
-        {
-            var items = MakeItems(itemNames);
+            assignment.As09_CreateItemFromArray(items);
 
-            assignment.As09_CreateItemFromArray(items, x, y);
+            var sb = new StringBuilder();
+            sb.AppendLine("Create Item Soda at x: 1 y: 0");
+            sb.AppendLine("Create Item Food at x: 2 y: 2");
 
-            TestUtils.AssertMultilineEqual(expectedOutput, SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(expectedClones, CountClones(), expectedClones > 0 ? "ต้อง Instantiate ไอเทม 1 ชิ้น" : "ช่องว่างต้องไม่ Instantiate อะไร");
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            Assert.AreEqual(2, CountClones(), "ต้อง Instantiate ทั้ง 2 ไอเทม (Soda และ Food)");
 
             DestroyItems(items);
             DestroyAllClones();
-            if (expectedClones > 0)
-            {
-                AssertBodyContains("As09_CreateItemFromArray", "Instantiate", "ต้อง Instantiate ไอเทมที่เจอ");
-            }
+            AssertUsesRealLoop("As09_CreateItemFromArray", minLoops: 2);
+            AssertBodyContains("As09_CreateItemFromArray", "Instantiate", "ต้อง Instantiate ไอเทมที่เจอ");
+        }
+
+        [Test]
+        public void As09_CreateItemFromArray_OnlySoda()
+        {
+            var items = MakeItems("Soda", "Water");
+
+            assignment.As09_CreateItemFromArray(items);
+
+            TestUtils.AssertMultilineEqual("Create Item Soda at x: 1 y: 0", SimpleDebugConsole.GetOutput());
+            Assert.AreEqual(1, CountClones(), "ต้อง Instantiate เฉพาะ Soda 1 ชิ้น");
+
+            DestroyItems(items);
+            DestroyAllClones();
+        }
+
+        [Test]
+        public void As09_CreateItemFromArray_NoMatchingItems()
+        {
+            var items = MakeItems("Water", "Potion");
+
+            assignment.As09_CreateItemFromArray(items);
+
+            TestUtils.AssertMultilineEqual("", SimpleDebugConsole.GetOutput());
+            Assert.AreEqual(0, CountClones(), "ไม่มีไอเทมที่ชื่อตรงกัน ต้องไม่ Instantiate อะไร");
+
+            DestroyItems(items);
+            DestroyAllClones();
         }
     }
 
@@ -372,16 +428,33 @@ namespace Week04_Array2D
             new object[] { Matrix1x1, 0 },
         };
 
-        [TestCaseSource(nameof(RowCases))]
-        public void Lv01_SumRow(int[,] matrix, int row)
+        [Test]
+        public void Lv01_GetSet2DStringArray()
         {
-            assignment.Lv01_SumRow(matrix, row);
+            assignment.Lv01_GetSet2DStringArray();
+
+            const string sep = "============================";
+            var sb = new StringBuilder();
+            sb.AppendLine("get : C");
+            sb.AppendLine("set : Cat");
+            sb.AppendLine(sep);
+            sb.AppendLine("A B Cat");
+            sb.AppendLine("D E F");
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            AssertBodyContains("Lv01_GetSet2DStringArray", "Print2DArray", "ต้องเรียกใช้ Print2DArray ในการแสดงผล 2D Array");
+        }
+
+        [TestCaseSource(nameof(RowCases))]
+        public void Lv02_SumRow(int[,] matrix, int row)
+        {
+            assignment.Lv02_SumRow(matrix, row);
 
             int expected = 0;
             for (int c = 0; c < matrix.GetLength(1); c++) expected += matrix[row, c];
 
             TestUtils.AssertMultilineEqual(expected.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv01_SumRow");
+            AssertUsesRealLoop("Lv02_SumRow");
         }
 
         static readonly object[] ColCases =
@@ -394,26 +467,26 @@ namespace Week04_Array2D
         };
 
         [TestCaseSource(nameof(ColCases))]
-        public void Lv02_SumColumn(int[,] matrix, int col)
+        public void Lv03_SumColumn(int[,] matrix, int col)
         {
-            assignment.Lv02_SumColumn(matrix, col);
+            assignment.Lv03_SumColumn(matrix, col);
 
             int expected = 0;
             for (int r = 0; r < matrix.GetLength(0); r++) expected += matrix[r, col];
 
             TestUtils.AssertMultilineEqual(expected.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv02_SumColumn");
+            AssertUsesRealLoop("Lv03_SumColumn");
         }
 
         [TestCase(3, 4)]
         [TestCase(1, 1)]
         [TestCase(5, 2)]
         [TestCase(7, 7)]
-        public void Lv03_BuildVillage(int columns, int rows)
+        public void Lv04_BuildVillage(int columns, int rows)
         {
             var tile = new GameObject("VillageTile");
 
-            assignment.Lv03_BuildVillage(columns, rows, tile);
+            assignment.Lv04_BuildVillage(columns, rows, tile);
 
             var sb = new StringBuilder();
             for (int y = 0; y < rows; y++)
@@ -434,19 +507,19 @@ namespace Week04_Array2D
 
             Object.DestroyImmediate(tile);
             DestroyAllClones();
-            AssertUsesRealLoop("Lv03_BuildVillage", minLoops: 2);
-            AssertBodyContains("Lv03_BuildVillage", "Instantiate", "ต้อง Instantiate บ้านลงในฉากจริง");
+            AssertUsesRealLoop("Lv04_BuildVillage", minLoops: 2);
+            AssertBodyContains("Lv04_BuildVillage", "Instantiate", "ต้อง Instantiate บ้านลงในฉากจริง");
         }
 
         [TestCase(5)]
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(8)]
-        public void Lv04_BuildRiver(int size)
+        public void Lv05_BuildRiver(int size)
         {
             var tile = new GameObject("RiverTile");
 
-            assignment.Lv04_BuildRiver(size, tile);
+            assignment.Lv05_BuildRiver(size, tile);
 
             var sb = new StringBuilder();
             for (int r = 1; r <= size; r++)
@@ -459,17 +532,17 @@ namespace Week04_Array2D
 
             Object.DestroyImmediate(tile);
             DestroyAllClones();
-            AssertUsesRealLoop("Lv04_BuildRiver", minLoops: 2);
-            AssertBodyContains("Lv04_BuildRiver", "Instantiate", "ต้อง Instantiate แม่น้ำลงในฉากจริง");
+            AssertUsesRealLoop("Lv05_BuildRiver", minLoops: 2);
+            AssertBodyContains("Lv05_BuildRiver", "Instantiate", "ต้อง Instantiate แม่น้ำลงในฉากจริง");
         }
 
         [TestCase(2, 4)]
         [TestCase(2, 2)]
         [TestCase(5, 9)]
         [TestCase(1, 3)]
-        public void Lv05_MultiplicationTableNested(int fromTable, int toTable)
+        public void Lv06_MultiplicationTableNested(int fromTable, int toTable)
         {
-            assignment.Lv05_MultiplicationTableNested(fromTable, toTable);
+            assignment.Lv06_MultiplicationTableNested(fromTable, toTable);
 
             var sb = new StringBuilder();
             for (int i = 1; i <= 12; i++)
@@ -484,7 +557,7 @@ namespace Week04_Array2D
             }
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv05_MultiplicationTableNested", minLoops: 2);
+            AssertUsesRealLoop("Lv06_MultiplicationTableNested", minLoops: 2);
         }
 
         static readonly object[] MaxCases =
@@ -497,12 +570,12 @@ namespace Week04_Array2D
         };
 
         [TestCaseSource(nameof(MaxCases))]
-        public void Lv06_FindMaxInMatrix(int[,] matrix, int expectedMax, int expectedR, int expectedC)
+        public void Lv07_FindMaxInMatrix(int[,] matrix, int expectedMax, int expectedR, int expectedC)
         {
-            assignment.Lv06_FindMaxInMatrix(matrix);
+            assignment.Lv07_FindMaxInMatrix(matrix);
 
             TestUtils.AssertMultilineEqual($"Max value {expectedMax} at [{expectedR}, {expectedC}]", SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv06_FindMaxInMatrix");
+            AssertUsesRealLoop("Lv07_FindMaxInMatrix");
         }
 
         static readonly object[] CountCases =
@@ -516,12 +589,12 @@ namespace Week04_Array2D
         };
 
         [TestCaseSource(nameof(CountCases))]
-        public void Lv07_CountTargetValue(int[,] matrix, int target, int expectedCount)
+        public void Lv08_CountTargetValue(int[,] matrix, int target, int expectedCount)
         {
-            assignment.Lv07_CountTargetValue(matrix, target);
+            assignment.Lv08_CountTargetValue(matrix, target);
 
             TestUtils.AssertMultilineEqual($"Found target {target}: {expectedCount} cells", SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv07_CountTargetValue");
+            AssertUsesRealLoop("Lv08_CountTargetValue");
         }
 
         static readonly object[] SumAllCases =
@@ -533,23 +606,23 @@ namespace Week04_Array2D
         };
 
         [TestCaseSource(nameof(SumAllCases))]
-        public void Lv08_SumAllElements(int[,] matrix, int expectedSum)
+        public void Lv09_SumAllElements(int[,] matrix, int expectedSum)
         {
-            assignment.Lv08_SumAllElements(matrix);
+            assignment.Lv09_SumAllElements(matrix);
 
             TestUtils.AssertMultilineEqual(expectedSum.ToString(), SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv08_SumAllElements");
+            AssertUsesRealLoop("Lv09_SumAllElements");
         }
 
         [TestCase(4)]
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(5)]
-        public void Lv09_BuildInvertedRiver(int size)
+        public void Lv10_BuildInvertedRiver(int size)
         {
             var tile = new GameObject("RiverTile");
 
-            assignment.Lv09_BuildInvertedRiver(size, tile);
+            assignment.Lv10_BuildInvertedRiver(size, tile);
 
             var sb = new StringBuilder();
             for (int r = size; r >= 1; r--)
@@ -562,8 +635,8 @@ namespace Week04_Array2D
 
             Object.DestroyImmediate(tile);
             DestroyAllClones();
-            AssertUsesRealLoop("Lv09_BuildInvertedRiver", minLoops: 2);
-            AssertBodyContains("Lv09_BuildInvertedRiver", "Instantiate", "ต้อง Instantiate แม่น้ำลงในฉากจริง");
+            AssertUsesRealLoop("Lv10_BuildInvertedRiver", minLoops: 2);
+            AssertBodyContains("Lv10_BuildInvertedRiver", "Instantiate", "ต้อง Instantiate แม่น้ำลงในฉากจริง");
         }
 
         static readonly object[] DiagonalCases =
@@ -575,12 +648,12 @@ namespace Week04_Array2D
         };
 
         [TestCaseSource(nameof(DiagonalCases))]
-        public void Lv10_PrintMainDiagonal(int[,] matrix, string expectedOutput)
+        public void Lv11_PrintMainDiagonal(int[,] matrix, string expectedOutput)
         {
-            assignment.Lv10_PrintMainDiagonal(matrix);
+            assignment.Lv11_PrintMainDiagonal(matrix);
 
             TestUtils.AssertMultilineEqual(expectedOutput, SimpleDebugConsole.GetOutput());
-            AssertUsesRealLoop("Lv10_PrintMainDiagonal");
+            AssertUsesRealLoop("Lv11_PrintMainDiagonal");
         }
 
         // ================= Level 2: Moderate (Ex01 - Ex03) =================

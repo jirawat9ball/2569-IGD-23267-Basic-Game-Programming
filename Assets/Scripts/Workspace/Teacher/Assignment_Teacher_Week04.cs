@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week04
@@ -27,31 +27,29 @@ namespace Week04
 
         [Header("As09 Variables")]
         public GameObject[] Items;
-        public int foodPosX = 1;
-        public int foodPosY = 0;
 
         #endregion
 
         #region Level 1 Variables
 
-        [Header("Lv01 & Lv02 Variables")]
+        [Header("Lv02 & Lv03 Variables")]
         public int row = 0;
         public int col = 0;
 
-        [Header("Lv03 Variables")]
+        [Header("Lv04 Variables")]
         public int starColumns = 5;
         public int starRows = 3;
         public GameObject villageTile;
 
-        [Header("Lv04 & Lv09 Variables")]
+        [Header("Lv05 & Lv10 Variables")]
         public int size = 5;
         public GameObject riverTile;
 
-        [Header("Lv05 Variables")]
+        [Header("Lv06 Variables")]
         public int fromTable = 2;
         public int toTable = 4;
 
-        [Header("Lv07 Variables")]
+        [Header("Lv08 Variables")]
         public int targetValue = 5;
 
         #endregion
@@ -130,20 +128,21 @@ namespace Week04
 
             if (HasPrefabs(Items, "Items", "As09_CreateItemFromArray"))
             {
-                As09_CreateItemFromArray(Items, foodPosX, foodPosY);
+                As09_CreateItemFromArray(Items);
             }
 
+            Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-            Lv01_SumRow(sampleMatrix, row);
-            Lv02_SumColumn(sampleMatrix, col);
-            Lv03_BuildVillage(starColumns, starRows, villageTile);
-            Lv04_BuildRiver(size, riverTile);
-            Lv05_MultiplicationTableNested(fromTable, toTable);
-            Lv06_FindMaxInMatrix(sampleMatrix);
-            Lv07_CountTargetValue(sampleMatrix, targetValue);
-            Lv08_SumAllElements(sampleMatrix);
-            Lv09_BuildInvertedRiver(size, riverTile);
-            Lv10_PrintMainDiagonal(sampleMatrix);
+            Lv02_SumRow(sampleMatrix, row);
+            Lv03_SumColumn(sampleMatrix, col);
+            Lv04_BuildVillage(starColumns, starRows, villageTile);
+            Lv05_BuildRiver(size, riverTile);
+            Lv06_MultiplicationTableNested(fromTable, toTable);
+            Lv07_FindMaxInMatrix(sampleMatrix);
+            Lv08_CountTargetValue(sampleMatrix, targetValue);
+            Lv09_SumAllElements(sampleMatrix);
+            Lv10_BuildInvertedRiver(size, riverTile);
+            Lv11_PrintMainDiagonal(sampleMatrix);
 
             int[,] moves = new int[,] { { 1, 0, 2 }, { 0, 1, 0 }, { 2, 0, 1 } };
             Ex01_TicTacToe(moves);
@@ -168,45 +167,30 @@ namespace Week04
             int[,] my2DArray = new int[rows, cols];
             Debug.Log("rows = " + my2DArray.GetLength(0));
             Debug.Log("cols = " + my2DArray.GetLength(1));
+            Debug.Log("length = " + my2DArray.Length);
         }
 
         public void As03_GetSet2DArray()
         {
             int[,] my2DArray = new int[3, 3] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-            string[,] my2DStringArray = new string[2, 3] { { "A", "B", "C" }, { "D", "E", "F" } };
 
             Debug.Log("get : " + my2DArray[1, 2]);
             my2DArray[1, 2] = 70;
             Debug.Log("set : " + my2DArray[1, 2]);
             Debug.Log(LineSeparator);
 
-            for (int r = 0; r < my2DArray.GetLength(0); r++)
+            Print2DArray(my2DArray);
+        }
+
+        public void Print2DArray(int[,] array)
+        {
+            for (int r = 0; r < array.GetLength(0); r++)
             {
                 string line = "";
-                for (int c = 0; c < my2DArray.GetLength(1); c++)
+                for (int c = 0; c < array.GetLength(1); c++)
                 {
-                    line += my2DArray[r, c];
-                    if (c < my2DArray.GetLength(1) - 1)
-                    {
-                        line += " ";
-                    }
-                }
-                Debug.Log(line);
-            }
-
-            Debug.Log(LineSeparator);
-            Debug.Log("get : " + my2DStringArray[0, 2]);
-            my2DStringArray[0, 2] = "Cat";
-            Debug.Log("set : " + my2DStringArray[0, 2]);
-            Debug.Log(LineSeparator);
-
-            for (int r = 0; r < my2DStringArray.GetLength(0); r++)
-            {
-                string line = "";
-                for (int c = 0; c < my2DStringArray.GetLength(1); c++)
-                {
-                    line += my2DStringArray[r, c];
-                    if (c < my2DStringArray.GetLength(1) - 1)
+                    line += array[r, c];
+                    if (c < array.GetLength(1) - 1)
                     {
                         line += " ";
                     }
@@ -215,18 +199,21 @@ namespace Week04
             }
         }
 
-        public void As04_CreateWallRow(int columns, GameObject wall)
+        public void Print2DArray(string[,] array)
         {
-            string line = "";
-            for (int x = 0; x < columns; x++)
+            for (int r = 0; r < array.GetLength(0); r++)
             {
-                if (wall != null)
+                string line = "";
+                for (int c = 0; c < array.GetLength(1); c++)
                 {
-                    Instantiate(wall, new Vector2(x, 0), Quaternion.identity);
+                    line += array[r, c];
+                    if (c < array.GetLength(1) - 1)
+                    {
+                        line += " ";
+                    }
                 }
-                line += "*";
+                Debug.Log(line);
             }
-            Debug.Log(line);
         }
 
         public void As04_CreateWallRow(int columns, GameObject[] walls)
@@ -255,29 +242,9 @@ namespace Week04
                 for (int x = 0; x < columns; x++)
                 {
                     GameObject tileChoice = floorTiles[Random.Range(0, floorTiles.Length)];
-                    Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
+                    GameObject instance = Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
+                    instance.name = $"Floor_{x}_{y}";
                     line += tileChoice.name;
-                }
-                Debug.Log(line);
-            }
-        }
-
-        public void As06_CreateWall(int columns, int rows, GameObject wall)
-        {
-            for (int y = -1; y <= rows; y++)
-            {
-                string line = "";
-                for (int x = -1; x <= columns; x++)
-                {
-                    if (x == -1 || x == columns || y == -1 || y == rows)
-                    {
-                        Instantiate(wall, new Vector2(x, y), Quaternion.identity);
-                        line += "*";
-                    }
-                    else
-                    {
-                        line += " ";
-                    }
                 }
                 Debug.Log(line);
             }
@@ -329,29 +296,32 @@ namespace Week04
             Debug.Log(tileChoice.name + " at x: " + x + " y: " + y);
         }
 
-        public void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY)
+        public void As09_CreateItemFromArray(GameObject[] items)
         {
             string[,] my2DStringArray = new string[3, 3] {
                 { " ", "Soda", " " },
                 { " ", " ", " " },
                 { " ", " ", "Food" } };
 
-            string itemName = my2DStringArray[itemPosY, itemPosX];
-
-            if (!string.IsNullOrWhiteSpace(itemName))
+            for (int y = 0; y < my2DStringArray.GetLength(0); y++)
             {
-                for (int i = 0; i < items.Length; i++)
+                for (int x = 0; x < my2DStringArray.GetLength(1); x++)
                 {
-                    if (items[i] != null && items[i].name == itemName)
+                    string itemName = my2DStringArray[y, x];
+                    if (!string.IsNullOrWhiteSpace(itemName))
                     {
-                        Instantiate(items[i], new Vector2(itemPosX, itemPosY), Quaternion.identity);
-                        Debug.Log("Create Item " + itemName + " at x: " + itemPosX + " y: " + itemPosY);
-                        return;
+                        for (int i = 0; i < items.Length; i++)
+                        {
+                            if (items[i] != null && items[i].name == itemName)
+                            {
+                                Instantiate(items[i], new Vector2(x, y), Quaternion.identity);
+                                Debug.Log("Create Item " + itemName + " at x: " + x + " y: " + y);
+                                break;
+                            }
+                        }
                     }
                 }
             }
-
-            Debug.Log("No items at x: " + itemPosX + " y: " + itemPosY);
         }
 
         #endregion
@@ -360,7 +330,19 @@ namespace Week04
 
         #region Level 1: Simple
 
-        public void Lv01_SumRow(int[,] matrix, int row)
+        public void Lv01_GetSet2DStringArray()
+        {
+            string[,] my2DStringArray = new string[2, 3] { { "A", "B", "C" }, { "D", "E", "F" } };
+
+            Debug.Log("get : " + my2DStringArray[0, 2]);
+            my2DStringArray[0, 2] = "Cat";
+            Debug.Log("set : " + my2DStringArray[0, 2]);
+            Debug.Log(LineSeparator);
+
+            Print2DArray(my2DStringArray);
+        }
+
+        public void Lv02_SumRow(int[,] matrix, int row)
         {
             int sum = 0;
             for (int c = 0; c < matrix.GetLength(1); c++)
@@ -370,7 +352,7 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv02_SumColumn(int[,] matrix, int col)
+        public void Lv03_SumColumn(int[,] matrix, int col)
         {
             int sum = 0;
             for (int r = 0; r < matrix.GetLength(0); r++)
@@ -380,7 +362,7 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv03_BuildVillage(int columns, int rows, GameObject villageTile)
+        public void Lv04_BuildVillage(int columns, int rows, GameObject villageTile)
         {
             for (int y = 0; y < rows; y++)
             {
@@ -397,7 +379,7 @@ namespace Week04
             }
         }
 
-        public void Lv04_BuildRiver(int size, GameObject riverTile)
+        public void Lv05_BuildRiver(int size, GameObject riverTile)
         {
             for (int r = 1; r <= size; r++)
             {
@@ -414,7 +396,7 @@ namespace Week04
             }
         }
 
-        public void Lv05_MultiplicationTableNested(int fromTable, int toTable)
+        public void Lv06_MultiplicationTableNested(int fromTable, int toTable)
         {
             for (int i = 1; i <= 12; i++)
             {
@@ -431,7 +413,7 @@ namespace Week04
             }
         }
 
-        public void Lv06_FindMaxInMatrix(int[,] matrix)
+        public void Lv07_FindMaxInMatrix(int[,] matrix)
         {
             int max = matrix[0, 0];
             int maxR = 0;
@@ -453,7 +435,7 @@ namespace Week04
             Debug.Log("Max value " + max + " at [" + maxR + ", " + maxC + "]");
         }
 
-        public void Lv07_CountTargetValue(int[,] matrix, int target)
+        public void Lv08_CountTargetValue(int[,] matrix, int target)
         {
             int count = 0;
             for (int r = 0; r < matrix.GetLength(0); r++)
@@ -470,7 +452,7 @@ namespace Week04
             Debug.Log("Found target " + target + ": " + count + " cells");
         }
 
-        public void Lv08_SumAllElements(int[,] matrix)
+        public void Lv09_SumAllElements(int[,] matrix)
         {
             int sum = 0;
             for (int r = 0; r < matrix.GetLength(0); r++)
@@ -484,7 +466,7 @@ namespace Week04
             Debug.Log(sum);
         }
 
-        public void Lv09_BuildInvertedRiver(int size, GameObject riverTile)
+        public void Lv10_BuildInvertedRiver(int size, GameObject riverTile)
         {
             int y = 0;
             for (int r = size; r >= 1; r--)
@@ -503,7 +485,7 @@ namespace Week04
             }
         }
 
-        public void Lv10_PrintMainDiagonal(int[,] matrix)
+        public void Lv11_PrintMainDiagonal(int[,] matrix)
         {
             int minDim = Mathf.Min(matrix.GetLength(0), matrix.GetLength(1));
             string line = "";

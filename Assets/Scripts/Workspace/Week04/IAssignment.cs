@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Week04
 {
@@ -11,18 +11,20 @@ namespace Week04
         void As02_ArraySize(int rows, int cols);
 
         void As03_GetSet2DArray();
+        void Print2DArray(int[,] array);
+        void Print2DArray(string[,] array);
 
-        void As04_CreateWallRow(int columns, GameObject wall);
+        void As04_CreateWallRow(int columns, GameObject[] walls);
 
         void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles);
 
-        void As06_CreateWall(int columns, int rows, GameObject wall);
+        void As06_CreateWall(int columns, int rows, GameObject[] walls);
 
         void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY);
 
         void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles);
 
-        void As09_CreateItemFromArray(GameObject[] items, int itemPosX, int itemPosY);
+        void As09_CreateItemFromArray(GameObject[] items);
 
         #endregion
 
@@ -30,25 +32,27 @@ namespace Week04
 
         #region Level 1: Simple
 
-        void Lv01_SumRow(int[,] matrix, int row);
+        void Lv01_GetSet2DStringArray();
 
-        void Lv02_SumColumn(int[,] matrix, int col);
+        void Lv02_SumRow(int[,] matrix, int row);
 
-        void Lv03_BuildVillage(int columns, int rows, GameObject villageTile);
+        void Lv03_SumColumn(int[,] matrix, int col);
 
-        void Lv04_BuildRiver(int size, GameObject riverTile);
+        void Lv04_BuildVillage(int columns, int rows, GameObject villageTile);
 
-        void Lv05_MultiplicationTableNested(int fromTable, int toTable);
+        void Lv05_BuildRiver(int size, GameObject riverTile);
 
-        void Lv06_FindMaxInMatrix(int[,] matrix);
+        void Lv06_MultiplicationTableNested(int fromTable, int toTable);
 
-        void Lv07_CountTargetValue(int[,] matrix, int target);
+        void Lv07_FindMaxInMatrix(int[,] matrix);
 
-        void Lv08_SumAllElements(int[,] matrix);
+        void Lv08_CountTargetValue(int[,] matrix, int target);
 
-        void Lv09_BuildInvertedRiver(int size, GameObject riverTile);
+        void Lv09_SumAllElements(int[,] matrix);
 
-        void Lv10_PrintMainDiagonal(int[,] matrix);
+        void Lv10_BuildInvertedRiver(int size, GameObject riverTile);
+
+        void Lv11_PrintMainDiagonal(int[,] matrix);
 
         #endregion
 
