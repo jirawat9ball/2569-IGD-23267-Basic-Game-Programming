@@ -29,10 +29,7 @@ namespace Week04_Array2D
         public void Setup()
         {
             testGo = new GameObject("Week04_TestRunner");
-            if (isTeacherMode)
-                assignment = testGo.AddComponent<Assignment_Teacher_Week04>();
-            else
-                assignment = testGo.AddComponent<Assignment_Student_Week04>();
+            assignment = testGo.AddComponent<Assignment_Student_Week04>();
             SimpleDebugConsole.Clear();
         }
 

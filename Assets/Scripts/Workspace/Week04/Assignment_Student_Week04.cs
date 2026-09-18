@@ -22,11 +22,9 @@ namespace Week04
         public int ItemPosX = 1;
         public int ItemPosY = 0;
 
-        [Header("As08 Variables")]
+        [Header("As08 & As09 Variables")]
         public GameObject[] foodTiles;
 
-        [Header("As09 Variables")]
-        public GameObject[] Items;
 
         #endregion
 
@@ -126,9 +124,9 @@ namespace Week04
                 As08_RandomFoodItem(columns, mapRows, foodTiles);
             }
 
-            if (HasPrefabs(Items, "Items", "As09_CreateItemFromArray"))
+            if (HasPrefabs(foodTiles, "Food Tiles", "As09_CreateItemFromArray"))
             {
-                As09_CreateItemFromArray(Items);
+                As09_CreateItemFromArray(foodTiles);
             }
 
             Lv01_GetSet2DStringArray();
