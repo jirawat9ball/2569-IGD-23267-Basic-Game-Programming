@@ -15,8 +15,14 @@ namespace Week05
         public GameObject player;
         public GameObject exitTile;
 
-        [Header("ข้อ 4-7: ตัวแปรของตัวละคร")]
-        public int energy = 20;
+        void Start()
+        {
+            GenerateFloor();
+            GenerateWalls();
+            GenerateFoods();
+            PlacePlayer();
+            PlaceExit();
+        }
 
         #region ข้อ 1: Method แบบ void และ Parameter (Overloading)
 
@@ -109,41 +115,6 @@ namespace Week05
         public void PlaceExit()
         {
             Instantiate(exitTile, new Vector2(columns - 1, rows - 1), Quaternion.identity);
-        }
-
-        #endregion
-
-        #region ข้อ 4-7: Method ของตัวละคร
-
-        public void Move(Vector2 direction)
-        {
-            transform.position += new Vector3(direction.x, direction.y, 0f);
-            energy -= 1;
-        }
-
-        public void TakeDamage(int Damage)
-        {
-            energy -= Damage;
-            if (energy < 0)
-            {
-                energy = 0;
-            }
-
-            Debug.Log("Current Energy : " + energy);
-            CheckDead();
-        }
-
-        private void CheckDead()
-        {
-            if (energy <= 0)
-            {
-                Debug.Log("You Lose");
-            }
-        }
-
-        public void Heal(int healPoint)
-        {
-            energy += healPoint;
         }
 
         #endregion

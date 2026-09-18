@@ -15,9 +15,6 @@ namespace Week05
         public GameObject player;
         public GameObject exitTile;
 
-        [Header("ข้อ 4-7: ตัวแปรของตัวละคร")]
-        public int energy = 20;
-
         void Start()
         {
             // เมื่อสร้าง Method ในข้อ 1 เสร็จแล้ว สามารถเปิดคอมเมนต์ด้านล่างเพื่อทดสอบการทำงานได้:
@@ -25,6 +22,53 @@ namespace Week05
             // UserNameIdentification("boy");
             // UserNameIdentification("big", 18);
             // UserCountry();
+
+            // =========================================================================
+            // โค้ดสร้างฉากจาก Week 4 (สำหรับข้อ 3: ให้นักเรียนฝึก Refactor แยกโค้ดเหล่านี้ออกไปเป็น Method)
+            // เมื่อสร้าง Method เสร็จแล้ว ให้คอมเมนต์โค้ดด้านล่างแล้วเปลี่ยนมาเรียก Method แทน:
+            // GenerateFloor();
+            // GenerateWalls();
+            // GenerateFoods();
+            // PlacePlayer();
+            // PlaceExit();
+            // =========================================================================
+
+            // --- โค้ดสร้างพื้นแผนที่ (ย้ายไปใส่ใน Method GenerateFloor()) ---
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+                    Instantiate(toInstantiate, new Vector2(x, y), Quaternion.identity);
+                }
+            }
+
+            // --- โค้ดสร้างกำแพงล้อมรอบ (ย้ายไปใส่ใน Method GenerateWalls()) ---
+            for (int y = -1; y <= rows; y++)
+            {
+                for (int x = -1; x <= columns; x++)
+                {
+                    if (x == -1 || x == columns || y == -1 || y == rows)
+                    {
+                        GameObject toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
+                        Instantiate(toInstantiate, new Vector2(x, y), Quaternion.identity);
+                    }
+                }
+            }
+
+            // --- โค้ดสุ่มวางอาหาร (ย้ายไปใส่ใน Method GenerateFoods()) ---
+            for (int i = 0; i < foodCount; i++)
+            {
+                GameObject toInstantiate = foodTiles[Random.Range(0, foodTiles.Length)];
+                Vector2 position = new Vector2(Random.Range(0, columns), Random.Range(0, rows));
+                Instantiate(toInstantiate, position, Quaternion.identity);
+            }
+
+            // --- โค้ดวางผู้เล่น (ย้ายไปใส่ใน Method PlacePlayer()) ---
+            Instantiate(player, new Vector2(0, 0), Quaternion.identity);
+
+            // --- โค้ดวางทางออก (ย้ายไปใส่ใน Method PlaceExit()) ---
+            Instantiate(exitTile, new Vector2(columns - 1, rows - 1), Quaternion.identity);
         }
 
         #region ข้อ 1: Method แบบ void และ Parameter (Overloading)
@@ -101,30 +145,5 @@ namespace Week05
 
         #endregion
 
-        #region ข้อ 4-7: Method ของตัวละคร
-
-        // Guideline ข้อ 4:
-        // สร้าง Method ชื่อ Move แบบ void รับพารามิเตอร์ Vector2 direction
-        // - บวกทิศทางที่รับมาเข้ากับ transform.position ของตัวละคร
-        //   (แปลง Vector2 เป็น Vector3 ก่อน เช่น new Vector3(direction.x, direction.y, 0))
-        // - ทุกครั้งที่เดิน ให้ลด energy ลง 1
-
-        // Guideline ข้อ 5:
-        // สร้าง Method ชื่อ TakeDamage แบบ void รับพารามิเตอร์ int Damage
-        // - ลด energy ลงตามค่า Damage ที่รับเข้ามา
-        // - ห้ามให้ energy ติดลบ ถ้าน้อยกว่า 0 ให้ตั้งเป็น 0
-        // - พิมพ์ "Current Energy : " ตามด้วยค่า energy ปัจจุบัน ผ่าน Debug.Log
-        // - เรียก CheckDead() เพื่อตรวจว่าตัวละครตายหรือยัง
-
-        // Guideline ข้อ 6:
-        // สร้าง Method ชื่อ CheckDead แบบ private void ไม่รับพารามิเตอร์
-        // - Method นี้เป็น private แปลว่าเรียกใช้ได้เฉพาะภายในคลาสนี้
-        // - ถ้า energy น้อยกว่าหรือเท่ากับ 0 ให้พิมพ์ "You Lose" ผ่าน Debug.Log
-
-        // Guideline ข้อ 7:
-        // สร้าง Method ชื่อ Heal แบบ void รับพารามิเตอร์ int healPoint
-        // - เพิ่มค่า energy ขึ้นตามค่า healPoint ที่รับเข้ามา
-
-        #endregion
     }
 }

@@ -127,11 +127,11 @@ namespace Week04
             // 1. สร้าง 2D String Array ขนาด 3x3 เช่น { { " ", "Soda", " " }, { " ", " ", " " }, { " ", " ", "Food" } }
             // 2. วน Nested Loop ตรวจสอบว่าช่องไหนมีชื่อไอเทม ให้ค้นหาใน foodTiles ที่ชื่อตรงกัน แล้ว Instantiate ที่ตำแหน่งนั้น
 
-            // Guideline As10 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0)
-            // 1. Instantiate player ที่ new Vector2(0, 0) ด้วย Quaternion.identity
+            // Guideline As10 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง 
+            // 1. Instantiate player 
 
-            // Guideline As11 PlaceExit: วางทางออกที่มุมขวาบน (columns - 1, mapRows - 1)
-            // 1. Instantiate exitTile ที่ new Vector2(columns - 1, mapRows - 1) ด้วย Quaternion.identity
+            // Guideline As11 PlaceExit: วางทางออกที่มุมขวาบน 
+            // 1. Instantiate exitTile 
 
             Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };

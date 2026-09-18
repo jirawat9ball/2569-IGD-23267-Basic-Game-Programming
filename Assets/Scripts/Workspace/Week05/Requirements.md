@@ -1,4 +1,4 @@
-# Week 05 Requirements: Methods & Refactoring
+﻿# Week 05 Requirements: Methods & Refactoring
 
 โจทย์สำหรับสัปดาห์ที่ 5 มุ่งเน้นไปที่การสร้างและใช้งาน **Method** ในภาษา C# ทั้งแบบ Void, มี Parameter, ส่งค่ากลับ (Return Type) และการนำโค้ดมารีแฟคเตอร์ (Refactor) ให้เป็นระเบียบ โดยมีโจทย์ 7 ข้อ ดังนี้ (รวมโค้ดเฉลย/ไกด์ไลน์ไว้ด้วย)
 
@@ -165,8 +165,8 @@ class MapGenerator : MonoBehavior
 
 ---
 
-## ข้อ 4: การเขียน Method ชื่อ Move
-**โจทย์:** ในคลาส `Player` จะมีตัวแปร `energy = 20` ให้เขียนเมธอด `Move` ดังนี้
+## ข้อ 4: การเขียน Method ชื่อ Move (Void & Parameter)
+**โจทย์:** ในคลาส `Player` จะมีตัวแปร `energy = 20` ให้เขียนเมธอด `Move` ดังนี้:
 - Access Modifier เป็น `public`
 - Return Type เป็น `void`
 - พารามิเตอร์ 1 ตัว ประเภท `Vector2` ชื่อ `direction`
@@ -181,10 +181,9 @@ player pos x: 3 y: 3 energy: 14
 <summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
 
 ```csharp
-using System;
 using UnityEngine;
 
-class Player : MonoBehavior
+public class Player : MonoBehaviour
 {
     public int energy = 20;
 
@@ -204,47 +203,28 @@ class Player : MonoBehavior
 - Access Modifier เป็น `public`
 - Return Type เป็น `void`
 - พารามิเตอร์ 1 ตัว ประเภท `int` ชื่อ `Damage`
-- การทำงาน: ลด `energy` ตาม `Damage` ที่รับมา โดยที่ค่า `energy` ต้องไม่ต่ำกว่า 0
+- การทำงาน:
+  - ลด `energy` ตาม `Damage` ที่รับมา (ค่า `energy` ต้องไม่ต่ำกว่า 0)
+  - แสดงค่าพลังงานที่เหลือผ่าน `Debug.Log("Current Energy : " + energy);`
+  - เรียกใช้ `CheckDead()` เพื่อตรวจว่าตัวละครตายหรือยัง
 
 **ตัวอย่างผลลัพธ์:** (เมื่อโดน Damage ไป 4, 5, 6 จากค่าเริ่มต้น 20)
 ```text
-player energy: 5
+Current Energy : 16
+Current Energy : 11
+Current Energy : 5
 ```
-
-<details>
-<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
-
-```csharp
-using System;
-using UnityEngine;
-
-class Player : MonoBehavior
-{
-    public int energy = 20;
-
-    public void TakeDamage(int Damage)
-    {
-        energy -= Damage;
-        if(energy < 0) {
-            energy = 0;
-        }
-    }
-}
-```
-</details>
 
 ---
 
-## ข้อ 6: การเขียน Method ชื่อ CheckDead()
-**โจทย์:** จากข้อ 5 เมื่อโดน Damage ไปแล้วให้รัน `CheckDead()` ด้วย โดยเขียนเมธอดดังนี้
+## ข้อ 6: การเขียน Method ชื่อ CheckDead() (Private Scope)
+**โจทย์:** ให้เขียนเมธอดตรวจสอบสถานะการตายของตัวละคร
 - Access Modifier เป็น `private`
-- ไม่มีการ return ค่า
-- การทำงาน: ถ้า `energy` น้อยกว่าหรือเท่ากับ 0 ให้พิมพ์ข้อความ `"You Lose"` ออกมา
+- Return Type เป็น `void` ไม่รับพารามิเตอร์
+- การทำงาน: ถ้า `energy` น้อยกว่าหรือเท่ากับ 0 ให้พิมพ์ข้อความ `"You Lose"` ผ่าน `Debug.Log`
 
 **ตัวอย่างผลลัพธ์:**
 ```text
-Enter energy:
-40
 Current Energy : 30
 Current Energy : 20
 Current Energy : 10
@@ -256,16 +236,20 @@ You Lose
 <summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
 
 ```csharp
-using System;
 using UnityEngine;
 
-class Player : MonoBehavior
+public class Player : MonoBehaviour
 {
     public int energy = 20;
 
     public void TakeDamage(int Damage)
     {
         energy -= Damage;
+        if (energy < 0)
+        {
+            energy = 0;
+        }
+
         Debug.Log("Current Energy : " + energy);
         CheckDead();
     }
@@ -283,32 +267,60 @@ class Player : MonoBehavior
 
 ---
 
-## ข้อ 7: การเขียน Method ชื่อ Heal
-**โจทย์:** ให้เขียนเมธอดสำหรับทำ Heal ให้ตัวละคร
+## ข้อ 7: การเขียน Method ชื่อ Heal (Default Parameter)
+**โจทย์:** ให้เขียนเมธอดสำหรับเพิ่ม `energy` ให้ตัวละคร โดยมีค่าเริ่มต้นของพารามิเตอร์ (Default Parameter):
 - Access Modifier เป็น `public`
 - Return Type เป็น `void`
-- พารามิเตอร์ 1 ตัว ประเภท `int` ชื่อ `healPoint`
-- การทำงาน: เพิ่มค่า `energy` ขึ้นตามที่รับมาจากพารามิเตอร์
+- พารามิเตอร์ 1 ตัว ประเภท `int` ชื่อ `healPoint` โดยมีค่าเริ่มต้นเป็น 10 (`int healPoint = 10`)
+- การทำงาน: เพิ่มค่า `energy` ขึ้นตาม `healPoint` ที่ได้รับ
 
-**ตัวอย่างผลลัพธ์:** สั่ง `Heal(4)` (จากค่าเริ่มต้น 20)
-```text
-player energy: 24
-```
+**ตัวอย่างผลลัพธ์:**
+- สั่ง `Heal(4)` (จาก 20) -> ได้ 24
+- สั่ง `Heal()` แบบไม่ส่งค่า (จาก 15) -> ได้ 25 (เพิ่มตามค่าเริ่มต้น 10)
 
 <details>
 <summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
 
 ```csharp
-using System;
 using UnityEngine;
 
-class Player : MonoBehavior
+public class Player : MonoBehaviour
 {
     public int energy = 20;
 
-    public void Heal(int healPoint)
+    public void Heal(int healPoint = 10)
     {
         energy += healPoint;
+    }
+}
+```
+</details>
+
+---
+
+## ข้อ 8: การเขียน Method ชื่อ CanMove() (Return Type bool)
+**โจทย์:** ให้เขียนเมธอดตรวจสอบว่าตัวละครยังมีพลังงานพอที่จะเดินต่อได้หรือไม่
+- Access Modifier เป็น `public`
+- Return Type เป็น `bool` ไม่รับพารามิเตอร์
+- การทำงาน: คืนค่า `true` ถ้า `energy` มากกว่า 0 นอกนั้นให้คืนค่า `false`
+
+**ตัวอย่างผลลัพธ์:**
+- ถ้า `energy = 20` -> `CanMove()` คืนค่า `true`
+- ถ้า `energy = 0` -> `CanMove()` คืนค่า `false`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public int energy = 20;
+
+    public bool CanMove()
+    {
+        return energy > 0;
     }
 }
 ```

@@ -39,15 +39,5 @@ namespace Week05
         void PlaceExit();
 
         #endregion
-
-        #region ข้อ 4-7: Method ของตัวละคร
-
-        void Move(Vector2 direction);
-
-        void TakeDamage(int Damage);
-
-        void Heal(int healPoint);
-
-        #endregion
     }
 }

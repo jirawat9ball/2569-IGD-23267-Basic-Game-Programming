@@ -38,7 +38,6 @@ namespace Week05_Method
                 teacher.foodCount = _studentSync.foodCount;
                 teacher.player = _studentSync.player;
                 teacher.exitTile = _studentSync.exitTile;
-                teacher.energy = _studentSync.energy;
                 teacher.transform.position = _studentSync.transform.position;
             }
         }
@@ -47,7 +46,6 @@ namespace Week05_Method
         {
             if (_studentSync != null && _target is Assignment_Teacher_Week05 teacher)
             {
-                _studentSync.energy = teacher.energy;
                 _studentSync.transform.position = teacher.transform.position;
             }
         }
@@ -167,9 +165,141 @@ namespace Week05_Method
         public void GenerateFoods() => Invoke(nameof(GenerateFoods));
         public void PlacePlayer() => Invoke(nameof(PlacePlayer));
         public void PlaceExit() => Invoke(nameof(PlaceExit));
+    }
+
+    public class PlayerInvoker
+    {
+        private readonly Component _target;
+
+        public PlayerInvoker(Component target)
+        {
+            _target = target;
+        }
+
+        public int Energy
+        {
+            get
+            {
+                var field = _target.GetType().GetField("energy", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                return field != null ? (int)field.GetValue(_target) : 0;
+            }
+            set
+            {
+                var field = _target.GetType().GetField("energy", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field != null) field.SetValue(_target, value);
+            }
+        }
+
+        public Vector3 Position
+        {
+            get => _target.transform.position;
+            set => _target.transform.position = value;
+        }
+
+        public Transform transform => _target.transform;
+
+        private object Invoke(string methodName, params object[] args)
+        {
+            var type = _target.GetType();
+            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo targetMethod = null;
+
+            foreach (var m in methods)
+            {
+                if (m.Name == methodName)
+                {
+                    var parameters = m.GetParameters();
+                    if (parameters.Length == args.Length)
+                    {
+                        bool match = true;
+                        for (int i = 0; i < args.Length; i++)
+                        {
+                            if (args[i] != null && !parameters[i].ParameterType.IsAssignableFrom(args[i].GetType()))
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match)
+                        {
+                            targetMethod = m;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 2. รองรับ default parameter กรณี args น้อยกว่าจำนวน parameter ของ method
+            if (targetMethod == null)
+            {
+                foreach (var m in methods)
+                {
+                    if (m.Name == methodName)
+                    {
+                        var parameters = m.GetParameters();
+                        if (args.Length < parameters.Length)
+                        {
+                            bool canFillDefaults = true;
+                            var fullArgs = new object[parameters.Length];
+                            for (int i = 0; i < parameters.Length; i++)
+                            {
+                                if (i < args.Length)
+                                {
+                                    fullArgs[i] = args[i];
+                                }
+                                else if (parameters[i].HasDefaultValue)
+                                {
+                                    fullArgs[i] = parameters[i].DefaultValue;
+                                }
+                                else
+                                {
+                                    canFillDefaults = false;
+                                    break;
+                                }
+                            }
+
+                            if (canFillDefaults)
+                            {
+                                targetMethod = m;
+                                args = fullArgs;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (targetMethod == null)
+            {
+                foreach (var m in methods)
+                {
+                    if (string.Equals(m.Name, methodName, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        Assert.Fail($"พบเมธอด '{m.Name}' ใน Player แต่ตัวสะกดพิมพ์ใหญ่-เล็กไม่ตรงกับที่กำหนด (ต้องเป็น '{methodName}')");
+                    }
+                }
+
+                Assert.Fail($"ไม่พบเมธอด '{methodName}' ใน Player (กรุณาสร้างเมธอดตามโจทย์ใน Player.cs)");
+                return null;
+            }
+
+            try
+            {
+                return targetMethod.Invoke(_target, args);
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                throw;
+            }
+        }
+
         public void Move(Vector2 direction) => Invoke(nameof(Move), direction);
         public void TakeDamage(int Damage) => Invoke(nameof(TakeDamage), Damage);
+        public void Heal() => Invoke(nameof(Heal));
         public void Heal(int healPoint) => Invoke(nameof(Heal), healPoint);
+        public bool CanMove() => (bool)(Invoke(nameof(CanMove)) ?? false);
     }
 
     public class TestBase
@@ -182,26 +312,40 @@ namespace Week05_Method
         protected const string StudentPath = "Assets/Scripts/Workspace/Week05/Assignment_Student_Week05.cs";
         protected const string TeacherPath = "Assets/Scripts/Workspace/Teacher/Assignment_Teacher_Week05.cs";
 
+        protected const string StudentPlayerPath = "Assets/Scripts/Workspace/Week05/Player.cs";
+        protected const string TeacherPlayerPath = "Assets/Scripts/Workspace/Teacher/Player_Teacher_Week05.cs";
+
         protected static string CurrentTargetFilePath => isTeacherMode ? TeacherPath : StudentPath;
+        protected static string CurrentPlayerFilePath => isTeacherMode ? TeacherPlayerPath : StudentPlayerPath;
 
         protected IAssignment assignment;
         protected Assignment_Student_Week05 student;
         protected Assignment_Teacher_Week05 teacher;
+
+        protected PlayerInvoker player;
         protected GameObject testGo;
+        protected GameObject playerGo;
 
         [SetUp]
         public void Setup()
         {
             testGo = new GameObject("Week05_TestRunner");
-            student = testGo.AddComponent<Assignment_Student_Week05>();
+            playerGo = new GameObject("Week05_Player");
+
             if (isTeacherMode)
             {
                 teacher = testGo.AddComponent<Assignment_Teacher_Week05>();
+                student = testGo.AddComponent<Assignment_Student_Week05>();
                 assignment = new AssignmentInvoker(teacher, student);
+                var teacherPlayer = playerGo.AddComponent<Player_Teacher_Week05>();
+                player = new PlayerInvoker(teacherPlayer);
             }
             else
             {
+                student = testGo.AddComponent<Assignment_Student_Week05>();
                 assignment = new AssignmentInvoker(student);
+                var studentPlayer = playerGo.AddComponent<Player>();
+                player = new PlayerInvoker(studentPlayer);
             }
             SimpleDebugConsole.Clear();
         }
@@ -211,6 +355,8 @@ namespace Week05_Method
         {
             if (testGo != null)
                 Object.DestroyImmediate(testGo);
+            if (playerGo != null)
+                Object.DestroyImmediate(playerGo);
 
             DestroyAllClones();
         }
@@ -367,6 +513,115 @@ namespace Week05_Method
 
             Assert.GreaterOrEqual(loops, minLoops,
                 $"{signature}: ต้องใช้ลูปจริงอย่างน้อย {minLoops} ลูป (ห้าม hardcode พิมพ์ทีละบรรทัด)");
+        }
+
+        // ---- อ่าน source ของ Player เพื่อกัน hardcode ----
+
+        private static string ReadPlayerSourceStripped()
+        {
+            string path = CurrentPlayerFilePath;
+            Assert.IsTrue(File.Exists(path),
+                $"หาไฟล์เป้าหมายไม่เจอที่ '{path}' (cwd={Directory.GetCurrentDirectory()})");
+
+            string src = File.ReadAllText(path);
+            src = Regex.Replace(src, @"//.*?$", "", RegexOptions.Multiline);
+            src = Regex.Replace(src, @"/\*.*?\*/", "", RegexOptions.Singleline);
+            src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");
+            src = Regex.Replace(src, "'([^'\\\\]|\\\\.)*'", "' '");
+            return src;
+        }
+
+        protected static string GetPlayerMethodBody(string signature)
+        {
+            string src = ReadPlayerSourceStripped();
+
+            int sig = src.IndexOf(signature, System.StringComparison.Ordinal);
+            if (sig == -1)
+            {
+                sig = src.IndexOf(signature, System.StringComparison.OrdinalIgnoreCase);
+            }
+            if (sig == -1)
+            {
+                var match = Regex.Match(signature, @"(\w+)\s*\(");
+                if (match.Success)
+                {
+                    string methodName = match.Groups[1].Value;
+                    var mMatch = Regex.Match(src, $@"\b{methodName}\s*\(");
+                    if (mMatch.Success) sig = mMatch.Index;
+                }
+            }
+
+            Assert.Greater(sig, -1, $"ไม่พบเมธอด '{signature}' ในไฟล์เป้าหมาย ({CurrentPlayerFilePath})");
+
+            int open = src.IndexOf('{', sig);
+            Assert.Greater(open, -1, $"เมธอด '{signature}' ไม่มี body");
+
+            int depth = 0;
+            for (int i = open; i < src.Length; i++)
+            {
+                if (src[i] == '{') depth++;
+                else if (src[i] == '}')
+                {
+                    depth--;
+                    if (depth == 0)
+                        return src.Substring(open + 1, i - open - 1);
+                }
+            }
+            Assert.Fail($"บอดี้เมธอด '{signature}' ปีกกาไม่ครบ");
+            return null;
+        }
+
+        protected static void AssertPlayerSignatureExists(string signature)
+        {
+            string src = ReadPlayerSourceStripped();
+            if (src.Contains(signature)) return;
+
+            var match = Regex.Match(signature, @"(public|private|protected)\s+([\w<>\[\], ]+?)\s+(\w+)\s*\((.*?)\)");
+            if (match.Success)
+            {
+                string access = match.Groups[1].Value;
+                string returnType = Regex.Escape(match.Groups[2].Value.Trim());
+                string methodName = match.Groups[3].Value;
+                string rawParams = match.Groups[4].Value.Trim();
+
+                string pattern;
+                if (string.IsNullOrEmpty(rawParams))
+                {
+                    pattern = $@"\b{access}\s+{returnType}\s+{methodName}\s*\(\s*\)";
+                }
+                else
+                {
+                    var paramParts = rawParams.Split(',');
+                    var typePatterns = new System.Collections.Generic.List<string>();
+                    foreach (var p in paramParts)
+                    {
+                        var tokens = p.Trim().Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+                        if (tokens.Length > 0)
+                        {
+                            string pType = Regex.Escape(tokens[0]);
+                            typePatterns.Add($@"{pType}\s+\w+");
+                        }
+                    }
+                    pattern = $@"\b{access}\s+{returnType}\s+{methodName}\s*\(\s*" + string.Join(@"\s*,\s*", typePatterns) + @"\s*\)";
+                }
+
+                if (Regex.IsMatch(src, pattern, RegexOptions.IgnoreCase))
+                    return;
+            }
+
+            StringAssert.Contains(signature, src, $"ต้องประกาศเมธอดตามรูปแบบ '{signature}' ใน {CurrentPlayerFilePath}");
+        }
+
+        protected static void AssertPlayerBodyContains(string signature, string needle, string reason)
+        {
+            StringAssert.Contains(needle, GetPlayerMethodBody(signature), $"{signature}: {reason}");
+        }
+
+        protected static void AssertPlayerRawSourceContains(string needle, string reason)
+        {
+            string path = CurrentPlayerFilePath;
+            Assert.IsTrue(File.Exists(path), $"หาไฟล์เป้าหมายไม่เจอที่ '{path}'");
+            StringAssert.Contains(needle, File.ReadAllText(path), reason);
         }
     }
 
@@ -582,17 +837,17 @@ namespace Week05_Method
         [Test]
         public void Ex04_Move_RightThreeThenUpThree()
         {
-            student.energy = 20;
-            student.transform.position = Vector3.zero;
+            player.Energy = 20;
+            player.Position = Vector3.zero;
 
-            for (int i = 0; i < 3; i++) assignment.Move(Vector2.right);
-            for (int i = 0; i < 3; i++) assignment.Move(Vector2.up);
+            for (int i = 0; i < 3; i++) player.Move(Vector2.right);
+            for (int i = 0; i < 3; i++) player.Move(Vector2.up);
 
-            Assert.AreEqual(3f, student.transform.position.x, 0.0001f, "เดินขวา 3 ครั้ง x ต้องเป็น 3");
-            Assert.AreEqual(3f, student.transform.position.y, 0.0001f, "เดินขึ้น 3 ครั้ง y ต้องเป็น 3");
-            Assert.AreEqual(14, student.energy, "เดิน 6 ครั้ง energy ต้องลดจาก 20 เหลือ 14");
+            Assert.AreEqual(3f, player.Position.x, 0.0001f, "เดินขวา 3 ครั้ง x ต้องเป็น 3");
+            Assert.AreEqual(3f, player.Position.y, 0.0001f, "เดินขึ้น 3 ครั้ง y ต้องเป็น 3");
+            Assert.AreEqual(14, player.Energy, "เดิน 6 ครั้ง energy ต้องลดจาก 20 เหลือ 14");
 
-            AssertSignatureExists("public void Move(Vector2 direction)");
+            AssertPlayerSignatureExists("public void Move(Vector2 direction)");
         }
 
         [TestCase(1, 0, 5)]
@@ -600,14 +855,14 @@ namespace Week05_Method
         [TestCase(2, 3, 4)]
         public void Ex04_Move_SingleDirection(int dirX, int dirY, int times)
         {
-            student.energy = 20;
-            student.transform.position = Vector3.zero;
+            player.Energy = 20;
+            player.Position = Vector3.zero;
 
-            for (int i = 0; i < times; i++) assignment.Move(new Vector2(dirX, dirY));
+            for (int i = 0; i < times; i++) player.Move(new Vector2(dirX, dirY));
 
-            Assert.AreEqual(dirX * times, student.transform.position.x, 0.0001f);
-            Assert.AreEqual(dirY * times, student.transform.position.y, 0.0001f);
-            Assert.AreEqual(20 - times, student.energy, "energy ต้องลดลง 1 ต่อการเดิน 1 ครั้ง");
+            Assert.AreEqual(dirX * times, player.Position.x, 0.0001f);
+            Assert.AreEqual(dirY * times, player.Position.y, 0.0001f);
+            Assert.AreEqual(20 - times, player.Energy, "energy ต้องลดลง 1 ต่อการเดิน 1 ครั้ง");
         }
 
         // ============ ข้อ 5: TakeDamage ============
@@ -615,14 +870,14 @@ namespace Week05_Method
         [Test]
         public void Ex05_TakeDamage_ReducesEnergy()
         {
-            student.energy = 20;
+            player.Energy = 20;
 
-            assignment.TakeDamage(4);
-            assignment.TakeDamage(5);
-            assignment.TakeDamage(6);
+            player.TakeDamage(4);
+            player.TakeDamage(5);
+            player.TakeDamage(6);
 
-            Assert.AreEqual(5, student.energy, "โดน 4 + 5 + 6 จาก 20 ต้องเหลือ 5");
-            AssertSignatureExists("public void TakeDamage(int Damage)");
+            Assert.AreEqual(5, player.Energy, "โดน 4 + 5 + 6 จาก 20 ต้องเหลือ 5");
+            AssertPlayerSignatureExists("public void TakeDamage(int Damage)");
         }
 
         [TestCase(10, 50)]
@@ -630,11 +885,11 @@ namespace Week05_Method
         [TestCase(1, 999)]
         public void Ex05_TakeDamage_NeverBelowZero(int startEnergy, int damage)
         {
-            student.energy = startEnergy;
+            player.Energy = startEnergy;
 
-            assignment.TakeDamage(damage);
+            player.TakeDamage(damage);
 
-            Assert.AreEqual(0, student.energy, "energy ต้องไม่ต่ำกว่า 0");
+            Assert.AreEqual(0, player.Energy, "energy ต้องไม่ต่ำกว่า 0");
         }
 
         // ============ ข้อ 6: CheckDead ============
@@ -642,13 +897,13 @@ namespace Week05_Method
         [Test]
         public void Ex06_CheckDead_PrintsYouLoseWhenEnergyRunsOut()
         {
-            student.energy = 40;
+            player.Energy = 40;
             SimpleDebugConsole.Clear();
 
-            assignment.TakeDamage(10);
-            assignment.TakeDamage(10);
-            assignment.TakeDamage(10);
-            assignment.TakeDamage(10);
+            player.TakeDamage(10);
+            player.TakeDamage(10);
+            player.TakeDamage(10);
+            player.TakeDamage(10);
 
             var sb = new StringBuilder();
             sb.AppendLine("Current Energy : 30");
@@ -663,10 +918,10 @@ namespace Week05_Method
         [Test]
         public void Ex06_CheckDead_NotDeadYet()
         {
-            student.energy = 30;
+            player.Energy = 30;
             SimpleDebugConsole.Clear();
 
-            assignment.TakeDamage(10);
+            player.TakeDamage(10);
 
             TestUtils.AssertMultilineEqual("Current Energy : 20", SimpleDebugConsole.GetOutput());
         }
@@ -674,12 +929,12 @@ namespace Week05_Method
         [Test]
         public void Ex06_CheckDead_IsPrivateAndCalledFromTakeDamage()
         {
-            AssertSignatureExists("private void CheckDead()");
-            AssertBodyContains("public void TakeDamage(int Damage)", "CheckDead",
+            AssertPlayerSignatureExists("private void CheckDead()");
+            AssertPlayerBodyContains("public void TakeDamage(int Damage)", "CheckDead",
                 "TakeDamage ต้องเรียก CheckDead() หลังลด energy");
         }
 
-        // ============ ข้อ 7: Heal ============
+        // ============ ข้อ 7: Heal & Default Parameter ============
 
         [TestCase(20, 4, 24)]
         [TestCase(0, 10, 10)]
@@ -687,12 +942,36 @@ namespace Week05_Method
         [TestCase(100, 250, 350)]
         public void Ex07_Heal(int startEnergy, int healPoint, int expected)
         {
-            student.energy = startEnergy;
+            player.Energy = startEnergy;
 
-            assignment.Heal(healPoint);
+            player.Heal(healPoint);
 
-            Assert.AreEqual(expected, student.energy, $"Heal({healPoint}) จาก {startEnergy} ต้องได้ {expected}");
-            AssertSignatureExists("public void Heal(int healPoint)");
+            Assert.AreEqual(expected, player.Energy, $"Heal({healPoint}) จาก {startEnergy} ต้องได้ {expected}");
+            AssertPlayerSignatureExists("public void Heal(int healPoint)");
+        }
+
+        [Test]
+        public void Ex07_Heal_UsesDefaultValue()
+        {
+            player.Energy = 15;
+            player.Heal(); // ไม่ส่งพารามิเตอร์ ต้องใช้ default = 10
+
+            Assert.AreEqual(25, player.Energy, "Heal() แบบไม่ระบุพารามิเตอร์ ต้องเพิ่ม energy 10 เป็นค่าเริ่มต้น");
+            AssertPlayerRawSourceContains("healPoint = 10",
+                "ต้องกำหนดค่าเริ่มต้นของพารามิเตอร์ healPoint เป็น 10 เช่น Heal(int healPoint = 10)");
+        }
+
+        // ============ ข้อ 8: CanMove ============
+
+        [TestCase(20, true)]
+        [TestCase(1, true)]
+        [TestCase(0, false)]
+        [TestCase(-5, false)]
+        public void Ex08_CanMove(int currentEnergy, bool expected)
+        {
+            player.Energy = currentEnergy;
+            Assert.AreEqual(expected, player.CanMove(), $"energy = {currentEnergy} CanMove() ต้อง return {expected}");
+            AssertPlayerSignatureExists("public bool CanMove()");
         }
     }
 
