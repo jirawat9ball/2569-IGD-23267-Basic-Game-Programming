@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Week04
 {
@@ -13,18 +13,6 @@ namespace Week04
         void As03_GetSet2DArray();
         void Print2DArray(int[,] array);
         void Print2DArray(string[,] array);
-
-        void As04_CreateWallRow(int columns, GameObject[] walls);
-
-        void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles);
-
-        void As06_CreateWall(int columns, int rows, GameObject[] walls);
-
-        void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY);
-
-        void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles);
-
-        void As09_CreateItemFromArray(GameObject[] items);
 
         #endregion
 

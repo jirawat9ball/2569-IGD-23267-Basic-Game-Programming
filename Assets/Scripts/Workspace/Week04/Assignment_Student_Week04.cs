@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week04
@@ -25,6 +25,9 @@ namespace Week04
         [Header("As08 & As09 Variables")]
         public GameObject[] foodTiles;
 
+        [Header("PlacePlayer & PlaceExit Variables")]
+        public GameObject player;
+        public GameObject exitTile;
 
         #endregion
 
@@ -95,39 +98,40 @@ namespace Week04
             As01_Create2DArray();
             As02_ArraySize(rows, cols);
             As03_GetSet2DArray();
-            if (HasPrefabs(wall, "Wall", "As04_CreateWallRow"))
-            {
-                As04_CreateWallRow(columns, wall);
-            }
 
-            if (HasPrefabs(floorTiles, "Floor Tiles", "As05_CreateFloor"))
-            {
-                As05_CreateFloor(columns, mapRows, floorTiles);
-            }
+            // =========================================================================
+            // สร้างแผนที่และวางวัตถุ
+            // =========================================================================
 
-            if (HasPrefabs(wall, "Wall", "As06_CreateWall"))
-            {
-                As06_CreateWall(columns, mapRows, wall);
-            }
+            // Guideline As04: สร้างแถวกำแพง
+            // 1. วนลูป x จาก 0 ถึง columns - 1 สุ่มหยิบ wall แล้ว Instantiate ที่ new Vector2(x, 0)
 
-            if (Item != null)
-            {
-                As07_SetItemPosition(Item, ItemPosX, ItemPosY);
-            }
-            else
-            {
-                Debug.Log("ข้าม As07_SetItemPosition เพราะช่อง 'Item' ใน Inspector ยังว่างอยู่");
-            }
+            // Guideline As05: สร้างพื้นแผนที่
+            // 1. ใช้ Nested Loop: วน y จาก 0 ถึง mapRows - 1 และ x จาก 0 ถึง columns - 1
+            // 2. สุ่มหยิบ floorTiles แล้ว Instantiate ที่ new Vector2(x, y)
+            // 3. ตั้งชื่อแผ่นพื้น: instance.name = $"Floor_{x}_{y}" และพิมพ์ชื่อแผ่นพื้นต่อกันในแต่ละแถวผ่าน Debug.Log
 
-            if (HasPrefabs(foodTiles, "Food Tiles", "As08_RandomFoodItem"))
-            {
-                As08_RandomFoodItem(columns, mapRows, foodTiles);
-            }
+            // Guideline As06: สร้างกำแพงล้อมรอบแผนที่
+            // 1. ใช้ Nested Loop: วน y จาก -1 ถึง mapRows และ x จาก -1 ถึง columns
+            // 2. เช็คเงื่อนไขขอบนอก: if (x == -1 || x == columns || y == -1 || y == mapRows)
+            // 3. สุ่มหยิบ wall แล้ว Instantiate ที่ new Vector2(x, y) พร้อมพิมพ์ '*' ออกมา (ด้านในพิมพ์ ' ')
 
-            if (HasPrefabs(foodTiles, "Food Tiles", "As09_CreateItemFromArray"))
-            {
-                As09_CreateItemFromArray(foodTiles);
-            }
+            // Guideline As07: วางไอเทมเดี่ยวตามพิกัด
+            // 1. Instantiate Item ที่ new Vector2(ItemPosX, ItemPosY) และพิมพ์ตำแหน่งผ่าน Debug.Log
+
+            // Guideline As08: สุ่มวางอาหาร
+            // 1. สุ่มพิกัด x (0 ถึง columns - 1) และ y (0 ถึง mapRows - 1)
+            // 2. สุ่ม foodTiles แล้ว Instantiate ที่ (x, y) พร้อมพิมพ์ข้อความผ่าน Debug.Log
+
+            // Guideline As09: สร้างไอเทมจาก 2D Array
+            // 1. สร้าง 2D String Array ขนาด 3x3 เช่น { { " ", "Soda", " " }, { " ", " ", " " }, { " ", " ", "Food" } }
+            // 2. วน Nested Loop ตรวจสอบว่าช่องไหนมีชื่อไอเทม ให้ค้นหาใน foodTiles ที่ชื่อตรงกัน แล้ว Instantiate ที่ตำแหน่งนั้น
+
+            // Guideline As10 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0)
+            // 1. Instantiate player ที่ new Vector2(0, 0) ด้วย Quaternion.identity
+
+            // Guideline As11 PlaceExit: วางทางออกที่มุมขวาบน (columns - 1, mapRows - 1)
+            // 1. Instantiate exitTile ที่ new Vector2(columns - 1, mapRows - 1) ด้วย Quaternion.identity
 
             Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
@@ -214,66 +218,6 @@ namespace Week04
                 Debug.Log(line);
             }
         }
-        public void As04_CreateWallRow(int columns, GameObject[] walls)
-        {
-            // Guideline:
-            // 1. วนลูป x ตั้งแต่ 0 ถึง columns - 1
-            // 2. สุ่มเลือก prefab จาก walls ด้วย walls[Random.Range(0, walls.Length)]
-            // 3. Instantiate ที่ตำแหน่ง new Vector2(x, 0)
-            // 4. สะสมสตริงเครื่องหมาย "*" ของแต่ละช่อง
-            // 5. เมื่อจบลูป ให้พิมพ์สตริงแถวกำแพงออกมา เช่น "*****"
-        }
-
-        public void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
-        {
-            // Guideline:
-            // 1. ใช้ Nested Loop: ลูปนอกวน y ตั้งแต่ 0 ถึง rows - 1, ลูปในวน x ตั้งแต่ 0 ถึง columns - 1
-            // 2. ในแต่ละช่อง ให้สุ่มเลือกแผ่นพื้นจาก floorTiles ด้วย Random.Range(0, floorTiles.Length)
-            // 3. Instantiate แผ่นพื้นที่สุ่มได้ที่พิกัด new Vector2(x, y)
-            // 4. ตั้งชื่อแผ่นพื้นที่สร้างขึ้นมาเป็น $"Floor_{x}_{y}" (เช่น Floor_0_0)
-            // 5. สะสมชื่อของแผ่นพื้น (tileChoice.name) ในแต่ละแถว แล้วพิมพ์ออกมาทีละแถว
-        }
-
-        public void As06_CreateWall(int columns, int rows, GameObject[] walls)
-        {
-            // Guideline:
-            // 1. ลูป y จาก -1 ถึง rows และ x จาก -1 ถึง columns (ขอบเขตรอบนอกขยายออกไปด้านละ 1 ช่อง)
-            // 2. ตรวจสอบเงื่อนไขขอบนอก: (x == -1 || x == columns || y == -1 || y == rows)
-            // 3. ถ้าเป็นขอบนอก ให้สุ่มเลือก prefab จาก walls แล้ว Instantiate ที่ new Vector2(x, y) พร้อมสะสม "*"
-            // 4. ถ้าไม่ใช่ขอบ (พื้นที่ภายใน) ให้สะสม " "
-            // 5. พิมพ์แต่ละแถวออกมาทาง Console
-        }
-
-        public void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
-        {
-            // Guideline:
-            // 1. ตรวจสอบว่า prefab item ไม่เป็น null
-            // 2. สั่ง Instantiate item ที่ตำแหน่ง new Vector2(itemPosX, itemPosY) ด้วย Quaternion.identity
-            // 3. พิมพ์ตำแหน่งของ GameObject ที่สร้างขึ้นมา (เช่น newItem.transform.position) ออกมาทาง Console
-        }
-
-        public void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)
-        {
-            // Guideline:
-            // 1. สุ่มพิกัด x จาก 0 ถึง columns - 1 และ y จาก 0 ถึง rows - 1 ด้วย Random.Range
-            // 2. สุ่มเลือกไอเทมอาหารจาก foodTiles ด้วย Random.Range(0, foodTiles.Length)
-            // 3. Instantiate ไอเทมที่สุ่มได้ที่พิกัด (x, y)
-            // 4. พิมพ์ข้อความ "{ชื่อไอเทม} at x: {x} y: {y}"
-        }
-
-        public void As09_CreateItemFromArray(GameObject[] items)
-        {
-            // Guideline:
-            // 1. สร้าง 2D String Array my2DStringArray ขนาด 3x3:
-            //    { { " ", "Soda", " " }, { " ", " ", " " }, { " ", " ", "Food" } }
-            // 2. ใช้ Nested Loop: ลูปนอกวน y จาก 0 ถึง GetLength(0) - 1, ลูปในวน x จาก 0 ถึง GetLength(1) - 1
-            // 3. อ่านชื่อไอเทม itemName = my2DStringArray[y, x]
-            // 4. ถ้าไม่ใช่ช่องว่าง (!string.IsNullOrWhiteSpace(itemName)):
-            //    - วนลูปหาใน items ที่มี name == itemName
-            //    - ถ้าพบ ให้ Instantiate(items[i], new Vector2(x, y), Quaternion.identity)
-            //    - และพิมพ์ "Create Item " + itemName + " at x: " + x + " y: " + y
-        }
-
         #endregion
 
         #region Homework

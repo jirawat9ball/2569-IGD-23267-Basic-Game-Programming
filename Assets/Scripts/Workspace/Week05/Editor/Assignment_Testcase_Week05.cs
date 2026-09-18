@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -10,6 +11,167 @@ using SimpleDebugConsole = Workspace.Core.SimpleDebugConsole;
 
 namespace Week05_Method
 {
+    /// <summary>
+    /// ตัวช่วยเรียก Method ผ่าน Reflection โดยไม่ต้องบังคับให้ Assignment_Student_Week05 สืบทอด IAssignment
+    /// ช่วยให้นักเรียนเริ่มไฟล์เปล่าได้โดยไม่มี Compiler Error CS0535
+    /// </summary>
+    public class AssignmentInvoker : IAssignment
+    {
+        private readonly object _target;
+        private readonly Assignment_Student_Week05 _studentSync;
+
+        public AssignmentInvoker(object target, Assignment_Student_Week05 studentSync = null)
+        {
+            _target = target;
+            _studentSync = studentSync;
+        }
+
+        private void SyncFieldsBeforeInvoke()
+        {
+            if (_studentSync != null && _target is Assignment_Teacher_Week05 teacher)
+            {
+                teacher.columns = _studentSync.columns;
+                teacher.rows = _studentSync.rows;
+                teacher.floorTiles = _studentSync.floorTiles;
+                teacher.wallTiles = _studentSync.wallTiles;
+                teacher.foodTiles = _studentSync.foodTiles;
+                teacher.foodCount = _studentSync.foodCount;
+                teacher.player = _studentSync.player;
+                teacher.exitTile = _studentSync.exitTile;
+                teacher.energy = _studentSync.energy;
+                teacher.transform.position = _studentSync.transform.position;
+            }
+        }
+
+        private void SyncFieldsAfterInvoke()
+        {
+            if (_studentSync != null && _target is Assignment_Teacher_Week05 teacher)
+            {
+                _studentSync.energy = teacher.energy;
+                _studentSync.transform.position = teacher.transform.position;
+            }
+        }
+
+        private object Invoke(string methodName, params object[] args)
+        {
+            SyncFieldsBeforeInvoke();
+
+            var type = _target.GetType();
+            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo targetMethod = null;
+
+            // 1. ค้นหาตามชื่อตรงและจำนวน/ชนิดของ Parameter
+            foreach (var m in methods)
+            {
+                if (m.Name == methodName)
+                {
+                    var parameters = m.GetParameters();
+                    if (parameters.Length == args.Length)
+                    {
+                        bool match = true;
+                        for (int i = 0; i < args.Length; i++)
+                        {
+                            if (args[i] != null && !parameters[i].ParameterType.IsAssignableFrom(args[i].GetType()))
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match)
+                        {
+                            targetMethod = m;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 2. รองรับ default parameter กรณี args น้อยกว่าจำนวน parameter ของ method
+            if (targetMethod == null)
+            {
+                foreach (var m in methods)
+                {
+                    if (m.Name == methodName)
+                    {
+                        var parameters = m.GetParameters();
+                        if (args.Length < parameters.Length)
+                        {
+                            bool canFillDefaults = true;
+                            var fullArgs = new object[parameters.Length];
+                            for (int i = 0; i < parameters.Length; i++)
+                            {
+                                if (i < args.Length)
+                                {
+                                    fullArgs[i] = args[i];
+                                }
+                                else if (parameters[i].HasDefaultValue)
+                                {
+                                    fullArgs[i] = parameters[i].DefaultValue;
+                                }
+                                else
+                                {
+                                    canFillDefaults = false;
+                                    break;
+                                }
+                            }
+
+                            if (canFillDefaults)
+                            {
+                                targetMethod = m;
+                                args = fullArgs;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. ตรวจสอบกรณีสะกดชื่อผิดตัวพิมพ์เล็ก-ใหญ่ เพื่อแจ้ง error ชัดเจน
+            if (targetMethod == null)
+            {
+                foreach (var m in methods)
+                {
+                    if (string.Equals(m.Name, methodName, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        Assert.Fail($"พบเมธอด '{m.Name}' แต่ตัวสะกดพิมพ์ใหญ่-เล็กไม่ตรงกับที่กำหนด (ต้องเป็น '{methodName}')");
+                    }
+                }
+
+                Assert.Fail($"ไม่พบเมธอด '{methodName}' ใน {_target.GetType().Name} (กรุณาสร้างเมธอดตามโจทย์)");
+                return null;
+            }
+
+            try
+            {
+                var result = targetMethod.Invoke(_target, args);
+                SyncFieldsAfterInvoke();
+                return result;
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    throw ex.InnerException;
+                throw;
+            }
+        }
+
+        public void UserNameIdentification() => Invoke(nameof(UserNameIdentification));
+        public void UserNameIdentification(string name) => Invoke(nameof(UserNameIdentification), name);
+        public void UserNameIdentification(string name, int age) => Invoke(nameof(UserNameIdentification), name, age);
+        public void UserCountry(string country = "Thailand") => Invoke(nameof(UserCountry), country);
+        public int Add(int a, int b) => (int)(Invoke(nameof(Add), a, b) ?? 0);
+        public int GetStringLength(string text) => (int)(Invoke(nameof(GetStringLength), text) ?? 0);
+        public bool ConvertInttoBool(int sex) => (bool)(Invoke(nameof(ConvertInttoBool), sex) ?? false);
+        public void GenerateFloor() => Invoke(nameof(GenerateFloor));
+        public void GenerateWalls() => Invoke(nameof(GenerateWalls));
+        public void GenerateFoods() => Invoke(nameof(GenerateFoods));
+        public void PlacePlayer() => Invoke(nameof(PlacePlayer));
+        public void PlaceExit() => Invoke(nameof(PlaceExit));
+        public void Move(Vector2 direction) => Invoke(nameof(Move), direction);
+        public void TakeDamage(int Damage) => Invoke(nameof(TakeDamage), Damage);
+        public void Heal(int healPoint) => Invoke(nameof(Heal), healPoint);
+    }
+
     public class TestBase
     {
         // =========================================================================================
@@ -24,6 +186,7 @@ namespace Week05_Method
 
         protected IAssignment assignment;
         protected Assignment_Student_Week05 student;
+        protected Assignment_Teacher_Week05 teacher;
         protected GameObject testGo;
 
         [SetUp]
@@ -31,7 +194,15 @@ namespace Week05_Method
         {
             testGo = new GameObject("Week05_TestRunner");
             student = testGo.AddComponent<Assignment_Student_Week05>();
-            assignment = student;
+            if (isTeacherMode)
+            {
+                teacher = testGo.AddComponent<Assignment_Teacher_Week05>();
+                assignment = new AssignmentInvoker(teacher, student);
+            }
+            else
+            {
+                assignment = new AssignmentInvoker(student);
+            }
             SimpleDebugConsole.Clear();
         }
 
@@ -99,6 +270,21 @@ namespace Week05_Method
             string src = ReadStudentSourceStripped();
 
             int sig = src.IndexOf(signature, System.StringComparison.Ordinal);
+            if (sig == -1)
+            {
+                sig = src.IndexOf(signature, System.StringComparison.OrdinalIgnoreCase);
+            }
+            if (sig == -1)
+            {
+                var match = Regex.Match(signature, @"(\w+)\s*\(");
+                if (match.Success)
+                {
+                    string methodName = match.Groups[1].Value;
+                    var mMatch = Regex.Match(src, $@"\b{methodName}\s*\(");
+                    if (mMatch.Success) sig = mMatch.Index;
+                }
+            }
+
             Assert.Greater(sig, -1, $"ไม่พบเมธอด '{signature}' ในไฟล์เป้าหมาย");
 
             int open = src.IndexOf('{', sig);
@@ -121,8 +307,43 @@ namespace Week05_Method
 
         protected static void AssertSignatureExists(string signature)
         {
-            StringAssert.Contains(signature, ReadStudentSourceStripped(),
-                $"ต้องประกาศเมธอดตามรูปแบบ '{signature}'");
+            string src = ReadStudentSourceStripped();
+            if (src.Contains(signature)) return;
+
+            var match = Regex.Match(signature, @"(public|private|protected)\s+([\w<>\[\], ]+?)\s+(\w+)\s*\((.*?)\)");
+            if (match.Success)
+            {
+                string access = match.Groups[1].Value;
+                string returnType = Regex.Escape(match.Groups[2].Value.Trim());
+                string methodName = match.Groups[3].Value;
+                string rawParams = match.Groups[4].Value.Trim();
+
+                string pattern;
+                if (string.IsNullOrEmpty(rawParams))
+                {
+                    pattern = $@"\b{access}\s+{returnType}\s+{methodName}\s*\(\s*\)";
+                }
+                else
+                {
+                    var paramParts = rawParams.Split(',');
+                    var typePatterns = new System.Collections.Generic.List<string>();
+                    foreach (var p in paramParts)
+                    {
+                        var tokens = p.Trim().Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+                        if (tokens.Length > 0)
+                        {
+                            string pType = Regex.Escape(tokens[0]);
+                            typePatterns.Add($@"{pType}\s+\w+");
+                        }
+                    }
+                    pattern = $@"\b{access}\s+{returnType}\s+{methodName}\s*\(\s*" + string.Join(@"\s*,\s*", typePatterns) + @"\s*\)";
+                }
+
+                if (Regex.IsMatch(src, pattern, RegexOptions.IgnoreCase))
+                    return;
+            }
+
+            StringAssert.Contains(signature, src, $"ต้องประกาศเมธอดตามรูปแบบ '{signature}'");
         }
 
         protected static void AssertRawSourceContains(string needle, string reason)
@@ -148,6 +369,7 @@ namespace Week05_Method
                 $"{signature}: ต้องใช้ลูปจริงอย่างน้อย {minLoops} ลูป (ห้าม hardcode พิมพ์ทีละบรรทัด)");
         }
     }
+
 
     public class Exercises : TestBase
     {

@@ -25,6 +25,10 @@ namespace Week04
         [Header("As08 & As09 Variables")]
         public GameObject[] foodTiles;
 
+        [Header("PlacePlayer & PlaceExit Variables")]
+        public GameObject player;
+        public GameObject exitTile;
+
         #endregion
 
         #region Level 1 Variables
@@ -65,68 +69,99 @@ namespace Week04
         private const string LineSeparator = "============================";
         private const string BoardSeparator = "-------------";
 
-        /// <summary>
-        /// เช็คว่าช่อง Prefab ใน Inspector ใส่มาครบหรือยัง ถ้ายังไม่ครบจะบอกเหตุผลใน Console
-        /// (ไม่ใช่ส่วนของโจทย์ แค่กันไม่ให้ Play แล้ว error ตอนยังตั้งค่าไม่เสร็จ)
-        /// </summary>
-        private static bool HasPrefabs(GameObject[] prefabs, string fieldName, string methodName)
-        {
-            if (prefabs == null || prefabs.Length == 0)
-            {
-                Debug.Log("ข้าม " + methodName + " เพราะช่อง '" + fieldName + "' ใน Inspector ยังว่างอยู่");
-                return false;
-            }
-
-            for (int i = 0; i < prefabs.Length; i++)
-            {
-                if (prefabs[i] == null)
-                {
-                    Debug.Log("ข้าม " + methodName + " เพราะช่อง '" + fieldName + "' Element " + i +
-                              " ยังว่างอยู่ — ลด Size เหลือ " + i + " หรือใส่ Prefab ให้ครบ");
-                    return false;
-                }
-            }
-            return true;
-        }
-
         void Start()
         {
             As01_Create2DArray();
             As02_ArraySize(rows, cols);
             As03_GetSet2DArray();
-            if (HasPrefabs(wall, "Wall", "As04_CreateWallRow"))
+
+            // =========================================================================
+            // สร้างแผนที่และวางวัตถุ
+            // =========================================================================
+
+            // As04: สร้างแถวกำแพง
+            for (int x = 0; x < columns; x++)
             {
-                As04_CreateWallRow(columns, wall);
+                GameObject tileChoice = wall[Random.Range(0, wall.Length)];
+                Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity);
             }
 
-            if (HasPrefabs(floorTiles, "Floor Tiles", "As05_CreateFloor"))
+            // As05: สร้างพื้นแผนที่
+            for (int y = 0; y < mapRows; y++)
             {
-                As05_CreateFloor(columns, mapRows, floorTiles);
+                string line = "";
+                for (int x = 0; x < columns; x++)
+                {
+                    GameObject tileChoice = floorTiles[Random.Range(0, floorTiles.Length)];
+                    GameObject instance = Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
+                    instance.name = $"Floor_{x}_{y}";
+                    line += tileChoice.name;
+                }
+                Debug.Log(line);
             }
 
-            if (HasPrefabs(wall, "Wall", "As06_CreateWall"))
+            // As06: สร้างกำแพงล้อมรอบแผนที่
+            for (int y = -1; y <= mapRows; y++)
             {
-                As06_CreateWall(columns, mapRows, wall);
+                string line = "";
+                for (int x = -1; x <= columns; x++)
+                {
+                    if (x == -1 || x == columns || y == -1 || y == mapRows)
+                    {
+                        GameObject tileChoice = wall[Random.Range(0, wall.Length)];
+                        Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
+                        line += "*";
+                    }
+                    else
+                    {
+                        line += " ";
+                    }
+                }
+                Debug.Log(line);
             }
 
-            if (Item != null)
+            // As07: วางไอเทมเดี่ยวตามพิกัด
+            Instantiate(Item, new Vector2(ItemPosX, ItemPosY), Quaternion.identity);
+            Debug.Log(new Vector3(ItemPosX, ItemPosY, 0f));
+
+            // As08: สุ่มวางอาหาร
+            int foodX = Random.Range(0, columns);
+            int foodY = Random.Range(0, mapRows);
+            GameObject foodChoice = foodTiles[Random.Range(0, foodTiles.Length)];
+            Instantiate(foodChoice, new Vector2(foodX, foodY), Quaternion.identity);
+            Debug.Log(foodChoice.name + " at x: " + foodX + " y: " + foodY);
+
+            // As09: สร้างไอเทมจาก 2D Array
+            string[,] my2DStringArray = new string[3, 3] {
+                { " ", "Soda", " " },
+                { " ", " ", " " },
+                { " ", " ", "Food" } };
+
+            for (int y = 0; y < my2DStringArray.GetLength(0); y++)
             {
-                As07_SetItemPosition(Item, ItemPosX, ItemPosY);
-            }
-            else
-            {
-                Debug.Log("ข้าม As07_SetItemPosition เพราะช่อง 'Item' ใน Inspector ยังว่างอยู่");
+                for (int x = 0; x < my2DStringArray.GetLength(1); x++)
+                {
+                    string itemName = my2DStringArray[y, x];
+                    if (!string.IsNullOrWhiteSpace(itemName))
+                    {
+                        for (int i = 0; i < foodTiles.Length; i++)
+                        {
+                            if (foodTiles[i].name == itemName)
+                            {
+                                Instantiate(foodTiles[i], new Vector2(x, y), Quaternion.identity);
+                                Debug.Log("Create Item " + itemName + " at x: " + x + " y: " + y);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
-            if (HasPrefabs(foodTiles, "Food Tiles", "As08_RandomFoodItem"))
-            {
-                As08_RandomFoodItem(columns, mapRows, foodTiles);
-            }
+            // PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0)
+            Instantiate(player, new Vector2(0, 0), Quaternion.identity);
 
-            if (HasPrefabs(foodTiles, "Food Tiles", "As09_CreateItemFromArray"))
-            {
-                As09_CreateItemFromArray(foodTiles);
-            }
+            // PlaceExit: วางทางออกที่มุมขวาบน (columns - 1, mapRows - 1)
+            Instantiate(exitTile, new Vector2(columns - 1, mapRows - 1), Quaternion.identity);
 
             Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
@@ -212,115 +247,6 @@ namespace Week04
                 Debug.Log(line);
             }
         }
-
-        public void As04_CreateWallRow(int columns, GameObject[] walls)
-        {
-            string line = "";
-            for (int x = 0; x < columns; x++)
-            {
-                if (walls != null && walls.Length > 0)
-                {
-                    GameObject tileChoice = walls[Random.Range(0, walls.Length)];
-                    if (tileChoice != null)
-                    {
-                        Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity);
-                    }
-                }
-                line += "*";
-            }
-            Debug.Log(line);
-        }
-
-        public void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
-        {
-            for (int y = 0; y < rows; y++)
-            {
-                string line = "";
-                for (int x = 0; x < columns; x++)
-                {
-                    GameObject tileChoice = floorTiles[Random.Range(0, floorTiles.Length)];
-                    GameObject instance = Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
-                    instance.name = $"Floor_{x}_{y}";
-                    line += tileChoice.name;
-                }
-                Debug.Log(line);
-            }
-        }
-
-        public void As06_CreateWall(int columns, int rows, GameObject[] walls)
-        {
-            for (int y = -1; y <= rows; y++)
-            {
-                string line = "";
-                for (int x = -1; x <= columns; x++)
-                {
-                    if (x == -1 || x == columns || y == -1 || y == rows)
-                    {
-                        if (walls != null && walls.Length > 0)
-                        {
-                            GameObject tileChoice = walls[Random.Range(0, walls.Length)];
-                            if (tileChoice != null)
-                            {
-                                Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
-                            }
-                        }
-                        line += "*";
-                    }
-                    else
-                    {
-                        line += " ";
-                    }
-                }
-                Debug.Log(line);
-            }
-        }
-
-        public void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
-        {
-            if (item != null)
-            {
-                GameObject spawned = Instantiate(item, new Vector2(itemPosX, itemPosY), Quaternion.identity);
-                Debug.Log(spawned.transform.position);
-            }
-        }
-
-        public void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)
-        {
-            int x = Random.Range(0, columns);
-            int y = Random.Range(0, rows);
-            GameObject tileChoice = foodTiles[Random.Range(0, foodTiles.Length)];
-            Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
-            Debug.Log(tileChoice.name + " at x: " + x + " y: " + y);
-        }
-
-        public void As09_CreateItemFromArray(GameObject[] items)
-        {
-            string[,] my2DStringArray = new string[3, 3] {
-                { " ", "Soda", " " },
-                { " ", " ", " " },
-                { " ", " ", "Food" } };
-
-            for (int y = 0; y < my2DStringArray.GetLength(0); y++)
-            {
-                for (int x = 0; x < my2DStringArray.GetLength(1); x++)
-                {
-                    string itemName = my2DStringArray[y, x];
-                    if (!string.IsNullOrWhiteSpace(itemName))
-                    {
-                        for (int i = 0; i < items.Length; i++)
-                        {
-                            if (items[i] != null && items[i].name == itemName)
-                            {
-                                Instantiate(items[i], new Vector2(x, y), Quaternion.identity);
-                                Debug.Log("Create Item " + itemName + " at x: " + x + " y: " + y);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         #endregion
 
         #region Homework

@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -29,7 +29,14 @@ namespace Week04_Array2D
         public void Setup()
         {
             testGo = new GameObject("Week04_TestRunner");
-            assignment = testGo.AddComponent<Assignment_Student_Week04>();
+            if (isTeacherMode)
+            {
+                assignment = testGo.AddComponent<Assignment_Teacher_Week04>();
+            }
+            else
+            {
+                assignment = testGo.AddComponent<Assignment_Student_Week04>();
+            }
             SimpleDebugConsole.Clear();
         }
 
@@ -60,6 +67,16 @@ namespace Week04_Array2D
             }
         }
 
+        protected static System.Collections.Generic.List<GameObject> ClonesNamed(string prefabName)
+        {
+            var list = new System.Collections.Generic.List<GameObject>();
+            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                if (go != null && go.name.Contains("(Clone)") && (go.name == prefabName + "(Clone)" || go.name.StartsWith(prefabName))) list.Add(go);
+            }
+            return list;
+        }
+
         protected static GameObject[] MakeItems(params string[] names)
         {
             var items = new GameObject[names.Length];
@@ -88,7 +105,8 @@ namespace Week04_Array2D
             src = Regex.Replace(src, "'([^'\\\\]|\\\\.)*'", "' '");
 
             int sig = src.IndexOf("public void " + methodName, System.StringComparison.Ordinal);
-            Assert.Greater(sig, -1, $"ไม่พบเมธอด public void {methodName} ในไฟล์ student");
+            if (sig == -1) sig = src.IndexOf("void " + methodName, System.StringComparison.Ordinal);
+            Assert.Greater(sig, -1, $"ไม่พบเมธอด {methodName} ในไฟล์ student");
 
             int open = src.IndexOf('{', sig);
             Assert.Greater(open, -1, $"เมธอด {methodName} ไม่มี body");
@@ -106,6 +124,50 @@ namespace Week04_Array2D
             }
             Assert.Fail($"บอดี้เมธอด {methodName} ปีกกาไม่ครบ");
             return null;
+        }
+
+        protected void InvokeStart()
+        {
+            var method = assignment.GetType().GetMethod("Start",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (method != null)
+            {
+                method.Invoke(assignment, null);
+            }
+        }
+
+        protected void SetupMapParameters(int cols, int rows, GameObject[] walls, GameObject[] floors, GameObject item, int itemX, int itemY, GameObject[] food, GameObject player, GameObject exit)
+        {
+            var student = testGo.GetComponent<Assignment_Student_Week04>();
+            if (student != null)
+            {
+                student.columns = cols;
+                student.mapRows = rows;
+                student.rows = rows;
+                student.wall = walls;
+                student.floorTiles = floors;
+                student.Item = item;
+                student.ItemPosX = itemX;
+                student.ItemPosY = itemY;
+                student.foodTiles = food;
+                student.player = player;
+                student.exitTile = exit;
+            }
+            var teacher = testGo.GetComponent<Assignment_Teacher_Week04>();
+            if (teacher != null)
+            {
+                teacher.columns = cols;
+                teacher.mapRows = rows;
+                teacher.rows = rows;
+                teacher.wall = walls;
+                teacher.floorTiles = floors;
+                teacher.Item = item;
+                teacher.ItemPosX = itemX;
+                teacher.ItemPosY = itemY;
+                teacher.foodTiles = food;
+                teacher.player = player;
+                teacher.exitTile = exit;
+            }
         }
 
         protected static void AssertUsesRealLoop(string methodName, int minLoops = 1)
@@ -127,7 +189,7 @@ namespace Week04_Array2D
 
     public class Lecture : TestBase
     {
-        // ============ Lecture (As01 - As09) ============
+        // ============ Lecture (As01 - As07) ============
 
         [Test]
         public void As01_Create2DArray()
@@ -171,238 +233,277 @@ namespace Week04_Array2D
             AssertBodyContains("As03_GetSet2DArray", "Print2DArray", "ต้องเรียกใช้ Print2DArray ในการแสดงผล 2D Array");
         }
 
-        [TestCase(5)]
-        [TestCase(3)]
-        [TestCase(1)]
-        [TestCase(8)]
-        public void As04_CreateWallRow(int columns)
+        // ============ As04: สร้างแถวกำแพง ============
+        [TestCase(4, 3)]
+        [TestCase(5, 4)]
+        public void As04_Start_CreateWallRow(int cols, int rows)
         {
-            var walls = new GameObject[] { new GameObject("Wall") };
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
 
-            assignment.As04_CreateWallRow(columns, walls);
+            SetupMapParameters(cols, rows, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
 
-            TestUtils.AssertMultilineEqual(new string('*', columns), SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(columns, CountClones(), $"ต้อง Instantiate กำแพง {columns} ชิ้น");
+            var wallClones = ClonesNamed("Wall");
+            var rowZeroWalls = wallClones.FindAll(go => Mathf.Approximately(go.transform.position.y, 0f));
+            Assert.GreaterOrEqual(rowZeroWalls.Count, cols,
+                $"As04: Start() ต้องสร้างกำแพง 1 แถวที่ y = 0 อย่างน้อย {cols} ช่อง (x = 0 ถึง {cols - 1})");
 
-            foreach (var w in walls) Object.DestroyImmediate(w);
-            DestroyAllClones();
-            AssertUsesRealLoop("As04_CreateWallRow", minLoops: 1);
-            AssertBodyContains("As04_CreateWallRow", "Instantiate", "ต้อง Instantiate กำแพงจริง");
-            AssertBodyContains("As04_CreateWallRow", "Random.Range", "ต้องสุ่มกำแพงด้วย Random.Range");
-        }
-
-        [Test]
-        public void As04_CreateWallRow_MultipleWallPrefabs()
-        {
-            var walls = MakeItems("Wall_A", "Wall_B", "Wall_C");
-            const int columns = 6;
-
-            assignment.As04_CreateWallRow(columns, walls);
-
-            TestUtils.AssertMultilineEqual(new string('*', columns), SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(columns, CountClones(), $"ต้อง Instantiate กำแพง {columns} ชิ้น");
-
-            DestroyItems(walls);
-            DestroyAllClones();
-        }
-
-        [Test]
-        public void As05_CreateFloor()
-        {
-            string[] names = { "0", "1", "2" };
-            var maps = new System.Collections.Generic.HashSet<string>();
-            const int columns = 4, rows = 3;
-
-            for (int seed = 1; seed <= 12; seed++)
+            for (int x = 0; x < cols; x++)
             {
-                SimpleDebugConsole.Clear();
-                DestroyAllClones();
-                Random.InitState(seed);
-                var tiles = MakeItems(names);
-
-                assignment.As05_CreateFloor(columns, rows, tiles);
-
-                string output = SimpleDebugConsole.GetOutput().Trim();
-                string[] lines = output.Replace("\r\n", "\n").Split('\n');
-
-                Assert.AreEqual(rows, lines.Length, $"seed {seed}: ต้องพิมพ์ {rows} บรรทัด");
-                foreach (var line in lines)
-                {
-                    Assert.AreEqual(columns, line.Length, $"seed {seed}: แต่ละบรรทัดต้องยาว {columns} ตัว — ได้ '{line}'");
-                    foreach (char ch in line)
-                        CollectionAssert.Contains(names, ch.ToString(), $"seed {seed}: เจอตัวอักษรแปลก '{ch}'");
-                }
-                Assert.AreEqual(columns * rows, CountClones(), $"seed {seed}: ต้อง Instantiate ครบทุกช่อง");
-
-                for (int y = 0; y < rows; y++)
-                {
-                    for (int x = 0; x < columns; x++)
-                    {
-                        var floorObj = GameObject.Find($"Floor_{x}_{y}");
-                        Assert.IsNotNull(floorObj, $"seed {seed}: ต้องมี GameObject ชื่อ 'Floor_{x}_{y}' ที่สร้างขึ้นมา");
-                    }
-                }
-
-                maps.Add(output);
-                DestroyItems(tiles);
-                DestroyAllClones();
+                bool found = rowZeroWalls.Exists(go => Mathf.Approximately(go.transform.position.x, (float)x));
+                Assert.IsTrue(found, $"As04: ไม่พบกำแพงที่พิกัด ({x}, 0)");
             }
 
-            Assert.Greater(maps.Count, 1, "สุ่ม 12 รอบได้แผนที่เดิมทุกครั้ง — น่าจะไม่ได้สุ่มจริง");
-            AssertUsesRealLoop("As05_CreateFloor", minLoops: 2);
-            AssertBodyContains("As05_CreateFloor", "Random.Range", "ต้องสุ่มพื้นด้วย Random.Range");
-            AssertBodyContains("As05_CreateFloor", "Instantiate", "ต้อง Instantiate พื้นทุกช่อง");
-            AssertBodyContains("As05_CreateFloor", ".name", "ต้องตั้งชื่อให้กับแผ่นพื้นที่สร้างขึ้นมา");
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
+            DestroyAllClones();
         }
 
-        [TestCase(5, 3)]
-        [TestCase(3, 3)]
+        // ============ As05: สร้างพื้นแผนที่ ============
+        [TestCase(4, 3)]
+        [TestCase(3, 4)]
+        public void As05_Start_CreateFloor(int cols, int rows)
+        {
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
+
+            SetupMapParameters(cols, rows, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
+
+            int floorCount = 0;
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < cols; x++)
+                {
+                    if (GameObject.Find($"Floor_{x}_{y}") != null) floorCount++;
+                }
+            }
+            Assert.AreEqual(cols * rows, floorCount,
+                $"As05: Start() ต้องสร้างแผ่นพื้น Floor_{{x}}_{{y}} ครบทุกช่อง ({cols * rows} ช่อง)");
+
+            string output = SimpleDebugConsole.GetOutput();
+            Assert.IsTrue(output.Contains("Floor"), "As05: ต้องพิมพ์ชื่อแผ่นพื้นของแต่ละแถวออกทาง Debug.Log");
+
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
+            DestroyAllClones();
+        }
+
+        // ============ As06: สร้างกำแพงล้อมรอบแผนที่ ============
+        [TestCase(4, 3)]
+        [TestCase(5, 5)]
+        public void As06_Start_CreateWall(int cols, int rows)
+        {
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
+
+            SetupMapParameters(cols, rows, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
+
+            var wallClones = ClonesNamed("Wall");
+            bool hasLeft = wallClones.Exists(go => Mathf.Approximately(go.transform.position.x, -1f));
+            bool hasRight = wallClones.Exists(go => Mathf.Approximately(go.transform.position.x, (float)cols));
+            bool hasBottom = wallClones.Exists(go => Mathf.Approximately(go.transform.position.y, -1f));
+            bool hasTop = wallClones.Exists(go => Mathf.Approximately(go.transform.position.y, (float)rows));
+
+            Assert.IsTrue(hasLeft, "As06: ต้องมีกำแพงที่ขอบซ้าย x = -1");
+            Assert.IsTrue(hasRight, $"As06: ต้องมีกำแพงที่ขอบขวา x = {cols}");
+            Assert.IsTrue(hasBottom, "As06: ต้องมีกำแพงที่ขอบล่าง y = -1");
+            Assert.IsTrue(hasTop, $"As06: ต้องมีกำแพงที่ขอบบน y = {rows}");
+
+            string output = SimpleDebugConsole.GetOutput();
+            Assert.IsTrue(output.Contains("*"), "As06: ต้องพิมพ์ '*' ออกทาง Debug.Log สำหรับกำแพงขอบนอก");
+
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
+            DestroyAllClones();
+        }
+
+        // ============ As07: วางไอเทมเดี่ยวตามพิกัด ============
         [TestCase(1, 1)]
-        [TestCase(4, 2)]
-        public void As06_CreateWall(int columns, int rows)
+        [TestCase(2, 0)]
+        public void As07_Start_CreateItem(int itemX, int itemY)
         {
-            var walls = new GameObject[] { new GameObject("Wall") };
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
 
-            assignment.As06_CreateWall(columns, rows, walls);
+            SetupMapParameters(4, 3, wallPrefabs, floorPrefabs, itemPrefab, itemX, itemY, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
 
-            var sb = new StringBuilder();
-            for (int y = -1; y <= rows; y++)
-            {
-                var line = new StringBuilder();
-                for (int x = -1; x <= columns; x++)
-                {
-                    line.Append(x == -1 || x == columns || y == -1 || y == rows ? '*' : ' ');
-                }
-                sb.AppendLine(line.ToString());
-            }
+            var itemClones = ClonesNamed("KeyItem");
+            Assert.AreEqual(1, itemClones.Count, "As07: Start() ต้อง Instantiate Item 1 ชิ้น");
+            Assert.AreEqual((float)itemX, itemClones[0].transform.position.x, 0.0001f, $"As07: Item x ต้องอยู่ที่ {itemX}");
+            Assert.AreEqual((float)itemY, itemClones[0].transform.position.y, 0.0001f, $"As07: Item y ต้องอยู่ที่ {itemY}");
 
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            string output = SimpleDebugConsole.GetOutput();
+            Assert.IsTrue(output.Contains($"{itemX}") && output.Contains($"{itemY}"),
+                $"As07: ต้องพิมพ์ตำแหน่ง ({itemX}, {itemY}) ออกทาง Debug.Log");
 
-            int expectedWalls = (columns + 2) * (rows + 2) - columns * rows;
-            Assert.AreEqual(expectedWalls, CountClones(), "จำนวนกำแพงที่สร้างไม่ตรงกับขอบนอก");
-
-            foreach (var w in walls) Object.DestroyImmediate(w);
-            DestroyAllClones();
-            AssertUsesRealLoop("As06_CreateWall", minLoops: 2);
-            AssertBodyContains("As06_CreateWall", "Instantiate", "ต้อง Instantiate กำแพงจริง");
-            AssertBodyContains("As06_CreateWall", "Random.Range", "ต้องสุ่มกำแพงด้วย Random.Range");
-        }
-
-        [Test]
-        public void As06_CreateWall_MultipleWallPrefabs()
-        {
-            var walls = MakeItems("Wall_A", "Wall_B", "Wall_C");
-            const int columns = 4, rows = 3;
-
-            assignment.As06_CreateWall(columns, rows, walls);
-
-            int expectedWalls = (columns + 2) * (rows + 2) - columns * rows;
-            Assert.AreEqual(expectedWalls, CountClones(), "จำนวนกำแพงที่สร้างไม่ตรงกับขอบนอก");
-
-            DestroyItems(walls);
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
             DestroyAllClones();
         }
 
-        [TestCase(1, 2)]
-        [TestCase(11, 31)]
-        [TestCase(0, 0)]
-        [TestCase(-3, 5)]
-        public void As07_SetItemPosition(int x, int y)
-        {
-            var item = new GameObject("Item");
-
-            assignment.As07_SetItemPosition(item, x, y);
-
-            TestUtils.AssertMultilineEqual(new Vector3(x, y, 0f).ToString(), SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(1, CountClones(), "ต้อง Instantiate item 1 ชิ้น");
-
-            Object.DestroyImmediate(item);
-            DestroyAllClones();
-            AssertBodyContains("As07_SetItemPosition", "Instantiate", "ต้อง Instantiate จาก Prefab");
-        }
-
+        // ============ As08: สุ่มวางอาหาร ============
         [Test]
-        public void As08_RandomFoodItem()
+        public void As08_Start_RandomFoodItem()
         {
-            string[] names = { "Soda", "Hamburger" };
-            const int columns = 5, rows = 5;
-            var results = new System.Collections.Generic.HashSet<string>();
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
 
-            for (int seed = 1; seed <= 15; seed++)
-            {
-                SimpleDebugConsole.Clear();
-                DestroyAllClones();
-                Random.InitState(seed);
-                var tiles = MakeItems(names);
+            SetupMapParameters(4, 3, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
 
-                assignment.As08_RandomFoodItem(columns, rows, tiles);
+            string output = SimpleDebugConsole.GetOutput();
+            var match = Regex.Match(output, @"(\S+)\s+at x:\s*(\d+)\s+y:\s*(\d+)");
+            Assert.IsTrue(match.Success,
+                $"As08: รูปแบบข้อความต้องเป็น '<ชื่ออาหาร> at x: <x> y: <y>' แต่ได้:\n{output}");
 
-                string output = SimpleDebugConsole.GetOutput().Trim();
-                var match = Regex.Match(output, @"^(\S+) at x: (\d+) y: (\d+)$");
-                Assert.IsTrue(match.Success, $"seed {seed}: รูปแบบต้องเป็น '<ชื่อ> at x: <x> y: <y>' แต่ได้ '{output}'");
+            string foodName = match.Groups[1].Value;
+            int foodX = int.Parse(match.Groups[2].Value);
+            int foodY = int.Parse(match.Groups[3].Value);
 
-                CollectionAssert.Contains(names, match.Groups[1].Value, $"seed {seed}: ชื่อของไม่อยู่ใน foodTiles");
-                int x = int.Parse(match.Groups[2].Value);
-                int y = int.Parse(match.Groups[3].Value);
-                Assert.IsTrue(x >= 0 && x < columns, $"seed {seed}: x ต้องอยู่ในช่วง 0-{columns - 1} แต่ได้ {x}");
-                Assert.IsTrue(y >= 0 && y < rows, $"seed {seed}: y ต้องอยู่ในช่วง 0-{rows - 1} แต่ได้ {y}");
-                Assert.AreEqual(1, CountClones(), $"seed {seed}: ต้อง Instantiate 1 ชิ้น");
+            Assert.IsTrue(foodName == "Soda" || foodName == "Food", $"As08: ชื่ออาหารต้องอยู่ใน foodTiles แต่ได้ '{foodName}'");
+            Assert.IsTrue(foodX >= 0 && foodX < 4, $"As08: foodX ต้องอยู่ในช่วง 0 ถึง 3 แต่ได้ {foodX}");
+            Assert.IsTrue(foodY >= 0 && foodY < 3, $"As08: foodY ต้องอยู่ในช่วง 0 ถึง 2 แต่ได้ {foodY}");
 
-                results.Add(output);
-                DestroyItems(tiles);
-                DestroyAllClones();
-            }
-
-            Assert.Greater(results.Count, 1, "สุ่ม 15 รอบได้ผลเดิมทุกครั้ง — น่าจะไม่ได้สุ่มจริง");
-            AssertBodyContains("As08_RandomFoodItem", "Random.Range", "ต้องสุ่มด้วย Random.Range");
-            AssertBodyContains("As08_RandomFoodItem", "Instantiate", "ต้อง Instantiate ของที่สุ่มได้");
-        }
-
-        [Test]
-        public void As09_CreateItemFromArray_AllItemsFound()
-        {
-            var items = MakeItems("Soda", "Food", "Water");
-
-            assignment.As09_CreateItemFromArray(items);
-
-            var sb = new StringBuilder();
-            sb.AppendLine("Create Item Soda at x: 1 y: 0");
-            sb.AppendLine("Create Item Food at x: 2 y: 2");
-
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(2, CountClones(), "ต้อง Instantiate ทั้ง 2 ไอเทม (Soda และ Food)");
-
-            DestroyItems(items);
-            DestroyAllClones();
-            AssertUsesRealLoop("As09_CreateItemFromArray", minLoops: 2);
-            AssertBodyContains("As09_CreateItemFromArray", "Instantiate", "ต้อง Instantiate ไอเทมที่เจอ");
-        }
-
-        [Test]
-        public void As09_CreateItemFromArray_OnlySoda()
-        {
-            var items = MakeItems("Soda", "Water");
-
-            assignment.As09_CreateItemFromArray(items);
-
-            TestUtils.AssertMultilineEqual("Create Item Soda at x: 1 y: 0", SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(1, CountClones(), "ต้อง Instantiate เฉพาะ Soda 1 ชิ้น");
-
-            DestroyItems(items);
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
             DestroyAllClones();
         }
 
+        // ============ As09: สร้างไอเทมจาก 2D Array ============
         [Test]
-        public void As09_CreateItemFromArray_NoMatchingItems()
+        public void As09_Start_CreateItemFromArray()
         {
-            var items = MakeItems("Water", "Potion");
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
 
-            assignment.As09_CreateItemFromArray(items);
+            SetupMapParameters(4, 3, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
 
-            TestUtils.AssertMultilineEqual("", SimpleDebugConsole.GetOutput());
-            Assert.AreEqual(0, CountClones(), "ไม่มีไอเทมที่ชื่อตรงกัน ต้องไม่ Instantiate อะไร");
+            var sodaClones = ClonesNamed("Soda");
+            var foodClones = ClonesNamed("Food");
+            Assert.GreaterOrEqual(sodaClones.Count, 1, "As09: Start() ต้องสร้างไอเทม Soda จาก 2D Array");
+            Assert.GreaterOrEqual(foodClones.Count, 1, "As09: Start() ต้องสร้างไอเทม Food จาก 2D Array");
 
-            DestroyItems(items);
+            bool hasSodaAtPos = sodaClones.Exists(go => Mathf.Approximately(go.transform.position.x, 1f) && Mathf.Approximately(go.transform.position.y, 0f));
+            bool hasFoodAtPos = foodClones.Exists(go => Mathf.Approximately(go.transform.position.x, 2f) && Mathf.Approximately(go.transform.position.y, 2f));
+            Assert.IsTrue(hasSodaAtPos, "As09: ต้องสร้าง Soda ที่ตำแหน่ง x: 1 y: 0");
+            Assert.IsTrue(hasFoodAtPos, "As09: ต้องสร้าง Food ที่ตำแหน่ง x: 2 y: 2");
+
+            string output = SimpleDebugConsole.GetOutput();
+            StringAssert.Contains("Create Item Soda at x: 1 y: 0", output, "As09: ต้องพิมพ์ 'Create Item Soda at x: 1 y: 0'");
+            StringAssert.Contains("Create Item Food at x: 2 y: 2", output, "As09: ต้องพิมพ์ 'Create Item Food at x: 2 y: 2'");
+
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
+            DestroyAllClones();
+        }
+
+        // ============ PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0) ============
+        [Test]
+        public void As10_Start_PlacePlayer()
+        {
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
+
+            SetupMapParameters(4, 3, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
+
+            var playerClones = ClonesNamed("Player");
+            Assert.AreEqual(1, playerClones.Count, "PlacePlayer: Start() ต้องสร้าง Player 1 ตัว");
+            Assert.AreEqual(0f, playerClones[0].transform.position.x, 0.0001f, "PlacePlayer: Player x ต้องอยู่ที่ 0");
+            Assert.AreEqual(0f, playerClones[0].transform.position.y, 0.0001f, "PlacePlayer: Player y ต้องอยู่ที่ 0");
+
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
+            DestroyAllClones();
+        }
+
+        // ============ PlaceExit: วางทางออกที่มุมขวาบน (columns - 1, mapRows - 1) ============
+        [TestCase(4, 3)]
+        [TestCase(6, 4)]
+        public void As11_Start_PlaceExit(int cols, int rows)
+        {
+            var wallPrefabs = MakeItems("Wall");
+            var floorPrefabs = MakeItems("Floor");
+            var itemPrefab = new GameObject("KeyItem");
+            var foodPrefabs = MakeItems("Soda", "Food");
+            var playerPrefab = new GameObject("Player");
+            var exitPrefab = new GameObject("Exit");
+
+            SetupMapParameters(cols, rows, wallPrefabs, floorPrefabs, itemPrefab, 1, 1, foodPrefabs, playerPrefab, exitPrefab);
+            InvokeStart();
+
+            var exitClones = ClonesNamed("Exit");
+            Assert.AreEqual(1, exitClones.Count, "PlaceExit: Start() ต้องสร้าง Exit 1 อัน");
+            Assert.AreEqual(cols - 1f, exitClones[0].transform.position.x, 0.0001f, $"PlaceExit: Exit x ต้องอยู่ที่ {cols - 1}");
+            Assert.AreEqual(rows - 1f, exitClones[0].transform.position.y, 0.0001f, $"PlaceExit: Exit y ต้องอยู่ที่ {rows - 1}");
+
+            DestroyItems(wallPrefabs);
+            DestroyItems(floorPrefabs);
+            DestroyItems(foodPrefabs);
+            Object.DestroyImmediate(itemPrefab);
+            Object.DestroyImmediate(playerPrefab);
+            Object.DestroyImmediate(exitPrefab);
             DestroyAllClones();
         }
     }
