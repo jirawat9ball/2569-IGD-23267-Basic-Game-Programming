@@ -7,25 +7,23 @@ namespace Week04
     {
         #region Lecture Variables
 
-        [Header("As02 Variables")]
-        public int rows = 3;
+        [Header("As02 & Map Size Variables")]
+        public int rows = 5;
         public int cols = 5;
 
-        [Header("As04 - As06 Variables")]
-        public int columns = 5;
-        public int mapRows = 5;
+        [Header("As05 - As07 Variables")]
         public GameObject[] floorTiles;
         public GameObject[] wall;
 
-        [Header("As07 Variables")]
+        [Header("As08 Variables")]
         public GameObject Item;
         public int ItemPosX = 1;
         public int ItemPosY = 0;
 
-        [Header("As08 & As09 Variables")]
+        [Header("As09 & As10 Variables")]
         public GameObject[] foodTiles;
 
-        [Header("PlacePlayer & PlaceExit Variables")]
+        [Header("As11 & As12 Variables")]
         public GameObject player;
         public GameObject exitTile;
 
@@ -103,34 +101,34 @@ namespace Week04
             // สร้างแผนที่และวางวัตถุ
             // =========================================================================
 
-            // Guideline As04: สร้างแถวกำแพง
-            // 1. วนลูป x จาก 0 ถึง columns - 1 สุ่มหยิบ wall แล้ว Instantiate ที่ new Vector2(x, 0)
+            // Guideline As05: สร้างแถวกำแพง
+            // 1. วนลูป x จาก 0 ถึง cols - 1 สุ่มหยิบ wall แล้ว Instantiate ที่ new Vector2(x, 0)
 
-            // Guideline As05: สร้างพื้นแผนที่
-            // 1. ใช้ Nested Loop: วน y จาก 0 ถึง mapRows - 1 และ x จาก 0 ถึง columns - 1
+            // Guideline As06: สร้างพื้นแผนที่
+            // 1. ใช้ Nested Loop: วน y จาก 0 ถึง rows - 1 และ x จาก 0 ถึง cols - 1
             // 2. สุ่มหยิบ floorTiles แล้ว Instantiate ที่ new Vector2(x, y)
             // 3. ตั้งชื่อแผ่นพื้น: instance.name = $"Floor_{x}_{y}" และพิมพ์ชื่อแผ่นพื้นต่อกันในแต่ละแถวผ่าน Debug.Log
 
-            // Guideline As06: สร้างกำแพงล้อมรอบแผนที่
-            // 1. ใช้ Nested Loop: วน y จาก -1 ถึง mapRows และ x จาก -1 ถึง columns
-            // 2. เช็คเงื่อนไขขอบนอก: if (x == -1 || x == columns || y == -1 || y == mapRows)
+            // Guideline As07: สร้างกำแพงล้อมรอบแผนที่
+            // 1. ใช้ Nested Loop: วน y จาก -1 ถึง rows และ x จาก -1 ถึง cols
+            // 2. เช็คเงื่อนไขขอบนอก: if (x == -1 || x == cols || y == -1 || y == rows)
             // 3. สุ่มหยิบ wall แล้ว Instantiate ที่ new Vector2(x, y) พร้อมพิมพ์ '*' ออกมา (ด้านในพิมพ์ ' ')
 
-            // Guideline As07: วางไอเทมเดี่ยวตามพิกัด
+            // Guideline As08: วางไอเทมเดี่ยวตามพิกัด
             // 1. Instantiate Item ที่ new Vector2(ItemPosX, ItemPosY) และพิมพ์ตำแหน่งผ่าน Debug.Log
 
-            // Guideline As08: สุ่มวางอาหาร
-            // 1. สุ่มพิกัด x (0 ถึง columns - 1) และ y (0 ถึง mapRows - 1)
+            // Guideline As09: สุ่มวางอาหาร
+            // 1. สุ่มพิกัด x (0 ถึง cols - 1) และ y (0 ถึง rows - 1)
             // 2. สุ่ม foodTiles แล้ว Instantiate ที่ (x, y) พร้อมพิมพ์ข้อความผ่าน Debug.Log
 
-            // Guideline As09: สร้างไอเทมจาก 2D Array
+            // Guideline As10: สร้างไอเทมจาก 2D Array
             // 1. สร้าง 2D String Array ขนาด 3x3 เช่น { { " ", "Soda", " " }, { " ", " ", " " }, { " ", " ", "Food" } }
             // 2. วน Nested Loop ตรวจสอบว่าช่องไหนมีชื่อไอเทม ให้ค้นหาใน foodTiles ที่ชื่อตรงกัน แล้ว Instantiate ที่ตำแหน่งนั้น
 
-            // Guideline As10 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง 
+            // Guideline As11 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง 
             // 1. Instantiate player 
 
-            // Guideline As11 PlaceExit: วางทางออกที่มุมขวาบน 
+            // Guideline As12 PlaceExit: วางทางออกที่มุมขวาบน 
             // 1. Instantiate exitTile 
 
             Lv01_GetSet2DStringArray();
@@ -150,7 +148,7 @@ namespace Week04
             Ex01_TicTacToe(moves);
             int[,] mapGrid = new int[,] { { 0, 1, 0 }, { 0, 0, 1 }, { 1, 0, 0 } };
             Ex02_CheckWalkableTile(mapGrid, targetX, targetY);
-            Ex03_SpawnChestsInCorners(columns, mapRows, chestPrefab);
+            Ex03_SpawnChestsInCorners(cols, rows, chestPrefab);
         }
 
         #region Lecture
@@ -182,10 +180,10 @@ namespace Week04
             // 2. ดึงค่า (Get) จาก my2DArray แถวที่ 1 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
             // 3. เปลี่ยนค่า (Set) ใน my2DArray แถวที่ 1 คอลัมน์ที่ 2 ให้เป็น 70 แล้วพิมพ์ "set : 70"
             // 4. พิมพ์เส้นคั่น LineSeparator ("============================")
-            // 5. เรียกใช้ฟังก์ชัน Print2DArray(my2DArray) เพื่อพิมพ์ข้อมูลใน my2DArray
+            // 5. เรียกใช้ฟังก์ชัน As04_Print2DArray(my2DArray) เพื่อพิมพ์ข้อมูลใน my2DArray
         }
 
-        public void Print2DArray(int[,] array)
+        public void As04_Print2DArray(int[,] array)
         {
             for (int r = 0; r < array.GetLength(0); r++)
             {
@@ -202,7 +200,7 @@ namespace Week04
             }
         }
 
-        public void Print2DArray(string[,] array)
+        public void As04_Print2DArray(string[,] array)
         {
             for (int r = 0; r < array.GetLength(0); r++)
             {
@@ -231,7 +229,7 @@ namespace Week04
             // 2. ดึงค่า (Get) จาก my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 แล้วพิมพ์ "get : " + ค่าที่ได้
             // 3. เปลี่ยนค่า (Set) ใน my2DStringArray แถวที่ 0 คอลัมน์ที่ 2 ให้เป็น "Cat" แล้วพิมพ์ "set : Cat"
             // 4. พิมพ์เส้นคั่น LineSeparator ("============================")
-            // 5. เรียกใช้ฟังก์ชัน Print2DArray(my2DStringArray) เพื่อพิมพ์ข้อมูลใน my2DStringArray
+            // 5. เรียกใช้ฟังก์ชัน As04_Print2DArray(my2DStringArray) เพื่อพิมพ์ข้อมูลใน my2DStringArray
         }
 
         public void Lv02_SumRow(int[,] matrix, int row)

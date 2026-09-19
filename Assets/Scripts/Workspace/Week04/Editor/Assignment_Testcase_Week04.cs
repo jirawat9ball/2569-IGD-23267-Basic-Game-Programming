@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -141,8 +141,7 @@ namespace Week04_Array2D
             var student = testGo.GetComponent<Assignment_Student_Week04>();
             if (student != null)
             {
-                student.columns = cols;
-                student.mapRows = rows;
+                student.cols = cols;
                 student.rows = rows;
                 student.wall = walls;
                 student.floorTiles = floors;
@@ -156,8 +155,7 @@ namespace Week04_Array2D
             var teacher = testGo.GetComponent<Assignment_Teacher_Week04>();
             if (teacher != null)
             {
-                teacher.columns = cols;
-                teacher.mapRows = rows;
+                teacher.cols = cols;
                 teacher.rows = rows;
                 teacher.wall = walls;
                 teacher.floorTiles = floors;
@@ -189,7 +187,7 @@ namespace Week04_Array2D
 
     public class Lecture : TestBase
     {
-        // ============ Lecture (As01 - As07) ============
+        // ============ Lecture (As01 - As12) ============
 
         [Test]
         public void As01_Create2DArray()
@@ -230,13 +228,41 @@ namespace Week04_Array2D
             sb.AppendLine("7 8 9");
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertBodyContains("As03_GetSet2DArray", "Print2DArray", "ต้องเรียกใช้ Print2DArray ในการแสดงผล 2D Array");
+            AssertBodyContains("As03_GetSet2DArray", "As04_Print2DArray", "ต้องเรียกใช้ As04_Print2DArray ในการแสดงผล 2D Array");
         }
 
-        // ============ As04: สร้างแถวกำแพง ============
+        // ============ As04: แสดงผล 2D Array ============
+        [Test]
+        public void As04_Print2DArray_Int()
+        {
+            int[,] array = { { 1, 2, 3 }, { 4, 5, 6 } };
+            assignment.As04_Print2DArray(array);
+
+            var sb = new StringBuilder();
+            sb.AppendLine("1 2 3");
+            sb.AppendLine("4 5 6");
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            AssertUsesRealLoop("As04_Print2DArray");
+        }
+
+        [Test]
+        public void As04_Print2DArray_String()
+        {
+            string[,] array = { { "A", "B" }, { "C", "D" } };
+            assignment.As04_Print2DArray(array);
+
+            var sb = new StringBuilder();
+            sb.AppendLine("A B");
+            sb.AppendLine("C D");
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+        }
+
+        // ============ As05: สร้างแถวกำแพง ============
         [TestCase(4, 3)]
         [TestCase(5, 4)]
-        public void As04_Start_CreateWallRow(int cols, int rows)
+        public void As05_Start_CreateWallRow(int cols, int rows)
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -251,12 +277,12 @@ namespace Week04_Array2D
             var wallClones = ClonesNamed("Wall");
             var rowZeroWalls = wallClones.FindAll(go => Mathf.Approximately(go.transform.position.y, 0f));
             Assert.GreaterOrEqual(rowZeroWalls.Count, cols,
-                $"As04: Start() ต้องสร้างกำแพง 1 แถวที่ y = 0 อย่างน้อย {cols} ช่อง (x = 0 ถึง {cols - 1})");
+                $"As05: Start() ต้องสร้างกำแพง 1 แถวที่ y = 0 อย่างน้อย {cols} ช่อง (x = 0 ถึง {cols - 1})");
 
             for (int x = 0; x < cols; x++)
             {
                 bool found = rowZeroWalls.Exists(go => Mathf.Approximately(go.transform.position.x, (float)x));
-                Assert.IsTrue(found, $"As04: ไม่พบกำแพงที่พิกัด ({x}, 0)");
+                Assert.IsTrue(found, $"As05: ไม่พบกำแพงที่พิกัด ({x}, 0)");
             }
 
             DestroyItems(wallPrefabs);
@@ -268,10 +294,10 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ As05: สร้างพื้นแผนที่ ============
+        // ============ As06: สร้างพื้นแผนที่ ============
         [TestCase(4, 3)]
         [TestCase(3, 4)]
-        public void As05_Start_CreateFloor(int cols, int rows)
+        public void As06_Start_CreateFloor(int cols, int rows)
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -292,10 +318,10 @@ namespace Week04_Array2D
                 }
             }
             Assert.AreEqual(cols * rows, floorCount,
-                $"As05: Start() ต้องสร้างแผ่นพื้น Floor_{{x}}_{{y}} ครบทุกช่อง ({cols * rows} ช่อง)");
+                $"As06: Start() ต้องสร้างแผ่นพื้น Floor_{{x}}_{{y}} ครบทุกช่อง ({cols * rows} ช่อง)");
 
             string output = SimpleDebugConsole.GetOutput();
-            Assert.IsTrue(output.Contains("Floor"), "As05: ต้องพิมพ์ชื่อแผ่นพื้นของแต่ละแถวออกทาง Debug.Log");
+            Assert.IsTrue(output.Contains("Floor"), "As06: ต้องพิมพ์ชื่อแผ่นพื้นของแต่ละแถวออกทาง Debug.Log");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -306,10 +332,10 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ As06: สร้างกำแพงล้อมรอบแผนที่ ============
+        // ============ As07: สร้างกำแพงล้อมรอบแผนที่ ============
         [TestCase(4, 3)]
         [TestCase(5, 5)]
-        public void As06_Start_CreateWall(int cols, int rows)
+        public void As07_Start_CreateWall(int cols, int rows)
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -322,18 +348,32 @@ namespace Week04_Array2D
             InvokeStart();
 
             var wallClones = ClonesNamed("Wall");
-            bool hasLeft = wallClones.Exists(go => Mathf.Approximately(go.transform.position.x, -1f));
-            bool hasRight = wallClones.Exists(go => Mathf.Approximately(go.transform.position.x, (float)cols));
-            bool hasBottom = wallClones.Exists(go => Mathf.Approximately(go.transform.position.y, -1f));
-            bool hasTop = wallClones.Exists(go => Mathf.Approximately(go.transform.position.y, (float)rows));
+            int expectedBorderWallCount = 2 * (cols + rows) + 4;
+            int borderWallCount = wallClones.FindAll(go =>
+                Mathf.Approximately(go.transform.position.x, -1f) ||
+                Mathf.Approximately(go.transform.position.x, (float)cols) ||
+                Mathf.Approximately(go.transform.position.y, -1f) ||
+                Mathf.Approximately(go.transform.position.y, (float)rows)).Count;
 
-            Assert.IsTrue(hasLeft, "As06: ต้องมีกำแพงที่ขอบซ้าย x = -1");
-            Assert.IsTrue(hasRight, $"As06: ต้องมีกำแพงที่ขอบขวา x = {cols}");
-            Assert.IsTrue(hasBottom, "As06: ต้องมีกำแพงที่ขอบล่าง y = -1");
-            Assert.IsTrue(hasTop, $"As06: ต้องมีกำแพงที่ขอบบน y = {rows}");
+            Assert.GreaterOrEqual(borderWallCount, expectedBorderWallCount,
+                $"As07: Start() ต้องสร้างกำแพงล้อมรอบแผนที่ครบทุกช่อง ({expectedBorderWallCount} ช่อง) แต่พบ {borderWallCount} ช่อง");
+
+            for (int y = -1; y <= rows; y++)
+            {
+                for (int x = -1; x <= cols; x++)
+                {
+                    if (x == -1 || x == cols || y == -1 || y == rows)
+                    {
+                        bool found = wallClones.Exists(go =>
+                            Mathf.Approximately(go.transform.position.x, (float)x) &&
+                            Mathf.Approximately(go.transform.position.y, (float)y));
+                        Assert.IsTrue(found, $"As07: ไม่พบกำแพงที่ขอบพิกัด ({x}, {y})");
+                    }
+                }
+            }
 
             string output = SimpleDebugConsole.GetOutput();
-            Assert.IsTrue(output.Contains("*"), "As06: ต้องพิมพ์ '*' ออกทาง Debug.Log สำหรับกำแพงขอบนอก");
+            Assert.IsTrue(output.Contains("*"), "As07: ต้องพิมพ์ '*' ออกทาง Debug.Log สำหรับกำแพงขอบนอก");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -344,10 +384,10 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ As07: วางไอเทมเดี่ยวตามพิกัด ============
+        // ============ As08: วางไอเทมเดี่ยวตามพิกัด ============
         [TestCase(1, 1)]
         [TestCase(2, 0)]
-        public void As07_Start_CreateItem(int itemX, int itemY)
+        public void As08_Start_CreateItem(int itemX, int itemY)
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -360,13 +400,13 @@ namespace Week04_Array2D
             InvokeStart();
 
             var itemClones = ClonesNamed("KeyItem");
-            Assert.AreEqual(1, itemClones.Count, "As07: Start() ต้อง Instantiate Item 1 ชิ้น");
-            Assert.AreEqual((float)itemX, itemClones[0].transform.position.x, 0.0001f, $"As07: Item x ต้องอยู่ที่ {itemX}");
-            Assert.AreEqual((float)itemY, itemClones[0].transform.position.y, 0.0001f, $"As07: Item y ต้องอยู่ที่ {itemY}");
+            Assert.AreEqual(1, itemClones.Count, "As08: Start() ต้อง Instantiate Item 1 ชิ้น");
+            Assert.AreEqual((float)itemX, itemClones[0].transform.position.x, 0.0001f, $"As08: Item x ต้องอยู่ที่ {itemX}");
+            Assert.AreEqual((float)itemY, itemClones[0].transform.position.y, 0.0001f, $"As08: Item y ต้องอยู่ที่ {itemY}");
 
             string output = SimpleDebugConsole.GetOutput();
             Assert.IsTrue(output.Contains($"{itemX}") && output.Contains($"{itemY}"),
-                $"As07: ต้องพิมพ์ตำแหน่ง ({itemX}, {itemY}) ออกทาง Debug.Log");
+                $"As08: ต้องพิมพ์ตำแหน่ง ({itemX}, {itemY}) ออกทาง Debug.Log");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -377,9 +417,9 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ As08: สุ่มวางอาหาร ============
+        // ============ As09: สุ่มวางอาหาร ============
         [Test]
-        public void As08_Start_RandomFoodItem()
+        public void As09_Start_RandomFoodItem()
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -394,15 +434,15 @@ namespace Week04_Array2D
             string output = SimpleDebugConsole.GetOutput();
             var match = Regex.Match(output, @"(\S+)\s+at x:\s*(\d+)\s+y:\s*(\d+)");
             Assert.IsTrue(match.Success,
-                $"As08: รูปแบบข้อความต้องเป็น '<ชื่ออาหาร> at x: <x> y: <y>' แต่ได้:\n{output}");
+                $"As09: รูปแบบข้อความต้องเป็น '<ชื่ออาหาร> at x: <x> y: <y>' แต่ได้:\n{output}");
 
             string foodName = match.Groups[1].Value;
             int foodX = int.Parse(match.Groups[2].Value);
             int foodY = int.Parse(match.Groups[3].Value);
 
-            Assert.IsTrue(foodName == "Soda" || foodName == "Food", $"As08: ชื่ออาหารต้องอยู่ใน foodTiles แต่ได้ '{foodName}'");
-            Assert.IsTrue(foodX >= 0 && foodX < 4, $"As08: foodX ต้องอยู่ในช่วง 0 ถึง 3 แต่ได้ {foodX}");
-            Assert.IsTrue(foodY >= 0 && foodY < 3, $"As08: foodY ต้องอยู่ในช่วง 0 ถึง 2 แต่ได้ {foodY}");
+            Assert.IsTrue(foodName == "Soda" || foodName == "Food", $"As09: ชื่ออาหารต้องอยู่ใน foodTiles แต่ได้ '{foodName}'");
+            Assert.IsTrue(foodX >= 0 && foodX < 4, $"As09: foodX ต้องอยู่ในช่วง 0 ถึง 3 แต่ได้ {foodX}");
+            Assert.IsTrue(foodY >= 0 && foodY < 3, $"As09: foodY ต้องอยู่ในช่วง 0 ถึง 2 แต่ได้ {foodY}");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -413,9 +453,9 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ As09: สร้างไอเทมจาก 2D Array ============
+        // ============ As10: สร้างไอเทมจาก 2D Array ============
         [Test]
-        public void As09_Start_CreateItemFromArray()
+        public void As10_Start_CreateItemFromArray()
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -429,17 +469,17 @@ namespace Week04_Array2D
 
             var sodaClones = ClonesNamed("Soda");
             var foodClones = ClonesNamed("Food");
-            Assert.GreaterOrEqual(sodaClones.Count, 1, "As09: Start() ต้องสร้างไอเทม Soda จาก 2D Array");
-            Assert.GreaterOrEqual(foodClones.Count, 1, "As09: Start() ต้องสร้างไอเทม Food จาก 2D Array");
+            Assert.GreaterOrEqual(sodaClones.Count, 1, "As10: Start() ต้องสร้างไอเทม Soda จาก 2D Array");
+            Assert.GreaterOrEqual(foodClones.Count, 1, "As10: Start() ต้องสร้างไอเทม Food จาก 2D Array");
 
             bool hasSodaAtPos = sodaClones.Exists(go => Mathf.Approximately(go.transform.position.x, 1f) && Mathf.Approximately(go.transform.position.y, 0f));
             bool hasFoodAtPos = foodClones.Exists(go => Mathf.Approximately(go.transform.position.x, 2f) && Mathf.Approximately(go.transform.position.y, 2f));
-            Assert.IsTrue(hasSodaAtPos, "As09: ต้องสร้าง Soda ที่ตำแหน่ง x: 1 y: 0");
-            Assert.IsTrue(hasFoodAtPos, "As09: ต้องสร้าง Food ที่ตำแหน่ง x: 2 y: 2");
+            Assert.IsTrue(hasSodaAtPos, "As10: ต้องสร้าง Soda ที่ตำแหน่ง x: 1 y: 0");
+            Assert.IsTrue(hasFoodAtPos, "As10: ต้องสร้าง Food ที่ตำแหน่ง x: 2 y: 2");
 
             string output = SimpleDebugConsole.GetOutput();
-            StringAssert.Contains("Create Item Soda at x: 1 y: 0", output, "As09: ต้องพิมพ์ 'Create Item Soda at x: 1 y: 0'");
-            StringAssert.Contains("Create Item Food at x: 2 y: 2", output, "As09: ต้องพิมพ์ 'Create Item Food at x: 2 y: 2'");
+            StringAssert.Contains("Create Item Soda at x: 1 y: 0", output, "As10: ต้องพิมพ์ 'Create Item Soda at x: 1 y: 0'");
+            StringAssert.Contains("Create Item Food at x: 2 y: 2", output, "As10: ต้องพิมพ์ 'Create Item Food at x: 2 y: 2'");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -450,9 +490,9 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0) ============
+        // ============ As11 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0) ============
         [Test]
-        public void As10_Start_PlacePlayer()
+        public void As11_Start_PlacePlayer()
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -465,9 +505,9 @@ namespace Week04_Array2D
             InvokeStart();
 
             var playerClones = ClonesNamed("Player");
-            Assert.AreEqual(1, playerClones.Count, "PlacePlayer: Start() ต้องสร้าง Player 1 ตัว");
-            Assert.AreEqual(0f, playerClones[0].transform.position.x, 0.0001f, "PlacePlayer: Player x ต้องอยู่ที่ 0");
-            Assert.AreEqual(0f, playerClones[0].transform.position.y, 0.0001f, "PlacePlayer: Player y ต้องอยู่ที่ 0");
+            Assert.AreEqual(1, playerClones.Count, "As11: Start() ต้องสร้าง Player 1 ตัว");
+            Assert.AreEqual(0f, playerClones[0].transform.position.x, 0.0001f, "As11: Player x ต้องอยู่ที่ 0");
+            Assert.AreEqual(0f, playerClones[0].transform.position.y, 0.0001f, "As11: Player y ต้องอยู่ที่ 0");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -478,10 +518,10 @@ namespace Week04_Array2D
             DestroyAllClones();
         }
 
-        // ============ PlaceExit: วางทางออกที่มุมขวาบน (columns - 1, mapRows - 1) ============
+        // ============ As12 PlaceExit: วางทางออกที่มุมขวาบน (cols - 1, rows - 1) ============
         [TestCase(4, 3)]
         [TestCase(6, 4)]
-        public void As11_Start_PlaceExit(int cols, int rows)
+        public void As12_Start_PlaceExit(int cols, int rows)
         {
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
@@ -494,9 +534,9 @@ namespace Week04_Array2D
             InvokeStart();
 
             var exitClones = ClonesNamed("Exit");
-            Assert.AreEqual(1, exitClones.Count, "PlaceExit: Start() ต้องสร้าง Exit 1 อัน");
-            Assert.AreEqual(cols - 1f, exitClones[0].transform.position.x, 0.0001f, $"PlaceExit: Exit x ต้องอยู่ที่ {cols - 1}");
-            Assert.AreEqual(rows - 1f, exitClones[0].transform.position.y, 0.0001f, $"PlaceExit: Exit y ต้องอยู่ที่ {rows - 1}");
+            Assert.AreEqual(1, exitClones.Count, "As12: Start() ต้องสร้าง Exit 1 อัน");
+            Assert.AreEqual(cols - 1f, exitClones[0].transform.position.x, 0.0001f, $"As12: Exit x ต้องอยู่ที่ {cols - 1}");
+            Assert.AreEqual(rows - 1f, exitClones[0].transform.position.y, 0.0001f, $"As12: Exit y ต้องอยู่ที่ {rows - 1}");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -540,7 +580,7 @@ namespace Week04_Array2D
             sb.AppendLine("D E F");
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
-            AssertBodyContains("Lv01_GetSet2DStringArray", "Print2DArray", "ต้องเรียกใช้ Print2DArray ในการแสดงผล 2D Array");
+            AssertBodyContains("Lv01_GetSet2DStringArray", "As04_Print2DArray", "ต้องเรียกใช้ As04_Print2DArray ในการแสดงผล 2D Array");
         }
 
         [TestCaseSource(nameof(RowCases))]

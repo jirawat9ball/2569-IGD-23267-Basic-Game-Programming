@@ -11,8 +11,8 @@ namespace Week04
         void As02_ArraySize(int rows, int cols);
 
         void As03_GetSet2DArray();
-        void Print2DArray(int[,] array);
-        void Print2DArray(string[,] array);
+        void As04_Print2DArray(int[,] array);
+        void As04_Print2DArray(string[,] array);
 
         #endregion
 

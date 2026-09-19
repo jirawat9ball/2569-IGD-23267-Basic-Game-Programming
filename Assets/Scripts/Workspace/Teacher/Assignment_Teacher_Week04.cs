@@ -7,25 +7,23 @@ namespace Week04
     {
         #region Lecture Variables
 
-        [Header("As02 Variables")]
-        public int rows = 3;
+        [Header("As02 & Map Size Variables")]
+        public int rows = 5;
         public int cols = 5;
 
-        [Header("As04 - As06 Variables")]
-        public int columns = 5;
-        public int mapRows = 5;
+        [Header("As05 - As07 Variables")]
         public GameObject[] floorTiles;
         public GameObject[] wall;
 
-        [Header("As07 Variables")]
+        [Header("As08 Variables")]
         public GameObject Item;
         public int ItemPosX = 1;
         public int ItemPosY = 0;
 
-        [Header("As08 & As09 Variables")]
+        [Header("As09 & As10 Variables")]
         public GameObject[] foodTiles;
 
-        [Header("PlacePlayer & PlaceExit Variables")]
+        [Header("As11 & As12 Variables")]
         public GameObject player;
         public GameObject exitTile;
 
@@ -79,18 +77,18 @@ namespace Week04
             // สร้างแผนที่และวางวัตถุ
             // =========================================================================
 
-            // As04: สร้างแถวกำแพง
-            for (int x = 0; x < columns; x++)
+            // As05: สร้างแถวกำแพง
+            for (int x = 0; x < cols; x++)
             {
                 GameObject tileChoice = wall[Random.Range(0, wall.Length)];
                 Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity);
             }
 
-            // As05: สร้างพื้นแผนที่
-            for (int y = 0; y < mapRows; y++)
+            // As06: สร้างพื้นแผนที่
+            for (int y = 0; y < rows; y++)
             {
                 string line = "";
-                for (int x = 0; x < columns; x++)
+                for (int x = 0; x < cols; x++)
                 {
                     GameObject tileChoice = floorTiles[Random.Range(0, floorTiles.Length)];
                     GameObject instance = Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
@@ -100,13 +98,13 @@ namespace Week04
                 Debug.Log(line);
             }
 
-            // As06: สร้างกำแพงล้อมรอบแผนที่
-            for (int y = -1; y <= mapRows; y++)
+            // As07: สร้างกำแพงล้อมรอบแผนที่
+            for (int y = -1; y <= rows; y++)
             {
                 string line = "";
-                for (int x = -1; x <= columns; x++)
+                for (int x = -1; x <= cols; x++)
                 {
-                    if (x == -1 || x == columns || y == -1 || y == mapRows)
+                    if (x == -1 || x == cols || y == -1 || y == rows)
                     {
                         GameObject tileChoice = wall[Random.Range(0, wall.Length)];
                         Instantiate(tileChoice, new Vector2(x, y), Quaternion.identity);
@@ -120,18 +118,18 @@ namespace Week04
                 Debug.Log(line);
             }
 
-            // As07: วางไอเทมเดี่ยวตามพิกัด
+            // As08: วางไอเทมเดี่ยวตามพิกัด
             Instantiate(Item, new Vector2(ItemPosX, ItemPosY), Quaternion.identity);
             Debug.Log(new Vector3(ItemPosX, ItemPosY, 0f));
 
-            // As08: สุ่มวางอาหาร
-            int foodX = Random.Range(0, columns);
-            int foodY = Random.Range(0, mapRows);
+            // As09: สุ่มวางอาหาร
+            int foodX = Random.Range(0, cols);
+            int foodY = Random.Range(0, rows);
             GameObject foodChoice = foodTiles[Random.Range(0, foodTiles.Length)];
             Instantiate(foodChoice, new Vector2(foodX, foodY), Quaternion.identity);
             Debug.Log(foodChoice.name + " at x: " + foodX + " y: " + foodY);
 
-            // As09: สร้างไอเทมจาก 2D Array
+            // As10: สร้างไอเทมจาก 2D Array
             string[,] my2DStringArray = new string[3, 3] {
                 { " ", "Soda", " " },
                 { " ", " ", " " },
@@ -157,11 +155,11 @@ namespace Week04
                 }
             }
 
-            // PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0)
+            // As11 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0)
             Instantiate(player, new Vector2(0, 0), Quaternion.identity);
 
-            // PlaceExit: วางทางออกที่มุมขวาบน (columns - 1, mapRows - 1)
-            Instantiate(exitTile, new Vector2(columns - 1, mapRows - 1), Quaternion.identity);
+            // As12 PlaceExit: วางทางออกที่มุมขวาบน (cols - 1, rows - 1)
+            Instantiate(exitTile, new Vector2(cols - 1, rows - 1), Quaternion.identity);
 
             Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
@@ -180,7 +178,7 @@ namespace Week04
             Ex01_TicTacToe(moves);
             int[,] mapGrid = new int[,] { { 0, 1, 0 }, { 0, 0, 1 }, { 1, 0, 0 } };
             Ex02_CheckWalkableTile(mapGrid, targetX, targetY);
-            Ex03_SpawnChestsInCorners(columns, mapRows, chestPrefab);
+            Ex03_SpawnChestsInCorners(cols, rows, chestPrefab);
         }
 
         #region Lecture
@@ -211,10 +209,10 @@ namespace Week04
             Debug.Log("set : " + my2DArray[1, 2]);
             Debug.Log(LineSeparator);
 
-            Print2DArray(my2DArray);
+            As04_Print2DArray(my2DArray);
         }
 
-        public void Print2DArray(int[,] array)
+        public void As04_Print2DArray(int[,] array)
         {
             for (int r = 0; r < array.GetLength(0); r++)
             {
@@ -231,7 +229,7 @@ namespace Week04
             }
         }
 
-        public void Print2DArray(string[,] array)
+        public void As04_Print2DArray(string[,] array)
         {
             for (int r = 0; r < array.GetLength(0); r++)
             {
@@ -262,7 +260,7 @@ namespace Week04
             Debug.Log("set : " + my2DStringArray[0, 2]);
             Debug.Log(LineSeparator);
 
-            Print2DArray(my2DStringArray);
+            As04_Print2DArray(my2DStringArray);
         }
 
         public void Lv02_SumRow(int[,] matrix, int row)

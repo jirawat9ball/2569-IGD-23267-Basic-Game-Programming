@@ -7,7 +7,7 @@
 
 ในเกม เราใช้ 2D Array บ่อยมาก เช่น แผนที่ด่าน ตารางช่องเก็บของ (inventory) กระดานหมากรุก หรือกระดาน XO
 
-มีแบบฝึกหัดทั้งหมด **22 ข้อ** แบ่งออกเป็นชุดในห้องเรียน (Lecture) และการบ้าน (Homework) ในไฟล์ `Assignment_Student_Week04.cs`
+มีแบบฝึกหัดทั้งหมด **26 ข้อ** แบ่งออกเป็นชุดในห้องเรียน (Lecture) และการบ้าน (Homework) ในไฟล์ `Assignment_Student_Week04.cs`
 ทุกข้อแสดงผลด้วย `Debug.Log()` และผลลัพธ์ต้องตรงกับที่ test case กำหนดเป๊ะ ๆ
 
 ## 🎯 จุดประสงค์การเรียนรู้
@@ -20,9 +20,9 @@
 
 ## 📚 โครงสร้างของ Assignment
 
-- **Lecture Methods (9 methods: As01 – As09)** — การฝึกเขียนโค้ดเพื่อเรียนรู้พื้นฐานร่วมกันในชั้นเรียน
-- **Homework - Level 1: Simple (10 methods: Lv01 – Lv10)** — การบ้านระดับพื้นฐาน เน้นคำนวณและวนลูปตาราง
-- **Homework - Level 2: Moderate (3 methods: Ex01 – Ex03)** — การบ้านระดับประยุกต์ร่วมกับ Game Objects และ Game Logic
+- **Lecture (12 ข้อ: As01 – As12)** — การฝึกเขียนโค้ดเพื่อเรียนรู้พื้นฐานร่วมกันในชั้นเรียน
+- **Homework - Level 1: Simple (11 ข้อ: Lv01 – Lv11)** — การบ้านระดับพื้นฐาน เน้นคำนวณและวนลูปตาราง
+- **Homework - Level 2: Moderate (3 ข้อ: Ex01 – Ex03)** — การบ้านระดับประยุกต์ร่วมกับ Game Objects และ Game Logic
 
 ---
 
@@ -123,7 +123,7 @@ void As03_GetSet2DArray()
   ```
 - อ่านค่า `my2DArray` แถว 1 คอลัมน์ 2 แล้วพิมพ์ `get : <ค่า>`
 - เปลี่ยนค่าช่องนั้นเป็น `70` แล้วพิมพ์ `set : 70`
-- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว หรือ `LineSeparator`) แล้วพิมพ์ตารางทั้งหมดโดยเรียกใช้ฟังก์ชัน `Print2DArray(my2DArray)`
+- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว หรือ `LineSeparator`) แล้วพิมพ์ตารางทั้งหมดโดยเรียกใช้ฟังก์ชัน `As04_Print2DArray(my2DArray)`
 
 **ผลลัพธ์ที่ต้องได้:**
 ```text
@@ -137,129 +137,96 @@ set : 70
 
 ---
 
-## As04. สร้างแถวกำแพง 1 แถว (Create Wall Row)
+## As04. แสดงผลตาราง 2 มิติ (Print 2D Array)
+
+**วัตถุประสงค์:** สร้างฟังก์ชันพิมพ์ข้อมูลใน 2D Array ออกมาทีละแถว คั่นสมาชิกด้วยช่องว่าง (รองรับทั้ง `int[,]` และ `string[,]`)
+
+**Method Signature:**
+```csharp
+void As04_Print2DArray(int[,] array)
+void As04_Print2DArray(string[,] array)
+```
+
+**Logic ที่ต้อง implement:**
+- วนลูปแถว `r` ตั้งแต่ `0` ถึง `array.GetLength(0) - 1`
+- ในแต่ละแถว ให้สร้างข้อความ `string line = ""`
+- วนลูปคอลัมน์ `c` ตั้งแต่ `0` ถึง `array.GetLength(1) - 1`
+- นำค่า `array[r, c]` มาต่อใน `line` และถ้ายังไม่ใช่คอลัมน์สุดท้าย ให้ต่อด้วยเว้นวรรค `" "`
+- เมื่อจบลูปคอลัมน์ ให้ `Debug.Log(line)`
+
+**ผลลัพธ์ที่ต้องได้:**
+```text
+1 2 3
+4 5 6
+```
+
+---
+
+## As05. สร้างแถวกำแพง 1 แถว (Create Wall Row)
 
 **วัตถุประสงค์:** ใช้ลูป 1 มิติ สร้างแถวกำแพงแนวนอนตามความยาวที่กำหนด โดยสุ่มชนิดกำแพงจาก Prefab และ Instantiate ลงฉาก
 
-**Method Signature:**
-```csharp
-void As04_CreateWallRow(int columns, GameObject[] walls)
-```
-
-**Logic ที่ต้อง implement:**
-- วนลูป `x` ตั้งแต่ `0` ถึง `columns - 1`
-- แต่ละช่องให้สุ่มเลือกกำแพงจาก `walls` ด้วย `walls[Random.Range(0, walls.Length)]` แล้ว `Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity)`
-- ต่อตัวอักษร `*` ในตัวแปรข้อความ แล้วพิมพ์ออกมา 1 บรรทัดเมื่อจบลูป
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 5`)
-```text
-*****
-```
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- วนลูป `x` ตั้งแต่ `0` ถึง `cols - 1`
+- แต่ละช่องให้สุ่มเลือกกำแพงจาก `wall` ด้วย `wall[Random.Range(0, wall.Length)]` แล้ว `Instantiate(tileChoice, new Vector2(x, 0), Quaternion.identity)`
 
 ---
 
-## As05. สร้างพื้นแผนที่แบบสุ่ม (Create Floor)
+## As06. สร้างพื้นแผนที่แบบสุ่ม (Create Floor)
 
 **วัตถุประสงค์:** ใช้ Nested Loop วางวัตถุลงทุกช่องของแผนที่ โดยสุ่มชนิดพื้น พร้อมตั้งชื่อแผ่นพื้นตามพิกัด
 
-**Method Signature:**
-```csharp
-void As05_CreateFloor(int columns, int rows, GameObject[] floorTiles)
-```
-
-**Logic ที่ต้อง implement:**
-- วน Nested Loop ทีละแถว (`y`) และทีละคอลัมน์ (`x`)
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- วน Nested Loop ทีละแถว (`y` จาก `0` ถึง `rows - 1`) และทีละคอลัมน์ (`x` จาก `0` ถึง `cols - 1`)
 - แต่ละช่องสุ่มเลือกพื้นจาก `floorTiles` ด้วย `Random.Range` แล้ว `Instantiate` ที่ตำแหน่ง `(x, y)`
 - ตั้งชื่อให้กับแผ่นพื้นที่สร้างขึ้นมาเป็น `Floor_{x}_{y}` (เช่น `Floor_0_0`, `Floor_1_0`) ผ่าน `.name`
-- เก็บชื่อพื้นของแถวนั้นต่อกันเป็นข้อความ แล้วพิมพ์ออกมาบรรทัดละแถว
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 3`, `rows = 3` และพื้นชื่อ `0`, `1`, `2` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
-```text
-211
-110
-000
-```
+- เก็บชื่อพื้นของแถวนั้นต่อกันเป็นข้อความ แล้วพิมพ์ออกมาบรรทัดละแถวด้วย `Debug.Log(line)`
 
 ---
 
-## As06. สร้างกำแพงล้อมรอบแผนที่ (Create Wall)
+## As07. สร้างกำแพงล้อมรอบแผนที่ (Create Wall)
 
 **วัตถุประสงค์:** ใช้ Nested Loop พร้อมเงื่อนไข เพื่อวางวัตถุเฉพาะขอบนอก โดยสุ่มชนิดกำแพงจาก Prefab
 
-**Method Signature:**
-```csharp
-void As06_CreateWall(int columns, int rows, GameObject[] walls)
-```
-
-**Logic ที่ต้อง implement:**
-- วนลูป `y` ตั้งแต่ `-1` ถึง `rows` และ `x` ตั้งแต่ `-1` ถึง `columns` (คือขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
-- ถ้าช่องนั้นอยู่ที่ขอบ (`x == -1 || x == columns || y == -1 || y == rows`) → สุ่มเลือกกำแพงจาก `walls` ด้วย `walls[Random.Range(0, walls.Length)]` แล้ว `Instantiate` ที่ตำแหน่งนั้น และเก็บอักษร `*`
-- ถ้าไม่ใช่ขอบ → เว้นว่าง เก็บอักษรเป็นช่องว่าง
-- พิมพ์ออกมาบรรทัดละแถว
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 3` → ได้ตารางกว้าง 7 สูง 5)
-```text
-*******
-*     *
-*     *
-*     *
-*******
-```
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- วนลูป `y` ตั้งแต่ `-1` ถึง `rows` และ `x` ตั้งแต่ `-1` ถึง `cols` (คือขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
+- ถ้าช่องนั้นอยู่ที่ขอบ (`x == -1 || x == cols || y == -1 || y == rows`) → สุ่มเลือกกำแพงจาก `wall` ด้วย `wall[Random.Range(0, wall.Length)]` แล้ว `Instantiate` ที่ตำแหน่งนั้น และเก็บอักษร `*`
+- ถ้าไม่ใช่ขอบ → เว้นว่าง เก็บอักษรเป็นช่องว่าง `" "`
+- พิมพ์ออกมาบรรทัดละแถวด้วย `Debug.Log(line)`
 
 ---
 
-## As07. วางวัตถุตามพิกัดในตาราง
+## As08. วางวัตถุตามพิกัดในตาราง
 
 **วัตถุประสงค์:** สร้าง GameObject จาก Prefab และวางตามตำแหน่งพิกัดในเกม
 
-**Method Signature:**
-```csharp
-void As07_SetItemPosition(GameObject item, int itemPosX, int itemPosY)
-```
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- สร้างวัตถุด้วย `Instantiate(Item, new Vector2(ItemPosX, ItemPosY), Quaternion.identity)`
+- พิมพ์ตำแหน่งของวัตถุออกมาทาง Console ด้วย `Debug.Log(new Vector3(ItemPosX, ItemPosY, 0f))`
 
-**Logic ที่ต้อง implement:**
-- ตรวจสอบว่า `item` ไม่เป็น `null`
-- สร้างวัตถุด้วย `Instantiate(item, new Vector2(itemPosX, itemPosY), Quaternion.identity)`
-- พิมพ์ตำแหน่งของวัตถุที่สร้างขึ้นมา (เช่น `newItem.transform.position`) ออกมาทาง Console
-
-**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `itemPosX = 1`, `itemPosY = 2`)
+**ผลลัพธ์ที่ต้องได้:** (ตัวอย่าง `ItemPosX = 1`, `ItemPosY = 0`)
 ```text
-(1.00, 2.00, 0.00)
+(1.00, 0.00, 0.00)
 ```
 
 ---
 
-## As08. สุ่มวางไอเทมลงแผนที่
+## As09. สุ่มวางอาหารลงแผนที่
 
 **วัตถุประสงค์:** สุ่มทั้งชนิดของและตำแหน่ง แล้ววางลงในแผนที่
 
-**Method Signature:**
-```csharp
-void As08_RandomFoodItem(int columns, int rows, GameObject[] foodTiles)
-```
-
-**Logic ที่ต้อง implement:**
-- สุ่มพิกัด `x` ในช่วง `0` ถึง `columns - 1` และ `y` ในช่วง `0` ถึง `rows - 1`
-- สุ่มเลือกของ 1 ชิ้นจาก `foodTiles` แล้ว `Instantiate` ที่พิกัดนั้น
-- พิมพ์ `<ชื่อของ> at x: <x> y: <y>`
-
-**ผลลัพธ์ที่ต้องได้:** (`columns = 5`, `rows = 5` — ค่าที่ได้จะเปลี่ยนทุกครั้งเพราะสุ่ม)
-```text
-Hamburger at x: 0 y: 3
-```
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- สุ่มพิกัด `foodX` ในช่วง `0` ถึง `cols - 1` และ `foodY` ในช่วง `0` ถึง `rows - 1`
+- สุ่มเลือกอาหาร 1 ชิ้นจาก `foodTiles` แล้ว `Instantiate` ที่พิกัด `(foodX, foodY)`
+- พิมพ์ข้อความ `<ชื่อของ> at x: <x> y: <y>` ผ่าน `Debug.Log`
 
 ---
 
-## As09. สร้างไอเทมตามชื่อที่อยู่ในตาราง (Create Item From Array)
+## As10. สร้างไอเทมตามชื่อที่อยู่ในตาราง (Create Item From Array)
 
 **วัตถุประสงค์:** อ่านชื่อไอเทมจากตาราง 2 มิติ แล้วหา Prefab ที่ชื่อตรงกันมา Instantiate ลงในตำแหน่งตามพิกัดตาราง
 
-**Method Signature:**
-```csharp
-void As09_CreateItemFromArray(GameObject[] items)
-```
-
-**Logic ที่ต้อง implement:**
+**Logic ที่ต้อง implement (ใน `Start()`):**
 - กำหนดตาราง 2 มิติ (แถวคือแกน Y คอลัมน์คือแกน X)
   ```csharp
   string[,] my2DStringArray = new string[3, 3] {
@@ -269,7 +236,7 @@ void As09_CreateItemFromArray(GameObject[] items)
   ```
 - ใช้ Nested Loop วนทีละแถว (`y`) และทีละคอลัมน์ (`x`)
 - ตรวจสอบชื่อไอเทมในแต่ละช่อง `my2DStringArray[y, x]` หากไม่ใช่ช่องว่าง:
-  - วนลูปค้นหาใน `items` ว่ามีตัวไหนที่มีชื่อ (`name`) ตรงกัน
+  - วนลูปค้นหาใน `foodTiles` ว่ามีตัวไหนที่มีชื่อ (`name`) ตรงกัน
   - เมื่อพบ ให้ `Instantiate` ที่ตำแหน่ง `new Vector2(x, y)`
   - พิมพ์ข้อความ `Create Item <ชื่อ> at x: <x> y: <y>`
 
@@ -278,6 +245,24 @@ void As09_CreateItemFromArray(GameObject[] items)
 Create Item Soda at x: 1 y: 0
 Create Item Food at x: 2 y: 2
 ```
+
+---
+
+## As11. วางผู้เล่นที่มุมซ้ายล่าง (Place Player)
+
+**วัตถุประสงค์:** วางตัวละครผู้เล่นลงที่ตำแหน่งมุมซ้ายล่างของแผนที่ `(0, 0)`
+
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- `Instantiate(player, new Vector2(0, 0), Quaternion.identity);`
+
+---
+
+## As12. วางทางออกที่มุมขวาบน (Place Exit)
+
+**วัตถุประสงค์:** วางแผ่นทางออกลงที่มุมขวาบนของแผนที่ `(cols - 1, rows - 1)`
+
+**Logic ที่ต้อง implement (ใน `Start()`):**
+- `Instantiate(exitTile, new Vector2(cols - 1, rows - 1), Quaternion.identity);`
 
 ---
 
@@ -299,7 +284,7 @@ void Lv01_GetSet2DStringArray()
   ```
 - อ่านค่า `my2DStringArray` แถว 0 คอลัมน์ 2 แล้วพิมพ์ `get : <ค่า>`
 - เปลี่ยนค่าช่องนั้นเป็น `"Cat"` แล้วพิมพ์ `set : Cat`
-- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว หรือ `LineSeparator`) แล้วพิมพ์ตารางทั้งหมดโดยเรียกใช้ฟังก์ชัน `Print2DArray(my2DStringArray)`
+- พิมพ์เส้นคั่น (เครื่องหมาย `=` จำนวน 28 ตัว หรือ `LineSeparator`) แล้วพิมพ์ตารางทั้งหมดโดยเรียกใช้ฟังก์ชัน `As04_Print2DArray(my2DStringArray)`
 
 **ผลลัพธ์ที่ต้องได้:**
 ```text
