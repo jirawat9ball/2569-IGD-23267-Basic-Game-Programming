@@ -314,7 +314,13 @@ namespace Week04_Array2D
             {
                 for (int x = 0; x < cols; x++)
                 {
-                    if (GameObject.Find($"Floor_{x}_{y}") != null) floorCount++;
+                    var floorGo = GameObject.Find($"Floor_{x}_{y}");
+                    if (floorGo != null)
+                    {
+                        Assert.AreEqual((float)x, floorGo.transform.position.x, 0.001f, $"As06: Floor_{x}_{y} พิกัด x ต้องอยู่ที่ {x}");
+                        Assert.AreEqual((float)y, floorGo.transform.position.y, 0.001f, $"As06: Floor_{x}_{y} พิกัด y ต้องอยู่ที่ {y}");
+                        floorCount++;
+                    }
                 }
             }
             Assert.AreEqual(cols * rows, floorCount,
@@ -443,6 +449,12 @@ namespace Week04_Array2D
             Assert.IsTrue(foodName == "Soda" || foodName == "Food", $"As09: ชื่ออาหารต้องอยู่ใน foodTiles แต่ได้ '{foodName}'");
             Assert.IsTrue(foodX >= 0 && foodX < 4, $"As09: foodX ต้องอยู่ในช่วง 0 ถึง 3 แต่ได้ {foodX}");
             Assert.IsTrue(foodY >= 0 && foodY < 3, $"As09: foodY ต้องอยู่ในช่วง 0 ถึง 2 แต่ได้ {foodY}");
+
+            var foodClones = ClonesNamed(foodName);
+            bool hasFoodAtPos = foodClones.Exists(go =>
+                Mathf.Approximately(go.transform.position.x, (float)foodX) &&
+                Mathf.Approximately(go.transform.position.y, (float)foodY));
+            Assert.IsTrue(hasFoodAtPos, $"As09: ต้อง Instantiate {foodName} ที่ตำแหน่งพิกัด x: {foodX} y: {foodY}");
 
             DestroyItems(wallPrefabs);
             DestroyItems(floorPrefabs);
@@ -633,14 +645,17 @@ namespace Week04_Array2D
             }
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
 
-            Assert.AreEqual(columns * rows, CountClones(), "ต้องสร้างบ้านให้ครบทุกช่องของหมู่บ้าน");
-            foreach (var go in Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            var villageClones = ClonesNamed("VillageTile");
+            Assert.AreEqual(columns * rows, villageClones.Count, "ต้องสร้างบ้านให้ครบทุกช่องของหมู่บ้าน");
+            for (int y = 0; y < rows; y++)
             {
-                if (go == null || !go.name.Contains("(Clone)")) continue;
-                float x = go.transform.position.x;
-                float y = go.transform.position.y;
-                Assert.IsTrue(x >= 0 && x <= columns - 1, $"บ้านอยู่นอกพื้นที่ (x = {x})");
-                Assert.IsTrue(y >= 0 && y <= rows - 1, $"บ้านอยู่นอกพื้นที่ (y = {y})");
+                for (int x = 0; x < columns; x++)
+                {
+                    bool found = villageClones.Exists(go =>
+                        Mathf.Approximately(go.transform.position.x, (float)x) &&
+                        Mathf.Approximately(go.transform.position.y, (float)y));
+                    Assert.IsTrue(found, $"ไม่พบบ้านที่พิกัด ({x}, {y})");
+                }
             }
 
             Object.DestroyImmediate(tile);
@@ -666,7 +681,18 @@ namespace Week04_Array2D
             }
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
 
-            Assert.AreEqual(size * (size + 1) / 2, CountClones(), "จำนวนช่องแม่น้ำต้องเท่ากับพื้นที่สามเหลี่ยม");
+            var riverClones = ClonesNamed("RiverTile");
+            Assert.AreEqual(size * (size + 1) / 2, riverClones.Count, "จำนวนช่องแม่น้ำต้องเท่ากับพื้นที่สามเหลี่ยม");
+            for (int r = 1; r <= size; r++)
+            {
+                for (int i = 0; i < r; i++)
+                {
+                    bool found = riverClones.Exists(go =>
+                        Mathf.Approximately(go.transform.position.x, (float)i) &&
+                        Mathf.Approximately(go.transform.position.y, (float)(r - 1)));
+                    Assert.IsTrue(found, $"ไม่พบแม่น้ำที่พิกัด ({i}, {r - 1})");
+                }
+            }
 
             Object.DestroyImmediate(tile);
             DestroyAllClones();
@@ -769,7 +795,20 @@ namespace Week04_Array2D
             }
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
 
-            Assert.AreEqual(size * (size + 1) / 2, CountClones(), "จำนวนช่องแม่น้ำต้องเท่ากับพื้นที่สามเหลี่ยม");
+            var riverClones = ClonesNamed("RiverTile");
+            Assert.AreEqual(size * (size + 1) / 2, riverClones.Count, "จำนวนช่องแม่น้ำต้องเท่ากับพื้นที่สามเหลี่ยม");
+            int currY = 0;
+            for (int r = size; r >= 1; r--)
+            {
+                for (int i = 0; i < r; i++)
+                {
+                    bool found = riverClones.Exists(go =>
+                        Mathf.Approximately(go.transform.position.x, (float)i) &&
+                        Mathf.Approximately(go.transform.position.y, (float)currY));
+                    Assert.IsTrue(found, $"ไม่พบแม่น้ำกลับด้านที่พิกัด ({i}, {currY})");
+                }
+                currY++;
+            }
 
             Object.DestroyImmediate(tile);
             DestroyAllClones();
