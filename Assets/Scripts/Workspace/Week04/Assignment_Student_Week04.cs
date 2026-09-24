@@ -23,9 +23,6 @@ namespace Week04
         [Header("As09 & As10 Variables")]
         public GameObject[] foodTiles;
 
-        [Header("As11 & As12 Variables")]
-        public GameObject player;
-        public GameObject exitTile;
 
         #endregion
 
@@ -126,10 +123,12 @@ namespace Week04
             // 2. วน Nested Loop ตรวจสอบว่าช่องไหนมีชื่อไอเทม ให้ค้นหาใน foodTiles ที่ชื่อตรงกัน แล้ว Instantiate ที่ตำแหน่งนั้น
 
             // Guideline As11 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง 
-            // 1. Instantiate player 
+            // 1. ประกาศตัวแปร public GameObject[] player; เองในคลาส (ด้านบน)
+            // 2. สุ่มเลือกหรือหยิบ player เช่น player[Random.Range(0, player.Length)] แล้ว Instantiate ที่ new Vector2(0, 0) ด้วย Quaternion.identity
 
             // Guideline As12 PlaceExit: วางทางออกที่มุมขวาบน 
-            // 1. Instantiate exitTile 
+            // 1. ประกาศตัวแปร public GameObject exitTile; เองในคลาส (ด้านบน)
+            // 2. Instantiate exitTile ที่ new Vector2(cols - 1, rows - 1) ด้วย Quaternion.identity
 
             Lv01_GetSet2DStringArray();
             int[,] sampleMatrix = new int[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };

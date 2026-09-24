@@ -24,7 +24,7 @@ namespace Week04
         public GameObject[] foodTiles;
 
         [Header("As11 & As12 Variables")]
-        public GameObject player;
+        public GameObject[] player;
         public GameObject exitTile;
 
         #endregion
@@ -156,7 +156,8 @@ namespace Week04
             }
 
             // As11 PlacePlayer: วางผู้เล่นที่มุมซ้ายล่าง (0, 0)
-            Instantiate(player, new Vector2(0, 0), Quaternion.identity);
+            GameObject playerChoice = player[Random.Range(0, player.Length)];
+            Instantiate(playerChoice, new Vector2(0, 0), Quaternion.identity);
 
             // As12 PlaceExit: วางทางออกที่มุมขวาบน (cols - 1, rows - 1)
             Instantiate(exitTile, new Vector2(cols - 1, rows - 1), Quaternion.identity);

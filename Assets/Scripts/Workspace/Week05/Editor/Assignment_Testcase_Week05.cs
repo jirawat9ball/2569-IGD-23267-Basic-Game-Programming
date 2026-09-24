@@ -30,14 +30,6 @@ namespace Week05_Method
         {
             if (_studentSync != null && _target is Assignment_Teacher_Week05 teacher)
             {
-                teacher.columns = _studentSync.columns;
-                teacher.rows = _studentSync.rows;
-                teacher.floorTiles = _studentSync.floorTiles;
-                teacher.wallTiles = _studentSync.wallTiles;
-                teacher.foodTiles = _studentSync.foodTiles;
-                teacher.foodCount = _studentSync.foodCount;
-                teacher.player = _studentSync.player;
-                teacher.exitTile = _studentSync.exitTile;
                 teacher.transform.position = _studentSync.transform.position;
             }
         }
@@ -160,11 +152,6 @@ namespace Week05_Method
         public int Add(int a, int b) => (int)(Invoke(nameof(Add), a, b) ?? 0);
         public int GetStringLength(string text) => (int)(Invoke(nameof(GetStringLength), text) ?? 0);
         public bool ConvertInttoBool(int sex) => (bool)(Invoke(nameof(ConvertInttoBool), sex) ?? false);
-        public void GenerateFloor() => Invoke(nameof(GenerateFloor));
-        public void GenerateWalls() => Invoke(nameof(GenerateWalls));
-        public void GenerateFoods() => Invoke(nameof(GenerateFoods));
-        public void PlacePlayer() => Invoke(nameof(PlacePlayer));
-        public void PlaceExit() => Invoke(nameof(PlaceExit));
     }
 
     public class PlayerInvoker
@@ -302,6 +289,138 @@ namespace Week05_Method
         public bool CanMove() => (bool)(Invoke(nameof(CanMove)) ?? false);
     }
 
+    public class MapGeneratorInvoker
+    {
+        private readonly Component _target;
+        private readonly Assignment_Student_Week05 _studentSync;
+
+        public MapGeneratorInvoker(Component target, Assignment_Student_Week05 studentSync = null)
+        {
+            _target = target;
+            _studentSync = studentSync;
+        }
+
+        public int Columns
+        {
+            get => GetField<int>("columns");
+            set => SetField("columns", value);
+        }
+
+        public int Rows
+        {
+            get => GetField<int>("rows");
+            set => SetField("rows", value);
+        }
+
+        public GameObject[] FloorTiles
+        {
+            get => GetField<GameObject[]>("floorTiles");
+            set => SetField("floorTiles", value);
+        }
+
+        public GameObject[] WallTiles
+        {
+            get => GetField<GameObject[]>("wallTiles");
+            set => SetField("wallTiles", value);
+        }
+
+        public GameObject[] FoodTiles
+        {
+            get => GetField<GameObject[]>("foodTiles");
+            set => SetField("foodTiles", value);
+        }
+
+        public int FoodCount
+        {
+            get => GetField<int>("foodCount");
+            set => SetField("foodCount", value);
+        }
+
+        public GameObject Player
+        {
+            get => GetField<GameObject>("player");
+            set => SetField("player", value);
+        }
+
+        public GameObject ExitTile
+        {
+            get => GetField<GameObject>("exitTile");
+            set => SetField("exitTile", value);
+        }
+
+        private T GetField<T>(string fieldName)
+        {
+            var f = _target.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (f != null) return (T)f.GetValue(_target);
+            if (_studentSync != null)
+            {
+                var sf = _studentSync.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (sf != null) return (T)sf.GetValue(_studentSync);
+            }
+            return default;
+        }
+
+        private void SetField(string fieldName, object value)
+        {
+            var f = _target.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (f != null) f.SetValue(_target, value);
+            if (_studentSync != null)
+            {
+                var sf = _studentSync.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (sf != null) sf.SetValue(_studentSync, value);
+            }
+        }
+
+        private object Invoke(string methodName, params object[] args)
+        {
+            var type = _target.GetType();
+            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo targetMethod = null;
+
+            foreach (var m in methods)
+            {
+                if (m.Name == methodName && m.GetParameters().Length == args.Length)
+                {
+                    targetMethod = m;
+                    break;
+                }
+            }
+
+            if (targetMethod == null && _studentSync != null)
+            {
+                foreach (var m in _studentSync.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    if (m.Name == methodName && m.GetParameters().Length == args.Length)
+                    {
+                        return m.Invoke(_studentSync, args);
+                    }
+                }
+            }
+
+            if (targetMethod == null)
+            {
+                Assert.Fail($"ไม่พบเมธอด '{methodName}' ใน MapGenerator");
+                return null;
+            }
+
+            try
+            {
+                return targetMethod.Invoke(_target, args);
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null) throw ex.InnerException;
+                throw;
+            }
+        }
+
+        public void GenerateFloor() => Invoke(nameof(GenerateFloor));
+        public void GenerateWalls() => Invoke(nameof(GenerateWalls));
+        public void GenerateFoods() => Invoke(nameof(GenerateFoods));
+        public void PlacePlayer() => Invoke(nameof(PlacePlayer));
+        public void PlaceExit() => Invoke(nameof(PlaceExit));
+    }
+
     public class TestBase
     {
         // =========================================================================================
@@ -310,27 +429,34 @@ namespace Week05_Method
         protected const bool isTeacherMode = false;
 
         protected const string StudentPath = "Assets/Scripts/Workspace/Week05/Assignment_Student_Week05.cs";
-        protected const string TeacherPath = "Assets/Scripts/Workspace/Teacher/Assignment_Teacher_Week05.cs";
+        protected const string TeacherPath = "Assets/Scripts/Workspace/Teacher/Week05/Assignment_Teacher_Week05.cs";
 
         protected const string StudentPlayerPath = "Assets/Scripts/Workspace/Week05/Player.cs";
-        protected const string TeacherPlayerPath = "Assets/Scripts/Workspace/Teacher/Player_Teacher_Week05.cs";
+        protected const string TeacherPlayerPath = "Assets/Scripts/Workspace/Teacher/Week05/Player_Teacher_Week05.cs";
+
+        protected const string StudentMapPath = "Assets/Scripts/Workspace/Week05/MapGenerator.cs";
+        protected const string TeacherMapPath = "Assets/Scripts/Workspace/Teacher/Week05/MapGenerator_Teacher_Week05.cs";
 
         protected static string CurrentTargetFilePath => isTeacherMode ? TeacherPath : StudentPath;
         protected static string CurrentPlayerFilePath => isTeacherMode ? TeacherPlayerPath : StudentPlayerPath;
+        protected static string CurrentMapFilePath => isTeacherMode ? TeacherMapPath : StudentMapPath;
 
         protected IAssignment assignment;
         protected Assignment_Student_Week05 student;
         protected Assignment_Teacher_Week05 teacher;
 
         protected PlayerInvoker player;
+        protected MapGeneratorInvoker mapGenerator;
         protected GameObject testGo;
         protected GameObject playerGo;
+        protected GameObject mapGeneratorGo;
 
         [SetUp]
         public void Setup()
         {
             testGo = new GameObject("Week05_TestRunner");
             playerGo = new GameObject("Week05_Player");
+            mapGeneratorGo = new GameObject("Week05_MapGenerator");
 
             if (isTeacherMode)
             {
@@ -339,6 +465,8 @@ namespace Week05_Method
                 assignment = new AssignmentInvoker(teacher, student);
                 var teacherPlayer = playerGo.AddComponent<Player_Teacher_Week05>();
                 player = new PlayerInvoker(teacherPlayer);
+                var teacherMap = mapGeneratorGo.AddComponent<MapGenerator_Teacher_Week05>();
+                mapGenerator = new MapGeneratorInvoker(teacherMap);
             }
             else
             {
@@ -346,6 +474,8 @@ namespace Week05_Method
                 assignment = new AssignmentInvoker(student);
                 var studentPlayer = playerGo.AddComponent<Player>();
                 player = new PlayerInvoker(studentPlayer);
+                var studentMap = mapGeneratorGo.AddComponent<MapGenerator>();
+                mapGenerator = new MapGeneratorInvoker(studentMap, student);
             }
             SimpleDebugConsole.Clear();
         }
@@ -357,6 +487,8 @@ namespace Week05_Method
                 Object.DestroyImmediate(testGo);
             if (playerGo != null)
                 Object.DestroyImmediate(playerGo);
+            if (mapGeneratorGo != null)
+                Object.DestroyImmediate(mapGeneratorGo);
 
             DestroyAllClones();
         }
@@ -623,6 +755,98 @@ namespace Week05_Method
             Assert.IsTrue(File.Exists(path), $"หาไฟล์เป้าหมายไม่เจอที่ '{path}'");
             StringAssert.Contains(needle, File.ReadAllText(path), reason);
         }
+
+        // ---- อ่าน source ของ MapGenerator เพื่อกัน hardcode ----
+
+        private static string ReadMapSourceStripped()
+        {
+            string path = CurrentMapFilePath;
+            if (!File.Exists(path) && !isTeacherMode)
+            {
+                path = StudentPath;
+            }
+            Assert.IsTrue(File.Exists(path), $"หาไฟล์เป้าหมายไม่เจอที่ '{path}'");
+
+            string src = File.ReadAllText(path);
+            src = Regex.Replace(src, @"//.*?$", "", RegexOptions.Multiline);
+            src = Regex.Replace(src, @"/\*.*?\*/", "", RegexOptions.Singleline);
+            src = Regex.Replace(src, "\"([^\"\\\\]|\\\\.)*\"", "\"\"");
+            src = Regex.Replace(src, "'([^'\\\\]|\\\\.)*'", "' '");
+            return src;
+        }
+
+        protected static string GetMapMethodBody(string signature)
+        {
+            string src = ReadMapSourceStripped();
+
+            int sig = src.IndexOf(signature, System.StringComparison.Ordinal);
+            if (sig == -1)
+            {
+                sig = src.IndexOf(signature, System.StringComparison.OrdinalIgnoreCase);
+            }
+            if (sig == -1)
+            {
+                var match = Regex.Match(signature, @"(\w+)\s*\(");
+                if (match.Success)
+                {
+                    string methodName = match.Groups[1].Value;
+                    var mMatch = Regex.Match(src, $@"\b{methodName}\s*\(");
+                    if (mMatch.Success) sig = mMatch.Index;
+                }
+            }
+
+            if (sig == -1 && !isTeacherMode)
+            {
+                src = ReadStudentSourceStripped();
+                sig = src.IndexOf(signature, System.StringComparison.Ordinal);
+                if (sig == -1) sig = src.IndexOf(signature, System.StringComparison.OrdinalIgnoreCase);
+                if (sig == -1)
+                {
+                    var match = Regex.Match(signature, @"(\w+)\s*\(");
+                    if (match.Success)
+                    {
+                        string methodName = match.Groups[1].Value;
+                        var mMatch = Regex.Match(src, $@"\b{methodName}\s*\(");
+                        if (mMatch.Success) sig = mMatch.Index;
+                    }
+                }
+            }
+
+            Assert.Greater(sig, -1, $"ไม่พบเมธอด '{signature}' ในไฟล์เป้าหมาย ({CurrentMapFilePath})");
+
+            int open = src.IndexOf('{', sig);
+            Assert.Greater(open, -1, $"เมธอด '{signature}' ไม่มี body");
+
+            int depth = 0;
+            for (int i = open; i < src.Length; i++)
+            {
+                if (src[i] == '{') depth++;
+                else if (src[i] == '}')
+                {
+                    depth--;
+                    if (depth == 0)
+                        return src.Substring(open + 1, i - open - 1);
+                }
+            }
+            Assert.Fail($"บอดี้เมธอด '{signature}' ปีกกาไม่ครบ");
+            return null;
+        }
+
+        protected static void AssertMapUsesRealLoop(string signature, int minLoops = 1)
+        {
+            string body = GetMapMethodBody(signature);
+            int loops = Regex.Matches(body, @"\bfor\s*\(").Count
+                      + Regex.Matches(body, @"\bforeach\s*\(").Count
+                      + Regex.Matches(body, @"\bwhile\s*\(").Count;
+
+            Assert.GreaterOrEqual(loops, minLoops,
+                $"{signature}: ต้องใช้ลูปจริงอย่างน้อย {minLoops} ลูป (ห้าม hardcode พิมพ์ทีละบรรทัด)");
+        }
+
+        protected static void AssertMapBodyContains(string signature, string needle, string reason)
+        {
+            StringAssert.Contains(needle, GetMapMethodBody(signature), $"{signature}: {reason}");
+        }
     }
 
 
@@ -716,11 +940,11 @@ namespace Week05_Method
         public void Ex03_GenerateFloor(int columns, int rows)
         {
             var tiles = MakePrefabs("Floor");
-            student.columns = columns;
-            student.rows = rows;
-            student.floorTiles = tiles;
+            mapGenerator.Columns = columns;
+            mapGenerator.Rows = rows;
+            mapGenerator.FloorTiles = tiles;
 
-            assignment.GenerateFloor();
+            mapGenerator.GenerateFloor();
 
             var clones = ClonesNamed("Floor");
             Assert.AreEqual(columns * rows, clones.Count, "ต้องสร้างพื้นให้ครบทุกช่องของแผนที่");
@@ -733,8 +957,8 @@ namespace Week05_Method
             }
 
             DestroyAll(tiles);
-            AssertUsesRealLoop("public void GenerateFloor()", minLoops: 2);
-            AssertBodyContains("public void GenerateFloor()", "Instantiate", "ต้อง Instantiate พื้นจริง");
+            AssertMapUsesRealLoop("public void GenerateFloor()", minLoops: 2);
+            AssertMapBodyContains("public void GenerateFloor()", "Instantiate", "ต้อง Instantiate พื้นจริง");
         }
 
         [TestCase(3, 4)]
@@ -743,11 +967,11 @@ namespace Week05_Method
         public void Ex03_GenerateWalls(int columns, int rows)
         {
             var tiles = MakePrefabs("Wall");
-            student.columns = columns;
-            student.rows = rows;
-            student.wallTiles = tiles;
+            mapGenerator.Columns = columns;
+            mapGenerator.Rows = rows;
+            mapGenerator.WallTiles = tiles;
 
-            assignment.GenerateWalls();
+            mapGenerator.GenerateWalls();
 
             var clones = ClonesNamed("Wall");
             int expected = (columns + 2) * (rows + 2) - columns * rows;
@@ -762,8 +986,8 @@ namespace Week05_Method
             }
 
             DestroyAll(tiles);
-            AssertUsesRealLoop("public void GenerateWalls()", minLoops: 2);
-            AssertBodyContains("public void GenerateWalls()", "Instantiate", "ต้อง Instantiate กำแพงจริง");
+            AssertMapUsesRealLoop("public void GenerateWalls()", minLoops: 2);
+            AssertMapBodyContains("public void GenerateWalls()", "Instantiate", "ต้อง Instantiate กำแพงจริง");
         }
 
         [TestCase(3, 4, 3)]
@@ -772,12 +996,12 @@ namespace Week05_Method
         public void Ex03_GenerateFoods(int columns, int rows, int foodCount)
         {
             var tiles = MakePrefabs("Food");
-            student.columns = columns;
-            student.rows = rows;
-            student.foodCount = foodCount;
-            student.foodTiles = tiles;
+            mapGenerator.Columns = columns;
+            mapGenerator.Rows = rows;
+            mapGenerator.FoodCount = foodCount;
+            mapGenerator.FoodTiles = tiles;
 
-            assignment.GenerateFoods();
+            mapGenerator.GenerateFoods();
 
             var clones = ClonesNamed("Food");
             Assert.AreEqual(foodCount, clones.Count, "จำนวนอาหารต้องเท่ากับ foodCount");
@@ -790,17 +1014,17 @@ namespace Week05_Method
             }
 
             DestroyAll(tiles);
-            AssertUsesRealLoop("public void GenerateFoods()");
-            AssertBodyContains("public void GenerateFoods()", "Instantiate", "ต้อง Instantiate อาหารจริง");
+            AssertMapUsesRealLoop("public void GenerateFoods()");
+            AssertMapBodyContains("public void GenerateFoods()", "Instantiate", "ต้อง Instantiate อาหารจริง");
         }
 
         [Test]
         public void Ex03_PlacePlayer()
         {
             var prefab = new GameObject("Player");
-            student.player = prefab;
+            mapGenerator.Player = prefab;
 
-            assignment.PlacePlayer();
+            mapGenerator.PlacePlayer();
 
             var clones = ClonesNamed("Player");
             Assert.AreEqual(1, clones.Count, "ต้องสร้างตัวละคร 1 ตัว");
@@ -808,7 +1032,7 @@ namespace Week05_Method
             Assert.AreEqual(0f, clones[0].transform.position.y, 0.0001f, "ตัวละครต้องอยู่ที่ y = 0");
 
             DestroyAll(prefab);
-            AssertBodyContains("public void PlacePlayer()", "Instantiate", "ต้อง Instantiate ตัวละครจริง");
+            AssertMapBodyContains("public void PlacePlayer()", "Instantiate", "ต้อง Instantiate ตัวละครจริง");
         }
 
         [TestCase(3, 4)]
@@ -817,11 +1041,11 @@ namespace Week05_Method
         public void Ex03_PlaceExit(int columns, int rows)
         {
             var prefab = new GameObject("Exit");
-            student.columns = columns;
-            student.rows = rows;
-            student.exitTile = prefab;
+            mapGenerator.Columns = columns;
+            mapGenerator.Rows = rows;
+            mapGenerator.ExitTile = prefab;
 
-            assignment.PlaceExit();
+            mapGenerator.PlaceExit();
 
             var clones = ClonesNamed("Exit");
             Assert.AreEqual(1, clones.Count, "ต้องสร้างทางออก 1 อัน");
@@ -829,7 +1053,7 @@ namespace Week05_Method
             Assert.AreEqual(rows - 1, clones[0].transform.position.y, 0.0001f, $"ทางออกต้องอยู่ที่ y = {rows - 1}");
 
             DestroyAll(prefab);
-            AssertBodyContains("public void PlaceExit()", "Instantiate", "ต้อง Instantiate ทางออกจริง");
+            AssertMapBodyContains("public void PlaceExit()", "Instantiate", "ต้อง Instantiate ทางออกจริง");
         }
 
         // ============ ข้อ 4: Move ============

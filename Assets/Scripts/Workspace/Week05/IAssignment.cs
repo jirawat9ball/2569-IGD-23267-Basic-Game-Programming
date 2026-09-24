@@ -25,19 +25,5 @@ namespace Week05
         bool ConvertInttoBool(int sex);
 
         #endregion
-
-        #region ข้อ 3: แยกโค้ดสร้างแผนที่ออกเป็น Method (Refactoring)
-
-        void GenerateFloor();
-
-        void GenerateWalls();
-
-        void GenerateFoods();
-
-        void PlacePlayer();
-
-        void PlaceExit();
-
-        #endregion
     }
 }

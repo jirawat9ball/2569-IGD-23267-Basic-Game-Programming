@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -136,6 +136,28 @@ namespace Week04_Array2D
             }
         }
 
+        protected static void SetFieldIfExists(object target, string fieldName, object value)
+        {
+            if (target == null) return;
+            var field = target.GetType().GetField(fieldName,
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field != null)
+            {
+                if (field.FieldType == typeof(GameObject[]) && value is GameObject singleGo)
+                {
+                    field.SetValue(target, new GameObject[] { singleGo });
+                }
+                else if (field.FieldType == typeof(GameObject) && value is GameObject[] arr && arr.Length > 0)
+                {
+                    field.SetValue(target, arr[0]);
+                }
+                else
+                {
+                    field.SetValue(target, value);
+                }
+            }
+        }
+
         protected void SetupMapParameters(int cols, int rows, GameObject[] walls, GameObject[] floors, GameObject item, int itemX, int itemY, GameObject[] food, GameObject player, GameObject exit)
         {
             var student = testGo.GetComponent<Assignment_Student_Week04>();
@@ -149,8 +171,8 @@ namespace Week04_Array2D
                 student.ItemPosX = itemX;
                 student.ItemPosY = itemY;
                 student.foodTiles = food;
-                student.player = player;
-                student.exitTile = exit;
+                SetFieldIfExists(student, "player", player);
+                SetFieldIfExists(student, "exitTile", exit);
             }
             var teacher = testGo.GetComponent<Assignment_Teacher_Week04>();
             if (teacher != null)
@@ -163,7 +185,7 @@ namespace Week04_Array2D
                 teacher.ItemPosX = itemX;
                 teacher.ItemPosY = itemY;
                 teacher.foodTiles = food;
-                teacher.player = player;
+                teacher.player = player != null ? new GameObject[] { player } : null;
                 teacher.exitTile = exit;
             }
         }
@@ -506,6 +528,10 @@ namespace Week04_Array2D
         [Test]
         public void As11_Start_PlacePlayer()
         {
+            var playerField = assignment.GetType().GetField("player",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(playerField, "As11: ต้องประกาศตัวแปร player (เช่น public GameObject[] player;) ในคลาส");
+
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
             var itemPrefab = new GameObject("KeyItem");
@@ -535,6 +561,10 @@ namespace Week04_Array2D
         [TestCase(6, 4)]
         public void As12_Start_PlaceExit(int cols, int rows)
         {
+            var exitField = assignment.GetType().GetField("exitTile",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(exitField, "As12: ต้องประกาศตัวแปร exitTile (เช่น public GameObject exitTile;) ในคลาส");
+
             var wallPrefabs = MakeItems("Wall");
             var floorPrefabs = MakeItems("Floor");
             var itemPrefab = new GameObject("KeyItem");

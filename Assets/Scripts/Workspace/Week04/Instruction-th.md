@@ -250,19 +250,23 @@ Create Item Food at x: 2 y: 2
 
 ## As11. วางผู้เล่นที่มุมซ้ายล่าง (Place Player)
 
-**วัตถุประสงค์:** วางตัวละครผู้เล่นลงที่ตำแหน่งมุมซ้ายล่างของแผนที่ `(0, 0)`
+**วัตถุประสงค์:** ประกาศตัวแปร GameObject[] สำหรับ Player แล้วสุ่ม/เลือกวางตัวละครผู้เล่นลงที่ตำแหน่งมุมซ้ายล่างของแผนที่ `(0, 0)`
 
-**Logic ที่ต้อง implement (ใน `Start()`):**
-- `Instantiate(player, new Vector2(0, 0), Quaternion.identity);`
+**Logic ที่ต้อง implement:**
+- ประกาศตัวแปร `public GameObject[] player;` ในคลาส (ด้านบน)
+- ใน `Start()`: 
+  - สุ่มเลือกหรือเลือกตัวละคร เช่น `GameObject playerChoice = player[Random.Range(0, player.Length)];` (หรือ `player[0]`)
+  - `Instantiate(playerChoice, new Vector2(0, 0), Quaternion.identity);`
 
 ---
 
 ## As12. วางทางออกที่มุมขวาบน (Place Exit)
 
-**วัตถุประสงค์:** วางแผ่นทางออกลงที่มุมขวาบนของแผนที่ `(cols - 1, rows - 1)`
+**วัตถุประสงค์:** ประกาศตัวแปร GameObject สำหรับทางออก แล้ววางแผ่นทางออกลงที่มุมขวาบนของแผนที่ `(cols - 1, rows - 1)`
 
-**Logic ที่ต้อง implement (ใน `Start()`):**
-- `Instantiate(exitTile, new Vector2(cols - 1, rows - 1), Quaternion.identity);`
+**Logic ที่ต้อง implement:**
+- ประกาศตัวแปร `public GameObject exitTile;` ในคลาส (ด้านบน)
+- ใน `Start()`: `Instantiate(exitTile, new Vector2(cols - 1, rows - 1), Quaternion.identity);`
 
 ---
 
