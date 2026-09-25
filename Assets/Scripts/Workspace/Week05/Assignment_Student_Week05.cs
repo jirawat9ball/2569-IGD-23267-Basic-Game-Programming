@@ -5,15 +5,25 @@ namespace Week05
 {
     public class Assignment_Student_Week05 : MonoBehaviour
     {
-        [Header("ข้อ 3: ตัวแปรสำหรับสร้างแผนที่")]
-        public int columns = 3;
-        public int rows = 4;
-        public GameObject[] floorTiles;
-        public GameObject[] wallTiles;
-        public GameObject[] foodTiles;
-        public int foodCount = 3;
-        public GameObject player;
-        public GameObject exitTile;
+        [Header("Lv01 Variables")]
+        public int baseDamage = 50;
+        public float damageMultiplier = 1.5f;
+
+        [Header("Lv02 Variables")]
+        public int currentMana = 40;
+        public int spellManaCost = 25;
+
+        [Header("Lv03 & Lv04 Variables")]
+        public int[] testScores = new int[] { 15, 42, 88, 64, 99, 23 };
+
+        [Header("Lv05 Variables")]
+        public int currentExp = 120;
+        public int requiredExp = 100;
+
+        [Header("Lv06 Variables")]
+        public int testHealth = 120;
+        public int minHealth = 0;
+        public int maxHealth = 100;
 
         void Start()
         {
@@ -23,53 +33,18 @@ namespace Week05
             // UserNameIdentification("big", 18);
             // UserCountry();
 
-            // =========================================================================
-            // โค้ดสร้างฉากจาก Week 4 (สำหรับข้อ 3: ให้นักเรียนฝึก Refactor แยกโค้ดเหล่านี้ออกไปเป็น Method)
-            // เมื่อสร้าง Method เสร็จแล้ว ให้คอมเมนต์โค้ดด้านล่างแล้วเปลี่ยนมาเรียก Method แทน:
-            // GenerateFloor();
-            // GenerateWalls();
-            // GenerateFoods();
-            // PlacePlayer();
-            // PlaceExit();
-            // =========================================================================
+            // เมื่อสร้าง Method ในการบ้านเสร็จแล้ว สามารถเปิดคอมเมนต์ด้านล่างเพื่อทดสอบได้:
+            // Debug.Log("Lv01_CalculateDamage: " + Lv01_CalculateDamage(baseDamage, damageMultiplier));
+            // Debug.Log("Lv02_CanCastSpell: " + Lv02_CanCastSpell(currentMana, spellManaCost));
+            // Debug.Log("Lv03_FindHighestScore: " + Lv03_FindHighestScore(testScores));
+            // Debug.Log("Lv04_CalculateTotalScore: " + Lv04_CalculateTotalScore(testScores));
+            // Debug.Log("Lv05_CheckLevelUp: " + Lv05_CheckLevelUp(currentExp, requiredExp));
+            // Debug.Log("Lv06_ClampHealth: " + Lv06_ClampHealth(testHealth, minHealth, maxHealth));
 
-            // --- โค้ดสร้างพื้นแผนที่ (ย้ายไปใส่ใน Method GenerateFloor()) ---
-            for (int y = 0; y < rows; y++)
-            {
-                for (int x = 0; x < columns; x++)
-                {
-                    GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
-                    Instantiate(toInstantiate, new Vector2(x, y), Quaternion.identity);
-                }
-            }
-
-            // --- โค้ดสร้างกำแพงล้อมรอบ (ย้ายไปใส่ใน Method GenerateWalls()) ---
-            for (int y = -1; y <= rows; y++)
-            {
-                for (int x = -1; x <= columns; x++)
-                {
-                    if (x == -1 || x == columns || y == -1 || y == rows)
-                    {
-                        GameObject toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
-                        Instantiate(toInstantiate, new Vector2(x, y), Quaternion.identity);
-                    }
-                }
-            }
-
-            // --- โค้ดสุ่มวางอาหาร (ย้ายไปใส่ใน Method GenerateFoods()) ---
-            for (int i = 0; i < foodCount; i++)
-            {
-                GameObject toInstantiate = foodTiles[Random.Range(0, foodTiles.Length)];
-                Vector2 position = new Vector2(Random.Range(0, columns), Random.Range(0, rows));
-                Instantiate(toInstantiate, position, Quaternion.identity);
-            }
-
-            // --- โค้ดวางผู้เล่น (ย้ายไปใส่ใน Method PlacePlayer()) ---
-            Instantiate(player, new Vector2(0, 0), Quaternion.identity);
-
-            // --- โค้ดวางทางออก (ย้ายไปใส่ใน Method PlaceExit()) ---
-            Instantiate(exitTile, new Vector2(columns - 1, rows - 1), Quaternion.identity);
+            // หมายเหตุ: โค้ดสร้างแผนที่สำหรับ Ex01 ย้ายไปอยู่ในไฟล์ "MapGenerator.cs" ให้นักเรียนเปิดทำในไฟล์นั้น
         }
+
+        #region Lecture
 
         #region ข้อ 1: Method แบบ void และ Parameter (Overloading)
 
@@ -115,35 +90,51 @@ namespace Week05
 
         #endregion
 
-        #region ข้อ 3: แยกโค้ดสร้างแผนที่ออกเป็น Method (Refactoring)
+        #endregion // End Lecture
 
-        // Guideline ข้อ 3.1:
-        // สร้าง Method ชื่อ GenerateFloor แบบ void ไม่รับพารามิเตอร์
-        // - ใช้ Nested Loop วน y ตั้งแต่ 0 ถึง rows-1 และ x ตั้งแต่ 0 ถึง columns-1
-        // - แต่ละช่องสุ่มพื้นจาก floorTiles ด้วย Random.Range
-        // - Instantiate พื้นที่ตำแหน่ง (x, y) ด้วย Quaternion.identity
+        #region Homework
 
-        // Guideline ข้อ 3.2:
-        // สร้าง Method ชื่อ GenerateWalls แบบ void ไม่รับพารามิเตอร์
-        // - วน x ตั้งแต่ -1 ถึง columns และ y ตั้งแต่ -1 ถึง rows (ขยายออกไปด้านละ 1 ช่องเพื่อทำขอบ)
-        // - สร้างกำแพงเฉพาะช่องที่อยู่ขอบนอกเท่านั้น (เงื่อนไขขอบคือ x == -1 || x == columns || y == -1 || y == rows)
-        // - สุ่มกำแพงจาก wallTiles แล้ว Instantiate ที่ตำแหน่งนั้น
+        // =========================================================================================
+        // 🏠 Ex01: แยกโค้ดสร้างแผนที่ออกเป็น Method (Refactoring)
+        // ให้นักเรียนเปิดอ่านโจทย์และเขียนโค้ดทำในไฟล์ "MapGenerator.cs"
+        // =========================================================================================
 
-        // Guideline ข้อ 3.3:
-        // สร้าง Method ชื่อ GenerateFoods แบบ void ไม่รับพารามิเตอร์
-        // - วนลูปจำนวน foodCount รอบ
-        // - แต่ละรอบสุ่มอาหารจาก foodTiles และสุ่มตำแหน่ง x (0 ถึง columns-1), y (0 ถึง rows-1)
-        // - Instantiate อาหารที่ตำแหน่งที่สุ่มได้
+        #region Level 1: Simple (โจทย์การบ้าน Method พื้นฐาน & ระบบเกม)
 
-        // Guideline ข้อ 3.4:
-        // สร้าง Method ชื่อ PlacePlayer แบบ void ไม่รับพารามิเตอร์
-        // - Instantiate ตัวละคร player ไว้ที่มุมซ้ายล่างของแผนที่ คือตำแหน่ง (0, 0)
+        // Guideline Lv01:
+        // สร้าง Method ชื่อ Lv01_CalculateDamage
+        // - รับพารามิเตอร์ int baseDamage, float multiplier และมี Return Type เป็น int
+        // - คำนวณพลังโจมตีโดยเอา baseDamage คูณกับ multiplier แล้วแปลงเป็น int (เช่น (int)(baseDamage * multiplier)) จากนั้น return ค่านั้นกลับไป
 
-        // Guideline ข้อ 3.5:
-        // สร้าง Method ชื่อ PlaceExit แบบ void ไม่รับพารามิเตอร์
-        // - Instantiate ทางออก exitTile ไว้ที่มุมขวาบนของแผนที่ คือตำแหน่ง (columns-1, rows-1)
+        // Guideline Lv02:
+        // สร้าง Method ชื่อ Lv02_CanCastSpell
+        // - รับพารามิเตอร์ int currentMana, int manaCost และมี Return Type เป็น bool
+        // - เช็คว่า currentMana มากกว่าหรือเท่ากับ manaCost หรือไม่ ถ้าใช่ return true ไม่ใช่ return false
+
+        // Guideline Lv03:
+        // สร้าง Method ชื่อ Lv03_FindHighestScore
+        // - รับพารามิเตอร์ int[] scores และมี Return Type เป็น int
+        // - ค้นหาคะแนนที่สูงที่สุดใน Array scores แล้ว return ค่านั้นกลับไป (หาก Array ว่างหรือเป็น null ให้ return 0)
+
+        // Guideline Lv04:
+        // สร้าง Method ชื่อ Lv04_CalculateTotalScore
+        // - รับพารามิเตอร์ int[] scores และมี Return Type เป็น int
+        // - วนลูปหาผลรวมของคะแนนทั้งหมดใน Array scores แล้ว return ผลรวมนั้นกลับไป (หาก Array ว่างหรือเป็น null ให้ return 0)
+
+        // Guideline Lv05:
+        // สร้าง Method ชื่อ Lv05_CheckLevelUp
+        // - รับพารามิเตอร์ int currentExp, int requiredExp และมี Return Type เป็น bool
+        // - เช็คว่า currentExp มากกว่าหรือเท่ากับ requiredExp หรือไม่ ถ้าใช่ return true ไม่ใช่ return false
+
+        // Guideline Lv06:
+        // สร้าง Method ชื่อ Lv06_ClampHealth
+        // - รับพารามิเตอร์ int currentHealth, int minHealth, int maxHealth และมี Return Type เป็น int
+        // - จำกัดค่าพลังชีวิตไม่ให้ต่ำกว่า minHealth และไม่ให้เกิน maxHealth แล้ว return ค่านั้นกลับไป
+        //   (เช่น ถ้า currentHealth < minHealth ให้ return minHealth, ถ้า currentHealth > maxHealth ให้ return maxHealth, นอกนั้น return currentHealth)
 
         #endregion
+
+        #endregion // End Homework
 
     }
 }

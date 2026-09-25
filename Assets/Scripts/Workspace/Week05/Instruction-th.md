@@ -16,11 +16,15 @@
 - แยกโค้ดก้อนใหญ่ใน `Start()` ออกเป็น Method ย่อย ๆ (Refactoring)
 - เข้าใจความต่างของ `public` กับ `private`
 
-## 📚 โครงสร้างของ Assignment
+## 📚 โครงสร้างของสัปดาห์นี้
 
-- **ข้อ 1–2: พื้นฐาน Method** — void, parameter, default value, return type
-- **ข้อ 3: Refactoring** — แยกโค้ดสร้างแผนที่ออกเป็น 5 Method
-- **ข้อ 4–7: Method ของตัวละคร** — เดิน, รับดาเมจ, เช็คตาย, ฮีล
+### 🏫 Lecture (เรียนและทำในคาบ)
+- **ข้อ 1–2:** พื้นฐาน Method — void, parameter, default value, return type (ใน `Assignment_Student_Week05.cs`)
+- **ข้อ 3–7:** Method ของตัวละคร — Move, TakeDamage, CheckDead, Heal, CanMove (ใน `Player.cs`)
+
+### 🏠 Homework (การบ้าน)
+- **Ex01:** Refactoring — แยกโค้ดสร้างแผนที่ออกเป็น 5 Method (ทำใน `MapGenerator.cs`)
+- **Level 1: Simple (Lv01 – Lv06):** ฟังก์ชันพื้นฐานและระบบเกม (เขียนใน `Assignment_Student_Week05.cs`)
 
 ---
 
@@ -110,7 +114,9 @@ bool isMale = ConvertInttoBool(1);      // isMale = true
 
 ---
 
-## ข้อ 3. แยกโค้ดสร้างแผนที่ออกเป็น Method (Refactoring)
+## Ex01. แยกโค้ดสร้างแผนที่ออกเป็น Method (Refactoring)
+
+> 📝 **ไฟล์ที่ใช้ทำ:** `MapGenerator.cs` (ให้นักเรียนเปิดทำในไฟล์ `MapGenerator.cs`)
 
 **วัตถุประสงค์:** ฝึกจัดระเบียบโค้ด โดยย้ายโค้ดก้อนใหญ่ใน `Start()` ออกมาเป็น Method ย่อย ๆ ที่มีหน้าที่ชัดเจน
 
@@ -164,7 +170,7 @@ public void GenerateFloor()
 
 ---
 
-## ข้อ 4. Method ชื่อ Move
+## ข้อ 3. Method ชื่อ Move
 
 **วัตถุประสงค์:** เขียน Method ที่รับทิศทางเข้ามาแล้วขยับตัวละคร พร้อมหักค่าพลังงาน
 
@@ -184,7 +190,7 @@ void Move(Vector2 direction)
 
 ---
 
-## ข้อ 5. Method ชื่อ TakeDamage
+## ข้อ 4. Method ชื่อ TakeDamage
 
 **วัตถุประสงค์:** เขียน Method ลดพลังงานเมื่อโดนโจมตี พร้อมกันค่าติดลบ
 
@@ -201,7 +207,7 @@ void TakeDamage(int Damage)
 
 ---
 
-## ข้อ 6. Method ชื่อ CheckDead
+## ข้อ 5. Method ชื่อ CheckDead
 
 **วัตถุประสงค์:** เขียน Method แบบ `private` และเรียกใช้จาก Method อื่นภายในคลาสเดียวกัน
 
@@ -212,7 +218,7 @@ private void CheckDead()
 
 **Logic ที่ต้อง implement:**
 - ถ้า `energy` น้อยกว่าหรือเท่ากับ 0 → พิมพ์ `You Lose`
-- **เพิ่มใน `TakeDamage` จากข้อ 5:** หลังลด energy แล้วให้พิมพ์ `Current Energy : <ค่า energy>` แล้วเรียก `CheckDead()`
+- **เพิ่มใน `TakeDamage` จากข้อ 4:** หลังลด energy แล้วให้พิมพ์ `Current Energy : <ค่า energy>` แล้วเรียก `CheckDead()`
 
 > `private` แปลว่า Method นี้เรียกได้เฉพาะจากภายในคลาสตัวเองเท่านั้น สคริปต์อื่นเรียกไม่ได้
 
@@ -227,7 +233,7 @@ You Lose
 
 ---
 
-## ข้อ 7. Method ชื่อ Heal
+## ข้อ 6. Method ชื่อ Heal
 
 **วัตถุประสงค์:** เขียน Method เพิ่มพลังงานให้ตัวละคร
 
@@ -237,9 +243,125 @@ void Heal(int healPoint)
 ```
 
 **Logic ที่ต้อง implement:**
-- เพิ่ม `energy` ขึ้นตามค่า `healPoint` ที่รับเข้ามา
+- เพิ่ม `energy` ขึ้นตามค่า `healPoint` ที่รับเข้ามา (มี default value = 10)
 
-**ตัวอย่าง:** energy เริ่มที่ 20 สั่ง `Heal(4)` → `energy = 24`
+**ตัวอย่าง:** energy เริ่มที่ 20 สั่ง `Heal(4)` → `energy = 24`, สั่ง `Heal()` → `energy = 34`
+
+---
+
+## ข้อ 7. Method ชื่อ CanMove
+
+**วัตถุประสงค์:** เขียน Method ตรวจสอบสถานะการเดินของตัวละคร (Return Type bool)
+
+**Method Signature:**
+```csharp
+public bool CanMove()
+```
+
+**Logic ที่ต้อง implement:**
+- ถ้า `energy > 0` ให้ `return true`
+- ถ้าน้อยกว่าหรือเท่ากับ 0 ให้ `return false`
+
+---
+
+# 🏠 ส่วนการบ้าน: Level 1: Simple (Lv01 – Lv06)
+
+ให้นักเรียนสร้าง Method ต่อไปนี้ลงในไฟล์ `Assignment_Student_Week05.cs` ภายใต้ Region `#region Level 1: Simple`
+
+---
+
+### Lv01. Method คำนวณดาเมจ: `Lv01_CalculateDamage`
+
+**วัตถุประสงค์:** คำนวณพลังโจมตีสุทธิจากพลังโจมตีพื้นฐานและตัวคูณดาเมจ
+
+**Method Signature:**
+```csharp
+public int Lv01_CalculateDamage(int baseDamage, float multiplier)
+```
+
+**Logic:**
+- เอา `baseDamage` คูณกับ `multiplier`
+- แปลงผลลัพธ์เป็น `int` แล้วคืนค่ากลับไป เช่น `(int)(baseDamage * multiplier)`
+- **ตัวอย่าง:** `Lv01_CalculateDamage(100, 1.5f)` ได้ `150`, `Lv01_CalculateDamage(10, 1.25f)` ได้ `12`
+
+---
+
+### Lv02. Method ตรวจสอบมานาในการร่ายเวท: `Lv02_CanCastSpell`
+
+**วัตถุประสงค์:** ตรวจสอบว่าตัวละครมีมานาเพียงพอสำหรับใช้สกิลหรือไม่
+
+**Method Signature:**
+```csharp
+public bool Lv02_CanCastSpell(int currentMana, int manaCost)
+```
+
+**Logic:**
+- ถ้า `currentMana >= manaCost` ให้คืนค่า `true` นอกนั้นคืนค่า `false`
+- **ตัวอย่าง:** `Lv02_CanCastSpell(50, 30)` ได้ `true`, `Lv02_CanCastSpell(20, 30)` ได้ `false`
+
+---
+
+### Lv03. Method ค้นหาคะแนนสูงสุด: `Lv03_FindHighestScore`
+
+**วัตถุประสงค์:** ค้นหาค่าตัวเลขที่มากที่สุดใน Array
+
+**Method Signature:**
+```csharp
+public int Lv03_FindHighestScore(int[] scores)
+```
+
+**Logic:**
+- วนลูปตรวจสอบสมาชิกทุกตัวใน `scores` เพื่อหาค่าที่มากที่สุด แล้ว return ค่านั้น
+- หาก Array เป็น `null` หรือไม่มีข้อมูล (`scores.Length == 0`) ให้คืนค่า `0`
+- **ตัวอย่าง:** `Lv03_FindHighestScore(new int[] { 10, 45, 99, 23, 7 })` ได้ `99`
+
+---
+
+### Lv04. Method คำนวณคะแนนรวม: `Lv04_CalculateTotalScore`
+
+**วัตถุประสงค์:** หาผลบวกของคะแนนทั้งหมดใน Array
+
+**Method Signature:**
+```csharp
+public int Lv04_CalculateTotalScore(int[] scores)
+```
+
+**Logic:**
+- วนลูปบวกสะสมค่าทั้งหมดใน `scores` แล้ว return ผลรวม
+- หาก Array เป็น `null` หรือไม่มีข้อมูล ให้คืนค่า `0`
+- **ตัวอย่าง:** `Lv04_CalculateTotalScore(new int[] { 10, 20, 30 })` ได้ `60`
+
+---
+
+### Lv05. Method ตรวจสอบการเลเวลอัป: `Lv05_CheckLevelUp`
+
+**วัตถุประสงค์:** ตรวจสอบว่า EXP สะสมเพียงพอสำหรับการเลเวลอัปหรือไม่
+
+**Method Signature:**
+```csharp
+public bool Lv05_CheckLevelUp(int currentExp, int requiredExp)
+```
+
+**Logic:**
+- ถ้า `currentExp >= requiredExp` ให้คืนค่า `true` นอกนั้นคืนค่า `false`
+- **ตัวอย่าง:** `Lv05_CheckLevelUp(120, 100)` ได้ `true`, `Lv05_CheckLevelUp(99, 100)` ได้ `false`
+
+---
+
+### Lv06. Method ควบคุมพลังชีวิตให้อยู่ในช่วง: `Lv06_ClampHealth`
+
+**วัตถุประสงค์:** ป้องกันไม่ให้พลังชีวิตต่ำกว่าค่าต่ำสุด (min) หรือสูงเกินค่าสูงสุด (max)
+
+**Method Signature:**
+```csharp
+public int Lv06_ClampHealth(int currentHealth, int minHealth, int maxHealth)
+```
+
+**Logic:**
+- ถ้า `currentHealth < minHealth` ให้คืนค่า `minHealth`
+- ถ้า `currentHealth > maxHealth` ให้คืนค่า `maxHealth`
+- ถ้าอยู่ในช่วง ให้คืนค่า `currentHealth` เดิม
+- **ตัวอย่าง:** `Lv06_ClampHealth(120, 0, 100)` ได้ `100`, `Lv06_ClampHealth(-10, 0, 100)` ได้ `0`, `Lv06_ClampHealth(50, 0, 100)` ได้ `50`
 
 ---
 
@@ -247,7 +369,7 @@ void Heal(int healPoint)
 
 - ชื่อ Method, ชนิดค่าที่คืนกลับ และพารามิเตอร์ **ต้องตรงตามที่โจทย์กำหนดเป๊ะ** ระบบตรวจจะเช็คถึงระดับ signature
 - ข้อ 2 ให้ `return` ค่า **อย่าพิมพ์ออกจอ**
-- ข้อ 6 `CheckDead()` ต้องเป็น `private` และต้องถูกเรียกจากใน `TakeDamage`
+- ข้อ 5 `CheckDead()` ต้องเป็น `private` และต้องถูกเรียกจากใน `TakeDamage`
 - ข้อความที่พิมพ์ต้องตรงเป๊ะ ทั้งตัวพิมพ์เล็กใหญ่ ช่องว่าง และเครื่องหมาย
 
 **ขอให้สนุกกับการเขียนโค้ดครับ 👨‍💻**

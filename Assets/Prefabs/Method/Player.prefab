@@ -35,6 +35,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7379325397244723127
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -80,6 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -963794370624598714, guid: c6432ea05caa0bb4b8121dd19c54bcfe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -89,8 +91,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &5474978867876262817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,11 +102,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5091299327554147869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10ef7a1e94942e8428f4b17497f272f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 63d54a1478e14c4b8fba2c27a3ee9283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Tests::Player
-  Name: Player1
-  PositionX: 0
-  PositionY: 0
   energy: 20
-  Map: {fileID: 0}

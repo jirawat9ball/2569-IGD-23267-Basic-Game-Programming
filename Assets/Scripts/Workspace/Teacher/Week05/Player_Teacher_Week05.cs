@@ -5,7 +5,7 @@ namespace Week05
 {
     public class Player_Teacher_Week05 : MonoBehaviour
     {
-        [Header("ข้อ 4-8: ตัวแปรของตัวละคร")]
+        [Header("ข้อ 3-7: ตัวแปรของตัวละคร")]
         public int energy = 20;
 
         private void Update()
@@ -30,16 +30,16 @@ namespace Week05
             }
         }
 
-        #region ข้อ 4-8: Method ของตัวละคร
+        #region ข้อ 3-7: Method ของตัวละคร
 
-        // ข้อ 4: Method แบบ void + Parameter
+        // ข้อ 3: Method แบบ void + Parameter
         public void Move(Vector2 direction)
         {
             transform.position += new Vector3(direction.x, direction.y, 0f);
             energy -= 1;
         }
 
-        // ข้อ 5: Method แบบ void + Parameter (ลด energy และเรียก CheckDead)
+        // ข้อ 4: Method แบบ void + Parameter (ลด energy และเรียก CheckDead)
         public void TakeDamage(int Damage)
         {
             energy -= Damage;
@@ -52,7 +52,7 @@ namespace Week05
             CheckDead();
         }
 
-        // ข้อ 6: Method Scope (private void ไม่รับพารามิเตอร์)
+        // ข้อ 5: Method Scope (private void ไม่รับพารามิเตอร์)
         private void CheckDead()
         {
             if (energy <= 0)
@@ -62,13 +62,13 @@ namespace Week05
             }
         }
 
-        // ข้อ 7: Method แบบ Default Parameter (ค่าเริ่มต้น 10)
+        // ข้อ 6: Method แบบ Default Parameter (ค่าเริ่มต้น 10)
         public void Heal(int healPoint = 10)
         {
             energy += healPoint;
         }
 
-        // ข้อ 8: Method แบบมีค่าส่งกลับ (Return Type bool)
+        // ข้อ 7: Method แบบมีค่าส่งกลับ (Return Type bool)
         public bool CanMove()
         {
             return energy > 0;

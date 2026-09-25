@@ -171,33 +171,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5474978867876262817, guid: b3cd3b0460437d54b9054ade44833be7, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5091299327554147869, guid: b3cd3b0460437d54b9054ade44833be7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 270770299}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3cd3b0460437d54b9054ade44833be7, type: 3}
---- !u!1 &270770298 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5091299327554147869, guid: b3cd3b0460437d54b9054ade44833be7, type: 3}
-  m_PrefabInstance: {fileID: 270770297}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &270770299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 270770298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63d54a1478e14c4b8fba2c27a3ee9283, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Workspace::Week05.Player
-  energy: 20
 --- !u!1 &926589286
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,14 +410,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0071548756ac2245855b666db93242d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Workspace::Week05.Assignment_Student_Week05
-  columns: 3
-  rows: 4
-  floorTiles: []
-  wallTiles: []
-  foodTiles: []
-  foodCount: 3
-  player: {fileID: 0}
-  exitTile: {fileID: 0}
+  baseDamage: 50
+  damageMultiplier: 1.5
+  currentMana: 40
+  spellManaCost: 25
+  testScores: 0f0000002a00000058000000400000006300000017000000
+  currentExp: 120
+  requiredExp: 100
+  testHealth: 120
+  minHealth: 0
+  maxHealth: 100
 --- !u!114 &2130644981
 MonoBehaviour:
   m_ObjectHideFlags: 0

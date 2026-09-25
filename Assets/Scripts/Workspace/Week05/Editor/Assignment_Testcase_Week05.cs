@@ -152,6 +152,12 @@ namespace Week05_Method
         public int Add(int a, int b) => (int)(Invoke(nameof(Add), a, b) ?? 0);
         public int GetStringLength(string text) => (int)(Invoke(nameof(GetStringLength), text) ?? 0);
         public bool ConvertInttoBool(int sex) => (bool)(Invoke(nameof(ConvertInttoBool), sex) ?? false);
+        public int Lv01_CalculateDamage(int baseDamage, float multiplier) => (int)(Invoke(nameof(Lv01_CalculateDamage), baseDamage, multiplier) ?? 0);
+        public bool Lv02_CanCastSpell(int currentMana, int manaCost) => (bool)(Invoke(nameof(Lv02_CanCastSpell), currentMana, manaCost) ?? false);
+        public int Lv03_FindHighestScore(int[] scores) => (int)(Invoke(nameof(Lv03_FindHighestScore), (object)scores) ?? 0);
+        public int Lv04_CalculateTotalScore(int[] scores) => (int)(Invoke(nameof(Lv04_CalculateTotalScore), (object)scores) ?? 0);
+        public bool Lv05_CheckLevelUp(int currentExp, int requiredExp) => (bool)(Invoke(nameof(Lv05_CheckLevelUp), currentExp, requiredExp) ?? false);
+        public int Lv06_ClampHealth(int currentHealth, int minHealth, int maxHealth) => (int)(Invoke(nameof(Lv06_ClampHealth), currentHealth, minHealth, maxHealth) ?? 0);
     }
 
     public class PlayerInvoker
@@ -850,12 +856,12 @@ namespace Week05_Method
     }
 
 
-    public class Exercises : TestBase
+    public class Lecture : TestBase
     {
         // ============ ข้อ 1: Method แบบ void และ Parameter (Overloading) ============
 
         [Test]
-        public void Ex01_UserNameIdentification_NoParameter()
+        public void As01_01_UserNameIdentification_NoParameter()
         {
             assignment.UserNameIdentification();
             TestUtils.AssertMultilineEqual("user name is UntitleUser", SimpleDebugConsole.GetOutput());
@@ -865,7 +871,7 @@ namespace Week05_Method
         [TestCase("boy")]
         [TestCase("Anna")]
         [TestCase("นักศึกษา")]
-        public void Ex01_UserNameIdentification_WithName(string name)
+        public void As01_02_UserNameIdentification_WithName(string name)
         {
             assignment.UserNameIdentification(name);
             TestUtils.AssertMultilineEqual("user name is " + name, SimpleDebugConsole.GetOutput());
@@ -875,7 +881,7 @@ namespace Week05_Method
         [TestCase("big", 18)]
         [TestCase("Tom", 7)]
         [TestCase("Ann", 0)]
-        public void Ex01_UserNameIdentification_WithNameAndAge(string name, int age)
+        public void As01_03_UserNameIdentification_WithNameAndAge(string name, int age)
         {
             assignment.UserNameIdentification(name, age);
             TestUtils.AssertMultilineEqual($"user name is {name} age is {age}", SimpleDebugConsole.GetOutput());
@@ -883,7 +889,7 @@ namespace Week05_Method
         }
 
         [Test]
-        public void Ex01_UserCountry_UsesDefaultValue()
+        public void As01_04_UserCountry_UsesDefaultValue()
         {
             assignment.UserCountry();
             TestUtils.AssertMultilineEqual("Thailand", SimpleDebugConsole.GetOutput());
@@ -893,7 +899,7 @@ namespace Week05_Method
 
         [TestCase("Japan")]
         [TestCase("Laos")]
-        public void Ex01_UserCountry_WithValue(string country)
+        public void As01_05_UserCountry_WithValue(string country)
         {
             assignment.UserCountry(country);
             TestUtils.AssertMultilineEqual(country, SimpleDebugConsole.GetOutput());
@@ -906,7 +912,7 @@ namespace Week05_Method
         [TestCase(-5, 5, 0)]
         [TestCase(100, 250, 350)]
         [TestCase(-7, -3, -10)]
-        public void Ex02_Add(int a, int b, int expected)
+        public void As02_01_Add(int a, int b, int expected)
         {
             Assert.AreEqual(expected, assignment.Add(a, b), $"Add({a}, {b}) ต้อง return {expected}");
             AssertSignatureExists("public int Add(int a, int b)");
@@ -916,7 +922,7 @@ namespace Week05_Method
         [TestCase("", 0)]
         [TestCase("Unity Engine", 12)]
         [TestCase("a", 1)]
-        public void Ex02_GetStringLength(string text, int expected)
+        public void As02_02_GetStringLength(string text, int expected)
         {
             Assert.AreEqual(expected, assignment.GetStringLength(text), $"GetStringLength(\"{text}\") ต้อง return {expected}");
             AssertSignatureExists("public int GetStringLength(string text)");
@@ -926,18 +932,163 @@ namespace Week05_Method
         [TestCase(0, false)]
         [TestCase(2, false)]
         [TestCase(-1, false)]
-        public void Ex02_ConvertInttoBool(int sex, bool expected)
+        public void As02_03_ConvertInttoBool(int sex, bool expected)
         {
             Assert.AreEqual(expected, assignment.ConvertInttoBool(sex), $"ConvertInttoBool({sex}) ต้อง return {expected}");
             AssertSignatureExists("public bool ConvertInttoBool(int sex)");
         }
 
-        // ============ ข้อ 3: แยกโค้ดสร้างแผนที่ออกเป็น Method ============
+        // ============ ข้อ 3: Move ============
+
+        [TestCase(1, 0, 5)]
+        [TestCase(0, -1, 1)]
+        [TestCase(2, 3, 4)]
+        public void As03_01_Move_SingleDirection(int dirX, int dirY, int times)
+        {
+            player.Energy = 20;
+            player.Position = Vector3.zero;
+
+            for (int i = 0; i < times; i++) player.Move(new Vector2(dirX, dirY));
+
+            Assert.AreEqual(dirX * times, player.Position.x, 0.0001f);
+            Assert.AreEqual(dirY * times, player.Position.y, 0.0001f);
+            Assert.AreEqual(20 - times, player.Energy, "energy ต้องลดลง 1 ต่อการเดิน 1 ครั้ง");
+        }
+
+        [Test]
+        public void As03_02_Move_RightThreeThenUpThree()
+        {
+            player.Energy = 20;
+            player.Position = Vector3.zero;
+
+            for (int i = 0; i < 3; i++) player.Move(Vector2.right);
+            for (int i = 0; i < 3; i++) player.Move(Vector2.up);
+
+            Assert.AreEqual(3f, player.Position.x, 0.0001f, "เดินขวา 3 ครั้ง x ต้องเป็น 3");
+            Assert.AreEqual(3f, player.Position.y, 0.0001f, "เดินขึ้น 3 ครั้ง y ต้องเป็น 3");
+            Assert.AreEqual(14, player.Energy, "เดิน 6 ครั้ง energy ต้องลดจาก 20 เหลือ 14");
+
+            AssertPlayerSignatureExists("public void Move(Vector2 direction)");
+        }
+
+        // ============ ข้อ 4: TakeDamage ============
+
+        [Test]
+        public void As04_01_TakeDamage_ReducesEnergy()
+        {
+            player.Energy = 20;
+
+            player.TakeDamage(4);
+            player.TakeDamage(5);
+            player.TakeDamage(6);
+
+            Assert.AreEqual(5, player.Energy, "โดน 4 + 5 + 6 จาก 20 ต้องเหลือ 5");
+            AssertPlayerSignatureExists("public void TakeDamage(int Damage)");
+        }
+
+        [TestCase(10, 50)]
+        [TestCase(20, 20)]
+        [TestCase(1, 999)]
+        public void As04_02_TakeDamage_NeverBelowZero(int startEnergy, int damage)
+        {
+            player.Energy = startEnergy;
+
+            player.TakeDamage(damage);
+
+            Assert.AreEqual(0, player.Energy, "energy ต้องไม่ต่ำกว่า 0");
+        }
+
+        // ============ ข้อ 5: CheckDead ============
+
+        [Test]
+        public void As05_01_CheckDead_NotDeadYet()
+        {
+            player.Energy = 30;
+            SimpleDebugConsole.Clear();
+
+            player.TakeDamage(10);
+
+            TestUtils.AssertMultilineEqual("Current Energy : 20", SimpleDebugConsole.GetOutput());
+        }
+
+        [Test]
+        public void As05_02_CheckDead_PrintsYouLoseWhenEnergyRunsOut()
+        {
+            player.Energy = 40;
+            SimpleDebugConsole.Clear();
+
+            player.TakeDamage(10);
+            player.TakeDamage(10);
+            player.TakeDamage(10);
+            player.TakeDamage(10);
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Current Energy : 30");
+            sb.AppendLine("Current Energy : 20");
+            sb.AppendLine("Current Energy : 10");
+            sb.AppendLine("Current Energy : 0");
+            sb.AppendLine("You Lose");
+
+            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+        }
+
+        [Test]
+        public void As05_03_CheckDead_IsPrivateAndCalledFromTakeDamage()
+        {
+            AssertPlayerSignatureExists("private void CheckDead()");
+            AssertPlayerBodyContains("public void TakeDamage(int Damage)", "CheckDead",
+                "TakeDamage ต้องเรียก CheckDead() หลังลด energy");
+        }
+
+        // ============ ข้อ 6: Heal & Default Parameter ============
+
+        [TestCase(20, 4, 24)]
+        [TestCase(0, 10, 10)]
+        [TestCase(5, 0, 5)]
+        [TestCase(100, 250, 350)]
+        public void As06_01_Heal(int startEnergy, int healPoint, int expected)
+        {
+            player.Energy = startEnergy;
+
+            player.Heal(healPoint);
+
+            Assert.AreEqual(expected, player.Energy, $"Heal({healPoint}) จาก {startEnergy} ต้องได้ {expected}");
+            AssertPlayerSignatureExists("public void Heal(int healPoint)");
+        }
+
+        [Test]
+        public void As06_02_Heal_UsesDefaultValue()
+        {
+            player.Energy = 15;
+            player.Heal(); // ไม่ส่งพารามิเตอร์ ต้องใช้ default = 10
+
+            Assert.AreEqual(25, player.Energy, "Heal() แบบไม่ระบุพารามิเตอร์ ต้องเพิ่ม energy 10 เป็นค่าเริ่มต้น");
+            AssertPlayerRawSourceContains("healPoint = 10",
+                "ต้องกำหนดค่าเริ่มต้นของพารามิเตอร์ healPoint เป็น 10 เช่น Heal(int healPoint = 10)");
+        }
+
+        // ============ ข้อ 7: CanMove ============
+
+        [TestCase(20, true)]
+        [TestCase(1, true)]
+        [TestCase(0, false)]
+        [TestCase(-5, false)]
+        public void As07_01_CanMove(int currentEnergy, bool expected)
+        {
+            player.Energy = currentEnergy;
+            Assert.AreEqual(expected, player.CanMove(), $"energy = {currentEnergy} CanMove() ต้อง return {expected}");
+            AssertPlayerSignatureExists("public bool CanMove()");
+        }
+    }
+
+    public class Homework : TestBase
+    {
+        // ============ Ex01: แยกโค้ดสร้างแผนที่ออกเป็น Method (Refactoring) ============
 
         [TestCase(3, 4)]
         [TestCase(1, 1)]
         [TestCase(5, 2)]
-        public void Ex03_GenerateFloor(int columns, int rows)
+        public void Ex01_GenerateFloor(int columns, int rows)
         {
             var tiles = MakePrefabs("Floor");
             mapGenerator.Columns = columns;
@@ -964,7 +1115,7 @@ namespace Week05_Method
         [TestCase(3, 4)]
         [TestCase(1, 1)]
         [TestCase(5, 2)]
-        public void Ex03_GenerateWalls(int columns, int rows)
+        public void Ex01_GenerateWalls(int columns, int rows)
         {
             var tiles = MakePrefabs("Wall");
             mapGenerator.Columns = columns;
@@ -993,7 +1144,7 @@ namespace Week05_Method
         [TestCase(3, 4, 3)]
         [TestCase(5, 5, 1)]
         [TestCase(2, 2, 6)]
-        public void Ex03_GenerateFoods(int columns, int rows, int foodCount)
+        public void Ex01_GenerateFoods(int columns, int rows, int foodCount)
         {
             var tiles = MakePrefabs("Food");
             mapGenerator.Columns = columns;
@@ -1019,7 +1170,7 @@ namespace Week05_Method
         }
 
         [Test]
-        public void Ex03_PlacePlayer()
+        public void Ex01_PlacePlayer()
         {
             var prefab = new GameObject("Player");
             mapGenerator.Player = prefab;
@@ -1038,7 +1189,7 @@ namespace Week05_Method
         [TestCase(3, 4)]
         [TestCase(1, 1)]
         [TestCase(6, 2)]
-        public void Ex03_PlaceExit(int columns, int rows)
+        public void Ex01_PlaceExit(int columns, int rows)
         {
             var prefab = new GameObject("Exit");
             mapGenerator.Columns = columns;
@@ -1056,146 +1207,97 @@ namespace Week05_Method
             AssertMapBodyContains("public void PlaceExit()", "Instantiate", "ต้อง Instantiate ทางออกจริง");
         }
 
-        // ============ ข้อ 4: Move ============
+        // ============ Level 1: Simple (โจทย์การบ้าน Method พื้นฐาน & ระบบเกม) ============
 
-        [Test]
-        public void Ex04_Move_RightThreeThenUpThree()
+        [TestCase(100, 1.5f, 150)]
+        [TestCase(50, 2.0f, 100)]
+        [TestCase(80, 0.5f, 40)]
+        [TestCase(10, 1.25f, 12)]
+        [TestCase(0, 2.5f, 0)]
+        public void Lv01_CalculateDamage(int baseDamage, float multiplier, int expected)
         {
-            player.Energy = 20;
-            player.Position = Vector3.zero;
-
-            for (int i = 0; i < 3; i++) player.Move(Vector2.right);
-            for (int i = 0; i < 3; i++) player.Move(Vector2.up);
-
-            Assert.AreEqual(3f, player.Position.x, 0.0001f, "เดินขวา 3 ครั้ง x ต้องเป็น 3");
-            Assert.AreEqual(3f, player.Position.y, 0.0001f, "เดินขึ้น 3 ครั้ง y ต้องเป็น 3");
-            Assert.AreEqual(14, player.Energy, "เดิน 6 ครั้ง energy ต้องลดจาก 20 เหลือ 14");
-
-            AssertPlayerSignatureExists("public void Move(Vector2 direction)");
+            AssertSignatureExists("public int Lv01_CalculateDamage(int baseDamage, float multiplier)");
+            int actual = assignment.Lv01_CalculateDamage(baseDamage, multiplier);
+            Assert.AreEqual(expected, actual, $"Lv01_CalculateDamage({baseDamage}, {multiplier}f) ต้องได้ {expected}");
         }
 
-        [TestCase(1, 0, 5)]
-        [TestCase(0, -1, 1)]
-        [TestCase(2, 3, 4)]
-        public void Ex04_Move_SingleDirection(int dirX, int dirY, int times)
+        [TestCase(50, 30, true)]
+        [TestCase(30, 30, true)]
+        [TestCase(20, 30, false)]
+        [TestCase(0, 10, false)]
+        [TestCase(100, 0, true)]
+        public void Lv02_CanCastSpell(int currentMana, int manaCost, bool expected)
         {
-            player.Energy = 20;
-            player.Position = Vector3.zero;
-
-            for (int i = 0; i < times; i++) player.Move(new Vector2(dirX, dirY));
-
-            Assert.AreEqual(dirX * times, player.Position.x, 0.0001f);
-            Assert.AreEqual(dirY * times, player.Position.y, 0.0001f);
-            Assert.AreEqual(20 - times, player.Energy, "energy ต้องลดลง 1 ต่อการเดิน 1 ครั้ง");
-        }
-
-        // ============ ข้อ 5: TakeDamage ============
-
-        [Test]
-        public void Ex05_TakeDamage_ReducesEnergy()
-        {
-            player.Energy = 20;
-
-            player.TakeDamage(4);
-            player.TakeDamage(5);
-            player.TakeDamage(6);
-
-            Assert.AreEqual(5, player.Energy, "โดน 4 + 5 + 6 จาก 20 ต้องเหลือ 5");
-            AssertPlayerSignatureExists("public void TakeDamage(int Damage)");
-        }
-
-        [TestCase(10, 50)]
-        [TestCase(20, 20)]
-        [TestCase(1, 999)]
-        public void Ex05_TakeDamage_NeverBelowZero(int startEnergy, int damage)
-        {
-            player.Energy = startEnergy;
-
-            player.TakeDamage(damage);
-
-            Assert.AreEqual(0, player.Energy, "energy ต้องไม่ต่ำกว่า 0");
-        }
-
-        // ============ ข้อ 6: CheckDead ============
-
-        [Test]
-        public void Ex06_CheckDead_PrintsYouLoseWhenEnergyRunsOut()
-        {
-            player.Energy = 40;
-            SimpleDebugConsole.Clear();
-
-            player.TakeDamage(10);
-            player.TakeDamage(10);
-            player.TakeDamage(10);
-            player.TakeDamage(10);
-
-            var sb = new StringBuilder();
-            sb.AppendLine("Current Energy : 30");
-            sb.AppendLine("Current Energy : 20");
-            sb.AppendLine("Current Energy : 10");
-            sb.AppendLine("Current Energy : 0");
-            sb.AppendLine("You Lose");
-
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            AssertSignatureExists("public bool Lv02_CanCastSpell(int currentMana, int manaCost)");
+            bool actual = assignment.Lv02_CanCastSpell(currentMana, manaCost);
+            Assert.AreEqual(expected, actual, $"Lv02_CanCastSpell({currentMana}, {manaCost}) ต้องได้ {expected}");
         }
 
         [Test]
-        public void Ex06_CheckDead_NotDeadYet()
+        public void Lv03_FindHighestScore()
         {
-            player.Energy = 30;
-            SimpleDebugConsole.Clear();
+            AssertSignatureExists("public int Lv03_FindHighestScore(int[] scores)");
 
-            player.TakeDamage(10);
+            int[] test1 = new int[] { 10, 45, 99, 23, 7 };
+            Assert.AreEqual(99, assignment.Lv03_FindHighestScore(test1), "อาร์เรย์ [10, 45, 99, 23, 7] คะแนนสูงสุดต้องเป็น 99");
 
-            TestUtils.AssertMultilineEqual("Current Energy : 20", SimpleDebugConsole.GetOutput());
+            int[] test2 = new int[] { -5, -20, -2, -10 };
+            Assert.AreEqual(-2, assignment.Lv03_FindHighestScore(test2), "อาร์เรย์ [-5, -20, -2, -10] คะแนนสูงสุดต้องเป็น -2");
+
+            int[] test3 = new int[] { 50 };
+            Assert.AreEqual(50, assignment.Lv03_FindHighestScore(test3), "อาร์เรย์ [50] คะแนนสูงสุดต้องเป็น 50");
+
+            int[] testEmpty = new int[] { };
+            Assert.AreEqual(0, assignment.Lv03_FindHighestScore(testEmpty), "อาร์เรย์ว่าง ต้องคืนค่า 0");
+
+            Assert.AreEqual(0, assignment.Lv03_FindHighestScore(null), "อาร์เรย์ null ต้องคืนค่า 0");
         }
 
         [Test]
-        public void Ex06_CheckDead_IsPrivateAndCalledFromTakeDamage()
+        public void Lv04_CalculateTotalScore()
         {
-            AssertPlayerSignatureExists("private void CheckDead()");
-            AssertPlayerBodyContains("public void TakeDamage(int Damage)", "CheckDead",
-                "TakeDamage ต้องเรียก CheckDead() หลังลด energy");
+            AssertSignatureExists("public int Lv04_CalculateTotalScore(int[] scores)");
+
+            int[] test1 = new int[] { 10, 20, 30 };
+            Assert.AreEqual(60, assignment.Lv04_CalculateTotalScore(test1), "อาร์เรย์ [10, 20, 30] ผลรวมต้องเป็น 60");
+
+            int[] test2 = new int[] { 5, -5, 10 };
+            Assert.AreEqual(10, assignment.Lv04_CalculateTotalScore(test2), "อาร์เรย์ [5, -5, 10] ผลรวมต้องเป็น 10");
+
+            int[] test3 = new int[] { 100 };
+            Assert.AreEqual(100, assignment.Lv04_CalculateTotalScore(test3), "อาร์เรย์ [100] ผลรวมต้องเป็น 100");
+
+            int[] testEmpty = new int[] { };
+            Assert.AreEqual(0, assignment.Lv04_CalculateTotalScore(testEmpty), "อาร์เรย์ว่าง ผลรวมต้องเป็น 0");
+
+            Assert.AreEqual(0, assignment.Lv04_CalculateTotalScore(null), "อาร์เรย์ null ผลรวมต้องเป็น 0");
         }
 
-        // ============ ข้อ 7: Heal & Default Parameter ============
-
-        [TestCase(20, 4, 24)]
-        [TestCase(0, 10, 10)]
-        [TestCase(5, 0, 5)]
-        [TestCase(100, 250, 350)]
-        public void Ex07_Heal(int startEnergy, int healPoint, int expected)
+        [TestCase(120, 100, true)]
+        [TestCase(100, 100, true)]
+        [TestCase(99, 100, false)]
+        [TestCase(0, 50, false)]
+        [TestCase(500, 200, true)]
+        public void Lv05_CheckLevelUp(int currentExp, int requiredExp, bool expected)
         {
-            player.Energy = startEnergy;
-
-            player.Heal(healPoint);
-
-            Assert.AreEqual(expected, player.Energy, $"Heal({healPoint}) จาก {startEnergy} ต้องได้ {expected}");
-            AssertPlayerSignatureExists("public void Heal(int healPoint)");
+            AssertSignatureExists("public bool Lv05_CheckLevelUp(int currentExp, int requiredExp)");
+            bool actual = assignment.Lv05_CheckLevelUp(currentExp, requiredExp);
+            Assert.AreEqual(expected, actual, $"Lv05_CheckLevelUp({currentExp}, {requiredExp}) ต้องได้ {expected}");
         }
 
-        [Test]
-        public void Ex07_Heal_UsesDefaultValue()
+        [TestCase(120, 0, 100, 100)]
+        [TestCase(-10, 0, 100, 0)]
+        [TestCase(50, 0, 100, 50)]
+        [TestCase(0, 0, 100, 0)]
+        [TestCase(100, 0, 100, 100)]
+        [TestCase(25, 20, 80, 25)]
+        [TestCase(15, 20, 80, 20)]
+        [TestCase(95, 20, 80, 80)]
+        public void Lv06_ClampHealth(int currentHealth, int minHealth, int maxHealth, int expected)
         {
-            player.Energy = 15;
-            player.Heal(); // ไม่ส่งพารามิเตอร์ ต้องใช้ default = 10
-
-            Assert.AreEqual(25, player.Energy, "Heal() แบบไม่ระบุพารามิเตอร์ ต้องเพิ่ม energy 10 เป็นค่าเริ่มต้น");
-            AssertPlayerRawSourceContains("healPoint = 10",
-                "ต้องกำหนดค่าเริ่มต้นของพารามิเตอร์ healPoint เป็น 10 เช่น Heal(int healPoint = 10)");
-        }
-
-        // ============ ข้อ 8: CanMove ============
-
-        [TestCase(20, true)]
-        [TestCase(1, true)]
-        [TestCase(0, false)]
-        [TestCase(-5, false)]
-        public void Ex08_CanMove(int currentEnergy, bool expected)
-        {
-            player.Energy = currentEnergy;
-            Assert.AreEqual(expected, player.CanMove(), $"energy = {currentEnergy} CanMove() ต้อง return {expected}");
-            AssertPlayerSignatureExists("public bool CanMove()");
+            AssertSignatureExists("public int Lv06_ClampHealth(int currentHealth, int minHealth, int maxHealth)");
+            int actual = assignment.Lv06_ClampHealth(currentHealth, minHealth, maxHealth);
+            Assert.AreEqual(expected, actual, $"Lv06_ClampHealth({currentHealth}, {minHealth}, {maxHealth}) ต้องได้ {expected}");
         }
     }
 

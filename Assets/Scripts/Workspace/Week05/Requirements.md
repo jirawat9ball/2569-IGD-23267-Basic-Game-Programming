@@ -1,6 +1,8 @@
-﻿# Week 05 Requirements: Methods & Refactoring
+# Week 05 Requirements: Methods & Refactoring
 
-โจทย์สำหรับสัปดาห์ที่ 5 มุ่งเน้นไปที่การสร้างและใช้งาน **Method** ในภาษา C# ทั้งแบบ Void, มี Parameter, ส่งค่ากลับ (Return Type) และการนำโค้ดมารีแฟคเตอร์ (Refactor) ให้เป็นระเบียบ โดยมีโจทย์ 7 ข้อ ดังนี้ (รวมโค้ดเฉลย/ไกด์ไลน์ไว้ด้วย)
+โจทย์สำหรับสัปดาห์ที่ 5 มุ่งเน้นไปที่การสร้างและใช้งาน **Method** ในภาษา C# ทั้งแบบ Void, Parameter, Return Type, Overloading และการนำโค้ดมารีแฟคเตอร์ (Refactor) แบ่งออกเป็น:
+- **Lecture (ข้อ 1–7):** เรียนรู้ในคาบ (Method พื้นฐาน, Return Type, และ Player Controller)
+- **Homework (Ex01, Lv01–Lv06):** การบ้าน (Refactoring แผนที่ และ Method คำนวณระบบเกม Level 1: Simple)
 
 ---
 
@@ -101,7 +103,9 @@ class Assignment : MonoBehavior
 
 ---
 
-## ข้อ 3: การย้ายโค้ดสร้างเป็น Method (Refactoring)
+## Ex01: การย้ายโค้ดสร้างเป็น Method (Refactoring)
+> 📝 **เขียนในไฟล์:** `MapGenerator.cs`
+
 **โจทย์:** ให้นักศึกษาย้ายโค้ดสร้างแผนที่จาก `Start()` ไปสร้างเป็น Method แยกต่างหาก 5 ตัวดังนี้:
 1. `GenerateFloor()`
 2. `GenerateWalls()`
@@ -165,7 +169,7 @@ class MapGenerator : MonoBehavior
 
 ---
 
-## ข้อ 4: การเขียน Method ชื่อ Move (Void & Parameter)
+## ข้อ 3: การเขียน Method ชื่อ Move (Void & Parameter)
 **โจทย์:** ในคลาส `Player` จะมีตัวแปร `energy = 20` ให้เขียนเมธอด `Move` ดังนี้:
 - Access Modifier เป็น `public`
 - Return Type เป็น `void`
@@ -198,7 +202,7 @@ public class Player : MonoBehaviour
 
 ---
 
-## ข้อ 5: การเขียน Method ชื่อ TakeDamage
+## ข้อ 4: การเขียน Method ชื่อ TakeDamage
 **โจทย์:** ให้เขียนเมธอดสำหรับลด `energy` ลงตามค่า Damage ที่กำหนด
 - Access Modifier เป็น `public`
 - Return Type เป็น `void`
@@ -217,7 +221,7 @@ Current Energy : 5
 
 ---
 
-## ข้อ 6: การเขียน Method ชื่อ CheckDead() (Private Scope)
+## ข้อ 5: การเขียน Method ชื่อ CheckDead() (Private Scope)
 **โจทย์:** ให้เขียนเมธอดตรวจสอบสถานะการตายของตัวละคร
 - Access Modifier เป็น `private`
 - Return Type เป็น `void` ไม่รับพารามิเตอร์
@@ -267,7 +271,7 @@ public class Player : MonoBehaviour
 
 ---
 
-## ข้อ 7: การเขียน Method ชื่อ Heal (Default Parameter)
+## ข้อ 6: การเขียน Method ชื่อ Heal (Default Parameter)
 **โจทย์:** ให้เขียนเมธอดสำหรับเพิ่ม `energy` ให้ตัวละคร โดยมีค่าเริ่มต้นของพารามิเตอร์ (Default Parameter):
 - Access Modifier เป็น `public`
 - Return Type เป็น `void`
@@ -298,7 +302,7 @@ public class Player : MonoBehaviour
 
 ---
 
-## ข้อ 8: การเขียน Method ชื่อ CanMove() (Return Type bool)
+## ข้อ 7: การเขียน Method ชื่อ CanMove() (Return Type bool)
 **โจทย์:** ให้เขียนเมธอดตรวจสอบว่าตัวละครยังมีพลังงานพอที่จะเดินต่อได้หรือไม่
 - Access Modifier เป็น `public`
 - Return Type เป็น `bool` ไม่รับพารามิเตอร์
@@ -322,6 +326,145 @@ public class Player : MonoBehaviour
     {
         return energy > 0;
     }
+}
+```
+</details>
+
+---
+
+# Homework: Level 1: Simple (โจทย์การบ้าน Method ระบบเกม Lv01 – Lv06)
+
+เขียนในไฟล์ `Assignment_Student_Week05.cs` ภายใต้ `#region Level 1: Simple`
+
+---
+
+## Lv01: คำนวณดาเมจสุทธิ (Lv01_CalculateDamage)
+**โจทย์:** คำนวณค่าดาเมจจากการโจมตีโดยนำพลังโจมตีพื้นฐานคูณกับตัวคูณดาเมจ
+- Signature: `public int Lv01_CalculateDamage(int baseDamage, float multiplier)`
+- การทำงาน: เอา `baseDamage` คูณกับ `multiplier` แปลงเป็น `int` แล้ว return ค่ากลับไป
+- **ตัวอย่าง:** `Lv01_CalculateDamage(100, 1.5f)` -> `150`, `Lv01_CalculateDamage(10, 1.25f)` -> `12`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public int Lv01_CalculateDamage(int baseDamage, float multiplier)
+{
+    return (int)(baseDamage * multiplier);
+}
+```
+</details>
+
+---
+
+## Lv02: ตรวจสอบมานาในการร่ายเวท (Lv02_CanCastSpell)
+**โจทย์:** ตรวจสอบว่ามานาปัจจุบันเพียงพอต่อการร่ายสกิลหรือไม่
+- Signature: `public bool Lv02_CanCastSpell(int currentMana, int manaCost)`
+- การทำงาน: ถ้า `currentMana >= manaCost` คืนค่า `true` นอกนั้นคืนค่า `false`
+- **ตัวอย่าง:** `Lv02_CanCastSpell(50, 30)` -> `true`, `Lv02_CanCastSpell(20, 30)` -> `false`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public bool Lv02_CanCastSpell(int currentMana, int manaCost)
+{
+    return currentMana >= manaCost;
+}
+```
+</details>
+
+---
+
+## Lv03: ค้นหาคะแนนสูงสุด (Lv03_FindHighestScore)
+**โจทย์:** หาค่าตัวเลขที่มากที่สุดใน Array
+- Signature: `public int Lv03_FindHighestScore(int[] scores)`
+- การทำงาน: วนลูปหาค่าสูงสุดใน Array `scores` แล้ว return ค่านั้นกลับไป (หาก Array เป็น null หรือว่าง ให้คืนค่า 0)
+- **ตัวอย่าง:** `Lv03_FindHighestScore(new int[] { 10, 45, 99, 23, 7 })` -> `99`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public int Lv03_FindHighestScore(int[] scores)
+{
+    if (scores == null || scores.Length == 0) return 0;
+    int max = scores[0];
+    for (int i = 1; i < scores.Length; i++)
+    {
+        if (scores[i] > max)
+        {
+            max = scores[i];
+        }
+    }
+    return max;
+}
+```
+</details>
+
+---
+
+## Lv04: คำนวณคะแนนรวม (Lv04_CalculateTotalScore)
+**โจทย์:** หาผลรวมของตัวเลขทั้งหมดใน Array
+- Signature: `public int Lv04_CalculateTotalScore(int[] scores)`
+- การทำงาน: วนลูปบวกผลรวมสมาชิกทั้งหมดใน `scores` แล้ว return ผลรวม (หาก Array เป็น null หรือว่าง ให้คืนค่า 0)
+- **ตัวอย่าง:** `Lv04_CalculateTotalScore(new int[] { 10, 20, 30 })` -> `60`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public int Lv04_CalculateTotalScore(int[] scores)
+{
+    if (scores == null || scores.Length == 0) return 0;
+    int total = 0;
+    for (int i = 0; i < scores.Length; i++)
+    {
+        total += scores[i];
+    }
+    return total;
+}
+```
+</details>
+
+---
+
+## Lv05: ตรวจสอบการเลเวลอัป (Lv05_CheckLevelUp)
+**โจทย์:** ตรวจสอบว่า EXP ปัจจุบันถึงเกณฑ์ที่ต้องใช้ในการอัปเลเวลหรือไม่
+- Signature: `public bool Lv05_CheckLevelUp(int currentExp, int requiredExp)`
+- การทำงาน: ถ้า `currentExp >= requiredExp` คืนค่า `true` นอกนั้นคืนค่า `false`
+- **ตัวอย่าง:** `Lv05_CheckLevelUp(120, 100)` -> `true`, `Lv05_CheckLevelUp(99, 100)` -> `false`
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public bool Lv05_CheckLevelUp(int currentExp, int requiredExp)
+{
+    return currentExp >= requiredExp;
+}
+```
+</details>
+
+---
+
+## Lv06: จำกัดช่วงพลังชีวิต (Lv06_ClampHealth)
+**โจทย์:** จำกัดค่าพลังชีวิตไม่ให้ต่ำกว่า `minHealth` และไม่ให้เกิน `maxHealth`
+- Signature: `public int Lv06_ClampHealth(int currentHealth, int minHealth, int maxHealth)`
+- การทำงาน:
+  - ถ้า `currentHealth < minHealth` คืนค่า `minHealth`
+  - ถ้า `currentHealth > maxHealth` คืนค่า `maxHealth`
+  - นอกนั้นคืนค่า `currentHealth` เดิม
+- **ตัวอย่าง:** `Lv06_ClampHealth(120, 0, 100)` -> `100`, `Lv06_ClampHealth(-10, 0, 100)` -> `0`, `Lv06_ClampHealth(50, 0, 100)` -> `50`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public int Lv06_ClampHealth(int currentHealth, int minHealth, int maxHealth)
+{
+    if (currentHealth < minHealth) return minHealth;
+    if (currentHealth > maxHealth) return maxHealth;
+    return currentHealth;
 }
 ```
 </details>
