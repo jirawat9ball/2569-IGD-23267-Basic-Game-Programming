@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week05
@@ -79,9 +79,9 @@ namespace Week05
         // - บวก a กับ b แล้ว return ผลลัพธ์กลับไป (เมธอดนี้ไม่ต้องพิมพ์อะไรออก console)
 
         // Guideline ข้อ 2.2:
-        // สร้าง Method ชื่อ GetStringLength
-        // - รับพารามิเตอร์ string text และมี Return Type เป็น int
-        // - หาจำนวนตัวอักษรของ text ด้วย text.Length แล้ว return ค่านั้นกลับไป
+        // สร้าง Method ชื่อ GetGreeting
+        // - รับพารามิเตอร์ string name และมี Return Type เป็น string
+        // - นำคำว่า "Hello, " ไปต่อกับ name แล้ว return ค่านั้นกลับไป (เช่น "Hello, " + name)
 
         // Guideline ข้อ 2.3:
         // สร้าง Method ชื่อ ConvertInttoBool

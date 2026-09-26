@@ -20,7 +20,7 @@
 
 ### 🏫 Lecture (เรียนและทำในคาบ)
 - **ข้อ 1–2:** พื้นฐาน Method — void, parameter, default value, return type (ใน `Assignment_Student_Week05.cs`)
-- **ข้อ 3–7:** Method ของตัวละคร — Move, TakeDamage, CheckDead, Heal, CanMove (ใน `Player.cs`)
+- **ข้อ 3–9:** Method ของตัวละคร — Move, Move (Overload), TakeDamage, TakeDamage (Overload), CheckDead, Heal, CanMove, GetEnergy, GetStatus (ใน `Player.cs`)
 
 ### 🏠 Homework (การบ้าน)
 - **Ex01:** Refactoring — แยกโค้ดสร้างแผนที่ออกเป็น 5 Method (ทำใน `MapGenerator.cs`)
@@ -94,22 +94,22 @@ Thailand
 **Method Signature:**
 ```csharp
 int Add(int a, int b)
-int GetStringLength(string text)
+string GetGreeting(string name)
 bool ConvertInttoBool(int sex)
 ```
 
 **Logic ที่ต้อง implement:**
 - `Add` — บวก `a` กับ `b` แล้ว `return` ผลลัพธ์
-- `GetStringLength` — `return` จำนวนตัวอักษรของ `text` (ใช้ `text.Length`)
+- `GetGreeting` — นำคำว่า `"Hello, "` ไปต่อกับ `name` แล้ว `return` ผลลัพธ์ (เช่น `"Hello, " + name`)
 - `ConvertInttoBool` — `return true` ถ้า `sex` เท่ากับ 1 นอกนั้น `return false`
 
 > **สำคัญ:** ทั้ง 3 Method นี้ **ไม่ต้องพิมพ์อะไรออกจอ** หน้าที่คือ *ส่งค่ากลับ* อย่างเดียว คนที่เรียกใช้จะเอาค่าไปทำอะไรต่อก็เรื่องของเขา
 
 **ตัวอย่างการใช้งาน:**
 ```csharp
-int sum = Add(1, 9);                    // sum = 10
-int len = GetStringLength("hello");     // len = 5
-bool isMale = ConvertInttoBool(1);      // isMale = true
+int sum = Add(1, 9);                         // sum = 10
+string greeting = GetGreeting("Alice");      // greeting = "Hello, Alice"
+bool isMale = ConvertInttoBool(1);           // isMale = true
 ```
 
 ---
@@ -177,13 +177,18 @@ public void GenerateFloor()
 **Method Signature:**
 ```csharp
 void Move(Vector2 direction)
+void Move(float x, float y) // Overloading
 ```
 
 **Logic ที่ต้อง implement:**
-- บวก `direction` เข้ากับ `transform.position` ของตัวละคร (แปลงเป็น `Vector3` ก่อน)
-- ทุกครั้งที่เดิน ลด `energy` ลง 1
+- `Move(Vector2 direction)`:
+  - เรียกใช้ `CanMove(direction)` ก่อน ถ้าคืนค่า `false` ให้ `return;` ทันที (ไม่ขยับและไม่ลด energy)
+  - ถ้าเดินได้ ให้บวก `direction` เข้ากับ `transform.position` ของตัวละคร (แปลงเป็น `Vector3` ก่อน)
+  - ลด `energy` ลง 1
+- `Move(float x, float y)` (Overloading):
+  - เรียกใช้ `Move(new Vector2(x, y))` เพื่อขยับตัวละคร
 
-**ตัวอย่าง:** เริ่มที่ (0, 0) energy = 20 แล้วเดินขวา 3 ครั้ง ขึ้น 3 ครั้ง
+**ตัวอย่าง:** แผนที่ 8x8 เริ่มที่ (0, 0) energy = 20 แล้วเดินขวา 3 ครั้ง ขึ้น 3 ครั้ง
 ```text
 ตำแหน่งสุดท้าย x = 3, y = 3, energy = 14
 ```
@@ -197,11 +202,17 @@ void Move(Vector2 direction)
 **Method Signature:**
 ```csharp
 void TakeDamage(int Damage)
+void TakeDamage(int Damage, string attacker) // Overloading
 ```
 
 **Logic ที่ต้อง implement:**
-- ลด `energy` ลงตามค่า `Damage`
-- **ห้ามให้ `energy` ติดลบ** ถ้าน้อยกว่า 0 ให้ตั้งเป็น 0
+- `TakeDamage(int Damage)`:
+  - ลด `energy` ลงตามค่า `Damage`
+  - **ห้ามให้ `energy` ติดลบ** ถ้าน้อยกว่า 0 ให้ตั้งเป็น 0
+  - พิมพ์ `Current Energy : <ค่า energy>` แล้วเรียก `CheckDead()`
+- `TakeDamage(int Damage, string attacker)` (Overloading):
+  - พิมพ์ `Attacked by <ชื่อ attacker>` ผ่าน `Debug.Log`
+  - เรียกใช้ `TakeDamage(Damage)` เพื่อลด energy
 
 **ตัวอย่าง:** energy เริ่มที่ 20 โดนดาเมจ 4, 5, 6 → เหลือ `energy = 5`
 
@@ -249,18 +260,53 @@ void Heal(int healPoint)
 
 ---
 
-## ข้อ 7. Method ชื่อ CanMove
+## ข้อ 7. Method ชื่อ CanMove (Return Type bool)
 
-**วัตถุประสงค์:** เขียน Method ตรวจสอบสถานะการเดินของตัวละคร (Return Type bool)
+**วัตถุประสงค์:** เขียน Method ตรวจสอบว่าตำแหน่งถัดไปที่จะเดินออกนอกแผนที่หรือไม่ (Return Type bool)
 
 **Method Signature:**
 ```csharp
-public bool CanMove()
+public bool CanMove(Vector2 direction)
 ```
 
 **Logic ที่ต้อง implement:**
-- ถ้า `energy > 0` ให้ `return true`
-- ถ้าน้อยกว่าหรือเท่ากับ 0 ให้ `return false`
+- คำนวณตำแหน่งเป้าหมายถัดไปโดยนำตำแหน่งปัจจุบัน `(Vector2)transform.position + direction`
+- ตรวจสอบว่าตำแหน่งเป้าหมายอยู่ในขอบเขตแผนที่หรือไม่:
+  - แกน x ต้องอยู่ในช่วง `0` ถึง `columns - 1` (`nextPos.x >= 0 && nextPos.x < columns`)
+  - แกน y ต้องอยู่ในช่วง `0` ถึง `rows - 1` (`nextPos.y >= 0 && nextPos.y < rows`)
+- ถ้าอยู่ในแผนที่ให้ `return true` นอกนั้นให้ `return false`
+
+**ตัวอย่าง:** แผนที่ขนาด `columns = 8, rows = 8` ตัวละครอยู่ที่ `(0, 0)`
+- สั่ง `CanMove(Vector2.right)` -> ตำแหน่งถัดไปคือ `(1, 0)` -> คืนค่า `true`
+- สั่ง `CanMove(Vector2.left)` -> ตำแหน่งถัดไปคือ `(-1, 0)` -> คืนค่า `false` (ออกนอกขอบซ้าย)
+
+---
+
+## ข้อ 8. Method ชื่อ GetEnergy (Return Type int)
+
+**วัตถุประสงค์:** เขียน Method เพื่ออ่านค่าพลังงานปัจจุบันของตัวละคร (Return Type int)
+
+**Method Signature:**
+```csharp
+public int GetEnergy()
+```
+
+**Logic ที่ต้อง implement:**
+- `return` ค่าตัวแปร `energy` ของตัวละคร
+
+---
+
+## ข้อ 9. Method ชื่อ GetStatus (Return Type string)
+
+**วัตถุประสงค์:** เขียน Method สรุปสถานะพลังงานของตัวละครในรูปแบบข้อความ (Return Type string)
+
+**Method Signature:**
+```csharp
+public string GetStatus()
+```
+
+**Logic ที่ต้อง implement:**
+- `return` ข้อความ `"Player Energy: "` ต่อด้วยค่า `energy` (เช่น `"Player Energy: 20"`)
 
 ---
 

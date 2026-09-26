@@ -58,7 +58,7 @@ class Assignment : MonoBehavior
 ## ข้อ 2: การประกาศ Method ประเภท Return Type
 **โจทย์:** ให้นักศึกษาประกาศ Method ประเภทมีการคืนค่ากลับ (Return Type) ดังนี้
 1. `Add(int a, int b)`: นำมาบวกกันแล้ว return ค่า
-2. `GetStringLength(string text)`: return จำนวนตัวอักษรของข้อความ (`text.Length`)
+2. `GetGreeting(string name)`: return ข้อความทักทายโดยนำ `"Hello, "` มาต่อกับ name (`"Hello, " + name`)
 3. `ConvertInttoBool(int sex)`: คืนค่าเป็น `true` ถ้า sex == 1, นอกนั้นเป็น `false`
 
 **ตัวอย่างผลลัพธ์:**
@@ -68,9 +68,9 @@ a ...
 b ...
 9
 1+9=10
-text ...
-hello
-length: 5
+name ...
+Alice
+greeting: Hello, Alice
 sex input 0||1
 1
 is male: True
@@ -90,8 +90,8 @@ class Assignment : MonoBehavior
         return c;
     }
     
-    public int GetStringLength(string text){
-        return text.Length;
+    public string GetGreeting(string name){
+        return "Hello, " + name;
     }
 
     public bool ConvertInttoBool(int sex){
@@ -169,12 +169,18 @@ class MapGenerator : MonoBehavior
 
 ---
 
-## ข้อ 3: การเขียน Method ชื่อ Move (Void & Parameter)
+## ข้อ 3: การเขียน Method ชื่อ Move (Void & Parameter + Overloading)
 **โจทย์:** ในคลาส `Player` จะมีตัวแปร `energy = 20` ให้เขียนเมธอด `Move` ดังนี้:
-- Access Modifier เป็น `public`
-- Return Type เป็น `void`
-- พารามิเตอร์ 1 ตัว ประเภท `Vector2` ชื่อ `direction`
-- การทำงาน: ให้เปลี่ยนค่า `transform.position` ของตัวละครตามทิศทางที่ส่งเข้ามา และลดค่า `energy` ลงทีละ 1 ทุกครั้งที่เดิน
+1. `Move(Vector2 direction)`:
+   - Access Modifier เป็น `public void`
+   - พารามิเตอร์ 1 ตัว ประเภท `Vector2` ชื่อ `direction`
+   - การทำงาน:
+     - เรียกใช้ `CanMove(direction)` ก่อน ถ้าคืนค่า `false` ให้ `return;` ทันที (ไม่ขยับและไม่ลด energy)
+     - ถ้าเดินได้ ให้เปลี่ยนค่า `transform.position` ตามทิศทางที่ส่งเข้ามา และลดค่า `energy` ลงทีละ 1 ทุกครั้งที่เดิน
+2. `Move(float x, float y)` (Overloading):
+   - Access Modifier เป็น `public void`
+   - พารามิเตอร์ 2 ตัว ประเภท `float` ชื่อ `x, y`
+   - การทำงาน: เรียกใช้ `Move(new Vector2(x, y))` เพื่อขยับตัวละคร
 
 **ตัวอย่างผลลัพธ์:** เมื่อเดิน ขวา, ขวา, ขวา, บน, บน, บน
 ```text
@@ -190,11 +196,20 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public int energy = 20;
+    public int columns = 8;
+    public int rows = 8;
 
     public void Move(Vector2 direction)
     {
+        if (!CanMove(direction)) return;
+
         transform.position += new Vector3(direction.x, direction.y, 0);
         energy -= 1;
+    }
+
+    public void Move(float x, float y)
+    {
+        Move(new Vector2(x, y));
     }
 }
 ```
@@ -202,15 +217,19 @@ public class Player : MonoBehaviour
 
 ---
 
-## ข้อ 4: การเขียน Method ชื่อ TakeDamage
+## ข้อ 4: การเขียน Method ชื่อ TakeDamage (Void & Parameter + Overloading)
 **โจทย์:** ให้เขียนเมธอดสำหรับลด `energy` ลงตามค่า Damage ที่กำหนด
-- Access Modifier เป็น `public`
-- Return Type เป็น `void`
-- พารามิเตอร์ 1 ตัว ประเภท `int` ชื่อ `Damage`
-- การทำงาน:
-  - ลด `energy` ตาม `Damage` ที่รับมา (ค่า `energy` ต้องไม่ต่ำกว่า 0)
-  - แสดงค่าพลังงานที่เหลือผ่าน `Debug.Log("Current Energy : " + energy);`
-  - เรียกใช้ `CheckDead()` เพื่อตรวจว่าตัวละครตายหรือยัง
+1. `TakeDamage(int Damage)`:
+   - Access Modifier เป็น `public void`
+   - พารามิเตอร์ 1 ตัว ประเภท `int` ชื่อ `Damage`
+   - การทำงาน:
+     - ลด `energy` ตาม `Damage` ที่รับมา (ค่า `energy` ต้องไม่ต่ำกว่า 0)
+     - แสดงค่าพลังงานที่เหลือผ่าน `Debug.Log("Current Energy : " + energy);`
+     - เรียกใช้ `CheckDead()` เพื่อตรวจว่าตัวละครตายหรือยัง
+2. `TakeDamage(int Damage, string attacker)` (Overloading):
+   - Access Modifier เป็น `public void`
+   - พารามิเตอร์ 2 ตัว ประเภท `int Damage, string attacker`
+   - การทำงาน: พิมพ์ `"Attacked by " + attacker` ผ่าน `Debug.Log` แล้วเรียกใช้ `TakeDamage(Damage)`
 
 **ตัวอย่างผลลัพธ์:** (เมื่อโดน Damage ไป 4, 5, 6 จากค่าเริ่มต้น 20)
 ```text
@@ -302,15 +321,17 @@ public class Player : MonoBehaviour
 
 ---
 
-## ข้อ 7: การเขียน Method ชื่อ CanMove() (Return Type bool)
-**โจทย์:** ให้เขียนเมธอดตรวจสอบว่าตัวละครยังมีพลังงานพอที่จะเดินต่อได้หรือไม่
+## ข้อ 7: การเขียน Method ชื่อ CanMove(Vector2 direction) (Return Type bool)
+**โจทย์:** ให้เขียนเมธอดตรวจสอบว่าถ้าเดินในทิศทาง `direction` ที่ระบุ จะไม่เดินออกนอกแผนที่
 - Access Modifier เป็น `public`
-- Return Type เป็น `bool` ไม่รับพารามิเตอร์
-- การทำงาน: คืนค่า `true` ถ้า `energy` มากกว่า 0 นอกนั้นให้คืนค่า `false`
+- Return Type เป็น `bool` รับพารามิเตอร์ `Vector2 direction`
+- การทำงาน: คำนวณตำแหน่งถัดไป `targetPos = (Vector2)transform.position + direction`
+  - คืนค่า `true` ถ้า `targetPos.x >= 0 && targetPos.x < columns && targetPos.y >= 0 && targetPos.y < rows`
+  - นอกนั้นให้คืนค่า `false`
 
-**ตัวอย่างผลลัพธ์:**
-- ถ้า `energy = 20` -> `CanMove()` คืนค่า `true`
-- ถ้า `energy = 0` -> `CanMove()` คืนค่า `false`
+**ตัวอย่างผลลัพธ์:** (เมื่อ `columns = 8, rows = 8` เริ่มที่ตำแหน่ง `(0, 0)`)
+- สั่ง `CanMove(Vector2.right)` -> ถัดไปคือ `(1, 0)` -> คืนค่า `true`
+- สั่ง `CanMove(Vector2.left)` -> ถัดไปคือ `(-1, 0)` -> คืนค่า `false` (ออกนอกขอบซ้าย)
 
 <details>
 <summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
@@ -321,11 +342,58 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public int energy = 20;
+    public int columns = 8;
+    public int rows = 8;
 
-    public bool CanMove()
+    public bool CanMove(Vector2 direction)
     {
-        return energy > 0;
+        Vector2 targetPos = (Vector2)transform.position + direction;
+        return targetPos.x >= 0 && targetPos.x < columns && targetPos.y >= 0 && targetPos.y < rows;
     }
+}
+```
+</details>
+
+---
+
+## ข้อ 8: การเขียน Method ชื่อ GetEnergy() (Return Type int)
+**โจทย์:** ให้เขียนเมธอดคืนค่าพลังงาน `energy` ปัจจุบันของตัวละคร
+- Access Modifier เป็น `public`
+- Return Type เป็น `int` ไม่รับพารามิเตอร์
+- การทำงาน: คืนค่า `energy`
+
+**ตัวอย่างผลลัพธ์:**
+- ถ้า `energy = 20` -> `GetEnergy()` คืนค่า `20`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public int GetEnergy()
+{
+    return energy;
+}
+```
+</details>
+
+---
+
+## ข้อ 9: การเขียน Method ชื่อ GetStatus() (Return Type string)
+**โจทย์:** ให้เขียนเมธอดคืนข้อความสถานะพลังงานของตัวละคร
+- Access Modifier เป็น `public`
+- Return Type เป็น `string` ไม่รับพารามิเตอร์
+- การทำงาน: คืนข้อความ `"Player Energy: "` ต่อด้วยค่า `energy`
+
+**ตัวอย่างผลลัพธ์:**
+- ถ้า `energy = 20` -> `GetStatus()` คืนค่า `"Player Energy: 20"`
+
+<details>
+<summary><b>ดูเฉลยแนวทาง (คลิกเพื่อขยาย)</b></summary>
+
+```csharp
+public string GetStatus()
+{
+    return "Player Energy: " + energy;
 }
 ```
 </details>

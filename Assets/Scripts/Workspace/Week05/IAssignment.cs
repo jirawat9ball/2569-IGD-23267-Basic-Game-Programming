@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Week05
 {
@@ -22,7 +22,7 @@ namespace Week05
 
         int Add(int a, int b);
 
-        int GetStringLength(string text);
+        string GetGreeting(string name);
 
         bool ConvertInttoBool(int sex);
 

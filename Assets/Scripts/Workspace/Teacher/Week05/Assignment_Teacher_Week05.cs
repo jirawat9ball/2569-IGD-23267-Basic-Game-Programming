@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week05
@@ -72,7 +72,7 @@ namespace Week05
 
             // ข้อ 2: ทดสอบเรียก Method แบบมีค่าส่งกลับ (Return Type)
             Debug.Log("Add(1, 9) = " + Add(1, 9));
-            Debug.Log("GetStringLength(\"hello\") = " + GetStringLength("hello"));
+            Debug.Log("GetGreeting(\"Alice\") = " + GetGreeting("Alice"));
             Debug.Log("ConvertInttoBool(1) = " + ConvertInttoBool(1));
 
             // =========================================================================
@@ -133,9 +133,9 @@ namespace Week05
             return c;
         }
 
-        public int GetStringLength(string text)
+        public string GetGreeting(string name)
         {
-            return text.Length;
+            return "Hello, " + name;
         }
 
         public bool ConvertInttoBool(int sex)

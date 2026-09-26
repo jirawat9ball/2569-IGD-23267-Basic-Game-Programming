@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -150,7 +150,7 @@ namespace Week05_Method
         public void UserNameIdentification(string name, int age) => Invoke(nameof(UserNameIdentification), name, age);
         public void UserCountry(string country = "Thailand") => Invoke(nameof(UserCountry), country);
         public int Add(int a, int b) => (int)(Invoke(nameof(Add), a, b) ?? 0);
-        public int GetStringLength(string text) => (int)(Invoke(nameof(GetStringLength), text) ?? 0);
+        public string GetGreeting(string name) => (string)(Invoke(nameof(GetGreeting), name) ?? "");
         public bool ConvertInttoBool(int sex) => (bool)(Invoke(nameof(ConvertInttoBool), sex) ?? false);
         public int Lv01_CalculateDamage(int baseDamage, float multiplier) => (int)(Invoke(nameof(Lv01_CalculateDamage), baseDamage, multiplier) ?? 0);
         public bool Lv02_CanCastSpell(int currentMana, int manaCost) => (bool)(Invoke(nameof(Lv02_CanCastSpell), currentMana, manaCost) ?? false);
@@ -179,6 +179,34 @@ namespace Week05_Method
             set
             {
                 var field = _target.GetType().GetField("energy", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field != null) field.SetValue(_target, value);
+            }
+        }
+
+        public int Columns
+        {
+            get
+            {
+                var field = _target.GetType().GetField("columns", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                return field != null ? (int)field.GetValue(_target) : 8;
+            }
+            set
+            {
+                var field = _target.GetType().GetField("columns", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field != null) field.SetValue(_target, value);
+            }
+        }
+
+        public int Rows
+        {
+            get
+            {
+                var field = _target.GetType().GetField("rows", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                return field != null ? (int)field.GetValue(_target) : 8;
+            }
+            set
+            {
+                var field = _target.GetType().GetField("rows", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (field != null) field.SetValue(_target, value);
             }
         }
@@ -289,10 +317,14 @@ namespace Week05_Method
         }
 
         public void Move(Vector2 direction) => Invoke(nameof(Move), direction);
+        public void Move(float x, float y) => Invoke(nameof(Move), x, y);
         public void TakeDamage(int Damage) => Invoke(nameof(TakeDamage), Damage);
+        public void TakeDamage(int Damage, string attacker) => Invoke(nameof(TakeDamage), Damage, attacker);
         public void Heal() => Invoke(nameof(Heal));
         public void Heal(int healPoint) => Invoke(nameof(Heal), healPoint);
-        public bool CanMove() => (bool)(Invoke(nameof(CanMove)) ?? false);
+        public bool CanMove(Vector2 direction) => (bool)(Invoke(nameof(CanMove), direction) ?? false);
+        public int GetEnergy() => (int)(Invoke(nameof(GetEnergy)) ?? 0);
+        public string GetStatus() => (string)(Invoke(nameof(GetStatus)) ?? "");
     }
 
     public class MapGeneratorInvoker
@@ -918,14 +950,14 @@ namespace Week05_Method
             AssertSignatureExists("public int Add(int a, int b)");
         }
 
-        [TestCase("hello", 5)]
-        [TestCase("", 0)]
-        [TestCase("Unity Engine", 12)]
-        [TestCase("a", 1)]
-        public void As02_02_GetStringLength(string text, int expected)
+        [TestCase("Alice", "Hello, Alice")]
+        [TestCase("Bob", "Hello, Bob")]
+        [TestCase("", "Hello, ")]
+        [TestCase("Unity", "Hello, Unity")]
+        public void As02_02_GetGreeting(string name, string expected)
         {
-            Assert.AreEqual(expected, assignment.GetStringLength(text), $"GetStringLength(\"{text}\") ต้อง return {expected}");
-            AssertSignatureExists("public int GetStringLength(string text)");
+            Assert.AreEqual(expected, assignment.GetGreeting(name), $"GetGreeting(\"{name}\") ต้อง return \"{expected}\"");
+            AssertSignatureExists("public string GetGreeting(string name)");
         }
 
         [TestCase(1, true)]
@@ -945,19 +977,23 @@ namespace Week05_Method
         [TestCase(2, 3, 4)]
         public void As03_01_Move_SingleDirection(int dirX, int dirY, int times)
         {
+            player.Columns = 20;
+            player.Rows = 20;
             player.Energy = 20;
-            player.Position = Vector3.zero;
+            player.Position = new Vector3(5f, 5f, 0f);
 
             for (int i = 0; i < times; i++) player.Move(new Vector2(dirX, dirY));
 
-            Assert.AreEqual(dirX * times, player.Position.x, 0.0001f);
-            Assert.AreEqual(dirY * times, player.Position.y, 0.0001f);
+            Assert.AreEqual(5f + dirX * times, player.Position.x, 0.0001f);
+            Assert.AreEqual(5f + dirY * times, player.Position.y, 0.0001f);
             Assert.AreEqual(20 - times, player.Energy, "energy ต้องลดลง 1 ต่อการเดิน 1 ครั้ง");
         }
 
         [Test]
         public void As03_02_Move_RightThreeThenUpThree()
         {
+            player.Columns = 8;
+            player.Rows = 8;
             player.Energy = 20;
             player.Position = Vector3.zero;
 
@@ -969,6 +1005,38 @@ namespace Week05_Method
             Assert.AreEqual(14, player.Energy, "เดิน 6 ครั้ง energy ต้องลดจาก 20 เหลือ 14");
 
             AssertPlayerSignatureExists("public void Move(Vector2 direction)");
+        }
+
+        [TestCase(2f, 3f)]
+        public void As03_03_Move_OverloadFloat(float x, float y)
+        {
+            player.Columns = 8;
+            player.Rows = 8;
+            player.Energy = 20;
+            player.Position = Vector3.zero;
+
+            player.Move(x, y);
+
+            Assert.AreEqual(x, player.Position.x, 0.0001f);
+            Assert.AreEqual(y, player.Position.y, 0.0001f);
+            Assert.AreEqual(19, player.Energy, "Move(float, float) ต้องลด energy ลง 1");
+            AssertPlayerSignatureExists("public void Move(float x, float y)");
+        }
+
+        [Test]
+        public void As03_04_Move_OutOfBoundsBlocked()
+        {
+            player.Columns = 8;
+            player.Rows = 8;
+            player.Position = Vector3.zero;
+            player.Energy = 20;
+
+            player.Move(Vector2.left); // เดินซ้ายจาก (0,0) ซึ่งออกนอกแผนที่
+
+            Assert.AreEqual(0f, player.Position.x, "เมื่อ CanMove คืน false ต้องไม่ขยับตำแหน่ง");
+            Assert.AreEqual(20, player.Energy, "เมื่อ CanMove คืน false ต้องไม่ลด energy");
+            AssertPlayerBodyContains("public void Move(Vector2 direction)", "CanMove",
+                "Move ต้องเรียกใช้ CanMove เพื่อตรวจขอบเขตก่อนเดิน");
         }
 
         // ============ ข้อ 4: TakeDamage ============
@@ -996,6 +1064,21 @@ namespace Week05_Method
             player.TakeDamage(damage);
 
             Assert.AreEqual(0, player.Energy, "energy ต้องไม่ต่ำกว่า 0");
+        }
+
+        [Test]
+        public void As04_03_TakeDamage_OverloadAttacker()
+        {
+            player.Energy = 20;
+            SimpleDebugConsole.Clear();
+
+            player.TakeDamage(5, "Slime");
+
+            Assert.AreEqual(15, player.Energy);
+            var output = SimpleDebugConsole.GetOutput();
+            StringAssert.Contains("Attacked by Slime", output);
+            StringAssert.Contains("Current Energy : 15", output);
+            AssertPlayerSignatureExists("public void TakeDamage(int Damage, string attacker)");
         }
 
         // ============ ข้อ 5: CheckDead ============
@@ -1069,15 +1152,48 @@ namespace Week05_Method
 
         // ============ ข้อ 7: CanMove ============
 
-        [TestCase(20, true)]
-        [TestCase(1, true)]
-        [TestCase(0, false)]
-        [TestCase(-5, false)]
-        public void As07_01_CanMove(int currentEnergy, bool expected)
+        [TestCase(0, 0, 1, 0, true)]
+        [TestCase(0, 0, 0, 1, true)]
+        [TestCase(0, 0, -1, 0, false)]
+        [TestCase(0, 0, 0, -1, false)]
+        [TestCase(7, 7, 1, 0, false)]
+        [TestCase(7, 7, 0, 1, false)]
+        [TestCase(7, 7, -1, 0, true)]
+        [TestCase(7, 7, 0, -1, true)]
+        public void As07_01_CanMove(float startX, float startY, float dirX, float dirY, bool expected)
         {
-            player.Energy = currentEnergy;
-            Assert.AreEqual(expected, player.CanMove(), $"energy = {currentEnergy} CanMove() ต้อง return {expected}");
-            AssertPlayerSignatureExists("public bool CanMove()");
+            player.Columns = 8;
+            player.Rows = 8;
+            player.Position = new Vector3(startX, startY, 0f);
+
+            var dir = new Vector2(dirX, dirY);
+            Assert.AreEqual(expected, player.CanMove(dir),
+                $"จาก ({startX}, {startY}) เดินทิศทาง ({dirX}, {dirY}) CanMove ต้อง return {expected}");
+            AssertPlayerSignatureExists("public bool CanMove(Vector2 direction)");
+        }
+
+        // ============ ข้อ 8: GetEnergy (Return Type int) ============
+
+        [TestCase(20)]
+        [TestCase(0)]
+        [TestCase(100)]
+        public void As08_01_GetEnergy(int energy)
+        {
+            player.Energy = energy;
+            Assert.AreEqual(energy, player.GetEnergy(), $"GetEnergy() ต้อง return ค่า energy ({energy})");
+            AssertPlayerSignatureExists("public int GetEnergy()");
+        }
+
+        // ============ ข้อ 9: GetStatus (Return Type string) ============
+
+        [TestCase(20, "Player Energy: 20")]
+        [TestCase(0, "Player Energy: 0")]
+        [TestCase(55, "Player Energy: 55")]
+        public void As09_01_GetStatus(int energy, string expected)
+        {
+            player.Energy = energy;
+            Assert.AreEqual(expected, player.GetStatus(), $"GetStatus() ต้อง return \"{expected}\"");
+            AssertPlayerSignatureExists("public string GetStatus()");
         }
     }
 
