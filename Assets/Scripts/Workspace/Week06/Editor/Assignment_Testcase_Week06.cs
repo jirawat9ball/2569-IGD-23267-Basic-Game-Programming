@@ -22,6 +22,17 @@ namespace Week06_OOP
         protected const BindingFlags AnyInstance =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
+        protected static System.Type CarType => isTeacherMode ? typeof(Week06.Teacher.Ex01.Car) : typeof(Week06.Ex01.Car);
+        protected static System.Type Dog02Type => isTeacherMode ? typeof(Week06.Teacher.Ex02.Dog) : typeof(Week06.Ex02.Dog);
+        protected static System.Type Animal03Type => isTeacherMode ? typeof(Week06.Teacher.Ex03.Animal) : typeof(Week06.Ex03.Animal);
+        protected static System.Type Dog03Type => isTeacherMode ? typeof(Week06.Teacher.Ex03.Dog) : typeof(Week06.Ex03.Dog);
+        protected static System.Type Bird03Type => isTeacherMode ? typeof(Week06.Teacher.Ex03.Bird) : typeof(Week06.Ex03.Bird);
+        protected static System.Type Animal04Type => isTeacherMode ? typeof(Week06.Teacher.Ex04.Animal) : typeof(Week06.Ex04.Animal);
+        protected static System.Type Dog04Type => isTeacherMode ? typeof(Week06.Teacher.Ex04.Dog) : typeof(Week06.Ex04.Dog);
+        protected static System.Type Animal05Type => isTeacherMode ? typeof(Week06.Teacher.Ex05.Animal) : typeof(Week06.Ex05.Animal);
+        protected static System.Type Dog05Type => isTeacherMode ? typeof(Week06.Teacher.Ex05.Dog) : typeof(Week06.Ex05.Dog);
+        protected static System.Type Cat05Type => isTeacherMode ? typeof(Week06.Teacher.Ex05.Cat) : typeof(Week06.Ex05.Cat);
+
         [SetUp]
         public void Setup()
         {
@@ -41,14 +52,16 @@ namespace Week06_OOP
         }
     }
 
-    // ===================== ข้อ 1: สร้างคลาส Car =====================
-
-    public class Ex01_Class : TestBase
+    public class Lecture : TestBase
     {
+        // ===================== ข้อ 1: สร้างคลาส Car =====================
+
         [Test]
-        public void Car_HasRequiredFields()
+        public void As01_01_Car_InheritsMonoBehaviourAndHasRequiredFields()
         {
-            var t = typeof(Week06.Ex01.Car);
+            var t = CarType;
+
+            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Car ต้องสืบทอดจาก MonoBehaviour");
 
             var name = t.GetField("name", AnyInstance);
             var color = t.GetField("color", AnyInstance);
@@ -66,16 +79,27 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Car_MethodsPrintCorrectMessages()
+        public void As01_02_Car_MethodsPrintCorrectMessages()
         {
-            var car = new Week06.Ex01.Car();
-            car.name = "civic";
-            car.color = "black";
-            car.speed = 110f;
+            var go = new GameObject("TestCar");
+            var car = go.AddComponent(CarType) as MonoBehaviour;
+            Assert.IsNotNull(car, "ไม่สามารถสร้าง Component จากคลาส Car ได้");
 
-            car.Move();
-            car.Turn();
-            car.Honk();
+            CarType.GetField("name", AnyInstance)?.SetValue(car, "civic");
+            CarType.GetField("color", AnyInstance)?.SetValue(car, "black");
+            CarType.GetField("speed", AnyInstance)?.SetValue(car, 110f);
+
+            var moveMethod = CarType.GetMethod("Move", AnyInstance);
+            var turnMethod = CarType.GetMethod("Turn", AnyInstance);
+            var honkMethod = CarType.GetMethod("Honk", AnyInstance);
+
+            Assert.IsNotNull(moveMethod, "คลาส Car ต้องมีเมธอด Move()");
+            Assert.IsNotNull(turnMethod, "คลาส Car ต้องมีเมธอด Turn()");
+            Assert.IsNotNull(honkMethod, "คลาส Car ต้องมีเมธอด Honk()");
+
+            moveMethod.Invoke(car, null);
+            turnMethod.Invoke(car, null);
+            honkMethod.Invoke(car, null);
 
             var sb = new StringBuilder();
             sb.AppendLine("Car is moving");
@@ -83,30 +107,51 @@ namespace Week06_OOP
             sb.AppendLine("Car is honking");
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            Object.DestroyImmediate(go);
         }
 
         [Test]
-        public void Ex01_CarDemo_Output()
+        public void As01_03_Car_HasStartAndInitializesDefaultValues()
         {
-            assignment.Ex01_CarDemo();
+            var t = CarType;
+            var startMethod = t.GetMethod("Start", AnyInstance);
+            Assert.IsNotNull(startMethod, "คลาส Car ต้องมีเมธอด Start()");
 
-            var sb = new StringBuilder();
-            sb.AppendLine("Car is moving");
-            sb.AppendLine("Car is turning");
-            sb.AppendLine("Car is honking");
+            var go = new GameObject("TestCar");
+            var car = go.AddComponent(t) as MonoBehaviour;
+            startMethod.Invoke(car, null);
 
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+            var nameVal = t.GetField("name", AnyInstance)?.GetValue(car) as string;
+            var colorVal = t.GetField("color", AnyInstance)?.GetValue(car) as string;
+            var speedVal = t.GetField("speed", AnyInstance)?.GetValue(car);
+
+            Assert.AreEqual("civic", nameVal, "Start() ต้องกำหนดค่า name เป็น civic");
+            Assert.AreEqual("black", colorVal, "Start() ต้องกำหนดค่า color เป็น black");
+            Assert.AreEqual(110f, speedVal != null ? System.Convert.ToSingle(speedVal) : 0f, "Start() ต้องกำหนดค่า speed เป็น 110");
+
+            Object.DestroyImmediate(go);
         }
-    }
 
-    // ===================== ข้อ 2: Constructor =====================
-
-    public class Ex02_Constructor : TestBase
-    {
         [Test]
-        public void Dog_HasConstructorWithThreeParameters()
+        public void As01_04_Car_HasUpdateMethod()
         {
-            var ctor = typeof(Week06.Ex02.Dog).GetConstructor(
+            var t = CarType;
+            var updateMethod = t.GetMethod("Update", AnyInstance);
+            Assert.IsNotNull(updateMethod, "คลาส Car ต้องมีเมธอด Update()");
+        }
+
+        [Test]
+        public void As01_05_Ex01_CarDemo_RunsWithoutError()
+        {
+            Assert.DoesNotThrow(() => assignment.Ex01_CarDemo());
+        }
+
+        // ===================== ข้อ 2: Constructor =====================
+
+        [Test]
+        public void As02_01_Dog_HasConstructorWithThreeParameters()
+        {
+            var ctor = Dog02Type.GetConstructor(
                 new[] { typeof(string), typeof(string), typeof(int) });
 
             Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ (string name, string breed, int age)");
@@ -120,24 +165,40 @@ namespace Week06_OOP
         [TestCase("Buddy", "Golden Retriever", 3)]
         [TestCase("Max", "Beagle", 5)]
         [TestCase("Coco", "Poodle", 1)]
-        public void Dog_ConstructorAssignsAllFields(string name, string breed, int age)
+        public void As02_02_Dog_ConstructorAssignsAllFields(string name, string breed, int age)
         {
-            var dog = new Week06.Ex02.Dog(name, breed, age);
+            var ctor = Dog02Type.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
+            Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ (string name, string breed, int age)");
+            var dog = ctor.Invoke(new object[] { name, breed, age });
 
-            Assert.AreEqual(name, dog.name, "Constructor ต้องกำหนดค่า name");
-            Assert.AreEqual(breed, dog.breed, "Constructor ต้องกำหนดค่า breed");
-            Assert.AreEqual(age, dog.age, "Constructor ต้องกำหนดค่า age");
+            var nameField = Dog02Type.GetField("name", AnyInstance);
+            var breedField = Dog02Type.GetField("breed", AnyInstance);
+            var ageField = Dog02Type.GetField("age", AnyInstance);
+
+            Assert.AreEqual(name, nameField?.GetValue(dog), "Constructor ต้องกำหนดค่า name");
+            Assert.AreEqual(breed, breedField?.GetValue(dog), "Constructor ต้องกำหนดค่า breed");
+            Assert.AreEqual(age, ageField?.GetValue(dog), "Constructor ต้องกำหนดค่า age");
         }
 
         [TestCase("Buddy")]
         [TestCase("Max")]
-        public void Dog_MethodsUseName(string name)
+        public void As02_03_Dog_MethodsUseName(string name)
         {
-            var dog = new Week06.Ex02.Dog(name, "Mixed", 2);
+            var ctor = Dog02Type.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
+            Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ (string name, string breed, int age)");
+            var dog = ctor.Invoke(new object[] { name, "Mixed", 2 });
 
-            dog.Bark();
-            dog.WagTail();
-            dog.StopBarking();
+            var barkMethod = Dog02Type.GetMethod("Bark", AnyInstance);
+            var wagMethod = Dog02Type.GetMethod("WagTail", AnyInstance);
+            var stopMethod = Dog02Type.GetMethod("StopBarking", AnyInstance);
+
+            Assert.IsNotNull(barkMethod, "คลาส Dog ต้องมีเมธอด Bark()");
+            Assert.IsNotNull(wagMethod, "คลาส Dog ต้องมีเมธอด WagTail()");
+            Assert.IsNotNull(stopMethod, "คลาส Dog ต้องมีเมธอด StopBarking()");
+
+            barkMethod.Invoke(dog, null);
+            wagMethod.Invoke(dog, null);
+            stopMethod.Invoke(dog, null);
 
             var sb = new StringBuilder();
             sb.AppendLine($"{name} is barking");
@@ -148,7 +209,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Ex02_DogDemo_UsesBuddy()
+        public void As02_04_Ex02_DogDemo_UsesBuddy()
         {
             assignment.Ex02_DogDemo();
 
@@ -159,29 +220,32 @@ namespace Week06_OOP
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
         }
-    }
 
-    // ===================== ข้อ 3: Inheritance =====================
+        // ===================== ข้อ 3: Inheritance =====================
 
-    public class Ex03_Inheritance : TestBase
-    {
         [Test]
-        public void DogAndBird_InheritFromAnimal()
+        public void As03_01_DogAndBird_InheritFromAnimal()
         {
-            Assert.AreEqual(typeof(Week06.Ex03.Animal), typeof(Week06.Ex03.Dog).BaseType,
+            Assert.AreEqual(Animal03Type, Dog03Type.BaseType,
                 "คลาส Dog ต้องสืบทอดจาก Animal (เขียน : Animal ต่อท้ายชื่อคลาส)");
-            Assert.AreEqual(typeof(Week06.Ex03.Animal), typeof(Week06.Ex03.Bird).BaseType,
+            Assert.AreEqual(Animal03Type, Bird03Type.BaseType,
                 "คลาส Bird ต้องสืบทอดจาก Animal");
         }
 
         [Test]
-        public void Dog_CanUseInheritedNameAndMakeSound()
+        public void As03_02_Dog_CanUseInheritedNameAndMakeSound()
         {
-            var dog = new Week06.Ex03.Dog();
-            dog.name = "Rex";
+            var dog = System.Activator.CreateInstance(Dog03Type);
+            Dog03Type.GetField("name", AnyInstance)?.SetValue(dog, "Rex");
 
-            dog.MakeSound();
-            dog.Walk();
+            var makeMethod = Dog03Type.GetMethod("MakeSound", AnyInstance);
+            var walkMethod = Dog03Type.GetMethod("Walk", AnyInstance);
+
+            Assert.IsNotNull(makeMethod, "คลาส Dog ต้องเรียกเมธอด MakeSound() ได้");
+            Assert.IsNotNull(walkMethod, "คลาส Dog ต้องมีเมธอด Walk()");
+
+            makeMethod.Invoke(dog, null);
+            walkMethod.Invoke(dog, null);
 
             var sb = new StringBuilder();
             sb.AppendLine("Animal Rex is making sound");
@@ -191,13 +255,19 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Bird_CanUseInheritedNameAndMakeSound()
+        public void As03_03_Bird_CanUseInheritedNameAndMakeSound()
         {
-            var bird = new Week06.Ex03.Bird();
-            bird.name = "Sky";
+            var bird = System.Activator.CreateInstance(Bird03Type);
+            Bird03Type.GetField("name", AnyInstance)?.SetValue(bird, "Sky");
 
-            bird.MakeSound();
-            bird.Fly();
+            var makeMethod = Bird03Type.GetMethod("MakeSound", AnyInstance);
+            var flyMethod = Bird03Type.GetMethod("Fly", AnyInstance);
+
+            Assert.IsNotNull(makeMethod, "คลาส Bird ต้องเรียกเมธอด MakeSound() ได้");
+            Assert.IsNotNull(flyMethod, "คลาส Bird ต้องมีเมธอด Fly()");
+
+            makeMethod.Invoke(bird, null);
+            flyMethod.Invoke(bird, null);
 
             var sb = new StringBuilder();
             sb.AppendLine("Animal Sky is making sound");
@@ -207,7 +277,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Ex03_InheritanceDemo_Output()
+        public void As03_04_Ex03_InheritanceDemo_Output()
         {
             assignment.Ex03_InheritanceDemo();
 
@@ -219,16 +289,13 @@ namespace Week06_OOP
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
         }
-    }
 
-    // ===================== ข้อ 4: Access Modifiers =====================
+        // ===================== ข้อ 4: Access Modifiers =====================
 
-    public class Ex04_AccessModifier : TestBase
-    {
         [Test]
-        public void Animal_FieldsHaveCorrectAccessLevels()
+        public void As04_01_Animal_FieldsHaveCorrectAccessLevels()
         {
-            var t = typeof(Week06.Ex04.Animal);
+            var t = Animal04Type;
 
             var name = t.GetField("name", AnyInstance);
             var specie = t.GetField("specie", AnyInstance);
@@ -244,36 +311,47 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Dog_InheritsAnimalAndHasNameConstructor()
+        public void As04_02_Dog_InheritsAnimalAndHasNameConstructor()
         {
-            Assert.AreEqual(typeof(Week06.Ex04.Animal), typeof(Week06.Ex04.Dog).BaseType,
+            Assert.AreEqual(Animal04Type, Dog04Type.BaseType,
                 "คลาส Dog ต้องสืบทอดจาก Animal");
 
-            var ctor = typeof(Week06.Ex04.Dog).GetConstructor(new[] { typeof(string) });
+            var ctor = Dog04Type.GetConstructor(new[] { typeof(string) });
             Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ string name");
         }
 
         [Test]
-        public void Dog_ConstructorSetsNameAndSpecie()
+        public void As04_03_Dog_ConstructorSetsNameAndSpecie()
         {
-            var dog = new Week06.Ex04.Dog("Buddy");
+            var ctor = Dog04Type.GetConstructor(new[] { typeof(string) });
+            Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ string name");
+            var dog = ctor.Invoke(new object[] { "Buddy" });
 
-            Assert.AreEqual("Buddy", dog.name, "Constructor ต้องกำหนดค่า name");
+            var name = Dog04Type.GetField("name", AnyInstance)?.GetValue(dog) as string;
+            Assert.AreEqual("Buddy", name, "Constructor ต้องกำหนดค่า name");
 
-            var specie = typeof(Week06.Ex04.Animal).GetField("specie", AnyInstance);
-            Assert.AreEqual("Dog", specie.GetValue(dog), "Constructor ต้องกำหนด specie = \"Dog\"");
+            var specie = Animal04Type.GetField("specie", AnyInstance)?.GetValue(dog) as string;
+            Assert.AreEqual("Dog", specie, "Constructor ต้องกำหนด specie = \"Dog\"");
         }
 
         [TestCase(0, "weak!")]
         [TestCase(40, "weak!")]
         [TestCase(41, "happy!")]
         [TestCase(90, "happy!")]
-        public void Feed_ThenMakeSound_ChecksHealthThreshold(int food, string expectedMood)
+        public void As04_04_Feed_ThenMakeSound_ChecksHealthThreshold(int food, string expectedMood)
         {
-            var dog = new Week06.Ex04.Dog("Buddy");
+            var ctor = Dog04Type.GetConstructor(new[] { typeof(string) });
+            Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ string name");
+            var dog = ctor.Invoke(new object[] { "Buddy" });
 
-            dog.Feed(food);
-            dog.MakeSound();
+            var feedMethod = Dog04Type.GetMethod("Feed", AnyInstance);
+            var makeMethod = Dog04Type.GetMethod("MakeSound", AnyInstance);
+
+            Assert.IsNotNull(feedMethod, "คลาส Dog หรือ Animal ต้องมีเมธอด Feed(int)");
+            Assert.IsNotNull(makeMethod, "คลาส Dog หรือ Animal ต้องมีเมธอด MakeSound()");
+
+            feedMethod.Invoke(dog, new object[] { food });
+            makeMethod.Invoke(dog, null);
 
             var sb = new StringBuilder();
             sb.AppendLine($"Buddy got {food} food");
@@ -283,7 +361,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Ex04_AccessModifierDemo_Output()
+        public void As04_05_Ex04_AccessModifierDemo_Output()
         {
             assignment.Ex04_AccessModifierDemo();
 
@@ -295,16 +373,13 @@ namespace Week06_OOP
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
         }
-    }
 
-    // ===================== ข้อ 5: Virtual / Override =====================
+        // ===================== ข้อ 5: Virtual / Override =====================
 
-    public class Ex05_VirtualOverride : TestBase
-    {
         [Test]
-        public void Animal_MakeSound_IsVirtual()
+        public void As05_01_Animal_MakeSound_IsVirtual()
         {
-            var method = typeof(Week06.Ex05.Animal).GetMethod("MakeSound");
+            var method = Animal05Type.GetMethod("MakeSound");
 
             Assert.IsNotNull(method, "Animal ต้องมีเมธอด MakeSound");
             Assert.IsTrue(method.IsVirtual && !method.IsFinal,
@@ -312,33 +387,49 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Dog_MakeSound_IsOverrideNotNew()
+        public void As05_02_Dog_MakeSound_IsOverrideNotNew()
         {
-            var method = typeof(Week06.Ex05.Dog).GetMethod("MakeSound");
+            var method = Dog05Type.GetMethod("MakeSound");
 
             Assert.IsNotNull(method, "Dog ต้องมีเมธอด MakeSound");
-            Assert.AreEqual(typeof(Week06.Ex05.Dog), method.DeclaringType,
+            Assert.AreEqual(Dog05Type, method.DeclaringType,
                 "Dog ต้องประกาศเมธอด MakeSound ของตัวเอง");
-            Assert.AreEqual(typeof(Week06.Ex05.Animal), method.GetBaseDefinition().DeclaringType,
+            Assert.AreEqual(Animal05Type, method.GetBaseDefinition().DeclaringType,
                 "MakeSound ของ Dog ต้องใช้คำว่า override (ไม่ใช่ new) เพื่อเขียนทับของ Animal");
         }
 
         [Test]
-        public void MakeSound_WorksPolymorphically()
+        public void As05_03_MakeSound_WorksPolymorphically()
         {
-            Week06.Ex05.Animal asAnimal = new Week06.Ex05.Dog();
-            asAnimal.MakeSound();
+            var dog = System.Activator.CreateInstance(Dog05Type);
+            Dog05Type.GetMethod("MakeSound")?.Invoke(dog, null);
 
             TestUtils.AssertMultilineEqual("Woof!", SimpleDebugConsole.GetOutput());
         }
 
         [Test]
-        public void Ex05_VirtualOverrideDemo_Output()
+        public void As05_04_Cat_MakeSound_IsOverride()
+        {
+            Assert.IsNotNull(Cat05Type, "ต้องมีคลาส Cat ใน Ex05");
+            Assert.AreEqual(Animal05Type, Cat05Type.BaseType, "Cat ต้องสืบทอดจาก Animal");
+
+            var method = Cat05Type.GetMethod("MakeSound");
+            Assert.IsNotNull(method, "Cat ต้องมีเมธอด MakeSound");
+            Assert.AreEqual(Cat05Type, method.DeclaringType, "Cat ต้อง override MakeSound ของตัวเอง");
+
+            var cat = System.Activator.CreateInstance(Cat05Type);
+            Cat05Type.GetMethod("MakeSound")?.Invoke(cat, null);
+            TestUtils.AssertMultilineEqual("Meow!", SimpleDebugConsole.GetOutput());
+        }
+
+        [Test]
+        public void As05_05_Ex05_VirtualOverrideDemo_Output()
         {
             assignment.Ex05_VirtualOverrideDemo();
 
             var sb = new StringBuilder();
             sb.AppendLine("Woof!");
+            sb.AppendLine("Meow!");
             sb.AppendLine("Generic animal sound");
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
@@ -365,17 +456,19 @@ namespace Week06_OOP
         }
     }
 
-    public class Ex06_Enemy : GameTestBase
+    public class Homework : GameTestBase
     {
+        // ===================== ข้อ 6: ศัตรู (Enemy) =====================
+
         [Test]
-        public void Enemy_InheritsCharacter()
+        public void As06_01_Enemy_InheritsCharacter()
         {
             Assert.AreEqual(typeof(Week06.Game.Character), typeof(Week06.Game.Enemy).BaseType,
                 "class Enemy ต้องสืบทอดจาก class Character");
         }
 
         [Test]
-        public void Enemy_Hit_IsOverride()
+        public void As06_02_Enemy_Hit_IsOverride()
         {
             var method = typeof(Week06.Game.Enemy).GetMethod("Hit");
             Assert.IsNotNull(method, "Enemy ต้องมีเมธอด Hit()");
@@ -385,7 +478,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Enemy_Hit_AttacksPlayer()
+        public void As06_03_Enemy_Hit_AttacksPlayer()
         {
             BuildMap();
             var enemy = map.enemies[3, 3];
@@ -398,7 +491,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Enemy_Hit_DoesNothingWhenDead()
+        public void As06_04_Enemy_Hit_DoesNothingWhenDead()
         {
             BuildMap();
             var enemy = map.enemies[3, 3];
@@ -412,7 +505,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Move_IntoEnemy_PlayerAttacksFirstThenEnemyStrikesBack()
+        public void As06_05_Move_IntoEnemy_PlayerAttacksFirstThenEnemyStrikesBack()
         {
             BuildMap();
             var player = map.player;
@@ -432,7 +525,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Move_IntoDeadEnemy_PlayerMovesIn()
+        public void As06_06_Move_IntoDeadEnemy_PlayerMovesIn()
         {
             BuildMap();
             var player = map.player;
@@ -453,7 +546,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Ex06_BattleDemo_FullScenario()
+        public void As06_07_Ex06_BattleDemo_FullScenario()
         {
             assignment.Ex06_BattleDemo();
 
@@ -474,19 +567,18 @@ namespace Week06_OOP
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
         }
-    }
 
-    public class Ex07_Potion : GameTestBase
-    {
+        // ===================== ข้อ 7: ยาฟื้นพลัง (Potion) =====================
+
         [Test]
-        public void ItemPotion_InheritsIdentity()
+        public void As07_01_ItemPotion_InheritsIdentity()
         {
             Assert.AreEqual(typeof(Week06.Game.Identity), typeof(Week06.Game.ItemPotion).BaseType,
                 "class ItemPotion ต้องสืบทอดจาก class Identity");
         }
 
         [Test]
-        public void ItemPotion_HasHealPointField()
+        public void As07_02_ItemPotion_HasHealPointField()
         {
             var field = typeof(Week06.Game.ItemPotion).GetField("healPoint", AnyInstance);
             Assert.IsNotNull(field, "ItemPotion ต้องมีตัวแปร healPoint");
@@ -495,7 +587,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Potion_Hit_HealsPlayerAndLeavesMap()
+        public void As07_03_Potion_Hit_HealsPlayerAndLeavesMap()
         {
             BuildMap();
             var potion = map.potions[2, 2];
@@ -509,7 +601,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Move_IntoPotion_NoEnergyLossAndPlayerMovesIn()
+        public void As07_04_Move_IntoPotion_NoEnergyLossAndPlayerMovesIn()
         {
             BuildMap();
             var player = map.player;
@@ -525,7 +617,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Ex07_PotionDemo_Output()
+        public void As07_05_Ex07_PotionDemo_Output()
         {
             assignment.Ex07_PotionDemo();
 
@@ -535,19 +627,18 @@ namespace Week06_OOP
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
         }
-    }
 
-    public class Ex08_Sword : GameTestBase
-    {
+        // ===================== ข้อ 8: ดาบ (Sword) =====================
+
         [Test]
-        public void ItemSword_InheritsIdentity()
+        public void As08_01_ItemSword_InheritsIdentity()
         {
             Assert.AreEqual(typeof(Week06.Game.Identity), typeof(Week06.Game.ItemSword).BaseType,
                 "class ItemSword ต้องสืบทอดจาก class Identity");
         }
 
         [Test]
-        public void ItemSword_HasAttackBonusField()
+        public void As08_02_ItemSword_HasAttackBonusField()
         {
             var field = typeof(Week06.Game.ItemSword).GetField("attackBonus", AnyInstance);
             Assert.IsNotNull(field, "ItemSword ต้องมีตัวแปร attackBonus");
@@ -556,7 +647,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Sword_Hit_IncreasesAttackAndLeavesMap()
+        public void As08_03_Sword_Hit_IncreasesAttackAndLeavesMap()
         {
             BuildMap();
             var theSword = map.swords[3, 2];
@@ -570,7 +661,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Move_IntoSword_NoEnergyLossAndPlayerMovesIn()
+        public void As08_04_Move_IntoSword_NoEnergyLossAndPlayerMovesIn()
         {
             BuildMap();
             var player = map.player;
@@ -588,7 +679,7 @@ namespace Week06_OOP
         }
 
         [Test]
-        public void Ex08_SwordDemo_Output()
+        public void As08_05_Ex08_SwordDemo_Output()
         {
             assignment.Ex08_SwordDemo();
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06
@@ -7,56 +7,27 @@ namespace Week06
     {
         public void Ex01_CarDemo()
         {
-            Ex01.Car honda = new Ex01.Car();
-            honda.name = "civic";
-            honda.color = "black";
-            honda.speed = 110;
-
-            honda.Move();
-            honda.Turn();
-            honda.Honk();
+            // Guideline: (โค้ดของ Car ทำงานใน Start() และ Update() ของไฟล์ Ex01_Car.cs)
         }
 
         public void Ex02_DogDemo()
         {
-            Ex02.Dog dog1 = new Ex02.Dog("Buddy", "Golden Retriever", 3);
-
-            dog1.Bark();
-            dog1.WagTail();
-            dog1.StopBarking();
+            new Teacher.Ex02.AS02_ClassConstructor().Start();
         }
 
         public void Ex03_InheritanceDemo()
         {
-            Ex03.Dog dog = new Ex03.Dog();
-            dog.name = "Buddy";
-            dog.MakeSound();
-            dog.Walk();
-
-            Ex03.Bird bird = new Ex03.Bird();
-            bird.name = "Twitty";
-            bird.MakeSound();
-            bird.Fly();
+            new Teacher.Ex03.AS03_Inheritance().Start();
         }
 
         public void Ex04_AccessModifierDemo()
         {
-            Ex04.Dog dog = new Ex04.Dog("Buddy");
-
-            Debug.Log($"my name is {dog.name}");
-
-            dog.MakeSound();
-            dog.Feed(50);
-            dog.MakeSound();
+            new Teacher.Ex04.AS04_AccessModifier().Start();
         }
 
         public void Ex05_VirtualOverrideDemo()
         {
-            Ex05.Dog dog = new Ex05.Dog();
-            dog.MakeSound();
-
-            Ex05.Animal someAnimal = new Ex05.Animal();
-            someAnimal.MakeSound();
+            new Teacher.Ex05.AS05_VirtualOverride().Start();
         }
 
         public void Ex06_BattleDemo()

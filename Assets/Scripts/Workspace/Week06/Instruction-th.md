@@ -28,21 +28,70 @@ myCar.Move();
 - เข้าใจและใช้ Access Modifier (`public` / `protected` / `private`) ได้ถูกที่
 - ใช้ `virtual` และ `override` ให้คลาสลูกเปลี่ยนพฤติกรรมของคลาสแม่ได้
 
-## 📚 ไฟล์ที่ต้องแก้
+## 📚 รายการไฟล์ที่นักเรียนต้องสร้างและจัดการ
 
-| ข้อ | ไฟล์ | สิ่งที่ต้องทำ |
+ในสัปดาห์นี้ **นักเรียนจะต้องสร้างไฟล์ C# Script ด้วยตัวเองใน Unity Editor** ตามโครงสร้างดังนี้:
+
+| ข้อ | ไฟล์ที่ต้องสร้าง/เขียน | ตำแหน่งโฟลเดอร์ | สิ่งที่ต้องทำ |
+|---|---|---|---|
+| 1 | `Ex01_Car.cs` | `Assets/.../Week06/` | สร้างไฟล์และเขียนคลาส `Car` |
+| 2 | `LCT02ClassConstructor.cs` | `Assets/.../Week06/` | สร้างไฟล์และเขียน Constructor ของ `Dog` |
+| 3 | `LCT03Inheritance.cs` | `Assets/.../Week06/` | สร้างไฟล์และเขียนคลาส `Animal`, `Dog`, `Bird` สืบทอดกัน |
+| 4 | `LCT04AccessModifier.cs` | `Assets/.../Week06/` | สร้างไฟล์และจัดการ Access Modifiers (`Feed`, `MakeSound`) |
+| 5 | `LCT05VirtualOverride.cs` | `Assets/.../Week06/` | สร้างไฟล์และใส่ `virtual` กับ `override` |
+| 6 | `Game/Enemy.cs` + `Game/Character.cs` | `Week06/Game/` | สร้าง/เขียนคลาส `Enemy` และส่วนตีศัตรูใน `Move()` |
+| 7 | `Game/ItemPotion.cs` + `Game/Character.cs` | `Week06/Game/` | สร้าง/เขียนคลาส `ItemPotion` และส่วนเก็บยาใน `Move()` |
+| 8 | `Game/ItemSword.cs` + `Game/Character.cs` | `Week06/Game/` | สร้าง/เขียนคลาส `ItemSword` และส่วนเก็บดาบใน `Move()` |
+| ทุกข้อ | `Assignment_Student_Week06.cs` | `Week06/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
+
+> **ไฟล์ที่ไม่ต้องสร้าง/แก้:** `Game/Identity.cs`, `Game/MapGenerator.cs`, `Game/Player.cs` — เป็นโครงสร้างของเกมที่เตรียมไว้ให้แล้ว
+
+---
+
+## 🛠️ ขั้นตอนการสร้างไฟล์ C# Script ด้วยตัวเองใน Unity Editor
+
+ในการทำงานจริงกับ Unity นักพัฒนาจะต้องสร้างสคริปต์ใหม่ด้วยตนเองเสมอ โดยมีขั้นตอนดังนี้:
+
+1. **เปิดหน้าต่าง Project Window ใน Unity:**
+   - นำทางไปยังโฟลเดอร์ที่ต้องการสร้างไฟล์ เช่น `Assets/Scripts/Workspace/Week06/` (หรือโฟลเดอร์ `Game/`)
+2. **สร้าง C# Script ใหม่:**
+   - **คลิกขวา** บนพื้นที่ว่างใน Project Window
+   - เลือก **Create** > **C# Script** (หรือ **Scripting** > **C# Script** ใน Unity เวอร์ชั่นใหม่)
+3. **ตั้งชื่อไฟล์ทันที (⚠️ กฎเหล็กของ Unity):**
+   - พิมพ์ชื่อไฟล์ให้ตรงกับโจทย์เป๊ะ ๆ เช่น `Ex01_Car` หรือ `Enemy` แล้วกด Enter
+   - **ข้อควรระวัง:** ชื่อไฟล์ (`.cs`) และชื่อคลาสภายใน (`public class ...`) **ต้องสะกดตรงกันทุกตัวอักษร** (Case-sensitive) ห้ามมีเว้นวรรค หากชื่อไฟล์ไม่ตรงกับชื่อคลาส Unity จะขึ้นข้อความแจ้งเตือนและจะไม่สามารถแนบสคริปต์ลงบน GameObject ได้!
+4. **เปิดไฟล์ขึ้นมาเขียนโค้ด:**
+   - ดับเบิลคลิกที่ไฟล์สคริปต์เพื่อเปิดในโปรแกรมเขียนโค้ด (VS Code / Visual Studio / Rider)
+
+---
+
+## 💡 วิธีคิดแบบ Unity (Component-Based & MonoBehaviour)
+
+เมื่อสร้าง C# Script ขึ้นมาใหม่ใน Unity ตัว Editor จะสร้างโค้ดเริ่มต้นที่สืบทอด `: MonoBehaviour` ให้ทันที:
+
+```csharp
+using UnityEngine;
+
+public class MyScript : MonoBehaviour
+{
+    void Start() { }
+    void Update() { }
+}
+```
+
+### 🧠 ความแตกต่างระหว่าง "Pure C# Class" กับ "MonoBehaviour"
+
+| หัวข้อ | Pure C# Class (แบบข้อ 1–5 ในใบงาน) | Unity MonoBehaviour (แบบในเกมข้อ 6–8) |
 |---|---|---|
-| 1 | `Ex01_Car.cs` | สร้างคลาส `Car` |
-| 2 | `Ex02_Dog.cs` | เขียน Constructor ของ `Dog` |
-| 3 | `Ex03_Animal.cs` | ทำให้ `Dog` และ `Bird` สืบทอดจาก `Animal` |
-| 4 | `Ex04_Animal.cs` | เขียน `Feed` / `MakeSound` และ Constructor ของ `Dog` |
-| 5 | `Ex05_Animal.cs` | ใส่ `virtual` และ `override` |
-| 6 | `Game/Enemy.cs` + `Game/Character.cs` | เขียนคลาส `Enemy` และส่วนตีศัตรูใน `Move()` |
-| 7 | `Game/ItemPotion.cs` + `Game/Character.cs` | เขียนคลาส `ItemPotion` และส่วนเก็บยาใน `Move()` |
-| 8 | `Game/ItemSword.cs` + `Game/Character.cs` | เขียนคลาส `ItemSword` และส่วนเก็บดาบใน `Move()` |
-| ทุกข้อ | `Assignment_Student_Week06.cs` | เขียนโค้ดเรียกใช้งาน (เหมือน `Start()` ในโจทย์) |
+| **การสร้างอ็อบเจกต์** | ใช้คำสั่ง `new MyClass()` | **ห้ามใช้ `new` เด็ดขาด!** ต้องใช้ `AddComponent<T>()` หรือแปะบน Prefab/GameObject |
+| **การตั้งค่าเริ่มต้น** | ใช้ Constructor (`public MyClass(...)`) | ใช้ Unity Lifecycle (`Awake()`, `Start()`) หรือสร้างฟังก์ชัน `Initialize(...)` |
+| **ตำแหน่งในระบบ** | อยู่ใน RAM ของโปรแกรม | ต้องเป็น **Component** แปะอยู่กับ **GameObject** ใน Scene เสมอ |
+| **การปรับค่าข้อมูล** | แก้ไขผ่านโค้ดเท่านั้น | ใช้ `[SerializeField]` หรือ `public` ให้ปรับแต่งค่าผ่าน **Inspector** ได้ |
 
-> **ไฟล์ที่ไม่ต้องแก้:** `Game/Identity.cs`, `Game/MapGenerator.cs`, `Game/Player.cs` — เป็นโครงของเกมที่เตรียมไว้ให้แล้ว
+> 📌 **สรุปวิธีคิด Unity:**
+> - **GameObject** เปรียบเสมือนตัวหุ่นเปล่า ๆ ในเกม (เช่น ผู้เล่น, ศัตรู, รถ)
+> - **MonoBehaviour Script** คือ "ชิ้นส่วน/ความสามารถ" (Component) ที่เราสร้างขึ้น แล้วนำไปแปะใส่ตัวหุ่น
+> - สังเกตในข้อ 6–8 โค้ดของเกมจะสืบทอด `MonoBehaviour -> Identity -> Character -> Enemy` ซึ่งเป็นโครงสร้าง Component-Based แท้จริงของ Unity
 
 ---
 
@@ -74,20 +123,21 @@ public class Car          // ← Access Modifier + ชื่อคลาส
 
 ## ข้อ 1. สร้างคลาส Car
 
-**วัตถุประสงค์:** ฝึกสร้างคลาสของตัวเอง กำหนดฟิลด์และเมธอด แล้วสร้างอ็อบเจกต์มาใช้งาน
+**วัตถุประสงค์:** ฝึกสร้างไฟล์และคลาสของตัวเอง กำหนดฟิลด์และเมธอด แล้วสร้างอ็อบเจกต์มาใช้งาน
 
-**ไฟล์:** `Ex01_Car.cs` และ `Assignment_Student_Week06.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/` > Create > C# Script ตั้งชื่อว่า `AS01_Car.cs`
 
 **Logic ที่ต้อง implement:**
 
-ในคลาส `Car`
+ในคลาส `Car` (อยู่ใน namespace `Week06.Ex01`)
 - ฟิลด์แบบ `public` 3 ตัว: `name` (string), `color` (string), `speed` (float)
 - เมธอดแบบ `public` 3 ตัว ไม่มีค่าส่งกลับ ไม่รับพารามิเตอร์
   - `Move()` → พิมพ์ `Car is moving`
   - `Turn()` → พิมพ์ `Car is turning`
   - `Honk()` → พิมพ์ `Car is honking`
 
-ใน `Ex01_CarDemo()`
+ใน `Ex01_CarDemo()` (ในไฟล์ `Assignment_Student_Week06.cs`)
 - สร้างรถด้วย `new Car()` กำหนด `name`, `color`, `speed`
 - เรียก `Move()`, `Turn()`, `Honk()` ตามลำดับ
 
@@ -104,11 +154,13 @@ Car is honking
 
 **วัตถุประสงค์:** ใช้ Constructor กำหนดค่าให้อ็อบเจกต์ตั้งแต่ตอนสร้าง แทนการมาไล่กำหนดทีละบรรทัด
 
-**ไฟล์:** `Ex02_Dog.cs` และ `Assignment_Student_Week06.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/` > Create > C# Script ตั้งชื่อว่า `AS02_ClassConstructor.cs`
 
 **Logic ที่ต้อง implement:**
 
-ในคลาส `Dog` (มีฟิลด์ `name`, `breed`, `age` ให้แล้ว)
+ในคลาส `Dog` (อยู่ใน namespace `Week06.Ex02`)
+- กำหนดฟิลด์ `public string name;`, `public string breed;`, `public int age;`
 - เขียน Constructor รับพารามิเตอร์ 3 ตัว: `name`, `breed`, `age`
 - ใช้ `this.name = name;` เพื่อบอกว่าตัวไหนคือฟิลด์ ตัวไหนคือพารามิเตอร์
 
@@ -146,9 +198,11 @@ Buddy stopped barking
 
 **ประโยชน์:** ลดโค้ดซ้ำ · จัดระเบียบโค้ดดีขึ้น · ขยายโปรแกรมง่าย · เตรียมทางไปสู่ Polymorphism
 
-**ไฟล์:** `Ex03_Animal.cs` และ `Assignment_Student_Week06.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/` > Create > C# Script ตั้งชื่อว่า `AS03_Inheritance.cs`
 
-**Logic ที่ต้อง implement:**
+**Logic ที่ต้อง implement:** (ใน namespace `Week06.Ex03`)
+- ในไฟล์ `AS03_Inheritance.cs` สามารถประกาศคลาส `Animal`, `Dog`, และ `Bird` ได้
 - ทำให้ `Dog` สืบทอดจาก `Animal` โดยเขียน `: Animal` ต่อท้ายชื่อคลาส → พอสืบทอดแล้วจะใช้ตัวแปร `name` ได้เลย
 - ในเมธอด `Walk()` พิมพ์ `Dog <ชื่อ> is walking`
 - ทำให้ `Bird` สืบทอดจาก `Animal` เหมือนกัน
@@ -178,9 +232,10 @@ Bird Twitty is flying
 - **protected** — เข้าถึงได้จากในคลาสเดียวกันและคลาสที่สืบทอดไป แต่คลาสอื่นที่ไม่เกี่ยวข้องเข้าไม่ได้
 - **private** — เข้าถึงได้เฉพาะในคลาสนั้นเท่านั้น
 
-**ไฟล์:** `Ex04_Animal.cs` และ `Assignment_Student_Week06.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/` > Create > C# Script ตั้งชื่อว่า `AS04_AccessModifier.cs`
 
-ในคลาส `Animal` มีฟิลด์ให้แล้ว:
+ในคลาส `Animal` (namespace `Week06.Ex04`) กำหนดฟิลด์:
 ```csharp
 public string name = "";
 protected string specie = "";
@@ -222,9 +277,10 @@ Buddy happy!
 - **คลาสแม่** เขียน `public virtual void MakeSound()` — เปิดให้ลูกเขียนทับได้
 - **คลาสลูก** เขียน `public override void MakeSound()` — เขียนทับของแม่
 
-**ไฟล์:** `Ex05_Animal.cs` และ `Assignment_Student_Week06.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/` > Create > C# Script ตั้งชื่อว่า `AS05_VirtualOverride.cs`
 
-**Logic ที่ต้อง implement:**
+**Logic ที่ต้อง implement:** (ใน namespace `Week06.Ex05`)
 - ในคลาส `Animal` เติมคำว่า `virtual` หน้าเมธอด `MakeSound` (พิมพ์ `Generic animal sound`)
 - ในคลาส `Dog` เติมคำว่า `override` หน้าเมธอด `MakeSound` และเปลี่ยนข้อความเป็น `Woof!`
 
@@ -277,9 +333,11 @@ MonoBehaviour
 
 ## ข้อ 6. คลาส Enemy และระบบต่อสู้
 
-**วัตถุประสงค์:** ใช้การสืบทอดและ `override` สร้างศัตรูที่ตีสวนกลับได้
+**วัตถุประสงค์:** ใช้การสืบทอดและ `override` สร้างศัตรูที่ตีสวนกลับได้ (สืบทอดโครงสร้าง MonoBehaviour ผ่าน `Character`)
 
-**ไฟล์:** `Game/Enemy.cs` และ `Game/Character.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/Game/` > Create > C# Script ตั้งชื่อว่า `Enemy.cs`
+- (ส่วน `Character.cs` มีไฟล์อยู่แล้วในโฟลเดอร์ `Game/` ให้เปิดขึ้นมาแก้ไขเมธอด `Move()`)
 
 **Logic ที่ต้อง implement:**
 
@@ -327,9 +385,10 @@ Enemy energy after attack: 0
 
 ## ข้อ 7. คลาส ItemPotion (ยาเพิ่มพลัง)
 
-**วัตถุประสงค์:** สร้างไอเทมที่สืบทอดจาก `Identity` แล้ว `override Hit()` ให้ทำงานตอนถูกเดินชน
+**วัตถุประสงค์:** สร้างไอเทมที่สืบทอดจาก `Identity` (MonoBehaviour) แล้ว `override Hit()` ให้ทำงานตอนถูกเดินชน
 
-**ไฟล์:** `Game/ItemPotion.cs` และ `Game/Character.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/Game/` > Create > C# Script ตั้งชื่อว่า `ItemPotion.cs`
 
 **Logic ที่ต้อง implement:**
 
@@ -356,7 +415,8 @@ Player energy after picking up potion: 117
 
 **วัตถุประสงค์:** ทำแบบเดียวกับยา แต่เปลี่ยนเป็นเพิ่มพลังโจมตี
 
-**ไฟล์:** `Game/ItemSword.cs` และ `Game/Character.cs`
+**การสร้างไฟล์:**
+- ใน Unity ให้คลิกขวาที่โฟลเดอร์ `Week06/Game/` > Create > C# Script ตั้งชื่อว่า `ItemSword.cs`
 
 **Logic ที่ต้อง implement:**
 

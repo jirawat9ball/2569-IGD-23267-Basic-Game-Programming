@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06
@@ -16,78 +16,27 @@ namespace Week06
 
         public void Ex01_CarDemo()
         {
-            // Guideline: (คลาส Car อยู่ในไฟล์ Ex01_Car.cs)
-            // 1. สร้าง object จากคลาส Car ด้วยคำสั่ง new
-            // 2. กำหนดค่า name, color, speed ให้รถคันนั้น
-            // 3. เรียกเมธอด Move(), Turn(), Honk() ตามลำดับ
-            Ex01.Car honda = new Ex01.Car();
-            honda.name = "civic";
-            honda.color = "black";
-            honda.speed = 110;
-
-            honda.Move();
-            honda.Turn();
-            honda.Honk();
+            // Guideline: (โค้ดของ Car ทำงานใน Start() และ Update() ของไฟล์ Ex01_Car.cs)
         }
 
         public void Ex02_DogDemo()
         {
-            // Guideline: (คลาส Dog อยู่ในไฟล์ Ex02_Dog.cs)
-            // 1. สร้าง object จากคลาส Dog โดยส่งค่าผ่าน Constructor
-            //    ให้ name เป็น "Buddy"
-            // 2. เรียกเมธอด Bark(), WagTail(), StopBarking() ตามลำดับ
-            Ex02.Dog dog1 = new Ex02.Dog("Buddy", "Golden Retriever", 3);
-
-            dog1.Bark();
-            dog1.WagTail();
-            dog1.StopBarking();
+            new Ex02.AS02_ClassConstructor().Start();
         }
 
         public void Ex03_InheritanceDemo()
         {
-            // Guideline: (คลาสอยู่ในไฟล์ Ex03_Animal.cs)
-            // 1. สร้าง Dog แล้วกำหนด name เป็น "Buddy"
-            // 2. เรียก MakeSound() (ได้มาจากการสืบทอดคลาส Animal) แล้วตามด้วย Walk()
-            // 3. สร้าง Bird แล้วกำหนด name เป็น "Twitty"
-            // 4. เรียก MakeSound() แล้วตามด้วย Fly()
-            Ex03.Dog dog = new Ex03.Dog();
-            dog.name = "Buddy";
-            dog.MakeSound();
-            dog.Walk();
-
-            Ex03.Bird bird = new Ex03.Bird();
-            bird.name = "Twitty";
-            bird.MakeSound();
-            bird.Fly();
+            new Ex03.AS03_Inheritance().Start();
         }
 
         public void Ex04_AccessModifierDemo()
         {
-            // Guideline: (คลาสอยู่ในไฟล์ Ex04_Animal.cs)
-            // 1. สร้าง Dog ผ่าน Constructor โดยส่งชื่อ "Buddy" เข้าไป
-            // 2. พิมพ์ "my name is <ชื่อ>"  (name เป็น public จึงอ่านจากข้างนอกได้)
-            // 3. เรียก MakeSound() ครั้งแรก (ตอนนี้ health = 10 จึงได้ weak!)
-            // 4. เรียก Feed(50) เพื่อเพิ่ม health
-            // 5. เรียก MakeSound() อีกครั้ง (health = 60 จึงได้ happy!)
-            Ex04.Dog dog = new Ex04.Dog("Buddy");
-
-            Debug.Log($"my name is {dog.name}");
-
-            dog.MakeSound();
-            dog.Feed(50);
-            dog.MakeSound();
+            new Ex04.AS04_AccessModifier().Start();
         }
 
         public void Ex05_VirtualOverrideDemo()
         {
-            // Guideline: (คลาสอยู่ในไฟล์ Ex05_Animal.cs)
-            // 1. สร้าง Dog แล้วเรียก MakeSound() -> จะได้เสียงที่ override ไว้ ("Woof!")
-            // 2. สร้าง Animal แล้วเรียก MakeSound() -> จะได้เสียงของคลาสแม่ ("Generic animal sound")
-            Ex05.Dog dog = new Ex05.Dog();
-            dog.MakeSound();
-
-            Ex05.Animal someAnimal = new Ex05.Animal();
-            someAnimal.MakeSound();
+            new Ex05.AS05_VirtualOverride().Start();
         }
 
         public void Ex06_BattleDemo()
