@@ -1,25 +1,50 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
 {
-    public class ItemPotion : Identity
+    public class ItemPotion : MonoBehaviour
     {
-        // Guideline: (ข้อ 7)
-        // 1. ประกาศตัวแปร healPoint แบบ public ชนิด int ค่าเริ่มต้น 10
+        public string Name = "Potion";
+        public int positionX;
+        public int positionY;
+        public MapGenerator mapGenerator;
+
         public int healPoint = 10;
 
-        public override void Hit()
+        public void Hit()
         {
-            // Guideline: (ข้อ 7)
-            // 2. พิมพ์ข้อความ "You got <ชื่อไอเทม> : <healPoint>"
-            // 3. เพิ่มเลือดให้ผู้เล่น: mapGenerator.player.Heal(healPoint);
-            // 4. เอาไอเทมออกจากแผนที่ โดยตั้งค่าช่องนั้นเป็น 0 แล้วทำลายวัตถุทิ้ง
             Debug.Log($"You got {Name} : {healPoint}");
 
-            mapGenerator.player.Heal(healPoint);
+            if (mapGenerator != null && mapGenerator.player != null)
+            {
+                mapGenerator.player.Heal(healPoint);
+            }
 
-            mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
+            if (mapGenerator != null && mapGenerator.mapdata != null)
+            {
+                mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
+            }
+
             DestroySafe(gameObject);
+        }
+
+        protected static void DestroySafe(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                target.SetActive(false);
+            }
         }
     }
 }
+

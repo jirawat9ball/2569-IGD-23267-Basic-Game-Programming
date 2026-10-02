@@ -1,19 +1,35 @@
-﻿using UnityEngine;
+using UnityEngine;
+
 namespace Week06.Game
 {
-    public class Wall : Identity
+    public class Wall : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        public string Name = "Wall";
+        public int positionX;
+        public int positionY;
+        public MapGenerator mapGenerator;
 
+        public void Hit()
+        {
+            // สามารถเพิ่มตรรกะเมื่อกำแพงโดนตีได้ เช่น ลดความทนทาน หรือทำลายกำแพง
         }
 
-        // Update is called once per frame
-        void Update()
+        protected static void DestroySafe(GameObject target)
         {
+            if (target == null)
+            {
+                return;
+            }
 
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                target.SetActive(false);
+            }
         }
     }
-
 }
+

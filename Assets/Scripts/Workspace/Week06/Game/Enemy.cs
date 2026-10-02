@@ -1,20 +1,69 @@
-﻿namespace Week06.Game
+using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
+
+namespace Week06.Game
 {
-    public class Enemy : Character
+    public class Enemy : MonoBehaviour
     {
-        public override void Hit()
+        public string Name = "Enemy";
+        public int positionX;
+        public int positionY;
+        public MapGenerator mapGenerator;
+
+        public int energy = 20;
+        public int attackPoint = 5;
+
+        public void Hit()
         {
-            // Guideline: (ข้อ 6)
-            // 1. ตรวจก่อนว่า energy ของศัตรูหมดหรือยัง
-            //    ถ้า energy <= 0 แปลว่าตายแล้ว ไม่ต้องทำอะไรต่อ ให้ return ออกไปเลย
-            // 2. ถ้ายังไม่ตาย ให้ศัตรูตีผู้เล่นกลับ
-            //    ใช้ this.Attack(mapGenerator.player, attackPoint);
             if (energy <= 0)
             {
                 return;
             }
 
-            this.Attack(mapGenerator.player, attackPoint);
+            if (mapGenerator != null && mapGenerator.player != null)
+            {
+                Attack(mapGenerator.player, attackPoint);
+            }
+        }
+
+        public void Attack(Player target, int damage)
+        {
+            if (target != null)
+            {
+                target.TakeDamage(damage);
+            }
+        }
+
+        public void TakeDamage(int damage)
+        {
+            energy -= damage;
+            CheckDead();
+        }
+
+        protected void CheckDead()
+        {
+            if (energy <= 0)
+            {
+                DestroySafe(gameObject);
+            }
+        }
+
+        protected static void DestroySafe(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                target.SetActive(false);
+            }
         }
     }
 }
+

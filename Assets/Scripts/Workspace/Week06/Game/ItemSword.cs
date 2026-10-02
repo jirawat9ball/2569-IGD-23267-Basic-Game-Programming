@@ -1,25 +1,50 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
 {
-    public class ItemSword : Identity
+    public class ItemSword : MonoBehaviour
     {
-        // Guideline: (ข้อ 8)
-        // 1. ประกาศตัวแปร attackBonus แบบ public ชนิด int ค่าเริ่มต้น 10
+        public string Name = "Sword";
+        public int positionX;
+        public int positionY;
+        public MapGenerator mapGenerator;
+
         public int attackBonus = 10;
 
-        public override void Hit()
+        public void Hit()
         {
-            // Guideline: (ข้อ 8)
-            // 2. พิมพ์ข้อความ "You got <ชื่อไอเทม> : <attackBonus>"
-            // 3. เพิ่มพลังโจมตีให้ผู้เล่น: mapGenerator.player.IncreaseAttack(attackBonus);
-            // 4. เอาไอเทมออกจากแผนที่ แบบเดียวกับ Potion
             Debug.Log($"You got {Name} : {attackBonus}");
 
-            mapGenerator.player.IncreaseAttack(attackBonus);
+            if (mapGenerator != null && mapGenerator.player != null)
+            {
+                mapGenerator.player.IncreaseAttack(attackBonus);
+            }
 
-            mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
+            if (mapGenerator != null && mapGenerator.mapdata != null)
+            {
+                mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
+            }
+
             DestroySafe(gameObject);
+        }
+
+        protected static void DestroySafe(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                target.SetActive(false);
+            }
         }
     }
 }
+
