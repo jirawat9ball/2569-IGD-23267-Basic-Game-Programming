@@ -1,4 +1,4 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 using Week06.Game;
 
@@ -6,7 +6,7 @@ namespace Week06.Teacher.Ex03
 {
     public class Enemy : MonoBehaviour
     {
-        public string name = "Enemy";
+        public new string name = "Enemy";
         public int energy = 10;
         public int attackPoint = 5;
 

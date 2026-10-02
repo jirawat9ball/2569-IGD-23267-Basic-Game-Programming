@@ -87,23 +87,23 @@
 ## 📝 การบ้าน (Homework)
 
 ### ข้อ 1: ไอเทมดาบเพิ่มพลังโจมตี (ItemSword)
-**ไฟล์:** `HW01_ItemSword.cs` (namespace `Week06.HW01`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/ItemSword.cs` (namespace `Week06.Game`)
 - ฟิลด์ `Name` (string) = `"Sword"`, `attackBonus` (int) = `10`
 - `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `player.IncreaseAttack(attackBonus)` และทำลายตัวเอง `Destroy(gameObject)`
 
 ### ข้อ 2: กับดักหนาม (Trap)
-**ไฟล์:** `HW02_Trap.cs` (namespace `Week06.HW02`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Trap.cs` (namespace `Week06.Game`)
 - ฟิลด์ `Name` (string) = `"Trap"`, `damage` (int) = `5`
 - `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้สั่ง `player.isTrapped = true` (ทำให้เดินไม่ได้ 1 ครั้ง) และเรียก `player.TakeDamage(damage)`
 
 ### ข้อ 3: กำแพงพังได้ (Wall)
-**ไฟล์:** `HW03_Wall.cs` (namespace `Week06.HW03`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Wall.cs` (namespace `Week06.Game`)
 - ฟิลด์ `Name` (string) = `"Wall"`, `durability` (int) = `2`
 - เมธอด `Hit()`: ลดค่า `durability--` หาก `<= 0` ให้ทำลายตัวเอง `Destroy(gameObject)`
 - `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `Hit()` และเรียก `player.RevertPosition()` เพื่อให้ผู้เล่นกลับไปอยู่ที่เดิม (เดินผ่านไม่ได้)
 
 ### ข้อ 4: กล่องสมบัติสร้างวัตถุใหม่ (Chest)
-**ไฟล์:** `HW04_Chest.cs` (namespace `Week06.HW04`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Chest.cs` (namespace `Week06.Game`)
 - ฟิลด์ `Name` (string) = `"Chest"`, `spawnPrefab` (GameObject)
 - เมธอด `OpenChest()`: หากมี `spawnPrefab != null` ให้สร้างวัตถุใหม่ที่ **ด้านบน 1 ช่อง (y + 1)** ด้วย `Instantiate(spawnPrefab, transform.position + Vector3.up, Quaternion.identity);` แล้วทำลายกล่อง `Destroy(gameObject)`
 - `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `OpenChest()`

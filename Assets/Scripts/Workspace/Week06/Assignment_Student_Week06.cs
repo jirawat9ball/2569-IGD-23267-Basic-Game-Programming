@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06
@@ -12,11 +12,17 @@ namespace Week06
             Ex03_EnemyDemo();
             Ex04_ExitDemo();
             Ex05_PotionDemo();
+            HW01_SwordDemo();
+            HW02_TrapDemo();
+            HW03_WallDemo();
+            HW04_ChestDemo();
         }
 
         public void Ex01_CarDemo()
         {
-            // Guideline: (โค้ดของ Car ทำงานใน Start() และ Update() ของไฟล์ AS01_Car.cs)
+            var go = new GameObject("DemoCar");
+            var car = go.AddComponent<Ex01.Car>();
+            if (go != null) Destroy(go);
         }
 
         public void Ex02_DogDemo()

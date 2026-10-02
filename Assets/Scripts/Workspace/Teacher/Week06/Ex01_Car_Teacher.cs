@@ -1,11 +1,11 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week06.Teacher.Ex01
 {
     public class Car : MonoBehaviour
     {
-        public string name;
+        public new string name;
         public string color;
         public float speed;
 

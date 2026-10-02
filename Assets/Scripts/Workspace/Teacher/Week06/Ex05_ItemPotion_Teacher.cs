@@ -1,4 +1,4 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 using Week06.Game;
 
@@ -6,7 +6,7 @@ namespace Week06.Teacher.Ex05
 {
     public class ItemPotion : MonoBehaviour
     {
-        public string name = "Potion";
+        public new string name = "Potion";
         public int healPoint = 10;
 
         private void OnTriggerEnter2D(Collider2D other)

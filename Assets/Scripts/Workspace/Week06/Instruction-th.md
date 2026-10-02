@@ -39,13 +39,13 @@ myCar.Move();
 |---|---|---|---|
 | ข้อ 1 | `AS01_Car.cs` | `Assets/.../Week06/` | เขียนคลาส `Car` มี name, color, speed และ Move(), Turn(), Honk() |
 | ข้อ 2 | `AS02_ClassConstructor.cs` | `Assets/.../Week06/` | เขียน Constructor ของ `Dog` และสร้าง instance ใน Start() |
-| ข้อ 3 | `AS03_Enemy.cs` | `Assets/.../Week06/` | เขียนคลาส `Enemy` มี energy, attackPoint, Attack(), TakeDamage(), Trigger |
-| ข้อ 4 | `AS04_Exit.cs` | `Assets/.../Week06/` | เขียนคลาส `Exit` มี positionX, positionY, Trigger ตรวจจับผู้เล่นชนะเกม |
-| ข้อ 5 | `AS05_ItemPotion.cs` | `Assets/.../Week06/` | เขียนคลาส `ItemPotion` มี healPoint, Trigger สั่ง Heal ผู้เล่นแล้วทำลายตัวเอง |
-| **HW 1** | `HW01_ItemSword.cs` | `Assets/.../Week06/` | ไอเทมดาบเพิ่มพลังโจมตี `attackBonus` ให้ผู้เล่นแล้วทำลายตัวเอง |
-| **HW 2** | `HW02_Trap.cs` | `Assets/.../Week06/` | กับดักหนาม ลดพลังงานผู้เล่นตามค่า `damage` เมื่อเหยียบ |
-| **HW 3** | `HW03_Wall.cs` | `Assets/.../Week06/` | กำแพงพังได้ มี `durability` ลดลงเมื่อชน หากหมดจะพังทลาย |
-| **HW 4** | `HW04_Chest.cs` | `Assets/.../Week06/` | กล่องสมบัติ เสกสร้างวัตถุใหม่ `Instantiate(spawnPrefab)` แล้วทำลายกล่อง |
+| ข้อ 3 | `Enemy.cs` | `Assets/.../Week06/Game/` | สคริปต์ `Enemy` มี energy, attackPoint, Attack(), TakeDamage(), Trigger |
+| ข้อ 4 | `Exit.cs` | `Assets/.../Week06/Game/` | สคริปต์ `Exit` มี positionX, positionY, Trigger ตรวจจับผู้เล่นชนะเกม |
+| ข้อ 5 | `ItemPotion.cs` | `Assets/.../Week06/Game/` | สคริปต์ `ItemPotion` มี healPoint, Trigger สั่ง Heal ผู้เล่นแล้วทำลายตัวเอง |
+| **HW 1** | `ItemSword.cs` | `Assets/.../Week06/Game/` | ไอเทมดาบเพิ่มพลังโจมตี `attackBonus` ให้ผู้เล่นแล้วทำลายตัวเอง |
+| **HW 2** | `Trap.cs` | `Assets/.../Week06/Game/` | กับดักหนาม ทำให้เดินไม่ได้ 1 ครั้ง (`isTrapped`) และลดพลังงานตามค่า `damage` |
+| **HW 3** | `Wall.cs` | `Assets/.../Week06/Game/` | กำแพงพังได้ มี `durability` ลดลงเมื่อชน ผู้เล่นจะกลับไปอยู่ที่เดิม เดินผ่านไม่ได้ |
+| **HW 4** | `Chest.cs` | `Assets/.../Week06/Game/` | กล่องสมบัติ เสกสร้างวัตถุใหม่ `Instantiate(spawnPrefab)` ด้านบน 1 ช่อง แล้วทำลายกล่อง |
 | สรุป | `Assignment_Student_Week06.cs` | `Assets/.../Week06/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
 | **Workshop** | โฟลเดอร์ `Game/` + `Workshop.md` | `Assets/.../Week06/` | คู่มือสร้างเกม 2D Dungeon: Player, Enemy, Item, Trigger |
 
@@ -165,7 +165,7 @@ Buddy stopped barking
 
 ### HW 1. ไอเทมดาบเพิ่มพลังโจมตี (ItemSword)
 
-**ไฟล์:** `HW01_ItemSword.cs` (namespace `Week06.HW01`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/ItemSword.cs` (namespace `Week06.Game`)
 1. **ประกาศฟิลด์แบบ public:**
    - `string Name = "Sword"`
    - `int attackBonus = 10`
@@ -181,7 +181,7 @@ Buddy stopped barking
 
 ### HW 2. กับดักหนาม (Trap)
 
-**ไฟล์:** `HW02_Trap.cs` (namespace `Week06.HW02`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Trap.cs` (namespace `Week06.Game`)
 1. **ประกาศฟิลด์แบบ public:**
    - `string Name = "Trap"`
    - `int damage = 5`
@@ -197,7 +197,7 @@ Buddy stopped barking
 
 ### HW 3. กำแพงพังได้ (Wall)
 
-**ไฟล์:** `HW03_Wall.cs` (namespace `Week06.HW03`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Wall.cs` (namespace `Week06.Game`)
 1. **ประกาศฟิลด์แบบ public:**
    - `string Name = "Wall"`
    - `int durability = 2`
@@ -216,7 +216,7 @@ Buddy stopped barking
 
 ### HW 4. กล่องสมบัติสร้างวัตถุใหม่ (Chest)
 
-**ไฟล์:** `HW04_Chest.cs` (namespace `Week06.HW04`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Chest.cs` (namespace `Week06.Game`)
 1. **ประกาศฟิลด์แบบ public:**
    - `string Name = "Chest"`
    - `GameObject spawnPrefab` (Prefab วัตถุที่จะเสกออกมา)
@@ -236,5 +236,5 @@ Buddy stopped barking
 ## 📌 ข้อควรระวัง
 
 - ข้อความที่พิมพ์ต้องตรงตามโจทย์ทุกตัวอักษร
-- ตรวจสอบชื่อ namespace ให้ถูกต้อง (`Week06.Ex01` ถึง `Week06.Ex05`, และ `Week06.HW01` ถึง `Week06.HW04`)
+- สคริปต์ในโฟลเดอร์ `Game/` ใช้ namespace `Week06.Game`
 
