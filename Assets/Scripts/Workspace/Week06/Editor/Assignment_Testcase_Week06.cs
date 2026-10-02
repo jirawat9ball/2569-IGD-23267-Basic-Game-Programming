@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text;
 
 using NUnit.Framework;
@@ -24,14 +24,16 @@ namespace Week06_Class
 
         protected static System.Type CarType => isTeacherMode ? typeof(Week06.Teacher.Ex01.Car) : typeof(Week06.Ex01.Car);
         protected static System.Type Dog02Type => isTeacherMode ? typeof(Week06.Teacher.Ex02.Dog) : typeof(Week06.Ex02.Dog);
-        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : typeof(Week06.Ex03.Enemy);
-        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : typeof(Week06.Ex04.Exit);
-        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : typeof(Week06.Ex05.ItemPotion);
+        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : typeof(Week06.Game.Enemy);
+        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : typeof(Week06.Game.Exit);
+        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : typeof(Week06.Game.ItemPotion);
 
-        protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : typeof(Week06.HW01.ItemSword);
-        protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : typeof(Week06.HW02.Trap);
-        protected static System.Type WallType => isTeacherMode ? typeof(Week06.Teacher.HW03.Wall) : typeof(Week06.HW03.Wall);
-        protected static System.Type ChestType => isTeacherMode ? typeof(Week06.Teacher.HW04.Chest) : typeof(Week06.HW04.Chest);
+        protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : typeof(Week06.Game.ItemSword);
+        protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : typeof(Week06.Game.Trap);
+        protected static System.Type WallType => isTeacherMode ? typeof(Week06.Teacher.HW03.Wall) : typeof(Week06.Game.Wall);
+        protected static System.Type ChestType => isTeacherMode ? typeof(Week06.Teacher.HW04.Chest) : typeof(Week06.Game.Chest);
+        protected static System.Type PlayerType => typeof(Week06.Game.Player);
+        protected static System.Type MapGeneratorType => typeof(Week06.Game.MapGenerator);
 
         [SetUp]
         public void Setup()
@@ -227,11 +229,11 @@ namespace Week06_Class
             switch (subTask)
             {
                 case "01_RequiredFields":
-                    var nameField = t.GetField("name", AnyInstance);
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
                     var energyField = t.GetField("energy", AnyInstance);
                     var atkField = t.GetField("attackPoint", AnyInstance);
 
-                    Assert.IsNotNull(nameField, "Enemy ต้องมีฟิลด์ name");
+                    Assert.IsNotNull(nameField, "Enemy ต้องมีฟิลด์ Name หรือ name");
                     Assert.IsNotNull(energyField, "Enemy ต้องมีฟิลด์ energy");
                     Assert.IsNotNull(atkField, "Enemy ต้องมีฟิลด์ attackPoint");
 
@@ -307,10 +309,10 @@ namespace Week06_Class
             switch (subTask)
             {
                 case "01_RequiredFields":
-                    var nameField = t.GetField("name", AnyInstance);
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
                     var healField = t.GetField("healPoint", AnyInstance);
 
-                    Assert.IsNotNull(nameField, "ItemPotion ต้องมีฟิลด์ name");
+                    Assert.IsNotNull(nameField, "ItemPotion ต้องมีฟิลด์ Name หรือ name");
                     Assert.IsNotNull(healField, "ItemPotion ต้องมีฟิลด์ healPoint");
                     Assert.AreEqual(typeof(string), nameField.FieldType, "name ต้องเป็น string");
                     Assert.AreEqual(typeof(int), healField.FieldType, "healPoint ต้องเป็น int");
@@ -319,6 +321,120 @@ namespace Week06_Class
                 case "02_TriggerExists":
                     var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
                     Assert.IsNotNull(triggerMethod, "ItemPotion ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+            }
+        }
+
+        // =========================================================================================
+        // ข้อ 6: ผู้เล่น (Player)
+        // =========================================================================================
+
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_MoveAndTakeDamage")]
+        [TestCase("03_HealAndIncreaseAttack")]
+        [TestCase("04_RevertPosition")]
+        public void As06_Player(string subTask)
+        {
+            var t = PlayerType;
+            switch (subTask)
+            {
+                case "01_RequiredFields":
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
+                    var energyField = t.GetField("energy", AnyInstance);
+                    var atkField = t.GetField("attackPoint", AnyInstance);
+                    var posX = t.GetField("positionX", AnyInstance);
+                    var posY = t.GetField("positionY", AnyInstance);
+
+                    Assert.IsNotNull(nameField, "Player ต้องมีฟิลด์ Name");
+                    Assert.IsNotNull(energyField, "Player ต้องมีฟิลด์ energy");
+                    Assert.IsNotNull(atkField, "Player ต้องมีฟิลด์ attackPoint");
+                    Assert.IsNotNull(posX, "Player ต้องมีฟิลด์ positionX");
+                    Assert.IsNotNull(posY, "Player ต้องมีฟิลด์ positionY");
+                    break;
+
+                case "02_MoveAndTakeDamage":
+                    var pGo = new GameObject("TestPlayer");
+                    var player = pGo.AddComponent(t) as MonoBehaviour;
+                    var energyF = t.GetField("energy", AnyInstance);
+                    var posXF = t.GetField("positionX", AnyInstance);
+                    energyF?.SetValue(player, 20);
+                    posXF?.SetValue(player, 0);
+
+                    var moveMethod = t.GetMethod("Move", new System.Type[] { typeof(Vector2) });
+                    Assert.IsNotNull(moveMethod, "Player ต้องมีเมธอด Move(Vector2)");
+
+                    moveMethod.Invoke(player, new object[] { Vector2.right });
+                    int currentPosX = (int)posXF.GetValue(player);
+                    int currentEnergy = (int)energyF.GetValue(player);
+
+                    Assert.AreEqual(1, currentPosX, "เมื่อ Move ไปทางขวา positionX ต้องเป็น 1");
+                    Assert.AreEqual(19, currentEnergy, "เมื่อ Move 1 ก้าว ต้องเสีย 1 energy");
+
+                    if (pGo != null) Object.DestroyImmediate(pGo);
+                    break;
+
+                case "03_HealAndIncreaseAttack":
+                    var pGo2 = new GameObject("TestPlayer2");
+                    var player2 = pGo2.AddComponent(t) as MonoBehaviour;
+                    var energyF2 = t.GetField("energy", AnyInstance);
+                    var atkF2 = t.GetField("attackPoint", AnyInstance);
+                    energyF2?.SetValue(player2, 10);
+                    atkF2?.SetValue(player2, 10);
+
+                    var healMethod = t.GetMethod("Heal", new System.Type[] { typeof(int) });
+                    var incAtkMethod = t.GetMethod("IncreaseAttack", new System.Type[] { typeof(int) });
+
+                    Assert.IsNotNull(healMethod, "Player ต้องมีเมธอด Heal(int)");
+                    Assert.IsNotNull(incAtkMethod, "Player ต้องมีเมธอด IncreaseAttack(int)");
+
+                    healMethod.Invoke(player2, new object[] { 5 });
+                    incAtkMethod.Invoke(player2, new object[] { 10 });
+
+                    Assert.AreEqual(15, (int)energyF2.GetValue(player2), "เมื่อ Heal 5 ค่า energy ต้องเพิ่มเป็น 15");
+                    Assert.AreEqual(20, (int)atkF2.GetValue(player2), "เมื่อ IncreaseAttack 10 ค่า attackPoint ต้องเพิ่มเป็น 20");
+
+                    if (pGo2 != null) Object.DestroyImmediate(pGo2);
+                    break;
+
+                case "04_RevertPosition":
+                    var pGo3 = new GameObject("TestPlayer3");
+                    var player3 = pGo3.AddComponent(t) as MonoBehaviour;
+                    var posXF3 = t.GetField("positionX", AnyInstance);
+                    var prevPosXF3 = t.GetField("previousPositionX", AnyInstance);
+                    posXF3?.SetValue(player3, 5);
+                    prevPosXF3?.SetValue(player3, 4);
+
+                    var revertMethod = t.GetMethod("RevertPosition", AnyInstance);
+                    Assert.IsNotNull(revertMethod, "Player ต้องมีเมธอด RevertPosition()");
+
+                    revertMethod.Invoke(player3, null);
+                    Assert.AreEqual(4, (int)posXF3.GetValue(player3), "เมื่อ RevertPosition ค่า positionX ต้องกลับไปเป็น previousPositionX");
+
+                    if (pGo3 != null) Object.DestroyImmediate(pGo3);
+                    break;
+            }
+        }
+
+        // =========================================================================================
+        // ข้อ 7: ตัวสร้างแผนที่ (MapGenerator)
+        // =========================================================================================
+
+        [TestCase("01_RequiredFields")]
+        public void As07_MapGenerator(string subTask)
+        {
+            var t = MapGeneratorType;
+            switch (subTask)
+            {
+                case "01_RequiredFields":
+                    var rowField = t.GetField("Row", AnyInstance);
+                    var colField = t.GetField("Col", AnyInstance);
+                    var playerField = t.GetField("player", AnyInstance);
+                    var exitField = t.GetField("Exit", AnyInstance);
+
+                    Assert.IsNotNull(rowField, "MapGenerator ต้องมีฟิลด์ Row");
+                    Assert.IsNotNull(colField, "MapGenerator ต้องมีฟิลด์ Col");
+                    Assert.IsNotNull(playerField, "MapGenerator ต้องมีฟิลด์ player");
+                    Assert.IsNotNull(exitField, "MapGenerator ต้องมีฟิลด์ Exit");
                     break;
             }
         }

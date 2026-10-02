@@ -26,26 +26,26 @@ namespace Week06
 
         public void Ex03_EnemyDemo()
         {
-            // จำลองการเรียกใช้ Enemy
+            // จำลองการเรียกใช้ Enemy จาก Game folder
             var go = new GameObject("DemoEnemy");
-            var enemy = go.AddComponent<Ex03.Enemy>();
+            var enemy = go.AddComponent<Game.Enemy>();
             enemy.TakeDamage(10);
             if (go != null) Destroy(go);
         }
 
         public void Ex04_ExitDemo()
         {
-            // จำลองการเรียกใช้ Exit
+            // จำลองการเรียกใช้ Exit จาก Game folder
             var go = new GameObject("DemoExit");
-            var exit = go.AddComponent<Ex04.Exit>();
+            var exit = go.AddComponent<Game.Exit>();
             if (go != null) Destroy(go);
         }
 
         public void Ex05_PotionDemo()
         {
-            // จำลองการเรียกใช้ ItemPotion
+            // จำลองการเรียกใช้ ItemPotion จาก Game folder
             var go = new GameObject("DemoPotion");
-            var potion = go.AddComponent<Ex05.ItemPotion>();
+            var potion = go.AddComponent<Game.ItemPotion>();
             if (go != null) Destroy(go);
         }
 
@@ -53,28 +53,28 @@ namespace Week06
         public void HW01_SwordDemo()
         {
             var go = new GameObject("DemoSword");
-            var sword = go.AddComponent<HW01.ItemSword>();
+            var sword = go.AddComponent<Game.ItemSword>();
             if (go != null) Destroy(go);
         }
 
         public void HW02_TrapDemo()
         {
             var go = new GameObject("DemoTrap");
-            var trap = go.AddComponent<HW02.Trap>();
+            var trap = go.AddComponent<Game.Trap>();
             if (go != null) Destroy(go);
         }
 
         public void HW03_WallDemo()
         {
             var go = new GameObject("DemoWall");
-            var wall = go.AddComponent<HW03.Wall>();
+            var wall = go.AddComponent<Game.Wall>();
             if (go != null) Destroy(go);
         }
 
         public void HW04_ChestDemo()
         {
             var go = new GameObject("DemoChest");
-            var chest = go.AddComponent<HW04.Chest>();
+            var chest = go.AddComponent<Game.Chest>();
             if (go != null) Destroy(go);
         }
         #endregion
