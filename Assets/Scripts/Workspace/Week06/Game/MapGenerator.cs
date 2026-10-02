@@ -167,19 +167,21 @@ namespace Week06.Game
             }
         }
 
-        /// <summary>วางทางออกที่มุมขวาบนของแผนที่</summary>
+        /// <summary>สร้างและวางทางออก (Instantiate) ที่มุมขวาบนของแผนที่</summary>
         public void PlaceExit()
         {
-            if (Row <= 0 || Col <= 0 || mapdata == null) return;
+            if (Row <= 0 || Col <= 0 || mapdata == null || Exit == null) return;
 
             int exitX = Row - 1;
             int exitY = Col - 1;
             mapdata[exitX, exitY] = exit;
 
-            if (Exit != null)
-            {
-                Exit.transform.position = new Vector3(exitX, exitY, 0);
-            }
+            Exit spawnedExit = Instantiate(Exit, new Vector3(exitX, exitY, 0), Quaternion.identity);
+            spawnedExit.name = "Exit";
+            spawnedExit.positionX = exitX;
+            spawnedExit.positionY = exitY;
+            spawnedExit.mapGenerator = this;
+            Exit = spawnedExit;
         }
 
         #endregion
