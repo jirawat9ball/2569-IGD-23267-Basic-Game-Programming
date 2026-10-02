@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -28,20 +28,17 @@ namespace Week06.Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // แสดง Log แจ้งเตือนเมื่อเกิดการชน
-            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+            // Guideline:
+            // 1. แสดง Log แจ้งเตือนเมื่อเกิดการชน: "[Trigger] <gameObject.name> collided with <other.gameObject.name>"
+            // 2. ใช้ other.GetComponent<Player>() เพื่อตรวจสอบว่าชนกับผู้เล่นหรือไม่
+            // 3. ถ้าเป็นผู้เล่น ให้สั่ง:
+            //    - แสดง Log: "⚔️ Picked up <Name>! +<attackBonus> Attack"
+            //    - เรียก player.IncreaseAttack(attackBonus)
+            //    - เรียก Destroy(gameObject) เพื่อลบไอเทมออกจากฉาก
 
-            // ตรวจสอบว่าวัตถุที่ชนมีคอมโพเนนต์ Player หรือไม่
-            Player player = other.GetComponent<Player>();
-            if (player != null)
-            {
-                // เรียกเมธอด IncreaseAttack() ของ Player เพื่อเพิ่มพลังโจมตี
-                Debug.Log($"⚔️ Picked up {Name}! +{attackBonus} Attack");
-                player.IncreaseAttack(attackBonus);
+            // Student code starts HERE ...
 
-                // ทำลายไอเทมออกจากฉากหลังจากถูกเก็บแล้ว
-                Destroy(gameObject);
-            }
+            // Student code ends HERE ...
         }
 
         #endregion

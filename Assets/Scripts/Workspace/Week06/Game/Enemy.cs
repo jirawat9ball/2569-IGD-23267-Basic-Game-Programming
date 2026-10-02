@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -41,17 +41,14 @@ namespace Week06.Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // แสดง Log แจ้งเตือนเมื่อเกิดการชน
-            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+            // Guideline:
+            // 1. แสดง Log แจ้งเตือนเมื่อเกิดการชน: "[Trigger] <gameObject.name> collided with <other.gameObject.name>"
+            // 2. ใช้ other.GetComponent<Player>() เพื่อตรวจสอบว่าชนกับผู้เล่นหรือไม่
+            // 3. ถ้าเป็นผู้เล่น ให้เรียก Attack(player, attackPoint) และ TakeDamage(player.attackPoint)
 
-            // ตรวจสอบว่าวัตถุที่ชนมีคอมโพเนนต์ Player หรือไม่
-            Player player = other.GetComponent<Player>();
-            if (player != null)
-            {
-                // ถ้าชนกับผู้เล่น ให้ศัตรูโจมตีผู้เล่น
-                Attack(player, attackPoint);
-                TakeDamage(player.attackPoint);
-            }
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         #endregion
@@ -63,11 +60,14 @@ namespace Week06.Game
         /// </summary>
         public void Attack(Player target, int damage)
         {
-            if (target != null)
-            {
-                Debug.Log($"{Name} attacks {target.Name} with {damage} damage!");
-                target.TakeDamage(damage, Name);
-            }
+            // Guideline:
+            // 1. ตรวจสอบว่า target ไม่เป็น null
+            // 2. พิมพ์ Log: "<Name> attacks <target.Name> with <damage> damage!"
+            // 3. เรียก target.TakeDamage(damage, Name)
+
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         /// <summary>
@@ -75,15 +75,14 @@ namespace Week06.Game
         /// </summary>
         public void TakeDamage(int damage)
         {
-            energy -= damage;
-            Debug.Log($"{Name} takes {damage} damage! Remaining HP: {energy}");
+            // Guideline:
+            // 1. ลดพลังชีวิต energy ลงตามค่า damage
+            // 2. พิมพ์ Log: "<Name> takes <damage> damage! Remaining HP: <energy>"
+            // 3. หาก energy <= 0 ให้พิมพ์ "💥 <Name> defeated!" และ Destroy(gameObject)
 
-            // หากพลังชีวิตหมด ให้ทำลายตัวเองออกจากฉาก
-            if (energy <= 0)
-            {
-                Debug.Log($"💥 {Name} defeated!");
-                Destroy(gameObject);
-            }
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         #endregion

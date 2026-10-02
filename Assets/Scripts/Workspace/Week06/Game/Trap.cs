@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -28,17 +28,17 @@ namespace Week06.Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // แสดง Log แจ้งเตือนเมื่อเกิดการชน
-            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+            // Guideline:
+            // 1. แสดง Log แจ้งเตือนเมื่อเกิดการชน: "[Trigger] <gameObject.name> collided with <other.gameObject.name>"
+            // 2. ใช้ other.GetComponent<Player>() เพื่อตรวจสอบว่าชนกับผู้เล่นหรือไม่
+            // 3. ถ้าเป็นผู้เล่น ให้สั่ง:
+            //    - แสดง Log: "⚠️ Stepped on <Name>! Trapped for 1 turn (-<damage> Energy)"
+            //    - กำหนด player.isTrapped = true (ทำให้เดินไม่ได้ 1 ครั้ง)
+            //    - เรียก player.TakeDamage(damage)
 
-            // ตรวจสอบว่าวัตถุที่ชนมีคอมโพเนนต์ Player หรือไม่
-            Player player = other.GetComponent<Player>();
-            if (player != null)
-            {
-                Debug.Log($"⚠️ Stepped on {Name}! Trapped for 1 turn (-{damage} Energy)");
-                player.isTrapped = true; // ทำให้เดินไม่ได้ 1 ครั้ง
-                player.TakeDamage(damage);
-            }
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         #endregion

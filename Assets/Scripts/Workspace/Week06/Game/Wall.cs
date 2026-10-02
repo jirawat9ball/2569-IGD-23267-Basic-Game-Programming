@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -28,16 +28,16 @@ namespace Week06.Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // แสดง Log แจ้งเตือนเมื่อเกิดการชน
-            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+            // Guideline:
+            // 1. แสดง Log แจ้งเตือนเมื่อเกิดการชน: "[Trigger] <gameObject.name> collided with <other.gameObject.name>"
+            // 2. ใช้ other.GetComponent<Player>() เพื่อตรวจสอบว่าชนกับผู้เล่นหรือไม่
+            // 3. ถ้าเป็นผู้เล่น ให้สั่ง:
+            //    - เรียก Hit()
+            //    - เรียก player.RevertPosition() (เพื่อให้ผู้เล่นกลับไปอยู่ที่เดิม เดินผ่านไม่ได้)
 
-            // ตรวจสอบว่าผู้เล่นเดินมาชนกำแพงหรือไม่
-            Player player = other.GetComponent<Player>();
-            if (player != null)
-            {
-                Hit();
-                player.RevertPosition(); // ผู้เล่นจะกลับไปอยู่ที่เดิม เดินผ่านไม่ได้
-            }
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         #endregion
@@ -49,15 +49,14 @@ namespace Week06.Game
         /// </summary>
         public void Hit()
         {
-            durability--;
-            Debug.Log($"🧱 {Name} was hit! Remaining durability: {durability}");
+            // Guideline:
+            // 1. ลดค่า durability ลง 1
+            // 2. แสดง Log: "🧱 <Name> was hit! Remaining durability: <durability>"
+            // 3. หาก durability <= 0 ให้แสดง Log "💥 <Name> destroyed!" และเรียก Destroy(gameObject)
 
-            // หากความทนทานหมด ให้ทำลายกำแพงออกจากฉาก
-            if (durability <= 0)
-            {
-                Debug.Log($"💥 {Name} destroyed!");
-                Destroy(gameObject);
-            }
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         #endregion

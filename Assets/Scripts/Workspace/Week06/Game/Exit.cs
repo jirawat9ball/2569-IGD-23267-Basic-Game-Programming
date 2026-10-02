@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -22,15 +22,14 @@ namespace Week06.Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // แสดง Log แจ้งเตือนเมื่อเกิดการชน
-            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+            // Guideline:
+            // 1. แสดง Log แจ้งเตือนเมื่อเกิดการชน: "[Trigger] <gameObject.name> collided with <other.gameObject.name>"
+            // 2. ใช้ other.GetComponent<Player>() เพื่อตรวจสอบว่าชนกับผู้เล่นหรือไม่
+            // 3. ถ้าเป็นผู้เล่น ให้แสดง Log ประกาศชัยชนะ: "🎉 You Win! Reached the exit!"
 
-            // ตรวจสอบว่าผู้เล่นเดินมาถึงทางออกหรือยัง
-            Player player = other.GetComponent<Player>();
-            if (player != null)
-            {
-                Debug.Log("🎉 You Win! Reached the exit!");
-            }
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
 
         #endregion
