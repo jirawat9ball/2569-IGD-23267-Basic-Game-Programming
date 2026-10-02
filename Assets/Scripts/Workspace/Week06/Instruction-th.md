@@ -42,6 +42,10 @@ myCar.Move();
 | ข้อ 3 | `AS03_Enemy.cs` | `Assets/.../Week06/` | เขียนคลาส `Enemy` มี energy, attackPoint, Attack(), TakeDamage(), Trigger |
 | ข้อ 4 | `AS04_Exit.cs` | `Assets/.../Week06/` | เขียนคลาส `Exit` มี positionX, positionY, Trigger ตรวจจับผู้เล่นชนะเกม |
 | ข้อ 5 | `AS05_ItemPotion.cs` | `Assets/.../Week06/` | เขียนคลาส `ItemPotion` มี healPoint, Trigger สั่ง Heal ผู้เล่นแล้วทำลายตัวเอง |
+| **HW 1** | `HW01_ItemSword.cs` | `Assets/.../Week06/` | ไอเทมดาบเพิ่มพลังโจมตี `attackBonus` ให้ผู้เล่นแล้วทำลายตัวเอง |
+| **HW 2** | `HW02_Trap.cs` | `Assets/.../Week06/` | กับดักหนาม ลดพลังงานผู้เล่นตามค่า `damage` เมื่อเหยียบ |
+| **HW 3** | `HW03_Wall.cs` | `Assets/.../Week06/` | กำแพงพังได้ มี `durability` ลดลงเมื่อชน หากหมดจะพังทลาย |
+| **HW 4** | `HW04_Chest.cs` | `Assets/.../Week06/` | กล่องสมบัติ เสกสร้างวัตถุใหม่ `Instantiate(spawnPrefab)` แล้วทำลายกล่อง |
 | สรุป | `Assignment_Student_Week06.cs` | `Assets/.../Week06/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
 | **Workshop** | โฟลเดอร์ `Game/` + `Workshop.md` | `Assets/.../Week06/` | คู่มือสร้างเกม 2D Dungeon: Player, Enemy, Item, Trigger |
 
@@ -157,8 +161,76 @@ Buddy stopped barking
 
 ---
 
+## 📝 ส่วนการบ้าน (Homework)
+
+### HW 1. ไอเทมดาบเพิ่มพลังโจมตี (ItemSword)
+
+**ไฟล์:** `HW01_ItemSword.cs` (namespace `Week06.HW01`)
+1. **ประกาศฟิลด์แบบ public:**
+   - `string Name = "Sword"`
+   - `int attackBonus = 10`
+2. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้สั่ง:
+     - `player.IncreaseAttack(attackBonus)`
+     - พิมพ์ `"⚔️ Picked up <Name>! +<attackBonus> Attack"`
+     - สั่ง `Destroy(gameObject)` เพื่อทำลายไอเทมออกจากฉาก
+
+---
+
+### HW 2. กับดักหนาม (Trap)
+
+**ไฟล์:** `HW02_Trap.cs` (namespace `Week06.HW02`)
+1. **ประกาศฟิลด์แบบ public:**
+   - `string Name = "Trap"`
+   - `int damage = 5`
+2. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้สั่ง:
+     - `player.TakeDamage(damage)`
+     - พิมพ์ `"⚠️ Stepped on <Name>! -<damage> Energy"`
+
+---
+
+### HW 3. กำแพงพังได้ (Wall)
+
+**ไฟล์:** `HW03_Wall.cs` (namespace `Week06.HW03`)
+1. **ประกาศฟิลด์แบบ public:**
+   - `string Name = "Wall"`
+   - `int durability = 2`
+2. **ประกาศเมธอด `Hit()` แบบ public:**
+   - ลดค่าความทนทานลง 1 (`durability--`)
+   - พิมพ์ `"🧱 <Name> was hit! Remaining durability: <durability>"`
+   - หาก `durability <= 0` ให้พิมพ์ `"💥 <Name> destroyed!"` และเรียก `Destroy(gameObject)`
+3. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้สั่ง `Hit()`
+
+---
+
+### HW 4. กล่องสมบัติสร้างวัตถุใหม่ (Chest)
+
+**ไฟล์:** `HW04_Chest.cs` (namespace `Week06.HW04`)
+1. **ประกาศฟิลด์แบบ public:**
+   - `string Name = "Chest"`
+   - `GameObject spawnPrefab` (Prefab วัตถุที่จะเสกออกมา)
+2. **ประกาศเมธอด `OpenChest()` แบบ public:**
+   - พิมพ์ `"📦 Opened <Name>!"`
+   - หากมี `spawnPrefab != null` ให้เสกวัตถุใหม่ลงฉาก:
+     `Instantiate(spawnPrefab, transform.position, Quaternion.identity);`
+   - เรียก `Destroy(gameObject)` เพื่อลบกล่องสมบัติออกจากฉาก
+3. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้สั่ง `OpenChest()`
+
+---
+
 ## 📌 ข้อควรระวัง
 
 - ข้อความที่พิมพ์ต้องตรงตามโจทย์ทุกตัวอักษร
-- ตรวจสอบชื่อ namespace ให้ถูกต้อง (`Week06.Ex01` ถึง `Week06.Ex05`)
+- ตรวจสอบชื่อ namespace ให้ถูกต้อง (`Week06.Ex01` ถึง `Week06.Ex05`, และ `Week06.HW01` ถึง `Week06.HW04`)
 

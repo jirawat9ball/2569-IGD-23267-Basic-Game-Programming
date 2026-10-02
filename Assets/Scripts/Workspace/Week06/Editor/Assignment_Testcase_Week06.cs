@@ -28,6 +28,11 @@ namespace Week06_Class
         protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : typeof(Week06.Ex04.Exit);
         protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : typeof(Week06.Ex05.ItemPotion);
 
+        protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : typeof(Week06.HW01.ItemSword);
+        protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : typeof(Week06.HW02.Trap);
+        protected static System.Type WallType => isTeacherMode ? typeof(Week06.Teacher.HW03.Wall) : typeof(Week06.HW03.Wall);
+        protected static System.Type ChestType => isTeacherMode ? typeof(Week06.Teacher.HW04.Chest) : typeof(Week06.HW04.Chest);
+
         [SetUp]
         public void Setup()
         {
@@ -314,6 +319,199 @@ namespace Week06_Class
                 case "02_TriggerExists":
                     var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
                     Assert.IsNotNull(triggerMethod, "ItemPotion ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+            }
+        }
+    }
+
+    public class Homework : TestBase
+    {
+        // =========================================================================================
+        // ข้อ 1: ไอเทมดาบเพิ่มพลังโจมตี (ItemSword)
+        // =========================================================================================
+
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_TriggerExists")]
+        [TestCase("03_PickUpIncreasesAttack")]
+        public void Hw01_ItemSword(string subTask)
+        {
+            var t = SwordType;
+            switch (subTask)
+            {
+                case "01_RequiredFields":
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
+                    var bonusField = t.GetField("attackBonus", AnyInstance);
+
+                    Assert.IsNotNull(nameField, "ItemSword ต้องมีฟิลด์ Name");
+                    Assert.IsNotNull(bonusField, "ItemSword ต้องมีฟิลด์ attackBonus");
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "Name ต้องเป็น string");
+                    Assert.AreEqual(typeof(int), bonusField.FieldType, "attackBonus ต้องเป็น int");
+                    break;
+
+                case "02_TriggerExists":
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "ItemSword ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+
+                case "03_PickUpIncreasesAttack":
+                    var swordGo = new GameObject("TestSword");
+                    var sword = swordGo.AddComponent(t);
+
+                    var playerGo = new GameObject("TestPlayer");
+                    var col = playerGo.AddComponent<BoxCollider2D>();
+                    var player = playerGo.AddComponent<Week06.Game.Player>();
+                    player.attackPoint = 10;
+
+                    var trig = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    trig?.Invoke(sword, new object[] { col });
+
+                    Assert.AreEqual(20, player.attackPoint, "เมื่อเก็บดาบ (bonus=10) ค่า attackPoint ของ Player ต้องเพิ่มขึ้น");
+
+                    if (playerGo != null) Object.DestroyImmediate(playerGo);
+                    if (swordGo != null) Object.DestroyImmediate(swordGo);
+                    break;
+            }
+        }
+
+        // =========================================================================================
+        // ข้อ 2: กับดักหนาม (Trap)
+        // =========================================================================================
+
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_TriggerExists")]
+        [TestCase("03_SteppingReducesEnergy")]
+        public void Hw02_Trap(string subTask)
+        {
+            var t = TrapType;
+            switch (subTask)
+            {
+                case "01_RequiredFields":
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
+                    var damageField = t.GetField("damage", AnyInstance);
+
+                    Assert.IsNotNull(nameField, "Trap ต้องมีฟิลด์ Name");
+                    Assert.IsNotNull(damageField, "Trap ต้องมีฟิลด์ damage");
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "Name ต้องเป็น string");
+                    Assert.AreEqual(typeof(int), damageField.FieldType, "damage ต้องเป็น int");
+                    break;
+
+                case "02_TriggerExists":
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "Trap ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+
+                case "03_SteppingReducesEnergy":
+                    var trapHolder = new GameObject("TestTrap");
+                    var trap = trapHolder.AddComponent(t);
+
+                    var playerGo = new GameObject("TestPlayer");
+                    var col = playerGo.AddComponent<BoxCollider2D>();
+                    var player = playerGo.AddComponent<Week06.Game.Player>();
+                    player.energy = 20;
+
+                    var trig = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    trig?.Invoke(trap, new object[] { col });
+
+                    Assert.AreEqual(15, player.energy, "เมื่อเหยียบกับดัก (damage=5) ค่า energy ของ Player ต้องลดจาก 20 เหลือ 15");
+
+                    if (playerGo != null) Object.DestroyImmediate(playerGo);
+                    if (trapHolder != null) Object.DestroyImmediate(trapHolder);
+                    break;
+            }
+        }
+
+        // =========================================================================================
+        // ข้อ 3: กำแพงพังได้ (Wall)
+        // =========================================================================================
+
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_HitReducesDurability")]
+        [TestCase("03_TriggerExists")]
+        public void Hw03_Wall(string subTask)
+        {
+            var t = WallType;
+            switch (subTask)
+            {
+                case "01_RequiredFields":
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
+                    var durField = t.GetField("durability", AnyInstance);
+
+                    Assert.IsNotNull(nameField, "Wall ต้องมีฟิลด์ Name");
+                    Assert.IsNotNull(durField, "Wall ต้องมีฟิลด์ durability");
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "Name ต้องเป็น string");
+                    Assert.AreEqual(typeof(int), durField.FieldType, "durability ต้องเป็น int");
+                    break;
+
+                case "02_HitReducesDurability":
+                    var wallGo = new GameObject("TestWall");
+                    var wall = wallGo.AddComponent(t);
+
+                    var hitMethod = t.GetMethod("Hit", AnyInstance);
+                    Assert.IsNotNull(hitMethod, "Wall ต้องมีเมธอด Hit()");
+
+                    var dur = t.GetField("durability", AnyInstance);
+                    dur?.SetValue(wall, 2);
+
+                    hitMethod.Invoke(wall, null);
+                    int remaining = (int)dur.GetValue(wall);
+                    Assert.AreEqual(1, remaining, "เมื่อเรียก Hit() ค่า durability ต้องลดลง 1 หน่วย");
+
+                    if (wallGo != null) Object.DestroyImmediate(wallGo);
+                    break;
+
+                case "03_TriggerExists":
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "Wall ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+            }
+        }
+
+        // =========================================================================================
+        // ข้อ 4: กล่องสมบัติสร้างวัตถุใหม่ (Chest)
+        // =========================================================================================
+
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_OpenChestInstantiatesPrefab")]
+        [TestCase("03_TriggerExists")]
+        public void Hw04_Chest(string subTask)
+        {
+            var t = ChestType;
+            switch (subTask)
+            {
+                case "01_RequiredFields":
+                    var nameField = t.GetField("Name", AnyInstance) ?? t.GetField("name", AnyInstance);
+                    var prefabField = t.GetField("spawnPrefab", AnyInstance);
+
+                    Assert.IsNotNull(nameField, "Chest ต้องมีฟิลด์ Name");
+                    Assert.IsNotNull(prefabField, "Chest ต้องมีฟิลด์ spawnPrefab");
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "Name ต้องเป็น string");
+                    Assert.AreEqual(typeof(GameObject), prefabField.FieldType, "spawnPrefab ต้องเป็น GameObject");
+                    break;
+
+                case "02_OpenChestInstantiatesPrefab":
+                    var chestGo = new GameObject("TestChest");
+                    var chest = chestGo.AddComponent(t);
+
+                    var dummyPrefab = new GameObject("DummySpawnItem");
+                    var prefabF = t.GetField("spawnPrefab", AnyInstance);
+                    prefabF?.SetValue(chest, dummyPrefab);
+
+                    var openMethod = t.GetMethod("OpenChest", AnyInstance);
+                    Assert.IsNotNull(openMethod, "Chest ต้องมีเมธอด OpenChest()");
+
+                    openMethod.Invoke(chest, null);
+
+                    var spawned = GameObject.Find("DummySpawnItem(Clone)");
+                    Assert.IsNotNull(spawned, "เมื่อเปิดกล่อง ต้องทำการ Instantiate spawnPrefab ออกมาในฉาก");
+
+                    if (dummyPrefab != null) Object.DestroyImmediate(dummyPrefab);
+                    if (spawned != null) Object.DestroyImmediate(spawned);
+                    if (chestGo != null) Object.DestroyImmediate(chestGo);
+                    break;
+
+                case "03_TriggerExists":
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "Chest ต้องมีเมธอด OnTriggerEnter2D()");
                     break;
             }
         }

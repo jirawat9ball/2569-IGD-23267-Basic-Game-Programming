@@ -84,6 +84,32 @@
 
 ---
 
+## 📝 การบ้าน (Homework)
+
+### ข้อ 1: ไอเทมดาบเพิ่มพลังโจมตี (ItemSword)
+**ไฟล์:** `HW01_ItemSword.cs` (namespace `Week06.HW01`)
+- ฟิลด์ `Name` (string) = `"Sword"`, `attackBonus` (int) = `10`
+- `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `player.IncreaseAttack(attackBonus)` และทำลายตัวเอง `Destroy(gameObject)`
+
+### ข้อ 2: กับดักหนาม (Trap)
+**ไฟล์:** `HW02_Trap.cs` (namespace `Week06.HW02`)
+- ฟิลด์ `Name` (string) = `"Trap"`, `damage` (int) = `5`
+- `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `player.TakeDamage(damage)` เพื่อลดพลังชีวิตผู้เล่น
+
+### ข้อ 3: กำแพงพังได้ (Wall)
+**ไฟล์:** `HW03_Wall.cs` (namespace `Week06.HW03`)
+- ฟิลด์ `Name` (string) = `"Wall"`, `durability` (int) = `2`
+- เมธอด `Hit()`: ลดค่า `durability--` หาก `<= 0` ให้ทำลายตัวเอง `Destroy(gameObject)`
+- `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `Hit()`
+
+### ข้อ 4: กล่องสมบัติสร้างวัตถุใหม่ (Chest)
+**ไฟล์:** `HW04_Chest.cs` (namespace `Week06.HW04`)
+- ฟิลด์ `Name` (string) = `"Chest"`, `spawnPrefab` (GameObject)
+- เมธอด `OpenChest()`: หากมี `spawnPrefab != null` ให้สร้างวัตถุใหม่ด้วย `Instantiate(spawnPrefab, transform.position, Quaternion.identity);` แล้วทำลายกล่อง `Destroy(gameObject)`
+- `OnTriggerEnter2D(Collider2D other)`: เมื่อชนผู้เล่น ให้เรียก `OpenChest()`
+
+---
+
 ## 🎮 กิจกรรม Workshop ในห้องเรียน (In-class Workshop)
 
 **คู่มือฉบับเต็ม:** [Workshop.md](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Workshop.md)
@@ -92,4 +118,5 @@
 - **Player.cs:** ควบคุมการเดิน (W/A/S/D), รับดาเมจ, ฮีลเลือด
 - **Enemy.cs:** โจมตีผู้เล่นเมื่อชนกัน, รับความเสียหาย
 - **ItemPotion.cs & ItemSword.cs:** ตรวจจับผู้เล่นด้วย `OnTriggerEnter2D` และเรียก `GetComponent<Player>()`
+- **Trap.cs & Chest.cs:** กับดักหนามลดพลังงาน และกล่องสมบัติเสกวัตถุใหม่
 - **Wall.cs & Exit.cs:** กำแพงที่มีความทนทาน และประตูทางออกสู่ชัยชนะ

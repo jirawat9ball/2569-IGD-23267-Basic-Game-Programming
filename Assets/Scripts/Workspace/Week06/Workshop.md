@@ -28,7 +28,9 @@
 | [Enemy.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Enemy.cs) | ตัวศัตรู, โจมตีผู้เล่นเมื่อชน, รับดาเมจ | `OnTriggerEnter2D`, `GetComponent<Player>()` |
 | [ItemPotion.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/ItemPotion.cs) | ยาฟื้นฟูพลังงาน (+10 Energy) | ดึง Component แล้วสั่ง `player.Heal()` |
 | [ItemSword.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/ItemSword.cs) | ดาบเพิ่มพลังโจมตี (+10 Attack) | ดึง Component แล้วสั่ง `player.IncreaseAttack()` |
+| [Trap.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Trap.cs) | กับดักหนาม (-5 Energy) | ตรวจจับการเหยียบแล้วลดเลือดผู้เล่น |
 | [Wall.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Wall.cs) | กำแพงขวางทาง (มีค่าความทนทาน) | การลดค่า Durability และทำลายวัตถุ |
+| [Chest.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Chest.cs) | กล่องสมบัติ (Spawner) | เสกสร้างวัตถุใหม่ลงฉากด้วย `Instantiate` |
 | [Exit.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Exit.cs) | ประตูทางออก | ตรวจจับผู้เล่นเพื่อประกาศชัยชนะ |
 | [MapGenerator.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/MapGenerator.cs) | สุ่มสร้างแผนที่ วางพื้น กำแพง ผู้เล่น ศัตรู ไอเทม | การใช้ `Instantiate` สร้าง Object ลงใน Scene |
 
