@@ -16,23 +16,22 @@ namespace Week06.Game
         private void OnTriggerEnter2D(Collider2D other)
         {
             Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+
+            // ใช้ GetComponent เพื่อเข้าถึงและโจมตี Player โดยตรง
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Hit();
+                Attack(player, attackPoint);
             }
         }
 
-        public void Hit()
+        public void Hit(Player player = null)
         {
-            if (energy <= 0)
+            if (energy <= 0) return;
+            if (player == null && mapGenerator != null) player = mapGenerator.player;
+            if (player != null)
             {
-                return;
-            }
-
-            if (mapGenerator != null && mapGenerator.player != null)
-            {
-                Attack(mapGenerator.player, attackPoint);
+                Attack(player, attackPoint);
             }
         }
 
@@ -47,33 +46,12 @@ namespace Week06.Game
         public void TakeDamage(int damage)
         {
             energy -= damage;
-            CheckDead();
-        }
-
-        protected void CheckDead()
-        {
             if (energy <= 0)
             {
-                DestroySafe(gameObject);
-            }
-        }
-
-        protected static void DestroySafe(GameObject target)
-        {
-            if (target == null)
-            {
-                return;
-            }
-
-            if (Application.isPlaying)
-            {
-                Destroy(target);
-            }
-            else
-            {
-                target.SetActive(false);
+                Destroy(gameObject);
             }
         }
     }
 }
+
 
