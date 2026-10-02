@@ -1,25 +1,35 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
 {
     /// <summary>
-    /// ตัวผู้เล่น — จัดการการควบคุม การเดิน เลือด และพฤติกรรมทั้งหมดในคลาสเดียว (ยังไม่ใช้การสืบทอด)
+    /// สคริปต์ควบคุมตัวละครผู้เล่น (Player)
+    /// ใช้สอนพื้นฐานเรื่อง: Class, Variables (Fields), Methods, และการใช้ OnTriggerEnter2D ร่วมกับ GetComponent
     /// </summary>
     public class Player : MonoBehaviour
     {
-        [Header("ข้อมูลตัวละคร")]
+        #region 1. ข้อมูลและสถานะของตัวละคร (Variables / Fields)
+
+        [Header("ข้อมูลทั่วไป")]
         public string Name = "Player";
+
+        [Header("ตำแหน่งบนแผนที่ (Grid Position)")]
         public int positionX;
         public int positionY;
-        public MapGenerator mapGenerator;
+        [HideInInspector] public MapGenerator mapGenerator;
 
-        [Header("สถานะตัวละคร")]
-        public int energy = 20;
-        public int attackPoint = 10;
+        [Header("ค่าสถานะ (Stats)")]
+        public int energy = 20;       // พลังงาน/พลังชีวิต (เดิน 1 ก้าว เสีย 1 energy)
+        public int attackPoint = 10;  // พลังโจมตีเริ่มต้น
+
+        #endregion
+
+        #region 2. วงจรการทำงานของ Unity (Lifecycle Methods)
 
         private void Awake()
         {
+            // กำหนดค่าพลังงานเริ่มต้นหากยังไม่ได้ตั้งค่า
             if (energy <= 0)
             {
                 energy = 20;
@@ -28,6 +38,7 @@ namespace Week06.Game
 
         private void Update()
         {
+            // รับอินพุตจากแป้นพิมพ์เพื่อบังคับทิศทางการเดินของผู้เล่น
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
                 Move(Vector2.right);
@@ -46,80 +57,38 @@ namespace Week06.Game
             }
         }
 
-        #region การเดินและการเคลื่อนที่
+        #endregion
 
-        /// <summary>เดินไปยังทิศทางที่กำหนด</summary>
+        #region 3. ระบบการเคลื่อนที่ (Movement)
+
+        /// <summary>
+        /// เดินไปยังทิศทางที่กำหนด (Vector2: บน, ล่าง, ซ้าย, ขวา)
+        /// </summary>
         public void Move(Vector2 direction)
         {
+            // 1. ตรวจสอบก่อนว่าเดินไปได้หรือไม่ (ติดขอบแมพหรือไม่)
             if (!CanMove(direction)) return;
 
-            int toX = (int)(positionX + direction.x);
-            int toY = (int)(positionY + direction.y);
+            // 2. อัปเดตพิกัดตำแหน่งของผู้เล่น
+            positionX += (int)direction.x;
+            positionY += (int)direction.y;
+            transform.position = new Vector3(positionX, positionY, 0);
 
-            if (HasSomeObject(toX, toY))
-            {
-                if (IsPotion(toX, toY))
-                {
-                    if (mapGenerator != null && mapGenerator.potions != null && mapGenerator.potions[toX, toY] != null)
-                    {
-                        mapGenerator.potions[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsDemonWall(toX, toY))
-                {
-                    if (mapGenerator != null && mapGenerator.walls != null && mapGenerator.walls[toX, toY] != null)
-                    {
-                        mapGenerator.walls[toX, toY].Hit();
-                    }
-                }
-            }
-            else
-            {
-                positionX = toX;
-                positionY = toY;
-                transform.position = new Vector3(positionX, positionY, 0);
-                TakeDamage(1);
-            }
+            // 3. ทุกครั้งที่ก้าวเดิน จะเสียพลังงาน 1 หน่วย
+            TakeDamage(1);
         }
 
-        /// <summary>Method Overloading: รับพารามิเตอร์แกน x และ y</summary>
+        /// <summary>
+        /// เมธอด Overload: เดินด้วยค่าแกน x, y
+        /// </summary>
         public void Move(float x, float y)
         {
             Move(new Vector2(x, y));
         }
 
-        public bool HasSomeObject(int x, int y)
-        {
-            if (mapGenerator == null) return false;
-            string mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata != mapGenerator.empty;
-        }
-
-        public bool IsDemonWall(int x, int y)
-        {
-            if (mapGenerator == null) return false;
-            string mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata == mapGenerator.demonWall;
-        }
-
-        public bool IsPotion(int x, int y)
-        {
-            if (mapGenerator == null) return false;
-            string mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata == mapGenerator.potion || mapdata == mapGenerator.bonuesPotion;
-        }
-
-        public bool IsExit(int x, int y)
-        {
-            if (mapGenerator == null) return false;
-            string mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata == mapGenerator.exit;
-        }
-
-        /// <summary>ตรวจสอบว่าทิศทางที่จะเดินไปอยู่ในขอบเขตแผนที่หรือไม่</summary>
+        /// <summary>
+        /// ตรวจสอบว่าพิกัดเป้าหมายอยู่ในขอบเขตแผนที่หรือไม่
+        /// </summary>
         public bool CanMove(Vector2 direction)
         {
             int targetX = (int)(positionX + direction.x);
@@ -127,7 +96,8 @@ namespace Week06.Game
 
             if (mapGenerator != null)
             {
-                return targetX >= 0 && targetX < mapGenerator.Row && targetY >= 0 && targetY < mapGenerator.Col;
+                return targetX >= 0 && targetX < mapGenerator.Row &&
+                       targetY >= 0 && targetY < mapGenerator.Col;
             }
 
             return true;
@@ -135,60 +105,67 @@ namespace Week06.Game
 
         #endregion
 
-        #region การต่อสู้และพลังชีวิต
+        #region 4. ระบบความสามารถและพลังชีวิต (Combat & Stats)
 
+        /// <summary>
+        /// โจมตีศัตรูเป้าหมาย
+        /// </summary>
         public void Attack(Enemy target, int damage)
         {
             if (target != null)
             {
+                Debug.Log($"{Name} attacks {target.Name} with {damage} damage!");
                 target.TakeDamage(damage);
             }
         }
 
-        /// <summary>รับดาเมจ ลด energy และแสดงผล</summary>
-        public void TakeDamage(int Damage)
+        /// <summary>
+        /// ลดพลังงาน/พลังชีวิตของผู้เล่น
+        /// </summary>
+        public void TakeDamage(int damage)
         {
-            energy -= Damage;
+            energy -= damage;
             if (energy < 0) energy = 0;
-            Debug.Log("Current Energy : " + energy);
+            Debug.Log($"Current Energy : {energy}");
             CheckDead();
         }
 
-        /// <summary>Method Overloading: รับชื่อผู้โจมตีด้วย</summary>
-        public void TakeDamage(int Damage, string attacker)
+        /// <summary>
+        /// เมธอด Overload: รับดาเมจพร้อมระบุชื่อผู้โจมตี
+        /// </summary>
+        public void TakeDamage(int damage, string attacker)
         {
-            Debug.Log("Attacked by " + attacker);
-            TakeDamage(Damage);
+            Debug.Log($"Attacked by {attacker} (-{damage})");
+            TakeDamage(damage);
         }
 
+        /// <summary>
+        /// ฟื้นฟูพลังงานของผู้เล่น
+        /// </summary>
         public void Heal(int healPoint)
         {
-            Heal(healPoint, false);
+            energy += healPoint;
+            Debug.Log($"Healed +{healPoint}! Current Energy: {energy}");
         }
 
-        public void Heal(int healPoint, bool bonus)
-        {
-            energy += healPoint * (bonus ? 2 : 1);
-        }
-
-        /// <summary>เพิ่มเลือดตามค่าเริ่มต้น (10)</summary>
-        public void Heal()
-        {
-            Heal(10);
-        }
-
+        /// <summary>
+        /// เพิ่มพลังโจมตีถาวรให้กับผู้เล่น (เช่น เมื่อเก็บดาบ)
+        /// </summary>
         public void IncreaseAttack(int value)
         {
             attackPoint += value;
+            Debug.Log($"Attack increased by +{value}! Current Attack: {attackPoint}");
         }
 
-        /// <summary>ตรวจว่าผู้เล่นตายหรือยัง</summary>
-        protected void CheckDead()
+        /// <summary>
+        /// ตรวจสอบว่าผู้เล่นพลังงานหมด (ตาย) หรือยัง
+        /// </summary>
+        private void CheckDead()
         {
             if (energy <= 0)
             {
-                Debug.Log("You Lose");
-                DestroySafe(gameObject);
+                Debug.Log("💀 You Lose! Out of energy.");
+                Destroy(gameObject);
             }
         }
 
@@ -197,63 +174,34 @@ namespace Week06.Game
             return energy;
         }
 
-        public string GetStatus()
-        {
-            return "Player Energy: " + energy;
-        }
+        #endregion
 
-        protected static void DestroySafe(GameObject target)
-        {
-            if (target == null)
-            {
-                return;
-            }
-
-            if (Application.isPlaying)
-            {
-                Destroy(target);
-            }
-            else
-            {
-                target.SetActive(false);
-            }
-        }
-
-        #region การตรวจจับการชนด้วย Trigger (OnTriggerEnter)
+        #region 5. การตรวจจับการชน (Collision Detection with OnTriggerEnter2D)
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            // แสดง Log แจ้งเตือนเมื่อมีการชนกัน
             Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
-            HandleTriggerEnter(other.gameObject);
-        }
 
-        private void HandleTriggerEnter(GameObject target)
-        {
-            if (target == null) return;
-
-            // การชนกับไอเทม (ItemPotion, ItemSword) จัดการใน OnTriggerEnter2D ของตัวไอเทมเอง
-
-            // ตรวจสอบการชนกับศัตรู
-            Enemy enemy = target.GetComponent<Enemy>();
+            // ตรวจสอบว่าชนกับ Enemy หรือไม่ ถ้าชนให้โจมตีศัตรู
+            Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
                 Attack(enemy, attackPoint);
-                enemy.Hit();
                 return;
             }
 
-            // ตรวจสอบการชนกับกำแพง
-            Wall wall = target.GetComponent<Wall>();
+            // ตรวจสอบว่าชนกับ Wall หรือไม่ ถ้าชนให้โจมตีกำแพง
+            Wall wall = other.GetComponent<Wall>();
             if (wall != null)
             {
                 wall.Hit();
                 return;
             }
-        }
 
-        #endregion
+            // หมายเหตุ: ไอเทม (ItemPotion, ItemSword) และ Exit จะจัดการการทำงานด้วยตัวเองใน OnTriggerEnter2D ของตนเอง
+        }
 
         #endregion
     }
 }
-
