@@ -53,238 +53,289 @@ namespace Week06_Class
         // ข้อ 1: การสร้างคลาสเบื้องต้น (Car)
         // =========================================================================================
 
-        [Test]
-        public void As01_01_Car_InheritsMonoBehaviour()
+        [TestCase("01_InheritsMonoBehaviour")]
+        [TestCase("02_PublicFields")]
+        [TestCase("03_MethodsPrintCorrectMessages")]
+        [TestCase("04_StartInitializesDefaultValues")]
+        [TestCase("05_UpdateMethodAndDemo")]
+        public void As01_Car(string subTask)
         {
-            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(CarType), "คลาส Car ต้องสืบทอดจาก MonoBehaviour");
-        }
+            var t = CarType;
+            switch (subTask)
+            {
+                case "01_InheritsMonoBehaviour":
+                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Car ต้องสืบทอดจาก MonoBehaviour");
+                    break;
 
-        [TestCase("name", typeof(string))]
-        [TestCase("color", typeof(string))]
-        [TestCase("speed", typeof(float))]
-        public void As01_02_Car_PublicFields(string fieldName, System.Type expectedType)
-        {
-            var field = CarType.GetField(fieldName, AnyInstance);
-            Assert.IsNotNull(field, $"คลาส Car ต้องมีฟิลด์ชื่อ {fieldName}");
-            Assert.AreEqual(expectedType, field.FieldType, $"ฟิลด์ {fieldName} ต้องเป็นชนิด {expectedType.Name}");
-            Assert.IsTrue(field.IsPublic, $"ฟิลด์ {fieldName} ต้องเป็น public");
-        }
+                case "02_PublicFields":
+                    var nameField = t.GetField("name", AnyInstance);
+                    var colorField = t.GetField("color", AnyInstance);
+                    var speedField = t.GetField("speed", AnyInstance);
 
-        [TestCase("Move", "Car is moving")]
-        [TestCase("Turn", "Car is turning")]
-        [TestCase("Honk", "Car is honking")]
-        public void As01_03_Car_MethodsPrintCorrectMessages(string methodName, string expectedMessage)
-        {
-            var go = new GameObject("TestCar");
-            var car = go.AddComponent(CarType) as MonoBehaviour;
+                    Assert.IsNotNull(nameField, "คลาส Car ต้องมีฟิลด์ชื่อ name");
+                    Assert.IsNotNull(colorField, "คลาส Car ต้องมีฟิลด์ชื่อ color");
+                    Assert.IsNotNull(speedField, "คลาส Car ต้องมีฟิลด์ชื่อ speed");
 
-            CarType.GetField("name", AnyInstance)?.SetValue(car, "civic");
-            CarType.GetField("color", AnyInstance)?.SetValue(car, "black");
-            CarType.GetField("speed", AnyInstance)?.SetValue(car, 110f);
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "name ต้องเป็น string");
+                    Assert.AreEqual(typeof(string), colorField.FieldType, "color ต้องเป็น string");
+                    Assert.AreEqual(typeof(float), speedField.FieldType, "speed ต้องเป็น float");
 
-            var method = CarType.GetMethod(methodName, AnyInstance);
-            Assert.IsNotNull(method, $"คลาส Car ต้องมีเมธอด {methodName}()");
+                    Assert.IsTrue(nameField.IsPublic && colorField.IsPublic && speedField.IsPublic, "ฟิลด์ทั้งสามต้องเป็น public");
+                    break;
 
-            SimpleDebugConsole.Clear();
-            method.Invoke(car, null);
-            TestUtils.AssertMultilineEqual(expectedMessage, SimpleDebugConsole.GetOutput());
+                case "03_MethodsPrintCorrectMessages":
+                    var go = new GameObject("TestCar");
+                    var car = go.AddComponent(CarType) as MonoBehaviour;
+                    Assert.IsNotNull(car, "ไม่สามารถสร้าง Component จากคลาส Car ได้");
 
-            Object.DestroyImmediate(go);
-        }
+                    t.GetField("name", AnyInstance)?.SetValue(car, "civic");
+                    t.GetField("color", AnyInstance)?.SetValue(car, "black");
+                    t.GetField("speed", AnyInstance)?.SetValue(car, 110f);
 
-        [Test]
-        public void As01_04_Car_StartInitializesDefaultValues()
-        {
-            var go = new GameObject("TestCar");
-            var car = go.AddComponent(CarType) as MonoBehaviour;
+                    var moveMethod = t.GetMethod("Move", AnyInstance);
+                    var turnMethod = t.GetMethod("Turn", AnyInstance);
+                    var honkMethod = t.GetMethod("Honk", AnyInstance);
 
-            var startMethod = CarType.GetMethod("Start", AnyInstance);
-            Assert.IsNotNull(startMethod, "คลาส Car ต้องมีเมธอด Start()");
-            startMethod.Invoke(car, null);
+                    Assert.IsNotNull(moveMethod, "คลาส Car ต้องมีเมธอด Move()");
+                    Assert.IsNotNull(turnMethod, "คลาส Car ต้องมีเมธอด Turn()");
+                    Assert.IsNotNull(honkMethod, "คลาส Car ต้องมีเมธอด Honk()");
 
-            var nameVal = CarType.GetField("name", AnyInstance)?.GetValue(car) as string;
-            var colorVal = CarType.GetField("color", AnyInstance)?.GetValue(car) as string;
-            var speedVal = CarType.GetField("speed", AnyInstance)?.GetValue(car);
+                    SimpleDebugConsole.Clear();
+                    moveMethod.Invoke(car, null);
+                    turnMethod.Invoke(car, null);
+                    honkMethod.Invoke(car, null);
 
-            Assert.AreEqual("civic", nameVal, "Start() ต้องกำหนดค่า name เป็น civic");
-            Assert.AreEqual("black", colorVal, "Start() ต้องกำหนดค่า color เป็น black");
-            Assert.AreEqual(110f, speedVal != null ? System.Convert.ToSingle(speedVal) : 0f, "Start() ต้องกำหนดค่า speed เป็น 110");
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Car is moving");
+                    sb.AppendLine("Car is turning");
+                    sb.AppendLine("Car is honking");
+                    TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
 
-            Object.DestroyImmediate(go);
-        }
+                    Object.DestroyImmediate(go);
+                    break;
 
-        [Test]
-        public void As01_05_Car_UpdateMethodAndDemo()
-        {
-            var updateMethod = CarType.GetMethod("Update", AnyInstance);
-            Assert.IsNotNull(updateMethod, "คลาส Car ต้องมีเมธอด Update()");
-            Assert.DoesNotThrow(() => assignment.Ex01_CarDemo(), "Ex01_CarDemo() ต้องรันได้โดยไม่เกิดข้อผิดพลาด");
+                case "04_StartInitializesDefaultValues":
+                    var goStart = new GameObject("TestCar");
+                    var carStart = goStart.AddComponent(CarType) as MonoBehaviour;
+
+                    var startMethod = t.GetMethod("Start", AnyInstance);
+                    Assert.IsNotNull(startMethod, "คลาส Car ต้องมีเมธอด Start()");
+                    startMethod.Invoke(carStart, null);
+
+                    var nameVal = t.GetField("name", AnyInstance)?.GetValue(carStart) as string;
+                    var colorVal = t.GetField("color", AnyInstance)?.GetValue(carStart) as string;
+                    var speedVal = t.GetField("speed", AnyInstance)?.GetValue(carStart);
+
+                    Assert.AreEqual("civic", nameVal, "Start() ต้องกำหนดค่า name เป็น civic");
+                    Assert.AreEqual("black", colorVal, "Start() ต้องกำหนดค่า color เป็น black");
+                    Assert.AreEqual(110f, speedVal != null ? System.Convert.ToSingle(speedVal) : 0f, "Start() ต้องกำหนดค่า speed เป็น 110");
+
+                    Object.DestroyImmediate(goStart);
+                    break;
+
+                case "05_UpdateMethodAndDemo":
+                    var updateMethod = t.GetMethod("Update", AnyInstance);
+                    Assert.IsNotNull(updateMethod, "คลาส Car ต้องมีเมธอด Update()");
+                    Assert.DoesNotThrow(() => assignment.Ex01_CarDemo(), "Ex01_CarDemo() ต้องรันได้โดยไม่เกิดข้อผิดพลาด");
+                    break;
+            }
         }
 
         // =========================================================================================
         // ข้อ 2: คอนสตรัคเตอร์ (Dog)
         // =========================================================================================
 
-        [Test]
-        public void As02_01_Dog_ConstructorParameters()
+        [TestCase("01_ConstructorParameters")]
+        [TestCase("02_ConstructorAssignsFields")]
+        [TestCase("03_MethodsOutput")]
+        [TestCase("04_DogDemo_UsesBuddy")]
+        public void As02_ClassConstructor(string subTask)
         {
-            var ctor = Dog02Type.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
-            Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ (string name, string breed, int age)");
+            var t = Dog02Type;
+            switch (subTask)
+            {
+                case "01_ConstructorParameters":
+                    var ctor = t.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
+                    Assert.IsNotNull(ctor, "คลาส Dog ต้องมี Constructor ที่รับ (string name, string breed, int age)");
 
-            var ps = ctor.GetParameters();
-            Assert.AreEqual("name", ps[0].Name, "พารามิเตอร์ตัวที่ 1 ต้องชื่อ name");
-            Assert.AreEqual("breed", ps[1].Name, "พารามิเตอร์ตัวที่ 2 ต้องชื่อ breed");
-            Assert.AreEqual("age", ps[2].Name, "พารามิเตอร์ตัวที่ 3 ต้องชื่อ age");
-        }
+                    var ps = ctor.GetParameters();
+                    Assert.AreEqual("name", ps[0].Name, "พารามิเตอร์ตัวที่ 1 ต้องชื่อ name");
+                    Assert.AreEqual("breed", ps[1].Name, "พารามิเตอร์ตัวที่ 2 ต้องชื่อ breed");
+                    Assert.AreEqual("age", ps[2].Name, "พารามิเตอร์ตัวที่ 3 ต้องชื่อ age");
+                    break;
 
-        [TestCase("Buddy", "Golden Retriever", 3)]
-        [TestCase("Max", "Beagle", 5)]
-        [TestCase("Coco", "Poodle", 1)]
-        public void As02_02_Dog_ConstructorAssignsFields(string name, string breed, int age)
-        {
-            var ctor = Dog02Type.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
-            var dog = ctor.Invoke(new object[] { name, breed, age });
+                case "02_ConstructorAssignsFields":
+                    var ctorAssign = t.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
+                    var dog = ctorAssign.Invoke(new object[] { "Buddy", "Golden Retriever", 3 });
 
-            var nameField = Dog02Type.GetField("name", AnyInstance);
-            var breedField = Dog02Type.GetField("breed", AnyInstance);
-            var ageField = Dog02Type.GetField("age", AnyInstance);
+                    var nameField = t.GetField("name", AnyInstance);
+                    var breedField = t.GetField("breed", AnyInstance);
+                    var ageField = t.GetField("age", AnyInstance);
 
-            Assert.AreEqual(name, nameField?.GetValue(dog), "Constructor ต้องกำหนดค่า name");
-            Assert.AreEqual(breed, breedField?.GetValue(dog), "Constructor ต้องกำหนดค่า breed");
-            Assert.AreEqual(age, ageField?.GetValue(dog), "Constructor ต้องกำหนดค่า age");
-        }
+                    Assert.AreEqual("Buddy", nameField?.GetValue(dog), "Constructor ต้องกำหนดค่า name");
+                    Assert.AreEqual("Golden Retriever", breedField?.GetValue(dog), "Constructor ต้องกำหนดค่า breed");
+                    Assert.AreEqual(3, ageField?.GetValue(dog), "Constructor ต้องกำหนดค่า age");
+                    break;
 
-        [TestCase("Buddy", "Bark", "Buddy is barking")]
-        [TestCase("Buddy", "WagTail", "Buddy is wagging tail")]
-        [TestCase("Buddy", "StopBarking", "Buddy stopped barking")]
-        public void As02_03_Dog_MethodsOutput(string dogName, string methodName, string expectedMessage)
-        {
-            var ctor = Dog02Type.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
-            var dog = ctor.Invoke(new object[] { dogName, "Golden Retriever", 3 });
+                case "03_MethodsOutput":
+                    var ctorMethod = t.GetConstructor(new[] { typeof(string), typeof(string), typeof(int) });
+                    var dogTest = ctorMethod.Invoke(new object[] { "Buddy", "Golden Retriever", 3 });
 
-            var method = Dog02Type.GetMethod(methodName, AnyInstance);
-            Assert.IsNotNull(method, $"คลาส Dog ต้องมีเมธอด {methodName}()");
+                    var barkMethod = t.GetMethod("Bark", AnyInstance);
+                    var wagMethod = t.GetMethod("WagTail", AnyInstance);
+                    var stopMethod = t.GetMethod("StopBarking", AnyInstance);
 
-            SimpleDebugConsole.Clear();
-            method.Invoke(dog, null);
-            TestUtils.AssertMultilineEqual(expectedMessage, SimpleDebugConsole.GetOutput());
-        }
+                    Assert.IsNotNull(barkMethod, "คลาส Dog ต้องมีเมธอด Bark()");
+                    Assert.IsNotNull(wagMethod, "คลาส Dog ต้องมีเมธอด WagTail()");
+                    Assert.IsNotNull(stopMethod, "คลาส Dog ต้องมีเมธอด StopBarking()");
 
-        [Test]
-        public void As02_04_DogDemo_UsesBuddy()
-        {
-            SimpleDebugConsole.Clear();
-            assignment.Ex02_DogDemo();
+                    SimpleDebugConsole.Clear();
+                    barkMethod.Invoke(dogTest, null);
+                    wagMethod.Invoke(dogTest, null);
+                    stopMethod.Invoke(dogTest, null);
 
-            var sb = new StringBuilder();
-            sb.AppendLine("Buddy is barking");
-            sb.AppendLine("Buddy is wagging tail");
-            sb.AppendLine("Buddy stopped barking");
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Buddy is barking");
+                    sb.AppendLine("Buddy is wagging tail");
+                    sb.AppendLine("Buddy stopped barking");
+                    TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
 
-            TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                case "04_DogDemo_UsesBuddy":
+                    SimpleDebugConsole.Clear();
+                    assignment.Ex02_DogDemo();
+
+                    var sbDemo = new StringBuilder();
+                    sbDemo.AppendLine("Buddy is barking");
+                    sbDemo.AppendLine("Buddy is wagging tail");
+                    sbDemo.AppendLine("Buddy stopped barking");
+                    TestUtils.AssertMultilineEqual(sbDemo.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+            }
         }
 
         // =========================================================================================
         // ข้อ 3: ศัตรูและการต่อสู้ (Enemy)
         // =========================================================================================
 
-        [Test]
-        public void As03_01_Enemy_InheritsMonoBehaviour()
+        [TestCase("01_InheritsMonoBehaviour")]
+        [TestCase("02_RequiredFields")]
+        [TestCase("03_TakeDamage")]
+        [TestCase("04_AttackAndTrigger")]
+        public void As03_Enemy(string subTask)
         {
-            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(EnemyType), "คลาส Enemy ต้องสืบทอดจาก MonoBehaviour");
-        }
+            var t = EnemyType;
+            switch (subTask)
+            {
+                case "01_InheritsMonoBehaviour":
+                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Enemy ต้องสืบทอดจาก MonoBehaviour");
+                    break;
 
-        [TestCase("name", typeof(string))]
-        [TestCase("energy", typeof(int))]
-        [TestCase("attackPoint", typeof(int))]
-        public void As03_02_Enemy_RequiredFields(string fieldName, System.Type expectedType)
-        {
-            var field = EnemyType.GetField(fieldName, AnyInstance);
-            Assert.IsNotNull(field, $"Enemy ต้องมีฟิลด์ {fieldName}");
-            Assert.AreEqual(expectedType, field.FieldType, $"ฟิลด์ {fieldName} ต้องเป็นชนิด {expectedType.Name}");
-        }
+                case "02_RequiredFields":
+                    var nameField = t.GetField("name", AnyInstance);
+                    var energyField = t.GetField("energy", AnyInstance);
+                    var atkField = t.GetField("attackPoint", AnyInstance);
 
-        [TestCase(2, 8)]
-        [TestCase(5, 5)]
-        [TestCase(10, 0)]
-        public void As03_03_Enemy_TakeDamage(int damage, int expectedHp)
-        {
-            var go = new GameObject("TestEnemy");
-            var enemy = go.AddComponent(EnemyType) as MonoBehaviour;
+                    Assert.IsNotNull(nameField, "Enemy ต้องมีฟิลด์ name");
+                    Assert.IsNotNull(energyField, "Enemy ต้องมีฟิลด์ energy");
+                    Assert.IsNotNull(atkField, "Enemy ต้องมีฟิลด์ attackPoint");
 
-            var energyField = EnemyType.GetField("energy", AnyInstance);
-            energyField?.SetValue(enemy, 10);
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "name ต้องเป็น string");
+                    Assert.AreEqual(typeof(int), energyField.FieldType, "energy ต้องเป็น int");
+                    Assert.AreEqual(typeof(int), atkField.FieldType, "attackPoint ต้องเป็น int");
+                    break;
 
-            var takeDamageMethod = EnemyType.GetMethod("TakeDamage", AnyInstance);
-            Assert.IsNotNull(takeDamageMethod, "Enemy ต้องมีเมธอด TakeDamage(int)");
+                case "03_TakeDamage":
+                    var go = new GameObject("TestEnemy");
+                    var enemy = go.AddComponent(EnemyType) as MonoBehaviour;
 
-            takeDamageMethod.Invoke(enemy, new object[] { damage });
-            int remaining = (int)energyField.GetValue(enemy);
-            Assert.AreEqual(expectedHp, remaining, $"รับดาเมจ {damage} จาก 10 ต้องเหลือ {expectedHp}");
+                    var eField = t.GetField("energy", AnyInstance);
+                    eField?.SetValue(enemy, 10);
 
-            if (go != null) Object.DestroyImmediate(go);
-        }
+                    var takeDamageMethod = t.GetMethod("TakeDamage", AnyInstance);
+                    Assert.IsNotNull(takeDamageMethod, "Enemy ต้องมีเมธอด TakeDamage(int)");
 
-        [Test]
-        public void As03_04_Enemy_AttackAndTriggerMethodsExist()
-        {
-            var attackMethod = EnemyType.GetMethod("Attack", AnyInstance);
-            var triggerMethod = EnemyType.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    takeDamageMethod.Invoke(enemy, new object[] { 4 });
+                    int remaining = (int)eField.GetValue(enemy);
+                    Assert.AreEqual(6, remaining, "โดนดาเมจ 4 จาก 10 ต้องเหลือ 6");
 
-            Assert.IsNotNull(attackMethod, "Enemy ต้องมีเมธอด Attack()");
-            Assert.IsNotNull(triggerMethod, "Enemy ต้องมีเมธอด OnTriggerEnter2D()");
+                    if (go != null) Object.DestroyImmediate(go);
+                    break;
+
+                case "04_AttackAndTrigger":
+                    var attackMethod = t.GetMethod("Attack", AnyInstance);
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+
+                    Assert.IsNotNull(attackMethod, "Enemy ต้องมีเมธอด Attack()");
+                    Assert.IsNotNull(triggerMethod, "Enemy ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+            }
         }
 
         // =========================================================================================
         // ข้อ 4: ทางออกของเกม (Exit)
         // =========================================================================================
 
-        [Test]
-        public void As04_01_Exit_InheritsMonoBehaviour()
+        [TestCase("01_InheritsMonoBehaviour")]
+        [TestCase("02_RequiredFields")]
+        [TestCase("03_TriggerExists")]
+        public void As04_Exit(string subTask)
         {
-            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(ExitType), "คลาส Exit ต้องสืบทอดจาก MonoBehaviour");
-        }
+            var t = ExitType;
+            switch (subTask)
+            {
+                case "01_InheritsMonoBehaviour":
+                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Exit ต้องสืบทอดจาก MonoBehaviour");
+                    break;
 
-        [TestCase("positionX", typeof(int))]
-        [TestCase("positionY", typeof(int))]
-        public void As04_02_Exit_RequiredFields(string fieldName, System.Type expectedType)
-        {
-            var field = ExitType.GetField(fieldName, AnyInstance);
-            Assert.IsNotNull(field, $"Exit ต้องมีฟิลด์ {fieldName}");
-            Assert.AreEqual(expectedType, field.FieldType, $"ฟิลด์ {fieldName} ต้องเป็นชนิด {expectedType.Name}");
-        }
+                case "02_RequiredFields":
+                    var posX = t.GetField("positionX", AnyInstance);
+                    var posY = t.GetField("positionY", AnyInstance);
 
-        [Test]
-        public void As04_03_Exit_OnTriggerEnter2DExists()
-        {
-            var triggerMethod = ExitType.GetMethod("OnTriggerEnter2D", AnyInstance);
-            Assert.IsNotNull(triggerMethod, "Exit ต้องมีเมธอด OnTriggerEnter2D()");
+                    Assert.IsNotNull(posX, "Exit ต้องมีฟิลด์ positionX");
+                    Assert.IsNotNull(posY, "Exit ต้องมีฟิลด์ positionY");
+                    Assert.AreEqual(typeof(int), posX.FieldType, "positionX ต้องเป็น int");
+                    Assert.AreEqual(typeof(int), posY.FieldType, "positionY ต้องเป็น int");
+                    break;
+
+                case "03_TriggerExists":
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "Exit ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+            }
         }
 
         // =========================================================================================
         // ข้อ 5: ไอเทมยาฟื้นพลัง (ItemPotion)
         // =========================================================================================
 
-        [Test]
-        public void As05_01_ItemPotion_InheritsMonoBehaviour()
+        [TestCase("01_InheritsMonoBehaviour")]
+        [TestCase("02_RequiredFields")]
+        [TestCase("03_TriggerExists")]
+        public void As05_ItemPotion(string subTask)
         {
-            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(PotionType), "คลาส ItemPotion ต้องสืบทอดจาก MonoBehaviour");
-        }
+            var t = PotionType;
+            switch (subTask)
+            {
+                case "01_InheritsMonoBehaviour":
+                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส ItemPotion ต้องสืบทอดจาก MonoBehaviour");
+                    break;
 
-        [TestCase("name", typeof(string))]
-        [TestCase("healPoint", typeof(int))]
-        public void As05_02_ItemPotion_RequiredFields(string fieldName, System.Type expectedType)
-        {
-            var field = PotionType.GetField(fieldName, AnyInstance);
-            Assert.IsNotNull(field, $"ItemPotion ต้องมีฟิลด์ {fieldName}");
-            Assert.AreEqual(expectedType, field.FieldType, $"ฟิลด์ {fieldName} ต้องเป็นชนิด {expectedType.Name}");
-        }
+                case "02_RequiredFields":
+                    var nameField = t.GetField("name", AnyInstance);
+                    var healField = t.GetField("healPoint", AnyInstance);
 
-        [Test]
-        public void As05_03_ItemPotion_OnTriggerEnter2DExists()
-        {
-            var triggerMethod = PotionType.GetMethod("OnTriggerEnter2D", AnyInstance);
-            Assert.IsNotNull(triggerMethod, "ItemPotion ต้องมีเมธอด OnTriggerEnter2D()");
+                    Assert.IsNotNull(nameField, "ItemPotion ต้องมีฟิลด์ name");
+                    Assert.IsNotNull(healField, "ItemPotion ต้องมีฟิลด์ healPoint");
+                    Assert.AreEqual(typeof(string), nameField.FieldType, "name ต้องเป็น string");
+                    Assert.AreEqual(typeof(int), healField.FieldType, "healPoint ต้องเป็น int");
+                    break;
+
+                case "03_TriggerExists":
+                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "ItemPotion ต้องมีเมธอด OnTriggerEnter2D()");
+                    break;
+            }
         }
     }
 
