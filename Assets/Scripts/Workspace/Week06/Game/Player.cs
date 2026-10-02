@@ -226,11 +226,6 @@ namespace Week06.Game
             HandleTriggerEnter(other.gameObject);
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            HandleTriggerEnter(other.gameObject);
-        }
-
         private void HandleTriggerEnter(GameObject target)
         {
             if (target == null) return;
