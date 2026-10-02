@@ -231,21 +231,7 @@ namespace Week06.Game
         {
             if (target == null) return;
 
-            // ตรวจสอบการชนกับไอเทมยา
-            ItemPotion potion = target.GetComponent<ItemPotion>();
-            if (potion != null)
-            {
-                potion.Hit();
-                return;
-            }
-
-            // ตรวจสอบการชนกับไอเทมดาบ
-            ItemSword sword = target.GetComponent<ItemSword>();
-            if (sword != null)
-            {
-                sword.Hit();
-                return;
-            }
+            // การชนกับไอเทม (ItemPotion, ItemSword) จัดการใน OnTriggerEnter2D ของตัวไอเทมเอง
 
             // ตรวจสอบการชนกับศัตรู
             Enemy enemy = target.GetComponent<Enemy>();

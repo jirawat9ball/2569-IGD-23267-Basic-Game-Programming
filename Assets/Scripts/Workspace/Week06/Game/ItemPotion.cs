@@ -12,52 +12,29 @@ namespace Week06.Game
 
         public int healPoint = 10;
 
-        private bool isCollected = false;
-
         private void OnTriggerEnter2D(Collider2D other)
         {
             Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+
+            // ใช้ GetComponent เพื่อเข้าถึงและเรียกใช้ความสามารถของ Player โดยตรง
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Hit();
+                Debug.Log($"You got {Name} : {healPoint}");
+                player.Heal(healPoint);
+                Destroy(gameObject);
             }
         }
 
         public void Hit()
         {
-            if (isCollected) return;
-            isCollected = true;
-            Debug.Log($"You got {Name} : {healPoint}");
-
-            if (mapGenerator != null && mapGenerator.player != null)
+            Player player = (mapGenerator != null) ? mapGenerator.player : null;
+            if (player != null)
             {
-                mapGenerator.player.Heal(healPoint);
+                Debug.Log($"You got {Name} : {healPoint}");
+                player.Heal(healPoint);
             }
-
-            if (mapGenerator != null && mapGenerator.mapdata != null)
-            {
-                mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
-            }
-
-            DestroySafe(gameObject);
-        }
-
-        protected static void DestroySafe(GameObject target)
-        {
-            if (target == null)
-            {
-                return;
-            }
-
-            if (Application.isPlaying)
-            {
-                Destroy(target);
-            }
-            else
-            {
-                target.SetActive(false);
-            }
+            Destroy(gameObject);
         }
     }
 }
