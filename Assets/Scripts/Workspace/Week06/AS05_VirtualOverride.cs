@@ -1,4 +1,4 @@
-using Debug = Workspace.Core.SimpleDebugConsole;
+﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week06.Ex05
@@ -43,8 +43,7 @@ namespace Week06.Ex05
             // Student code ends HERE ...
 
             // 5. create instance of Animal and call MakeSound()
-            Animal animal = new Animal();
-            animal.MakeSound();
+        
         }
     }
 }

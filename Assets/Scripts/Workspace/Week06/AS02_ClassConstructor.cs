@@ -1,4 +1,4 @@
-using Debug = Workspace.Core.SimpleDebugConsole;
+﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week06.Ex02
@@ -53,12 +53,7 @@ namespace Week06.Ex02
             // Student code ends HERE ...
 
             // เรียกใช้ method ของ object นั้น
-            if (dog1 != null)
-            {
-                dog1.Bark();
-                dog1.WagTail();
-                dog1.StopBarking();
-            }
+           
         }
     }
 }

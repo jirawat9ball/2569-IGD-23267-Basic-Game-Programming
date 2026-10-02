@@ -104,7 +104,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129293ed217d52645b2ffae35f26f25b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Workspace::Week06.Game.Player
+  m_EditorClassIdentifier: Workspace::Week07.Game.Player
   Name: 
   positionX: 0
   positionY: 0

@@ -18,7 +18,7 @@ namespace Week06.Game
 
             mapGenerator.player.IncreaseAttack(attackBonus);
 
-            mapGenerator.mapData[positionX, positionY] = 0;
+            mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
             DestroySafe(gameObject);
         }
     }

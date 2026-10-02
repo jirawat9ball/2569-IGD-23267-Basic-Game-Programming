@@ -33,32 +33,19 @@ namespace Week06.Game
                 // หมายเหตุ: ช่องที่มีของวางอยู่จะไม่โดนหัก energy (ต่างจากช่องว่างด้านล่าง)
                 if (IsPotion(toX, toY))
                 {
-                    mapGenerator.potions[toX, toY].Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsSword(toX, toY))
-                {
-                    mapGenerator.swords[toX, toY].Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsEnemy(toX, toY))
-                {
-                    Enemy e = mapGenerator.enemies[toX, toY];
-                    this.Attack(e, attackPoint);
-
-                    if (e.energy > 0)
+                    if (mapGenerator.potions != null && mapGenerator.potions[toX, toY] != null)
                     {
-                        mapGenerator.enemies[toX, toY].Hit();
+                        mapGenerator.potions[toX, toY].Hit();
                     }
-                    else
+                    positionX = toX;
+                    positionY = toY;
+                    transform.position = new Vector3(positionX, positionY, 0);
+                }
+                else if (IsDemonWall(toX, toY))
+                {
+                    if (mapGenerator.walls != null && mapGenerator.walls[toX, toY] != null)
                     {
-                        positionX = toX;
-                        positionY = toY;
-                        transform.position = new Vector3(positionX, positionY, 0);
+                        mapGenerator.walls[toX, toY].Hit();
                     }
                 }
                 // ===== student code ends HERE =====
@@ -74,37 +61,35 @@ namespace Week06.Game
 
         public bool HasSomeObject(int x, int y)
         {
-            int mapdata = mapGenerator.GetMapData(x, y);
+            string mapdata = mapGenerator.GetMapData(x, y);
             return mapdata != mapGenerator.empty;
         }
 
         public bool IsDemonWall(int x, int y)
         {
-            int mapdata = mapGenerator.GetMapData(x, y);
+            string mapdata = mapGenerator.GetMapData(x, y);
             return mapdata == mapGenerator.demonWall;
         }
 
         public bool IsEnemy(int x, int y)
         {
-            int mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata == mapGenerator.enemy;
+            return false;
         }
 
         public bool IsSword(int x, int y)
         {
-            int mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata == mapGenerator.sword;
+            return false;
         }
 
         public bool IsPotion(int x, int y)
         {
-            int mapdata = mapGenerator.GetMapData(x, y);
-            return mapdata == mapGenerator.potion;
+            string mapdata = mapGenerator.GetMapData(x, y);
+            return mapdata == mapGenerator.potion || mapdata == mapGenerator.bonuesPotion;
         }
 
         public bool IsExit(int x, int y)
         {
-            int mapdata = mapGenerator.GetMapData(x, y);
+            string mapdata = mapGenerator.GetMapData(x, y);
             return mapdata == mapGenerator.exit;
         }
 

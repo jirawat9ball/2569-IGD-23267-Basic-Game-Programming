@@ -1,4 +1,4 @@
-using Debug = Workspace.Core.SimpleDebugConsole;
+﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week06.Ex04
@@ -92,9 +92,7 @@ namespace Week06.Ex04
             // ไม่สามารถเรียกใช้งานตัวแปร health จาก dog ได้
             // Debug.Log($"my health {dog.health}");
 
-            dog.MakeSound();
-            dog.Feed(50);
-            dog.MakeSound();
+          
         }
     }
 }

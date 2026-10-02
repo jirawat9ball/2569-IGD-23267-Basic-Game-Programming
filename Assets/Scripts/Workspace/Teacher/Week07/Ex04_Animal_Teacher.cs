@@ -1,7 +1,7 @@
-using Debug = Workspace.Core.SimpleDebugConsole;
+﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
-namespace Week06.Teacher.Ex04
+namespace Week07.Teacher.Ex04
 {
     public class Animal
     {
