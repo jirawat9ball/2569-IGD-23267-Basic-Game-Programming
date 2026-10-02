@@ -20,8 +20,20 @@ namespace Week06.Game
         [HideInInspector] public MapGenerator mapGenerator;
 
         [Header("ค่าสถานะ (Stats)")]
-        public int energy = 20;       // พลังชีวิตของศัตรู
-        public int attackPoint = 5;   // พลังโจมตีใส่ผู้เล่น
+        public int energy = 10;       // พลังชีวิตของศัตรู (น้อยกว่า Player: 10 vs 20)
+        public int attackPoint = 5;   // พลังโจมตีใส่ผู้เล่น (น้อยกว่า Player: 5 vs 10)
+
+        #endregion
+
+        #region วงจรการทำงานของ Unity (Lifecycle)
+
+        private void Awake()
+        {
+            if (energy <= 0)
+            {
+                energy = 10;
+            }
+        }
 
         #endregion
 
