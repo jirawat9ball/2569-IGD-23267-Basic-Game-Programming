@@ -32,56 +32,81 @@ namespace Week06
 
         public void Ex03_EnemyDemo()
         {
-            // จำลองการเรียกใช้ Enemy จาก Game folder
-            var go = new GameObject("DemoEnemy");
-            var enemy = go.AddComponent<Game.Enemy>();
-            enemy.TakeDamage(10);
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.Enemy, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoEnemy");
+                var enemy = go.AddComponent(t);
+                t.GetMethod("TakeDamage", new System.Type[] { typeof(int) })?.Invoke(enemy, new object[] { 10 });
+                if (go != null) Destroy(go);
+            }
         }
 
         public void Ex04_ExitDemo()
         {
-            // จำลองการเรียกใช้ Exit จาก Game folder
-            var go = new GameObject("DemoExit");
-            var exit = go.AddComponent<Game.Exit>();
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.Exit, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoExit");
+                go.AddComponent(t);
+                if (go != null) Destroy(go);
+            }
         }
 
         public void Ex05_PotionDemo()
         {
-            // จำลองการเรียกใช้ ItemPotion จาก Game folder
-            var go = new GameObject("DemoPotion");
-            var potion = go.AddComponent<Game.ItemPotion>();
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.ItemPotion, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoPotion");
+                go.AddComponent(t);
+                if (go != null) Destroy(go);
+            }
         }
 
         #region Homework
         public void HW01_SwordDemo()
         {
-            var go = new GameObject("DemoSword");
-            var sword = go.AddComponent<Game.ItemSword>();
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.ItemSword, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoSword");
+                go.AddComponent(t);
+                if (go != null) Destroy(go);
+            }
         }
 
         public void HW02_TrapDemo()
         {
-            var go = new GameObject("DemoTrap");
-            var trap = go.AddComponent<Game.Trap>();
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.Trap, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoTrap");
+                go.AddComponent(t);
+                if (go != null) Destroy(go);
+            }
         }
 
         public void HW03_WallDemo()
         {
-            var go = new GameObject("DemoWall");
-            var wall = go.AddComponent<Game.Wall>();
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.Wall, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoWall");
+                go.AddComponent(t);
+                if (go != null) Destroy(go);
+            }
         }
 
         public void HW04_ChestDemo()
         {
-            var go = new GameObject("DemoChest");
-            var chest = go.AddComponent<Game.Chest>();
-            if (go != null) Destroy(go);
+            var t = System.Type.GetType("Week06.Game.Chest, Workspace");
+            if (t != null)
+            {
+                var go = new GameObject("DemoChest");
+                go.AddComponent(t);
+                if (go != null) Destroy(go);
+            }
         }
         #endregion
     }

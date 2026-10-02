@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Week06.Game
@@ -17,7 +17,7 @@ namespace Week06.Game
         public Vector2Int playerStartPos;
 
         [Header("Set Exit")]
-        public Exit Exit;
+        public MonoBehaviour Exit;
 
         [Header("Set Prefab")]
         public GameObject[] floorsPrefab;
@@ -36,8 +36,8 @@ namespace Week06.Game
 
         public string[,] mapdata;
 
-        public Wall[,] walls;
-        public ItemPotion[,] potions;
+        public MonoBehaviour[,] walls;
+        public MonoBehaviour[,] potions;
 
         // Block types
         [HideInInspector]
@@ -124,7 +124,7 @@ namespace Week06.Game
         /// <summary>สุ่มวางสิ่งกีดขวาง (DemonWall) ตามจำนวน obsatcleCount</summary>
         public void GenerateObstacles()
         {
-            walls = new Wall[Row, Col];
+            walls = new MonoBehaviour[Row, Col];
 
             if (enemyPrefab == null || enemyPrefab.Length == 0 || obsatcleCount <= 0) return;
 
@@ -147,7 +147,7 @@ namespace Week06.Game
         /// <summary>สุ่มวางไอเทมฟื้นฟูเลือดตามจำนวน itemPotionCount</summary>
         public void GenerateItems()
         {
-            potions = new ItemPotion[Row, Col];
+            potions = new MonoBehaviour[Row, Col];
 
             if (itemsPrefab == null || itemsPrefab.Length == 0 || itemPotionCount <= 0) return;
 
@@ -176,11 +176,11 @@ namespace Week06.Game
             int exitY = Col - 1;
             mapdata[exitX, exitY] = exit;
 
-            Exit spawnedExit = Instantiate(Exit, new Vector3(exitX, exitY, 0), Quaternion.identity);
+            MonoBehaviour spawnedExit = Instantiate(Exit, new Vector3(exitX, exitY, 0), Quaternion.identity);
             spawnedExit.name = "Exit";
-            spawnedExit.positionX = exitX;
-            spawnedExit.positionY = exitY;
-            spawnedExit.mapGenerator = this;
+            spawnedExit.GetType().GetField("positionX")?.SetValue(spawnedExit, exitX);
+            spawnedExit.GetType().GetField("positionY")?.SetValue(spawnedExit, exitY);
+            spawnedExit.GetType().GetField("mapGenerator")?.SetValue(spawnedExit, this);
             Exit = spawnedExit;
         }
 
@@ -236,14 +236,16 @@ namespace Week06.Game
             if (itemPotionParent != null) obj.transform.parent = itemPotionParent;
             if (mapdata != null) mapdata[x, y] = potion;
 
-            var itemPotion = obj.GetComponent<ItemPotion>();
+            var itemPotion = obj.GetComponent("ItemPotion");
             if (itemPotion != null)
             {
-                itemPotion.positionX = x;
-                itemPotion.positionY = y;
-                itemPotion.mapGenerator = this;
-                if (potions != null) potions[x, y] = itemPotion;
-                obj.name = $"Item_{itemPotion.Name} {x}, {y}";
+                var t = itemPotion.GetType();
+                t.GetField("positionX")?.SetValue(itemPotion, x);
+                t.GetField("positionY")?.SetValue(itemPotion, y);
+                t.GetField("mapGenerator")?.SetValue(itemPotion, this);
+                if (potions != null) potions[x, y] = itemPotion as MonoBehaviour;
+                var nameVal = t.GetField("Name")?.GetValue(itemPotion) ?? t.GetField("name")?.GetValue(itemPotion) ?? "Potion";
+                obj.name = $"Item_{nameVal} {x}, {y}";
             }
         }
 
@@ -259,14 +261,16 @@ namespace Week06.Game
             if (wallParent != null) obj.transform.parent = wallParent;
             if (mapdata != null) mapdata[x, y] = demonWall;
 
-            var wall = obj.GetComponent<Wall>();
+            var wall = obj.GetComponent("Wall");
             if (wall != null)
             {
-                wall.positionX = x;
-                wall.positionY = y;
-                wall.mapGenerator = this;
-                if (walls != null) walls[x, y] = wall;
-                obj.name = $"DemonWall_{wall.Name} {x}, {y}";
+                var t = wall.GetType();
+                t.GetField("positionX")?.SetValue(wall, x);
+                t.GetField("positionY")?.SetValue(wall, y);
+                t.GetField("mapGenerator")?.SetValue(wall, this);
+                if (walls != null) walls[x, y] = wall as MonoBehaviour;
+                var nameVal = t.GetField("Name")?.GetValue(wall) ?? t.GetField("name")?.GetValue(wall) ?? "Wall";
+                obj.name = $"DemonWall_{nameVal} {x}, {y}";
             }
         }
 

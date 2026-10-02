@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text;
 
 using NUnit.Framework;
@@ -24,14 +24,21 @@ namespace Week06_Class
 
         protected static System.Type CarType => isTeacherMode ? typeof(Week06.Teacher.Ex01.Car) : typeof(Week06.Ex01.Car);
         protected static System.Type Dog02Type => isTeacherMode ? typeof(Week06.Teacher.Ex02.Dog) : typeof(Week06.Ex02.Dog);
-        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : typeof(Week06.Game.Enemy);
-        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : typeof(Week06.Game.Exit);
-        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : typeof(Week06.Game.ItemPotion);
+        protected static System.Type GetGameType(string typeName)
+        {
+            return System.Type.GetType($"Week06.Game.{typeName}, Workspace")
+                ?? System.Type.GetType($"Week06.Game.{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType($"Week06.Game.{typeName}");
+        }
 
-        protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : typeof(Week06.Game.ItemSword);
-        protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : typeof(Week06.Game.Trap);
-        protected static System.Type WallType => isTeacherMode ? typeof(Week06.Teacher.HW03.Wall) : typeof(Week06.Game.Wall);
-        protected static System.Type ChestType => isTeacherMode ? typeof(Week06.Teacher.HW04.Chest) : typeof(Week06.Game.Chest);
+        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : GetGameType("Enemy");
+        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : GetGameType("Exit");
+        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : GetGameType("ItemPotion");
+
+        protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : GetGameType("ItemSword");
+        protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : GetGameType("Trap");
+        protected static System.Type WallType => isTeacherMode ? typeof(Week06.Teacher.HW03.Wall) : GetGameType("Wall");
+        protected static System.Type ChestType => isTeacherMode ? typeof(Week06.Teacher.HW04.Chest) : GetGameType("Chest");
         protected static System.Type PlayerType => typeof(Week06.Game.Player);
         protected static System.Type MapGeneratorType => typeof(Week06.Game.MapGenerator);
 
@@ -226,6 +233,7 @@ namespace Week06_Class
         public void As03_Enemy(string subTask)
         {
             var t = EnemyType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Enemy ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Enemy)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -278,6 +286,7 @@ namespace Week06_Class
         public void As04_Exit(string subTask)
         {
             var t = ExitType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Exit ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Exit)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -306,6 +315,7 @@ namespace Week06_Class
         public void As05_ItemPotion(string subTask)
         {
             var t = PotionType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ ItemPotion ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.ItemPotion)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -452,6 +462,7 @@ namespace Week06_Class
         public void Hw01_ItemSword(string subTask)
         {
             var t = SwordType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ ItemSword ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.ItemSword)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -499,6 +510,7 @@ namespace Week06_Class
         public void Hw02_Trap(string subTask)
         {
             var t = TrapType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Trap ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Trap)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -553,6 +565,7 @@ namespace Week06_Class
         public void Hw03_Wall(string subTask)
         {
             var t = WallType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Wall ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Wall)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -616,6 +629,7 @@ namespace Week06_Class
         public void Hw04_Chest(string subTask)
         {
             var t = ChestType;
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Chest ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Chest)");
             switch (subTask)
             {
                 case "01_RequiredFields":

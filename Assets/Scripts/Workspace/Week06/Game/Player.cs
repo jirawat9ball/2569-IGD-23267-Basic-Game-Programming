@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -136,12 +136,13 @@ namespace Week06.Game
         /// <summary>
         /// โจมตีศัตรูเป้าหมาย
         /// </summary>
-        public void Attack(Enemy target, int damage)
+        public void Attack(MonoBehaviour target, int damage)
         {
             if (target != null)
             {
-                Debug.Log($"{Name} attacks {target.Name} with {damage} damage!");
-                target.TakeDamage(damage);
+                var nameVal = target.GetType().GetField("Name")?.GetValue(target)?.ToString() ?? target.name;
+                Debug.Log($"{Name} attacks {nameVal} with {damage} damage!");
+                target.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
             }
         }
 
