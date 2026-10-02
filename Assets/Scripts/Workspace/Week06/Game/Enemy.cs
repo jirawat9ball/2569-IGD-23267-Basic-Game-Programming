@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
@@ -50,6 +50,7 @@ namespace Week06.Game
             {
                 // ถ้าชนกับผู้เล่น ให้ศัตรูโจมตีผู้เล่น
                 Attack(player, attackPoint);
+                TakeDamage(player.attackPoint);
             }
         }
 

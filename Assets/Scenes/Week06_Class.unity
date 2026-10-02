@@ -286,8 +286,8 @@ MonoBehaviour:
   enemyPrefab:
   - {fileID: 3003392536853120156, guid: c2bbbda2ad691b14e961a51caa12ad76, type: 3}
   itemsPrefab:
-  - {fileID: 8115495000308165093, guid: f6955e570e93a1445916ed7286a3c8a3, type: 3}
-  - {fileID: 6586689788709595604, guid: 11bbc6c2f0f3a3141b54799ffa8d0c51, type: 3}
+  - {fileID: 8115495000308165093, guid: 3928d03ec3333c943a7748d16eb3bd70, type: 3}
+  - {fileID: 6586689788709595604, guid: f78b9845ecfcc1b42a0264f8eadf3597, type: 3}
   floorParent: {fileID: 1503268139}
   wallParent: {fileID: 1044629113}
   itemPotionParent: {fileID: 2023451166}

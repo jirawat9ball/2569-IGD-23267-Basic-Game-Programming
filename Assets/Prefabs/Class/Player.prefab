@@ -111,8 +111,8 @@ MonoBehaviour:
   positionX: 0
   positionY: 0
   mapGenerator: {fileID: 0}
-  energy: 0
-  attackPoint: 0
+  energy: 20
+  attackPoint: 5
 --- !u!61 &-2214602158526775162
 BoxCollider2D:
   m_ObjectHideFlags: 0

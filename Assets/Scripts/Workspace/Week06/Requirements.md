@@ -40,3 +40,15 @@
 2. ใน `AS02_ClassConstructor.Start()`:
    - สร้าง instance `dog1 = new Dog("Buddy", "Golden Retriever", 3)`
    - เรียกใช้ `Bark()`, `WagTail()`, `StopBarking()`
+
+---
+
+## 🎮 กิจกรรม Workshop ในห้องเรียน (In-class Workshop)
+
+**คู่มือฉบับเต็ม:** [Workshop.md](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Workshop.md)
+
+สร้างมินิเกม 2D Grid Dungeon Crawler ในโฟลเดอร์ `Week06/Game/`:
+- **Player.cs:** ควบคุมการเดิน (W/A/S/D), รับดาเมจ, ฮีลเลือด
+- **Enemy.cs:** โจมตีผู้เล่นเมื่อชนกัน, รับความเสียหาย
+- **ItemPotion.cs & ItemSword.cs:** ตรวจจับผู้เล่นด้วย `OnTriggerEnter2D` และเรียก `GetComponent<Player>()`
+- **Wall.cs & Exit.cs:** กำแพงที่มีความทนทาน และประตูทางออกสู่ชัยชนะ

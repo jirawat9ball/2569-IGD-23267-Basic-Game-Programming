@@ -14,9 +14,12 @@ myCar.name = "Toyota";
 myCar.Move();
 ```
 
-มีแบบฝึกหัดทั้งหมด **2 ข้อ**
-- **ข้อ 1** การสร้างคลาสเบื้องต้น กำหนดฟิลด์และเมธอด (`AS01_Car.cs`)
-- **ข้อ 2** การสร้างและใช้งาน Constructor เพื่อกำหนดค่าเริ่มต้น (`AS02_ClassConstructor.cs`)
+มีเนื้อหาการเรียนรู้แบ่งเป็น 2 ส่วน:
+1. **แบบฝึกหัดเดี่ยว (Individual Assignments):**
+   - **ข้อ 1** การสร้างคลาสเบื้องต้น กำหนดฟิลด์และเมธอด (`AS01_Car.cs`)
+   - **ข้อ 2** การสร้างและใช้งาน Constructor เพื่อกำหนดค่าเริ่มต้น (`AS02_ClassConstructor.cs`)
+2. **กิจกรรมในชั้นเรียน (In-class Workshop):**
+   - พัฒนาเกมเดินตาราง 2D Mini Game ประยุกต์ใช้ Class, Method, `GetComponent<T>()` และ `OnTriggerEnter2D` (ดูคู่มือฉบับเต็มที่ [Workshop.md](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Workshop.md))
 
 ---
 
@@ -26,16 +29,18 @@ myCar.Move();
 - เข้าใจความแตกต่างระหว่าง Class และ Object
 - สร้างและใช้งาน Constructor เพื่อกำหนดค่าเริ่มต้นให้กับตัวแปร
 - เรียกใช้งานพฤติกรรม (Method) ของ Object ได้อย่างถูกต้อง
+- เชื่อมต่อการทำงานระหว่างสคริปต์ใน Unity ด้วย `GetComponent` และ `OnTriggerEnter2D`
 
 ---
 
-## 📚 รายการไฟล์ใน Assignment
+## 📚 รายการไฟล์ใน Assignment & Workshop
 
-| ข้อ | ไฟล์ | ตำแหน่ง | รายละเอียด |
+| ส่วน | ไฟล์ | ตำแหน่ง | รายละเอียด |
 |---|---|---|---|
-| 1 | `AS01_Car.cs` | `Assets/.../Week06/` | เขียนคลาส `Car` มี name, color, speed และ Move(), Turn(), Honk() |
-| 2 | `AS02_ClassConstructor.cs` | `Assets/.../Week06/` | เขียน Constructor ของ `Dog` และสร้าง instance ใน Start() |
-| รวม | `Assignment_Student_Week06.cs` | `Assets/.../Week06/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
+| ข้อ 1 | `AS01_Car.cs` | `Assets/.../Week06/` | เขียนคลาส `Car` มี name, color, speed และ Move(), Turn(), Honk() |
+| ข้อ 2 | `AS02_ClassConstructor.cs` | `Assets/.../Week06/` | เขียน Constructor ของ `Dog` และสร้าง instance ใน Start() |
+| สรุป | `Assignment_Student_Week06.cs` | `Assets/.../Week06/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
+| **Workshop** | โฟลเดอร์ `Game/` + `Workshop.md` | `Assets/.../Week06/` | คู่มือสร้างเกม 2D Dungeon: Player, Enemy, Item, Trigger |
 
 ---
 

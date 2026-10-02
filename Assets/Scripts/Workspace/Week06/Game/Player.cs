@@ -176,32 +176,6 @@ namespace Week06.Game
 
         #endregion
 
-        #region 5. การตรวจจับการชน (Collision Detection with OnTriggerEnter2D)
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            // แสดง Log แจ้งเตือนเมื่อมีการชนกัน
-            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
-
-            // ตรวจสอบว่าชนกับ Enemy หรือไม่ ถ้าชนให้โจมตีศัตรู
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                Attack(enemy, attackPoint);
-                return;
-            }
-
-            // ตรวจสอบว่าชนกับ Wall หรือไม่ ถ้าชนให้โจมตีกำแพง
-            Wall wall = other.GetComponent<Wall>();
-            if (wall != null)
-            {
-                wall.Hit();
-                return;
-            }
-
-            // หมายเหตุ: ไอเทม (ItemPotion, ItemSword) และ Exit จะจัดการการทำงานด้วยตัวเองใน OnTriggerEnter2D ของตนเอง
-        }
-
-        #endregion
+       
     }
 }
