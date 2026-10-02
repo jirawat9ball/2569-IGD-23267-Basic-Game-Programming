@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06
@@ -9,6 +9,9 @@ namespace Week06
         {
             Ex01_CarDemo();
             Ex02_DogDemo();
+            Ex03_EnemyDemo();
+            Ex04_ExitDemo();
+            Ex05_PotionDemo();
         }
 
         public void Ex01_CarDemo()
@@ -19,6 +22,31 @@ namespace Week06
         public void Ex02_DogDemo()
         {
             new Ex02.AS02_ClassConstructor().Start();
+        }
+
+        public void Ex03_EnemyDemo()
+        {
+            // จำลองการเรียกใช้ Enemy
+            var go = new GameObject("DemoEnemy");
+            var enemy = go.AddComponent<Ex03.Enemy>();
+            enemy.TakeDamage(10);
+            if (go != null) Destroy(go);
+        }
+
+        public void Ex04_ExitDemo()
+        {
+            // จำลองการเรียกใช้ Exit
+            var go = new GameObject("DemoExit");
+            var exit = go.AddComponent<Ex04.Exit>();
+            if (go != null) Destroy(go);
+        }
+
+        public void Ex05_PotionDemo()
+        {
+            // จำลองการเรียกใช้ ItemPotion
+            var go = new GameObject("DemoPotion");
+            var potion = go.AddComponent<Ex05.ItemPotion>();
+            if (go != null) Destroy(go);
         }
     }
 }

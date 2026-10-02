@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text;
 
 using NUnit.Framework;
@@ -24,6 +24,9 @@ namespace Week06_Class
 
         protected static System.Type CarType => isTeacherMode ? typeof(Week06.Teacher.Ex01.Car) : typeof(Week06.Ex01.Car);
         protected static System.Type Dog02Type => isTeacherMode ? typeof(Week06.Teacher.Ex02.Dog) : typeof(Week06.Ex02.Dog);
+        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : typeof(Week06.Ex03.Enemy);
+        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : typeof(Week06.Ex04.Exit);
+        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : typeof(Week06.Ex05.ItemPotion);
 
         [SetUp]
         public void Setup()
@@ -211,6 +214,78 @@ namespace Week06_Class
             sb.AppendLine("Buddy stopped barking");
 
             TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+        }
+
+        // ===================== ข้อ 3: ศัตรู (Enemy) =====================
+
+        [Test]
+        public void As03_01_Enemy_InheritsMonoBehaviourAndHasRequiredFields()
+        {
+            var t = EnemyType;
+            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Enemy ต้องสืบทอดจาก MonoBehaviour");
+
+            var nameField = t.GetField("name", AnyInstance);
+            var energyField = t.GetField("energy", AnyInstance);
+            var atkField = t.GetField("attackPoint", AnyInstance);
+
+            Assert.IsNotNull(nameField, "Enemy ต้องมีฟิลด์ name");
+            Assert.IsNotNull(energyField, "Enemy ต้องมีฟิลด์ energy");
+            Assert.IsNotNull(atkField, "Enemy ต้องมีฟิลด์ attackPoint");
+
+            Assert.AreEqual(typeof(string), nameField.FieldType, "name ต้องเป็น string");
+            Assert.AreEqual(typeof(int), energyField.FieldType, "energy ต้องเป็น int");
+            Assert.AreEqual(typeof(int), atkField.FieldType, "attackPoint ต้องเป็น int");
+        }
+
+        [Test]
+        public void As03_02_Enemy_TakeDamage_DecreasesEnergy()
+        {
+            var go = new GameObject("TestEnemy");
+            var enemy = go.AddComponent(EnemyType) as MonoBehaviour;
+
+            EnemyType.GetField("energy", AnyInstance)?.SetValue(enemy, 10);
+            var takeDamageMethod = EnemyType.GetMethod("TakeDamage", AnyInstance);
+            Assert.IsNotNull(takeDamageMethod, "Enemy ต้องมีเมธอด TakeDamage(int)");
+
+            takeDamageMethod.Invoke(enemy, new object[] { 4 });
+            int remaining = (int)EnemyType.GetField("energy", AnyInstance)?.GetValue(enemy);
+            Assert.AreEqual(6, remaining, "โดนดาเมจ 4 จาก 10 ต้องเหลือ 6");
+
+            if (go != null) Object.DestroyImmediate(go);
+        }
+
+        // ===================== ข้อ 4: ทางออก (Exit) =====================
+
+        [Test]
+        public void As04_01_Exit_InheritsMonoBehaviourAndHasRequiredFields()
+        {
+            var t = ExitType;
+            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Exit ต้องสืบทอดจาก MonoBehaviour");
+
+            var posX = t.GetField("positionX", AnyInstance);
+            var posY = t.GetField("positionY", AnyInstance);
+
+            Assert.IsNotNull(posX, "Exit ต้องมีฟิลด์ positionX");
+            Assert.IsNotNull(posY, "Exit ต้องมีฟิลด์ positionY");
+            Assert.AreEqual(typeof(int), posX.FieldType, "positionX ต้องเป็น int");
+            Assert.AreEqual(typeof(int), posY.FieldType, "positionY ต้องเป็น int");
+        }
+
+        // ===================== ข้อ 5: ไอเทมยาฟื้นพลัง (ItemPotion) =====================
+
+        [Test]
+        public void As05_01_ItemPotion_InheritsMonoBehaviourAndHasRequiredFields()
+        {
+            var t = PotionType;
+            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส ItemPotion ต้องสืบทอดจาก MonoBehaviour");
+
+            var nameField = t.GetField("name", AnyInstance);
+            var healField = t.GetField("healPoint", AnyInstance);
+
+            Assert.IsNotNull(nameField, "ItemPotion ต้องมีฟิลด์ name");
+            Assert.IsNotNull(healField, "ItemPotion ต้องมีฟิลด์ healPoint");
+            Assert.AreEqual(typeof(string), nameField.FieldType, "name ต้องเป็น string");
+            Assert.AreEqual(typeof(int), healField.FieldType, "healPoint ต้องเป็น int");
         }
     }
 

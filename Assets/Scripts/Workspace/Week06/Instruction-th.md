@@ -39,6 +39,9 @@ myCar.Move();
 |---|---|---|---|
 | ข้อ 1 | `AS01_Car.cs` | `Assets/.../Week06/` | เขียนคลาส `Car` มี name, color, speed และ Move(), Turn(), Honk() |
 | ข้อ 2 | `AS02_ClassConstructor.cs` | `Assets/.../Week06/` | เขียน Constructor ของ `Dog` และสร้าง instance ใน Start() |
+| ข้อ 3 | `AS03_Enemy.cs` | `Assets/.../Week06/` | เขียนคลาส `Enemy` มี energy, attackPoint, Attack(), TakeDamage(), Trigger |
+| ข้อ 4 | `AS04_Exit.cs` | `Assets/.../Week06/` | เขียนคลาส `Exit` มี positionX, positionY, Trigger ตรวจจับผู้เล่นชนะเกม |
+| ข้อ 5 | `AS05_ItemPotion.cs` | `Assets/.../Week06/` | เขียนคลาส `ItemPotion` มี healPoint, Trigger สั่ง Heal ผู้เล่นแล้วทำลายตัวเอง |
 | สรุป | `Assignment_Student_Week06.cs` | `Assets/.../Week06/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
 | **Workshop** | โฟลเดอร์ `Game/` + `Workshop.md` | `Assets/.../Week06/` | คู่มือสร้างเกม 2D Dungeon: Player, Enemy, Item, Trigger |
 
@@ -95,8 +98,67 @@ Buddy stopped barking
 
 ---
 
+## ข้อ 3. ศัตรูและการต่อสู้ (Enemy)
+
+### 📖 รายละเอียดโจทย์
+ในไฟล์ `AS03_Enemy.cs` (namespace `Week06.Ex03`) ให้เขียนคลาส `Enemy` สืบทอดจาก `MonoBehaviour`
+
+1. **ประกาศฟิลด์แบบ public:**
+   - `string name = "Enemy"`
+   - `int energy = 10` (เลือดของศัตรู น้อยกว่า Player)
+   - `int attackPoint = 5` (ดาเมจของศัตรู น้อยกว่า Player)
+2. **ใน `Awake()`:**
+   - ถ้า `energy <= 0` ให้กำหนดค่าเป็น `10`
+3. **ประกาศเมธอดแบบ public:**
+   - `Attack(Player target, int damage)`:
+     - พิมพ์ `"<name> attacks <target.Name> with <damage> damage!"`
+     - สั่งให้ `target.TakeDamage(damage, name)`
+   - `TakeDamage(int damage)`:
+     - ลดค่า `energy -= damage`
+     - พิมพ์ `"<name> takes <damage> damage! Remaining HP: <energy>"`
+     - ถ้า `energy <= 0` พิมพ์ `"💥 <name> defeated!"` และสั่ง `Destroy(gameObject)`
+4. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้สั่ง `Attack(player, attackPoint)` และ `TakeDamage(player.attackPoint)`
+
+---
+
+## ข้อ 4. ทางออกของเกม (Exit)
+
+### 📖 รายละเอียดโจทย์
+ในไฟล์ `AS04_Exit.cs` (namespace `Week06.Ex04`) ให้เขียนคลาส `Exit` สืบทอดจาก `MonoBehaviour`
+
+1. **ประกาศฟิลด์แบบ public:**
+   - `int positionX`
+   - `int positionY`
+2. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้พิมพ์ `"🎉 You Win! Reached the exit!"`
+
+---
+
+## ข้อ 5. ไอเทมยาฟื้นพลัง (ItemPotion)
+
+### 📖 รายละเอียดโจทย์
+ในไฟล์ `AS05_ItemPotion.cs` (namespace `Week06.Ex05`) ให้เขียนคลาส `ItemPotion` สืบทอดจาก `MonoBehaviour`
+
+1. **ประกาศฟิลด์แบบ public:**
+   - `string name = "Potion"`
+   - `int healPoint = 10`
+2. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
+   - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
+   - ดึง `Player player = other.GetComponent<Player>()`
+   - ถ้าเจอ Player ให้สั่ง:
+     - `player.Heal(healPoint)`
+     - พิมพ์ `"✨ Picked up <name>! +<healPoint> Energy"`
+     - สั่ง `Destroy(gameObject)` เพื่อทำลายไอเทมออกจากฉาก
+
+---
+
 ## 📌 ข้อควรระวัง
 
 - ข้อความที่พิมพ์ต้องตรงตามโจทย์ทุกตัวอักษร
-- Constructor ต้องรับพารามิเตอร์ตามลำดับ: `name`, `breed`, `age`
-- ตรวจสอบชื่อ namespace ให้ถูกต้อง (`Week06.Ex01`, `Week06.Ex02`)
+- ตรวจสอบชื่อ namespace ให้ถูกต้อง (`Week06.Ex01` ถึง `Week06.Ex05`)
+
