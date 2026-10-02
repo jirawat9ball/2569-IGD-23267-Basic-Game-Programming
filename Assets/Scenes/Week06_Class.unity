@@ -263,7 +263,7 @@ MonoBehaviour:
   Col: 8
   player: {fileID: 5062964248721245127, guid: 7bd8467c6f5de184f808ac8f2b363290, type: 3}
   playerStartPos: {x: 0, y: 0}
-  Exit: {fileID: 0}
+  Exit: {fileID: -1586405780355982009, guid: b594c3a0d3151a649a4b01c1720be0ba, type: 3}
   floorsPrefab:
   - {fileID: 5156506336488936284, guid: e9de412b4adce2746ab3b1fbe49289d3, type: 3}
   - {fileID: 1531069909287099713, guid: f73e15a5ef143204793701708a5e95af, type: 3}

@@ -1,18 +1,27 @@
-﻿using UnityEngine;
+using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
+
 namespace Week06.Game
 {
     public class Exit : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        private void OnTriggerEnter2D(Collider2D other)
         {
-
+            HandleCollision(other.gameObject);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnTriggerEnter(Collider other)
         {
+            HandleCollision(other.gameObject);
+        }
 
+        private void HandleCollision(GameObject other)
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                Debug.Log("You Win! Reached the exit!");
+            }
         }
     }
 }

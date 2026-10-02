@@ -219,6 +219,58 @@ namespace Week06.Game
             }
         }
 
+        #region การตรวจจับการชนด้วย Trigger (OnTriggerEnter)
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            HandleTriggerEnter(other.gameObject);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            HandleTriggerEnter(other.gameObject);
+        }
+
+        private void HandleTriggerEnter(GameObject target)
+        {
+            if (target == null) return;
+
+            // ตรวจสอบการชนกับไอเทมยา
+            ItemPotion potion = target.GetComponent<ItemPotion>();
+            if (potion != null)
+            {
+                potion.Hit();
+                return;
+            }
+
+            // ตรวจสอบการชนกับไอเทมดาบ
+            ItemSword sword = target.GetComponent<ItemSword>();
+            if (sword != null)
+            {
+                sword.Hit();
+                return;
+            }
+
+            // ตรวจสอบการชนกับศัตรู
+            Enemy enemy = target.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                Attack(enemy, attackPoint);
+                enemy.Hit();
+                return;
+            }
+
+            // ตรวจสอบการชนกับกำแพง
+            Wall wall = target.GetComponent<Wall>();
+            if (wall != null)
+            {
+                wall.Hit();
+                return;
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }

@@ -12,6 +12,25 @@ namespace Week06.Game
 
         public int healPoint = 10;
 
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            HandleCollision(other.gameObject);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            HandleCollision(other.gameObject);
+        }
+
+        private void HandleCollision(GameObject other)
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                Hit();
+            }
+        }
+
         public void Hit()
         {
             Debug.Log($"You got {Name} : {healPoint}");
