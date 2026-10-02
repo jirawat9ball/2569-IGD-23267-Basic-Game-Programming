@@ -36,6 +36,7 @@ namespace Week06.Game
             if (player != null)
             {
                 Hit();
+                player.RevertPosition(); // ผู้เล่นจะกลับไปอยู่ที่เดิม เดินผ่านไม่ได้
             }
         }
 

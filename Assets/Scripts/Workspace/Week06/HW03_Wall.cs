@@ -37,7 +37,9 @@ namespace Week06.HW03
         // 3. เขียนเมธอด OnTriggerEnter2D(Collider2D other) แบบ private:
         //    - แสดงผลข้อความ "[Trigger] {gameObject.name} collided with {other.gameObject.name}"
         //    - ใช้ other.GetComponent<Player>() เพื่อตรวจหาตัวผู้เล่น
-        //    - หากพบผู้เล่น ให้เรียกใช้ Hit()
+        //    - หากพบผู้เล่น:
+        //      - เรียกใช้ Hit() เพื่อลดความทนทานกำแพง
+        //      - เรียกใช้ player.RevertPosition() เพื่อให้ผู้เล่นกลับไปอยู่ที่เดิม (เดินผ่านไม่ได้)
         private void OnTriggerEnter2D(Collider2D other)
         {
             Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
@@ -46,6 +48,7 @@ namespace Week06.HW03
             if (player != null)
             {
                 Hit();
+                player.RevertPosition();
             }
         }
     }

@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 
 using NUnit.Framework;
@@ -379,7 +379,7 @@ namespace Week06_Class
 
         [TestCase("01_RequiredFields")]
         [TestCase("02_TriggerExists")]
-        [TestCase("03_SteppingReducesEnergy")]
+        [TestCase("03_SteppingTrapsPlayer")]
         public void Hw02_Trap(string subTask)
         {
             var t = TrapType;
@@ -400,7 +400,7 @@ namespace Week06_Class
                     Assert.IsNotNull(triggerMethod, "Trap ต้องมีเมธอด OnTriggerEnter2D()");
                     break;
 
-                case "03_SteppingReducesEnergy":
+                case "03_SteppingTrapsPlayer":
                     var trapHolder = new GameObject("TestTrap");
                     var trap = trapHolder.AddComponent(t);
 
@@ -408,11 +408,18 @@ namespace Week06_Class
                     var col = playerGo.AddComponent<BoxCollider2D>();
                     var player = playerGo.AddComponent<Week06.Game.Player>();
                     player.energy = 20;
+                    player.positionX = 0;
+                    player.positionY = 0;
 
                     var trig = t.GetMethod("OnTriggerEnter2D", AnyInstance);
                     trig?.Invoke(trap, new object[] { col });
 
-                    Assert.AreEqual(15, player.energy, "เมื่อเหยียบกับดัก (damage=5) ค่า energy ของ Player ต้องลดจาก 20 เหลือ 15");
+                    Assert.IsTrue(player.isTrapped, "เมื่อเหยียบกับดัก ค่า isTrapped ของ Player ต้องเป็น true");
+
+                    // ทดลองเดิน 1 ครั้งขณะติดกับดัก
+                    player.Move(Vector2.right);
+                    Assert.AreEqual(0, player.positionX, "เมื่อติดกับดัก จะเดินไม่ได้ในครั้งนั้น (พิกัด positionX ต้องยังอยู่ที่เดิม)");
+                    Assert.IsFalse(player.isTrapped, "หลังพยายามเดินแล้ว ค่า isTrapped ต้องถูกปลดเป็น false เพื่อให้เดินได้ในครั้งถัดไป");
 
                     if (playerGo != null) Object.DestroyImmediate(playerGo);
                     if (trapHolder != null) Object.DestroyImmediate(trapHolder);
@@ -426,7 +433,7 @@ namespace Week06_Class
 
         [TestCase("01_RequiredFields")]
         [TestCase("02_HitReducesDurability")]
-        [TestCase("03_TriggerExists")]
+        [TestCase("03_TriggerCallsHitAndRevertsPlayer")]
         public void Hw03_Wall(string subTask)
         {
             var t = WallType;
@@ -459,9 +466,26 @@ namespace Week06_Class
                     if (wallGo != null) Object.DestroyImmediate(wallGo);
                     break;
 
-                case "03_TriggerExists":
-                    var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
-                    Assert.IsNotNull(triggerMethod, "Wall ต้องมีเมธอด OnTriggerEnter2D()");
+                case "03_TriggerCallsHitAndRevertsPlayer":
+                    var wallGo2 = new GameObject("TestWall");
+                    var wall2 = wallGo2.AddComponent(t);
+
+                    var playerGo2 = new GameObject("TestPlayer");
+                    var col2 = playerGo2.AddComponent<BoxCollider2D>();
+                    var player2 = playerGo2.AddComponent<Week06.Game.Player>();
+                    player2.positionX = 0;
+                    player2.positionY = 0;
+
+                    // ผู้เล่นก้าวเดินไปยังตำแหน่งกำแพง
+                    player2.Move(Vector2.right);
+
+                    var trig2 = t.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    trig2?.Invoke(wall2, new object[] { col2 });
+
+                    Assert.AreEqual(0, player2.positionX, "เมื่อชนกำแพง ผู้เล่นต้องกลับไปอยู่ที่เดิม (RevertPosition) ทำให้เดินผ่านไม่ได้");
+
+                    if (playerGo2 != null) Object.DestroyImmediate(playerGo2);
+                    if (wallGo2 != null) Object.DestroyImmediate(wallGo2);
                     break;
             }
         }
@@ -471,7 +495,7 @@ namespace Week06_Class
         // =========================================================================================
 
         [TestCase("01_RequiredFields")]
-        [TestCase("02_OpenChestInstantiatesPrefab")]
+        [TestCase("02_OpenChestInstantiatesPrefabAbove")]
         [TestCase("03_TriggerExists")]
         public void Hw04_Chest(string subTask)
         {
@@ -488,8 +512,9 @@ namespace Week06_Class
                     Assert.AreEqual(typeof(GameObject), prefabField.FieldType, "spawnPrefab ต้องเป็น GameObject");
                     break;
 
-                case "02_OpenChestInstantiatesPrefab":
+                case "02_OpenChestInstantiatesPrefabAbove":
                     var chestGo = new GameObject("TestChest");
+                    chestGo.transform.position = new Vector3(2, 3, 0);
                     var chest = chestGo.AddComponent(t);
 
                     var dummyPrefab = new GameObject("DummySpawnItem");
@@ -503,6 +528,7 @@ namespace Week06_Class
 
                     var spawned = GameObject.Find("DummySpawnItem(Clone)");
                     Assert.IsNotNull(spawned, "เมื่อเปิดกล่อง ต้องทำการ Instantiate spawnPrefab ออกมาในฉาก");
+                    Assert.AreEqual(4f, spawned.transform.position.y, 0.01f, "วัตถุที่เสกออกมาต้องอยู่ 'ด้านบน 1 ช่อง' (y + 1) จากตำแหน่งของกล่อง");
 
                     if (dummyPrefab != null) Object.DestroyImmediate(dummyPrefab);
                     if (spawned != null) Object.DestroyImmediate(spawned);

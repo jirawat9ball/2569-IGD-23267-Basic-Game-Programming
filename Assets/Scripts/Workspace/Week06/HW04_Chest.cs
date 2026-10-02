@@ -19,8 +19,9 @@ namespace Week06.HW04
         // Guideline:
         // 2. เขียนเมธอด OpenChest() แบบ public:
         //    - แสดงผลข้อความ "📦 Opened {Name}!"
-        //    - ตรวจสอบว่า spawnPrefab != null หรือไม่ หากใช่ ให้สร้างวัตถุใหม่ด้วย:
-        //      Instantiate(spawnPrefab, transform.position, Quaternion.identity);
+        //    - ตรวจสอบว่า spawnPrefab != null หรือไม่ หากใช่ ให้สร้างวัตถุใหม่ที่ตำแหน่ง "ด้านบน 1 ช่อง" (y + 1) ด้วย:
+        //      Vector3 spawnPosition = transform.position + Vector3.up;
+        //      Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
         //    - เรียกใช้ Destroy(gameObject) เพื่อลบกล่องสมบัติออกจากฉาก
         public void OpenChest()
         {
@@ -28,7 +29,8 @@ namespace Week06.HW04
 
             if (spawnPrefab != null)
             {
-                Instantiate(spawnPrefab, transform.position, Quaternion.identity);
+                Vector3 spawnPosition = transform.position + Vector3.up;
+                Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
             }
 
             Destroy(gameObject);

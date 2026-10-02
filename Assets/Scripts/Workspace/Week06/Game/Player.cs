@@ -17,11 +17,14 @@ namespace Week06.Game
         [Header("ตำแหน่งบนแผนที่ (Grid Position)")]
         public int positionX;
         public int positionY;
+        public int previousPositionX;
+        public int previousPositionY;
         [HideInInspector] public MapGenerator mapGenerator;
 
         [Header("ค่าสถานะ (Stats)")]
         public int energy = 20;       // พลังงาน/พลังชีวิต (เดิน 1 ก้าว เสีย 1 energy)
         public int attackPoint = 10;  // พลังโจมตีเริ่มต้น
+        public bool isTrapped = false; // ติดกับดัก (ทำให้เดินไม่ได้ 1 ครั้ง)
 
         #endregion
 
@@ -66,16 +69,39 @@ namespace Week06.Game
         /// </summary>
         public void Move(Vector2 direction)
         {
+            // หากติดกับดัก จะเดินไม่ได้ 1 ครั้ง
+            if (isTrapped)
+            {
+                Debug.Log("⛓️ You are trapped! Cannot move for 1 turn.");
+                isTrapped = false; // ปลดกับดักเพื่อให้เดินได้ในตาถัดไป
+                return;
+            }
+
             // 1. ตรวจสอบก่อนว่าเดินไปได้หรือไม่ (ติดขอบแมพหรือไม่)
             if (!CanMove(direction)) return;
 
-            // 2. อัปเดตพิกัดตำแหน่งของผู้เล่น
+            // 2. บันทึกตำแหน่งก่อนหน้า
+            previousPositionX = positionX;
+            previousPositionY = positionY;
+
+            // 3. อัปเดตพิกัดตำแหน่งของผู้เล่น
             positionX += (int)direction.x;
             positionY += (int)direction.y;
             transform.position = new Vector3(positionX, positionY, 0);
 
-            // 3. ทุกครั้งที่ก้าวเดิน จะเสียพลังงาน 1 หน่วย
+            // 4. ทุกครั้งที่ก้าวเดิน จะเสียพลังงาน 1 หน่วย
             TakeDamage(1);
+        }
+
+        /// <summary>
+        /// ถอยกลับไปตำแหน่งเดิมก่อนเดิน (เช่น เมื่อเดินชนกำแพง ทำให้เดินผ่านไม่ได้)
+        /// </summary>
+        public void RevertPosition()
+        {
+            positionX = previousPositionX;
+            positionY = previousPositionY;
+            transform.position = new Vector3(positionX, positionY, 0);
+            energy += 1; // คืนพลังงานที่เสียไปจากการเดินชน
         }
 
         /// <summary>

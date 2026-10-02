@@ -189,8 +189,9 @@ Buddy stopped barking
    - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
    - ดึง `Player player = other.GetComponent<Player>()`
    - ถ้าเจอ Player ให้สั่ง:
+     - `player.isTrapped = true` (ทำให้เดินไม่ได้ 1 ครั้ง)
      - `player.TakeDamage(damage)`
-     - พิมพ์ `"⚠️ Stepped on <Name>! -<damage> Energy"`
+     - พิมพ์ `"⚠️ Stepped on <Name>! Trapped for 1 turn (-<damage> Energy)"`
 
 ---
 
@@ -207,7 +208,9 @@ Buddy stopped barking
 3. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
    - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
    - ดึง `Player player = other.GetComponent<Player>()`
-   - ถ้าเจอ Player ให้สั่ง `Hit()`
+   - ถ้าเจอ Player ให้สั่ง:
+     - `Hit()`
+     - `player.RevertPosition()` (ผู้เล่นจะกลับไปอยู่ที่เดิม เดินผ่านไม่ได้)
 
 ---
 
@@ -219,8 +222,9 @@ Buddy stopped barking
    - `GameObject spawnPrefab` (Prefab วัตถุที่จะเสกออกมา)
 2. **ประกาศเมธอด `OpenChest()` แบบ public:**
    - พิมพ์ `"📦 Opened <Name>!"`
-   - หากมี `spawnPrefab != null` ให้เสกวัตถุใหม่ลงฉาก:
-     `Instantiate(spawnPrefab, transform.position, Quaternion.identity);`
+   - หากมี `spawnPrefab != null` ให้เสกสร้างวัตถุใหม่ลงฉากที่ตำแหน่ง **ด้านบน 1 ช่อง (y + 1)**:
+     `Vector3 spawnPosition = transform.position + Vector3.up;`
+     `Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);`
    - เรียก `Destroy(gameObject)` เพื่อลบกล่องสมบัติออกจากฉาก
 3. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
    - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`

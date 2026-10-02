@@ -35,7 +35,8 @@ namespace Week06.Game
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log($"⚠️ Stepped on {Name}! -{damage} Energy");
+                Debug.Log($"⚠️ Stepped on {Name}! Trapped for 1 turn (-{damage} Energy)");
+                player.isTrapped = true; // ทำให้เดินไม่ได้ 1 ครั้ง
                 player.TakeDamage(damage);
             }
         }

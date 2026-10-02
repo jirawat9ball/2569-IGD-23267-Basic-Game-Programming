@@ -20,8 +20,10 @@ namespace Week06.HW02
         // 2. เขียนเมธอด OnTriggerEnter2D(Collider2D other) แบบ private:
         //    - แสดงผลข้อความ "[Trigger] {gameObject.name} collided with {other.gameObject.name}"
         //    - ใช้ other.GetComponent<Player>() เพื่อตรวจหาตัวผู้เล่น
-        //    - หากพบผู้เล่น ให้เรียกใช้ player.TakeDamage(damage)
-        //    - แสดงผลข้อความ "⚠️ Stepped on {Name}! -{damage} Energy"
+        //    - หากพบผู้เล่น:
+        //      - กำหนดให้ player.isTrapped = true (ทำให้เดินไม่ได้ 1 ครั้ง)
+        //      - เรียกใช้ player.TakeDamage(damage)
+        //      - แสดงผลข้อความ "⚠️ Stepped on {Name}! Trapped for 1 turn (-{damage} Energy)"
         private void OnTriggerEnter2D(Collider2D other)
         {
             Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
@@ -29,7 +31,8 @@ namespace Week06.HW02
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log($"⚠️ Stepped on {Name}! -{damage} Energy");
+                Debug.Log($"⚠️ Stepped on {Name}! Trapped for 1 turn (-{damage} Energy)");
+                player.isTrapped = true;
                 player.TakeDamage(damage);
             }
         }

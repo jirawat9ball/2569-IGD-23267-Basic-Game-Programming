@@ -29,6 +29,7 @@ namespace Week06.Teacher.HW03
             if (player != null)
             {
                 Hit();
+                player.RevertPosition();
             }
         }
     }

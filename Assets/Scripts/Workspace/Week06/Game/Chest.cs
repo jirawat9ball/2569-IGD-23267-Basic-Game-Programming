@@ -50,10 +50,11 @@ namespace Week06.Game
         {
             Debug.Log($"📦 Opened {Name}!");
 
-            // หากมีการระบุ Prefab ให้เสกสร้างวัตถุใหม่ลงไป ณ ตำแหน่งของกล่อง
+            // หากมีการระบุ Prefab ให้เสกสร้างวัตถุใหม่ลงไปด้านบน 1 ช่อง (y + 1)
             if (spawnPrefab != null)
             {
-                Instantiate(spawnPrefab, transform.position, Quaternion.identity);
+                Vector3 spawnPosition = transform.position + Vector3.up;
+                Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
             }
 
             // ทำลายกล่องสมบัติออกจากฉาก

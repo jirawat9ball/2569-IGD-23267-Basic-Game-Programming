@@ -15,7 +15,8 @@ namespace Week06.Teacher.HW04
 
             if (spawnPrefab != null)
             {
-                Instantiate(spawnPrefab, transform.position, Quaternion.identity);
+                Vector3 spawnPosition = transform.position + Vector3.up;
+                Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
             }
 
             Destroy(gameObject);
