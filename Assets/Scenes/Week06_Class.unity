@@ -259,8 +259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd9b34b30916431ca23bd233f2c80d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Workspace::Week06.Game.MapGenerator
-  Row: 10
-  Col: 10
+  Row: 8
+  Col: 8
   player: {fileID: 5062964248721245127, guid: 7bd8467c6f5de184f808ac8f2b363290, type: 3}
   playerStartPos: {x: 0, y: 0}
   Exit: {fileID: 0}
@@ -283,15 +283,16 @@ MonoBehaviour:
   - {fileID: 1153298426408827053, guid: 469fe9d220ed6894f853f88242a22ff6, type: 3}
   - {fileID: 2868505506387828058, guid: 2c45c0e5a7a8ef54bb142a7a15a4e19c, type: 3}
   - {fileID: 2782601005154120690, guid: d21b95df05cdb634691a7dbd2a0dc589, type: 3}
-  enemyPrefab: []
+  enemyPrefab:
+  - {fileID: 3003392536853120156, guid: c2bbbda2ad691b14e961a51caa12ad76, type: 3}
   itemsPrefab:
   - {fileID: 8115495000308165093, guid: f6955e570e93a1445916ed7286a3c8a3, type: 3}
   - {fileID: 6586689788709595604, guid: 11bbc6c2f0f3a3141b54799ffa8d0c51, type: 3}
   floorParent: {fileID: 1503268139}
   wallParent: {fileID: 1044629113}
   itemPotionParent: {fileID: 2023451166}
-  obsatcleCount: 0
-  itemPotionCount: 0
+  obsatcleCount: 3
+  itemPotionCount: 3
   empty: 
   demonWall: 
   potion: 
