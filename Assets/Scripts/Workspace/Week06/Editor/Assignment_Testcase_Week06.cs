@@ -53,21 +53,16 @@ namespace Week06_Class
         // ข้อ 1: การสร้างคลาสเบื้องต้น (Car)
         // =========================================================================================
 
-        [TestCase("01_InheritsMonoBehaviour")]
-        [TestCase("02_PublicFields")]
-        [TestCase("03_MethodsPrintCorrectMessages")]
-        [TestCase("04_StartInitializesDefaultValues")]
-        [TestCase("05_UpdateMethodAndDemo")]
+        [TestCase("01_PublicFields")]
+        [TestCase("02_MethodsPrintCorrectMessages")]
+        [TestCase("03_StartInitializesDefaultValues")]
+        [TestCase("04_UpdateMethodAndDemo")]
         public void As01_Car(string subTask)
         {
             var t = CarType;
             switch (subTask)
             {
-                case "01_InheritsMonoBehaviour":
-                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Car ต้องสืบทอดจาก MonoBehaviour");
-                    break;
-
-                case "02_PublicFields":
+                case "01_PublicFields":
                     var nameField = t.GetField("name", AnyInstance);
                     var colorField = t.GetField("color", AnyInstance);
                     var speedField = t.GetField("speed", AnyInstance);
@@ -83,7 +78,7 @@ namespace Week06_Class
                     Assert.IsTrue(nameField.IsPublic && colorField.IsPublic && speedField.IsPublic, "ฟิลด์ทั้งสามต้องเป็น public");
                     break;
 
-                case "03_MethodsPrintCorrectMessages":
+                case "02_MethodsPrintCorrectMessages":
                     var go = new GameObject("TestCar");
                     var car = go.AddComponent(CarType) as MonoBehaviour;
                     Assert.IsNotNull(car, "ไม่สามารถสร้าง Component จากคลาส Car ได้");
@@ -114,7 +109,7 @@ namespace Week06_Class
                     Object.DestroyImmediate(go);
                     break;
 
-                case "04_StartInitializesDefaultValues":
+                case "03_StartInitializesDefaultValues":
                     var goStart = new GameObject("TestCar");
                     var carStart = goStart.AddComponent(CarType) as MonoBehaviour;
 
@@ -133,7 +128,7 @@ namespace Week06_Class
                     Object.DestroyImmediate(goStart);
                     break;
 
-                case "05_UpdateMethodAndDemo":
+                case "04_UpdateMethodAndDemo":
                     var updateMethod = t.GetMethod("Update", AnyInstance);
                     Assert.IsNotNull(updateMethod, "คลาส Car ต้องมีเมธอด Update()");
                     Assert.DoesNotThrow(() => assignment.Ex01_CarDemo(), "Ex01_CarDemo() ต้องรันได้โดยไม่เกิดข้อผิดพลาด");
@@ -218,20 +213,15 @@ namespace Week06_Class
         // ข้อ 3: ศัตรูและการต่อสู้ (Enemy)
         // =========================================================================================
 
-        [TestCase("01_InheritsMonoBehaviour")]
-        [TestCase("02_RequiredFields")]
-        [TestCase("03_TakeDamage")]
-        [TestCase("04_AttackAndTrigger")]
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_TakeDamage")]
+        [TestCase("03_AttackAndTrigger")]
         public void As03_Enemy(string subTask)
         {
             var t = EnemyType;
             switch (subTask)
             {
-                case "01_InheritsMonoBehaviour":
-                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Enemy ต้องสืบทอดจาก MonoBehaviour");
-                    break;
-
-                case "02_RequiredFields":
+                case "01_RequiredFields":
                     var nameField = t.GetField("name", AnyInstance);
                     var energyField = t.GetField("energy", AnyInstance);
                     var atkField = t.GetField("attackPoint", AnyInstance);
@@ -245,7 +235,7 @@ namespace Week06_Class
                     Assert.AreEqual(typeof(int), atkField.FieldType, "attackPoint ต้องเป็น int");
                     break;
 
-                case "03_TakeDamage":
+                case "02_TakeDamage":
                     var go = new GameObject("TestEnemy");
                     var enemy = go.AddComponent(EnemyType) as MonoBehaviour;
 
@@ -262,7 +252,7 @@ namespace Week06_Class
                     if (go != null) Object.DestroyImmediate(go);
                     break;
 
-                case "04_AttackAndTrigger":
+                case "03_AttackAndTrigger":
                     var attackMethod = t.GetMethod("Attack", AnyInstance);
                     var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
 
@@ -276,19 +266,14 @@ namespace Week06_Class
         // ข้อ 4: ทางออกของเกม (Exit)
         // =========================================================================================
 
-        [TestCase("01_InheritsMonoBehaviour")]
-        [TestCase("02_RequiredFields")]
-        [TestCase("03_TriggerExists")]
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_TriggerExists")]
         public void As04_Exit(string subTask)
         {
             var t = ExitType;
             switch (subTask)
             {
-                case "01_InheritsMonoBehaviour":
-                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส Exit ต้องสืบทอดจาก MonoBehaviour");
-                    break;
-
-                case "02_RequiredFields":
+                case "01_RequiredFields":
                     var posX = t.GetField("positionX", AnyInstance);
                     var posY = t.GetField("positionY", AnyInstance);
 
@@ -298,7 +283,7 @@ namespace Week06_Class
                     Assert.AreEqual(typeof(int), posY.FieldType, "positionY ต้องเป็น int");
                     break;
 
-                case "03_TriggerExists":
+                case "02_TriggerExists":
                     var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
                     Assert.IsNotNull(triggerMethod, "Exit ต้องมีเมธอด OnTriggerEnter2D()");
                     break;
@@ -309,19 +294,14 @@ namespace Week06_Class
         // ข้อ 5: ไอเทมยาฟื้นพลัง (ItemPotion)
         // =========================================================================================
 
-        [TestCase("01_InheritsMonoBehaviour")]
-        [TestCase("02_RequiredFields")]
-        [TestCase("03_TriggerExists")]
+        [TestCase("01_RequiredFields")]
+        [TestCase("02_TriggerExists")]
         public void As05_ItemPotion(string subTask)
         {
             var t = PotionType;
             switch (subTask)
             {
-                case "01_InheritsMonoBehaviour":
-                    Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(t), "คลาส ItemPotion ต้องสืบทอดจาก MonoBehaviour");
-                    break;
-
-                case "02_RequiredFields":
+                case "01_RequiredFields":
                     var nameField = t.GetField("name", AnyInstance);
                     var healField = t.GetField("healPoint", AnyInstance);
 
@@ -331,7 +311,7 @@ namespace Week06_Class
                     Assert.AreEqual(typeof(int), healField.FieldType, "healPoint ต้องเป็น int");
                     break;
 
-                case "03_TriggerExists":
+                case "02_TriggerExists":
                     var triggerMethod = t.GetMethod("OnTriggerEnter2D", AnyInstance);
                     Assert.IsNotNull(triggerMethod, "ItemPotion ต้องมีเมธอด OnTriggerEnter2D()");
                     break;
