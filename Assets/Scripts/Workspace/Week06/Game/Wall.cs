@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week06.Game
 {
@@ -11,6 +12,7 @@ namespace Week06.Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
