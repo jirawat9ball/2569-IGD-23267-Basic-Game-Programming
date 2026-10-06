@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07
@@ -20,7 +20,19 @@ namespace Week07
             new Teacher.Ex03.AS03_VirtualOverride().Start();
         }
 
-        public void Ex04_BattleDemo()
+        public void Ex04_PlayerDemo()
+        {
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Player player = map.player as Game.Player;
+
+            player.Move(Vector2.right);
+            Debug.Log($"Player position: ({player.positionX}, {player.positionY})");
+            Debug.Log($"Player energy: {player.energy}");
+
+            map.ClearMap();
+        }
+
+        public void Ex05_BattleDemo()
         {
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -53,7 +65,7 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex05_PotionDemo()
+        public void Ex06_PotionDemo()
         {
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -68,7 +80,7 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex06_SwordDemo()
+        public void Ex07_SwordDemo()
         {
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -80,6 +92,28 @@ namespace Week07
             player.Move(Vector2.right);   // เหยียบดาบ
 
             Debug.Log($"Player attack point after picking up sword: {player.attackPoint}");
+
+            map.ClearMap();
+        }
+
+        public void Ex08_WallDemo()
+        {
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Wall wall = map.walls[1, 3];
+
+            wall.Hit();
+            wall.Hit();
+            wall.Hit();
+
+            map.ClearMap();
+        }
+
+        public void Ex09_ChestDemo()
+        {
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Chest chest = map.chests[1, 1];
+
+            chest.OpenChest();
 
             map.ClearMap();
         }

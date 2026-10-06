@@ -1,4 +1,4 @@
-﻿namespace Week07
+namespace Week07
 {
     public interface IAssignment
     {
@@ -8,10 +8,16 @@
 
         void Ex03_VirtualOverrideDemo();
 
-        void Ex04_BattleDemo();
+        void Ex04_PlayerDemo();
 
-        void Ex05_PotionDemo();
+        void Ex05_BattleDemo();
 
-        void Ex06_SwordDemo();
+        void Ex06_PotionDemo();
+
+        void Ex07_SwordDemo();
+
+        void Ex08_WallDemo();
+
+        void Ex09_ChestDemo();
     }
 }

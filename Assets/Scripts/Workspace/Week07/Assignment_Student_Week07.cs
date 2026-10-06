@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07
@@ -10,6 +10,12 @@ namespace Week07
             Ex01_InheritanceDemo();
             Ex02_AccessModifierDemo();
             Ex03_VirtualOverrideDemo();
+            Ex04_PlayerDemo();
+            Ex05_BattleDemo();
+            Ex06_PotionDemo();
+            Ex07_SwordDemo();
+            Ex08_WallDemo();
+            Ex09_ChestDemo();
         }
 
         public void Ex01_InheritanceDemo()
@@ -27,10 +33,23 @@ namespace Week07
             new Ex03.AS03_VirtualOverride().Start();
         }
 
-        public void Ex04_BattleDemo()
+        public void Ex04_PlayerDemo()
         {
-            // Guideline: (คลาสของเกมอยู่ในโฟลเดอร์ Game/)
-            // ฉากนี้เดินตามโจทย์: Player (0,0) energy 100 attack 10
+            // ข้อ 4: ตัวอย่างการเดินของผู้เล่น (เดิน 1 ก้าว เสีย 1 energy)
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Player player = map.player as Game.Player;
+
+            player.Move(Vector2.right); // เดินไป (1,0) ช่องว่าง -> energy 99
+            Debug.Log($"Player position: ({player.positionX}, {player.positionY})");
+            Debug.Log($"Player energy: {player.energy}");
+
+            map.ClearMap();
+        }
+
+        public void Ex05_BattleDemo()
+        {
+            // ข้อ 5: ฉากต่อสู้กับศัตรู
+            // Player (0,0) energy 100 attack 10
             // ผ่านช่องว่าง 3 ช่อง -> เก็บยาที่ (2,2) -> เก็บดาบที่ (3,2) -> ตีศัตรูที่ (3,3) 3 ครั้ง
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -63,9 +82,9 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex05_PotionDemo()
+        public void Ex06_PotionDemo()
         {
-            // Guideline: เดินไปเหยียบยาที่ (2,2) แล้วดูว่า energy เพิ่มขึ้นไหม
+            // ข้อ 6: เดินไปเหยียบยาที่ (2,2) แล้วดูว่า energy เพิ่มขึ้นไหม
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
 
@@ -79,9 +98,9 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex06_SwordDemo()
+        public void Ex07_SwordDemo()
         {
-            // Guideline: เดินไปเหยียบดาบที่ (3,2) แล้วดูว่า attackPoint เพิ่มขึ้นไหม
+            // ข้อ 7: เดินไปเหยียบดาบที่ (3,2) แล้วดูว่า attackPoint เพิ่มขึ้นไหม
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
 
@@ -95,6 +114,29 @@ namespace Week07
 
             map.ClearMap();
         }
+
+        public void Ex08_WallDemo()
+        {
+            // ข้อ 8: ตีกำแพงที่ (1,3) จนพัง
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Wall wall = map.walls[1, 3];
+
+            wall.Hit();
+            wall.Hit();
+            wall.Hit();
+
+            map.ClearMap();
+        }
+
+        public void Ex09_ChestDemo()
+        {
+            // ข้อ 9: เปิดกล่องสมบัติที่ (1,1)
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Chest chest = map.chests[1, 1];
+
+            chest.OpenChest();
+
+            map.ClearMap();
+        }
     }
 }
-

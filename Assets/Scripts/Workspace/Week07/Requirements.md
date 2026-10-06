@@ -1,6 +1,6 @@
 # Week 07 Requirements: Object-Oriented Programming (OOP)
 
-โจทย์สำหรับสัปดาห์ที่ 7 มุ่งเน้นไปที่แนวคิดการเขียนโปรแกรมเชิงวัตถุ (OOP) ครอบคลุมเรื่อง Inheritance, Access Modifiers, และ Virtual/Override Methods (Polymorphism) รวมถึงการประยุกต์ใช้ในเกมจริง โดย **คงคำอธิบายและทฤษฎีทั้งหมดไว้** เพื่อให้นักศึกษาอ่านทำความเข้าใจได้ครบถ้วน โดยมีโจทย์ทั้งหมด 6 ข้อ ดังนี้
+โจทย์สำหรับสัปดาห์ที่ 7 มุ่งเน้นไปที่แนวคิดการเขียนโปรแกรมเชิงวัตถุ (OOP) ครอบคลุมเรื่อง Inheritance, Access Modifiers, และ Virtual/Override Methods (Polymorphism) รวมถึงการประยุกต์ใช้ในเกมจริง โดย **คงคำอธิบายและทฤษฎีทั้งหมดไว้** เพื่อให้นักศึกษาอ่านทำความเข้าใจได้ครบถ้วน โดยมีโจทย์ทั้งหมด 9 ข้อ ดังนี้ (Lecture ข้อ 1–3 และ Homework ข้อ 4–9)
 
 ---
 
@@ -246,7 +246,34 @@ public class AS03_VirtualOverride
 
 ---
 
-## ข้อ 4: ระบบต่อสู้กับศัตรู (File Enemy.cs และ Character.cs)
+---
+
+## ข้อ 4: ผู้เล่น (Player)
+
+**ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Player.cs` (namespace `Week07.Game`)
+
+**โจทย์:**
+1. **คลาส `Player` สืบทอดมาจาก `Character`:**
+   - มีฟิลด์ตำแหน่งก่อนหน้า `public int previousPositionX;`, `public int previousPositionY;`
+   - มีฟิลด์สถานะกับดัก `public bool isTrapped = false;`
+2. **การเดินและตรวจสอบขอบเขต:**
+   - เมธอด `CanMove(Vector2 direction)` ตรวจสอบว่าตำแหน่งเป้าหมายอยู่ในขอบเขตแผนที่หรือไม่
+   - เมธอด `Move(Vector2 direction)`:
+     - หาก `isTrapped == true` ให้พิมพ์แจ้งเตือน ปลดสถานะกับดัก แล้ว return (เดินไม่ได้ 1 ตา)
+     - บันทึก `previousPositionX`, `previousPositionY`
+     - เรียก `base.Move(direction);`
+3. **การย้อนตำแหน่งกลับ:**
+   - เมธอด `RevertPosition()`: คืนค่าตำแหน่งไปยัง `previousPositionX`, `previousPositionY` และคืนพลังงาน `energy += 1;`
+
+**ตัวอย่างผลลัพธ์ใน `Ex04_PlayerDemo()`:**
+```text
+Player position: (1, 0)
+Player energy: 99
+```
+
+---
+
+## ข้อ 5: ระบบต่อสู้กับศัตรู (Enemy)
 
 **ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Enemy.cs` และ `Character.cs` (namespace `Week07.Game`)
 
@@ -257,17 +284,15 @@ public class AS03_VirtualOverride
    - สั่งให้ enemy attack player: `this.Attack(mapGenerator.player, attackPoint);`
 2. **File `Character.cs`**
    - เพิ่มการ check เงื่อนไขใน scope ภายใต้ `if (HasSomeObject(toX, toY))` ว่าตำแหน่งมี Enemy หรือไม่ โดยใช้ `IsEnemy(toX, toY)`
-   - ถ้ามี ให้ call method `Hit()` ของศัตรู: `mapGenerator.enemies[toX, toY].Hit();`
    - สั่งให้ character (player) โจมตี enemy ในตำแหน่งนั้น: `Enemy e = mapGenerator.enemies[toX, toY]; this.Attack(e, attackPoint);`
    - ตรวจสอบว่าศัตรูตายหรือยัง ถ้า `enemy.energy > 0` ให้สั่งเรียก method `Hit()` ของศัตรู (เพื่อให้ศัตรูตีสวน)
    - ถ้าศัตรูตายแล้ว (`else`) ให้เดินขยับเข้าไปที่ช่องนั้น (กำหนดค่า `positionX`, `positionY` และ `transform.position`)
 
-**คำอธิบายและตัวอย่าง Output:**
-เมื่อ Player เดินไปตีศัตรู ระบบจะคำนวณ Damage โจมตีกันไปมา หากศัตรูตายแล้วจะโจมตีกลับไม่ได้อีก
-
+**คำอธิบายและตัวอย่าง Output ใน `Ex05_BattleDemo()`:**
 ```text
 You got Potion1 : 20
-Player energy after picking up potion: 119
+You got Sword1 : 10
+Player energy after picking up potion: 117
 Player attack point after picking up sword: 20
 first attack ...
 Player energy after attack: 112
@@ -281,7 +306,7 @@ Enemy energy after attack: 0
 ```
 
 <details>
-<summary><b>ดูเฉลยแนวทางข้อ 4 (คลิกเพื่อขยาย)</b></summary>
+<summary><b>ดูเฉลยแนวทางข้อ 5 (คลิกเพื่อขยาย)</b></summary>
 
 ```csharp
 // ในส่วนของ IsEnemy(...)
@@ -306,7 +331,7 @@ else if (IsEnemy(toX, toY))
 
 ---
 
-## ข้อ 5: ระบบเก็บยาเพิ่มพลัง (File ItemPotion.cs และ Character.cs)
+## ข้อ 6: ระบบเก็บยาเพิ่มพลัง (ItemPotion)
 
 **ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/ItemPotion.cs` และ `Character.cs` (namespace `Week07.Game`)
 
@@ -323,7 +348,7 @@ else if (IsEnemy(toX, toY))
    - เลื่อนตำแหน่งผู้เล่นเข้าไปที่ช่องนั้น
 
 <details>
-<summary><b>ดูเฉลยแนวทางข้อ 5 (คลิกเพื่อขยาย)</b></summary>
+<summary><b>ดูเฉลยแนวทางข้อ 6 (คลิกเพื่อขยาย)</b></summary>
 
 ```csharp
 // ภายใต้ if (HasSomeObject(toX, toY))
@@ -339,7 +364,7 @@ if (IsPotion(toX, toY))
 
 ---
 
-## ข้อ 6: ระบบเก็บดาบเพิ่มพลังโจมตี (File ItemSword.cs และ Character.cs)
+## ข้อ 7: ระบบเก็บดาบเพิ่มพลังโจมตี (ItemSword)
 
 **ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/ItemSword.cs` และ `Character.cs` (namespace `Week07.Game`)
 
@@ -356,7 +381,7 @@ if (IsPotion(toX, toY))
    - เลื่อนตำแหน่งผู้เล่นเข้าไปที่ช่องนั้น
 
 <details>
-<summary><b>ดูเฉลยแนวทางข้อ 6 (คลิกเพื่อขยาย)</b></summary>
+<summary><b>ดูเฉลยแนวทางข้อ 7 (คลิกเพื่อขยาย)</b></summary>
 
 ```csharp
 // ภายใต้ if (HasSomeObject(toX, toY))
@@ -369,3 +394,53 @@ else if (IsSword(toX, toY))
 }
 ```
 </details>
+
+---
+
+## ข้อ 8: กำแพงพังได้ (Wall)
+
+**ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Wall.cs` และ `Character.cs` (namespace `Week07.Game`)
+
+**โจทย์:**
+1. **File `Wall.cs`**
+   - เขียน class `Wall` โดยให้ Inherit มาจาก class `Identity`
+   - สร้าง class variable ชื่อ `durability` (type `int`, ค่าเริ่มต้น 3, modifier `public`)
+   - เขียน `override method Hit()`:
+     - ลดค่าความทนทาน `durability--;`
+     - พิมพ์ `Debug.Log($"Hit Wall {Name}! Remaining durability: {durability}");`
+     - ถ้า `durability <= 0` พิมพ์ `Debug.Log($"💥 Wall {Name} destroyed!");` เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และสั่ง `DestroySafe(gameObject);`
+2. **File `Character.cs`**
+   - ภายใต้ `if (HasSomeObject(toX, toY))` เมื่อเจอ `IsDemonWall(toX, toY)` ให้เรียก `mapGenerator.walls[toX, toY].Hit();` โดยผู้เล่นจะไม่เดินข้ามกำแพง
+
+**ตัวอย่างผลลัพธ์ใน `Ex08_WallDemo()` (ตีกำแพง 3 ครั้ง):**
+```text
+Hit Wall Wall1! Remaining durability: 2
+Hit Wall Wall1! Remaining durability: 1
+Hit Wall Wall1! Remaining durability: 0
+💥 Wall Wall1 destroyed!
+```
+
+---
+
+## ข้อ 9: กล่องสมบัติสร้างวัตถุใหม่ (Chest)
+
+**ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Chest.cs` และ `Character.cs` (namespace `Week07.Game`)
+
+**โจทย์:**
+1. **File `Chest.cs`**
+   - เขียน class `Chest` โดยให้ Inherit มาจาก class `Identity`
+   - สร้าง class variables: `public GameObject spawnPrefab;` และ `public bool isOpen = false;`
+   - เขียนเมธอด `OpenChest()`:
+     - ถ้า `isOpen` แล้ว ให้ return
+     - ตั้งค่า `isOpen = true;`
+     - พิมพ์ `Debug.Log($"📦 Opened {Name}!");`
+     - ถ้า `spawnPrefab != null` ให้สร้างวัตถุใหม่ที่ด้านบน 1 ช่อง (`transform.position + Vector3.up`)
+     - เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และสั่ง `DestroySafe(gameObject);`
+   - เขียน `override method Hit()` ให้เรียก `OpenChest();`
+2. **File `Character.cs`**
+   - ภายใต้ `if (HasSomeObject(toX, toY))` เมื่อเจอ `IsChest(toX, toY)` ให้เรียก `mapGenerator.chests[toX, toY].Hit();` และให้ผู้เล่นเดินเข้าไปที่ช่องนั้น
+
+**ตัวอย่างผลลัพธ์ใน `Ex09_ChestDemo()`:**
+```text
+📦 Opened Chest1!
+```

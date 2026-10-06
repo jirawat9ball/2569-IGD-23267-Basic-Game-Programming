@@ -8,10 +8,10 @@
 - **การควบคุมการเข้าถึง (Access Modifiers):** กำหนดขอบเขตการเข้าถึงตัวแปรด้วย `public`, `protected`, `private`
 - **พอลิมอร์ฟิซึม (Polymorphism):** ให้คลาสลูกปรับเปลี่ยนพฤติกรรมจากคลาสแม่ด้วย `virtual` และ `override`
 
-มีแบบฝึกหัดทั้งหมด **6 ข้อ**
+มีแบบฝึกหัดทั้งหมด **9 ข้อ**
 
-- **ข้อ 1–3** ฝึก OOP พื้นฐานทีละเรื่อง (Inheritance, Access Modifiers, Virtual & Override)
-- **ข้อ 4–6** นำ OOP ไปใช้จริงในเกมเดินแผนที่ (ตีศัตรู / เก็บยา / เก็บดาบ)
+- **ข้อ 1–3 (Lecture)** ฝึก OOP พื้นฐานทีละเรื่อง (Inheritance, Access Modifiers, Virtual & Override)
+- **ข้อ 4–9 (Homework)** นำ OOP ไปใช้จริงในเกมเดินแผนที่ (Player, Enemy, ItemPotion, ItemSword, Wall, Chest)
 
 ## 🎯 จุดประสงค์การเรียนรู้
 
@@ -29,12 +29,15 @@
 | 1 | `AS01_Inheritance.cs` | `Assets/.../Week07/` | เขียนคลาส `Animal`, `Dog`, `Bird` สืบทอดกัน |
 | 2 | `AS02_AccessModifier.cs` | `Assets/.../Week07/` | จัดการ Access Modifiers (`Feed`, `MakeSound`, `protected specie`, `private health`) |
 | 3 | `AS03_VirtualOverride.cs` | `Assets/.../Week07/` | ใส่ `virtual` กับ `override` ในคลาส `Animal`, `Dog`, `Cat` |
-| 4 | `Game/Enemy.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `Enemy` และส่วนตีศัตรูใน `Move()` |
-| 5 | `Game/ItemPotion.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `ItemPotion` และส่วนเก็บยาใน `Move()` |
-| 6 | `Game/ItemSword.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `ItemSword` และส่วนเก็บดาบใน `Move()` |
+| 4 | `Game/Player.cs` | `Week07/Game/` | คลาส `Player` สืบทอดจาก `Character` จัดการตำแหน่งและการเดิน |
+| 5 | `Game/Enemy.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `Enemy` และส่วนตีศัตรูใน `Move()` |
+| 6 | `Game/ItemPotion.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `ItemPotion` และส่วนเก็บยาใน `Move()` |
+| 7 | `Game/ItemSword.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `ItemSword` และส่วนเก็บดาบใน `Move()` |
+| 8 | `Game/Wall.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `Wall` มี `durability` ลดลงเมื่อถูกชน และขวางทางเดิน |
+| 9 | `Game/Chest.cs` + `Game/Character.cs` | `Week07/Game/` | เขียนคลาส `Chest` สร้างวัตถุจาก prefab เมื่อเปิด และเดินเข้าช่องได้ |
 | ทุกข้อ | `Assignment_Student_Week07.cs` | `Week07/` | สคริปต์หลักสำหรับรัน Demo และส่งตรวจงาน |
 
-> **ไฟล์โครงสร้างเกมที่เตรียมไว้ให้:** `Game/Identity.cs`, `Game/MapGenerator.cs`, `Game/Player.cs`, `Game/Wall.cs`, `Game/Exit.cs` — เป็นโครงสร้างเกม 2D Grid
+> **ไฟล์โครงสร้างเกมที่เตรียมไว้ให้:** `Game/Identity.cs`, `Game/MapGenerator.cs`, `Game/Exit.cs` — เป็นโครงสร้างเกม 2D Grid ร่วมกับระบบ OOP
 
 ---
 
@@ -178,40 +181,69 @@ Generic animal sound
 
 ---
 
-# เกมเดินแผนที่ (ข้อ 4–6)
+# เกมเดินแผนที่ (ข้อ 4–9)
 
-สามข้อนี้เอา OOP ที่เรียนมาไปใช้จริงในเกมเดินตารางบนแผนที่ ผู้เล่นเดินบนแผนที่ เก็บของ และต่อสู้กับศัตรู
+ข้อ 4–9 เป็นการนำ OOP ที่เรียนมาไปใช้จริงในเกมเดินตารางบนแผนที่ ผู้เล่นเดินบนแผนที่ จัดการตำแหน่ง ตีศัตรู เก็บไอเทม ทุบกำแพง และเปิดกล่องสมบัติ
 
 **โครงคลาสของเกม**
 ```
 MonoBehaviour
-└── Identity                 ← ของทุกอย่างบนแผนที่ (Name, positionX/Y, mapGenerator, Hit())
+└── Identity                 ← ของทุกอย่างบนแผนที่ (Name, positionX/Y, mapGenerator, Hit(), DestroySafe())
     ├── Character            ← มี energy, attackPoint, Move(), Attack(), TakeDamage(), Heal()
-    │   ├── Player
-    │   └── Enemy            ← ข้อ 4
-    ├── ItemPotion           ← ข้อ 5
-    └── ItemSword            ← ข้อ 6
+    │   ├── Player           ← ข้อ 4: ควบคุมด้วยปุ่ม/เดิน/ย้อนตำแหน่ง/ติดกับดัก
+    │   └── Enemy            ← ข้อ 5: ศัตรูตีสวนเมื่อยังมีพลังงาน
+    ├── ItemPotion           ← ข้อ 6: ยาเพิ่มพลัง
+    ├── ItemSword            ← ข้อ 7: ดาบเพิ่มพลังโจมตี
+    ├── Wall                 ← ข้อ 8: กำแพงพังได้ตาม durability
+    └── Chest                ← ข้อ 9: กล่องสมบัติสร้างวัตถุใหม่
 ```
 
 **กติกาของเกม**
 - เดินเข้าช่องว่าง → เสีย energy 1
-- เดินเข้าช่องที่มีของ (ยา/ดาบ/ศัตรู) → **ไม่เสีย** energy
-- `Hit()` คือ "สิ่งที่เกิดขึ้นเมื่อถูกเดินชน" — ยาก็เพิ่มเลือด ดาบก็เพิ่มพลังโจมตี ศัตรูก็ตีสวน
+- เดินเข้าช่องที่มีของ (ยา/ดาบ/ศัตรู/กล่อง) → **ไม่เสีย** energy
+- `Hit()` คือ "สิ่งที่เกิดขึ้นเมื่อวัตถุถูกกระทบ/เดินชน" — ยาเพิ่มเลือด ดาบเพิ่มพลังโจมตี ศัตรูตีสวน กำแพงลดความทนทาน และกล่องเปิดออก
 
-**ฉากตัวอย่างที่ระบบเตรียมไว้**
+**ฉากตัวอย่างที่ระบบเตรียมไว้ (`MapGenerator.CreateDemoMap()`)**
 
 | สิ่งของ | ตำแหน่ง | ค่า |
 |---|---|---|
 | Player | (0, 0) | energy 100, attackPoint 10 |
+| Chest1 | (1, 1) | spawnPrefab (optional) |
+| Wall1 | (1, 3) | durability 3 |
 | Potion1 | (2, 2) | healPoint 20 |
 | Sword1 | (3, 2) | attackBonus 10 |
 | Enemy1 | (3, 3) | energy 60, attackPoint 5 |
 
 ---
 
-## ข้อ 4. คลาส Enemy และระบบต่อสู้
+## ข้อ 4. คลาส Player (การเคลื่อนที่และควบคุมผู้เล่น)
 
-**วัตถุประสงค์:** ใช้การสืบทอดและ `override` สร้างศัตรูที่ตีสวนกลับได้ (สืบทอดโครงสร้าง MonoBehaviour ผ่าน `Character`)
+**วัตถุประสงค์:** สืบทอดคุณสมบัติจาก `Character` แล้วต่อยอดระบบตำแหน่งก่อนหน้า, การตรวจสอบขอบเขต, และสถานะติดกับดัก
+
+**ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Player.cs`
+
+**Logic ที่ต้อง implement:**
+- `class Player` สืบทอดจาก `Character`
+- ฟิลด์ `public int previousPositionX;`, `public int previousPositionY;`, `public bool isTrapped = false;`
+- เมธอด `CanMove(Vector2 direction)`: ตรวจสอบว่าเป้าหมายอยู่ในขอบเขตแผนที่ 0 ถึง Row/Col หรือไม่
+- เมธอด `Move(Vector2 direction)`:
+  - หาก `isTrapped` เป็นจริง ให้แสดงข้อความ ปลด `isTrapped = false;` และ `return;`
+  - ตรวจสอบ `if (!CanMove(direction)) return;`
+  - บันทึก `previousPositionX = positionX;` และ `previousPositionY = positionY;`
+  - เรียก `base.Move(direction);`
+- เมธอด `RevertPosition()`: คืนค่าตำแหน่งไปที่ `previousPositionX/Y` อัปเดต `transform.position` และคืนพลังงาน `energy += 1;`
+
+**ตัวอย่างผลลัพธ์ใน `Ex04_PlayerDemo()`:**
+```text
+Player position: (1, 0)
+Player energy: 99
+```
+
+---
+
+## ข้อ 5. คลาส Enemy และระบบต่อสู้
+
+**วัตถุประสงค์:** ใช้การสืบทอดและ `override` สร้างศัตรูที่ตีสวนกลับได้
 
 **ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Enemy.cs` และ `Character.cs`
 
@@ -220,7 +252,7 @@ MonoBehaviour
 ใน `Enemy.cs`
 - เขียน `class Enemy` ให้สืบทอดจาก `Character`
 - เขียน `override void Hit()` ทำตามลำดับ
-  1. ถ้า `energy <= 0` (ตายแล้ว) → `return;` ออกไปเลย ไม่ต้องทำอะไร
+  1. ถ้า `energy <= 0` (ตายแล้ว) → `return;`
   2. ถ้ายังไม่ตาย → ตีผู้เล่นกลับด้วย `this.Attack(mapGenerator.player, attackPoint);`
 
 ใน `Character.cs` ส่วน `else if (IsEnemy(toX, toY))`
@@ -229,7 +261,7 @@ MonoBehaviour
 3. ถ้าศัตรู **ยังไม่ตาย** (`e.energy > 0`) → ให้ศัตรูตีสวน `mapGenerator.enemies[toX, toY].Hit();`
 4. ถ้าศัตรู **ตายแล้ว** → ผู้เล่นเดินเข้าไปที่ช่องนั้น (กำหนด `positionX`, `positionY`, `transform.position`)
 
-**ผลลัพธ์ของฉากตัวอย่างทั้งหมด:**
+**ผลลัพธ์ของฉากตัวอย่างใน `Ex05_BattleDemo()`:**
 ```text
 You got Potion1 : 20
 You got Sword1 : 10
@@ -246,20 +278,9 @@ Player energy after attack: 107
 Enemy energy after attack: 0
 ```
 
-**ที่มาของตัวเลข**
-```
-เริ่ม energy 100, attack 10
-เดินช่องว่าง 3 ช่อง            → 100 − 3 = 97
-เหยียบยา (2,2)                 → 97 + 20 = 117
-เหยียบดาบ (3,2)                → attack 10 + 10 = 20
-ตีครั้งที่ 1: ศัตรู 60 − 20 = 40 ยังไม่ตาย → สวน 5 → ผู้เล่น 117 − 5 = 112
-ตีครั้งที่ 2: ศัตรู 40 − 20 = 20 ยังไม่ตาย → สวน 5 → ผู้เล่น 112 − 5 = 107
-ตีครั้งที่ 3: ศัตรู 20 − 20 = 0  ตายแล้ว   → ไม่สวน → ผู้เล่น 107 เท่าเดิม แล้วเดินเข้าช่อง
-```
-
 ---
 
-## ข้อ 5. คลาส ItemPotion (ยาเพิ่มพลัง)
+## ข้อ 6. คลาส ItemPotion (ยาเพิ่มพลัง)
 
 **วัตถุประสงค์:** สร้างไอเทมที่สืบทอดจาก `Identity` (MonoBehaviour) แล้ว `override Hit()` ให้ทำงานตอนถูกเดินชน
 
@@ -268,17 +289,17 @@ Enemy energy after attack: 0
 **Logic ที่ต้อง implement:**
 
 ใน `ItemPotion.cs`
-- เขียน `class ItemPotion` ให้สืบทอดจาก **`Identity`** (ไม่ใช่ `Character` เพราะยาไม่มี energy ไม่ต้องเดิน)
+- เขียน `class ItemPotion` ให้สืบทอดจาก **`Identity`**
 - ประกาศตัวแปร `public int healPoint = 10;`
 - เขียน `override void Hit()`
   1. พิมพ์ `You got <ชื่อไอเทม> : <healPoint>`
   2. เพิ่มเลือดผู้เล่น: `mapGenerator.player.Heal(healPoint);`
-  3. เอาไอเทมออกจากแผนที่: ตั้ง `mapGenerator.mapData[positionX, positionY] = 0;` แล้วทำลายวัตถุ
+  3. เอาไอเทมออกจากแผนที่: ตั้ง `mapGenerator.mapData[positionX, positionY] = 0;` แล้วเรียก `DestroySafe(gameObject);`
 
 ใน `Character.cs` ส่วน `if (IsPotion(toX, toY))`
 - เรียก `mapGenerator.potions[toX, toY].Hit();` แล้วขยับผู้เล่นเข้าไปที่ช่องนั้น
 
-**ผลลัพธ์ที่ต้องได้:** (เดินไปเหยียบยาที่ (2,2))
+**ผลลัพธ์ที่ต้องได้ใน `Ex06_PotionDemo()`:**
 ```text
 You got Potion1 : 20
 Player energy after picking up potion: 117
@@ -286,7 +307,7 @@ Player energy after picking up potion: 117
 
 ---
 
-## ข้อ 6. คลาส ItemSword (ดาบเพิ่มพลังโจมตี)
+## ข้อ 7. คลาส ItemSword (ดาบเพิ่มพลังโจมตี)
 
 **วัตถุประสงค์:** ทำแบบเดียวกับยา แต่เปลี่ยนเป็นเพิ่มพลังโจมตี
 
@@ -300,12 +321,12 @@ Player energy after picking up potion: 117
 - เขียน `override void Hit()`
   1. พิมพ์ `You got <ชื่อไอเทม> : <attackBonus>`
   2. เพิ่มพลังโจมตีผู้เล่น: `mapGenerator.player.IncreaseAttack(attackBonus);`
-  3. เอาไอเทมออกจากแผนที่แบบเดียวกับยา
+  3. เอาไอเทมออกจากแผนที่แบบเดียวกับยาด้วย `DestroySafe(gameObject);`
 
 ใน `Character.cs` ส่วน `else if (IsSword(toX, toY))`
 - เรียก `mapGenerator.swords[toX, toY].Hit();` แล้วขยับผู้เล่นเข้าไปที่ช่องนั้น
 
-**ผลลัพธ์ที่ต้องได้:** (เดินผ่านยาแล้วไปเหยียบดาบที่ (3,2))
+**ผลลัพธ์ที่ต้องได้ใน `Ex07_SwordDemo()`:**
 ```text
 You got Potion1 : 20
 You got Sword1 : 10
@@ -314,11 +335,70 @@ Player attack point after picking up sword: 20
 
 ---
 
+## ข้อ 8. คลาส Wall (กำแพงพังได้)
+
+**วัตถุประสงค์:** กำแพงขวางทางเดินที่สืบทอดจาก `Identity` มีค่าความทนทาน เมื่อถูกชนจะลดลง และทำลายตัวเองเมื่อหมด
+
+**ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Wall.cs`
+
+**Logic ที่ต้อง implement:**
+
+ใน `Wall.cs`
+- เขียน `class Wall` ให้สืบทอดจาก `Identity`
+- ประกาศตัวแปร `public int durability = 3;`
+- เขียน `override void Hit()`:
+  - ลดความทนทาน `durability--;`
+  - พิมพ์ `Hit Wall <ชื่อ>! Remaining durability: <durability>`
+  - หาก `durability <= 0` ให้พิมพ์ `💥 Wall <ชื่อ> destroyed!` เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และเรียก `DestroySafe(gameObject);`
+
+ใน `Character.cs` ส่วน `else if (IsDemonWall(toX, toY))`
+- เรียก `mapGenerator.walls[toX, toY].Hit();` โดยผู้เล่นจะไม่เดินข้ามกำแพง
+
+**ผลลัพธ์ที่ได้ใน `Ex08_WallDemo()` (ตี 3 ครั้ง):**
+```text
+Hit Wall Wall1! Remaining durability: 2
+Hit Wall Wall1! Remaining durability: 1
+Hit Wall Wall1! Remaining durability: 0
+💥 Wall Wall1 destroyed!
+```
+
+---
+
+## ข้อ 9. คลาส Chest (กล่องสมบัติสร้างวัตถุใหม่)
+
+**วัตถุประสงค์:** กล่องสมบัติที่สืบทอดจาก `Identity` เมื่อเปิดจะเสกไอเทมจาก prefab และเปิดทางให้เดินต่อได้
+
+**ไฟล์:** `Assets/Scripts/Workspace/Week07/Game/Chest.cs`
+
+**Logic ที่ต้อง implement:**
+
+ใน `Chest.cs`
+- เขียน `class Chest` ให้สืบทอดจาก `Identity`
+- ประกาศตัวแปร `public GameObject spawnPrefab;` และ `public bool isOpen = false;`
+- เขียนเมธอด `public void OpenChest()`:
+  - หาก `isOpen` เป็นจริง ให้ return
+  - ตั้ง `isOpen = true;`
+  - พิมพ์ `📦 Opened <ชื่อ>!`
+  - หาก `spawnPrefab != null` ให้สร้างวัตถุใหม่ที่ `transform.position + Vector3.up`
+  - เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และเรียก `DestroySafe(gameObject);`
+- เขียน `override void Hit()` ให้เรียก `OpenChest();`
+
+ใน `Character.cs` ส่วน `else if (IsChest(toX, toY))`
+- เรียก `mapGenerator.chests[toX, toY].Hit();` และเดินเข้าไปที่ช่องนั้น
+
+**ผลลัพธ์ที่ได้ใน `Ex09_ChestDemo()`:**
+```text
+📦 Opened Chest1!
+```
+
+---
+
 ## 📌 ข้อควรระวัง
 
-- ข้อความที่พิมพ์ต้องตรงเป๊ะ ทั้งตัวพิมพ์เล็กใหญ่ ช่องว่าง และเครื่องหมาย (`!`, `:`)
+- ข้อความที่พิมพ์ต้องตรงเป๊ะ ทั้งตัวพิมพ์เล็กใหญ่ ช่องว่าง และเครื่องหมาย (`!`, `:`, `📦`, `💥`)
 - Access Modifier ต้องตรงตามโจทย์ — ระบบตรวจเช็คถึงระดับว่า `health` เป็น `private` จริงไหม, `specie` เป็น `protected` จริงไหม
-- ข้อ 3 ต้องใช้ `override` เท่านั้น ใช้ `new` แทนจะไม่ผ่าน (พฤติกรรมต่างกัน)
-- แต่ละข้ออยู่คนละ namespace (`Week07.Ex01`, `Week07.Ex02`, `Week07.Ex03`) เพราะชื่อคลาสซ้ำกันหลายข้อ — เขียนโค้ดในไฟล์ของข้อนั้นได้ตามปกติ ไม่ต้องกังวล
+- ทุกคลาสในส่วนเกม (Player, Enemy, ItemPotion, ItemSword, Wall, Chest) ต้องสืบทอดตามลำดับชั้น OOP ที่กำหนด
+- แต่ละข้อใน Lecture อยู่คนละ namespace (`Week07.Ex01`, `Week07.Ex02`, `Week07.Ex03`)
+- ในโหมดทดสอบ EditMode หลีกเลี่ยงการใช้ `Destroy()` ตรง ๆ ให้ใช้ `DestroySafe()` ที่คลาส `Identity` เตรียมไว้ให้
 
 **ขอให้สนุกกับการเขียนโค้ดครับ 👨‍💻**

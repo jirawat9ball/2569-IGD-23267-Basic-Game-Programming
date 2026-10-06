@@ -269,7 +269,7 @@ namespace Week07.Tests
         }
     }
 
-    // ===================== ข้อ 4-6: ระบบเกม (Enemy / Potion / Sword) =====================
+    // ===================== ข้อ 4-9: การบ้านระบบเกมเชิงวัตถุ =====================
 
     public class GameTestBase : TestBase
     {
@@ -291,7 +291,89 @@ namespace Week07.Tests
 
     public class Homework : GameTestBase
     {
-        // ===================== ข้อ 4: ศัตรู (Enemy) =====================
+        // ===================== ข้อ 4: ผู้เล่น (Player) =====================
+
+        [TestCase("01_Player_InheritsCharacter")]
+        [TestCase("02_Player_HasRequiredFields")]
+        [TestCase("03_Player_CanMove_BoundsCheck")]
+        [TestCase("04_Player_RevertPosition_RestoresState")]
+        [TestCase("05_Player_Trapped_CannotMoveForOneTurn")]
+        [TestCase("06_Ex04_PlayerDemo_Output")]
+        public void As04_Player(string subTask)
+        {
+            switch (subTask)
+            {
+                case "01_Player_InheritsCharacter":
+                    Assert.AreEqual(typeof(Week07.Game.Character), typeof(Week07.Game.Player).BaseType,
+                        "class Player ต้องสืบทอดจาก class Character");
+                    break;
+
+                case "02_Player_HasRequiredFields":
+                    var t = typeof(Week07.Game.Player);
+                    var prevX = t.GetField("previousPositionX", AnyInstance);
+                    var prevY = t.GetField("previousPositionY", AnyInstance);
+                    var trapped = t.GetField("isTrapped", AnyInstance);
+
+                    Assert.IsNotNull(prevX, "Player ต้องมีฟิลด์ previousPositionX");
+                    Assert.IsNotNull(prevY, "Player ต้องมีฟิลด์ previousPositionY");
+                    Assert.IsNotNull(trapped, "Player ต้องมีฟิลด์ isTrapped");
+                    break;
+
+                case "03_Player_CanMove_BoundsCheck":
+                    BuildMap();
+                    var p = map.player as Week07.Game.Player;
+                    p.positionX = 0;
+                    p.positionY = 0;
+
+                    Assert.IsFalse(p.CanMove(Vector2.left), "เดินออกซ้ายขอบแผนที่ต้อง CanMove เป็น false");
+                    Assert.IsFalse(p.CanMove(Vector2.down), "เดินออกล่างขอบแผนที่ต้อง CanMove เป็น false");
+                    Assert.IsTrue(p.CanMove(Vector2.right), "เดินไปขวาในขอบเขตต้อง CanMove เป็น true");
+                    Assert.IsTrue(p.CanMove(Vector2.up), "เดินขึ้นในขอบเขตต้อง CanMove เป็น true");
+                    break;
+
+                case "04_Player_RevertPosition_RestoresState":
+                    BuildMap();
+                    var player = map.player as Week07.Game.Player;
+                    player.positionX = 2;
+                    player.positionY = 2;
+                    player.previousPositionX = 1;
+                    player.previousPositionY = 2;
+                    player.energy = 50;
+
+                    player.RevertPosition();
+
+                    Assert.AreEqual(1, player.positionX, "RevertPosition ต้องย้อนกลับไป previousPositionX");
+                    Assert.AreEqual(2, player.positionY, "RevertPosition ต้องย้อนกลับไป previousPositionY");
+                    Assert.AreEqual(51, player.energy, "RevertPosition ต้องคืนค่า energy + 1");
+                    break;
+
+                case "05_Player_Trapped_CannotMoveForOneTurn":
+                    BuildMap();
+                    var trappedPlayer = map.player as Week07.Game.Player;
+                    trappedPlayer.positionX = 0;
+                    trappedPlayer.positionY = 0;
+                    trappedPlayer.isTrapped = true;
+
+                    trappedPlayer.Move(Vector2.right);
+
+                    Assert.AreEqual(0, trappedPlayer.positionX, "เมื่อติดกับดัก ต้องขยับไม่ได้");
+                    Assert.AreEqual(0, trappedPlayer.positionY, "เมื่อติดกับดัก ต้องขยับไม่ได้");
+                    Assert.IsFalse(trappedPlayer.isTrapped, "เมื่อพยายามเดินตอนติดกับดัก สถานะติดกับดักต้องถูกปลดออก");
+                    break;
+
+                case "06_Ex04_PlayerDemo_Output":
+                    assignment.Ex04_PlayerDemo();
+
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Player position: (1, 0)");
+                    sb.AppendLine("Player energy: 99");
+
+                    TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+            }
+        }
+
+        // ===================== ข้อ 5: ศัตรู (Enemy) =====================
 
         [TestCase("01_Enemy_InheritsCharacter")]
         [TestCase("02_Enemy_Hit_IsOverride")]
@@ -299,8 +381,8 @@ namespace Week07.Tests
         [TestCase("04_Enemy_Hit_DoesNothingWhenDead")]
         [TestCase("05_Move_IntoEnemy_PlayerAttacksFirstThenEnemyStrikesBack")]
         [TestCase("06_Move_IntoDeadEnemy_PlayerMovesIn")]
-        [TestCase("07_Ex04_BattleDemo_FullScenario")]
-        public void As04_Enemy(string subTask)
+        [TestCase("07_Ex05_BattleDemo_FullScenario")]
+        public void As05_Enemy(string subTask)
         {
             switch (subTask)
             {
@@ -377,8 +459,8 @@ namespace Week07.Tests
                     Assert.AreEqual(3, p.positionY, "ศัตรูตายแล้ว ผู้เล่นต้องเดินเข้าไปที่ช่องนั้น");
                     break;
 
-                case "07_Ex04_BattleDemo_FullScenario":
-                    assignment.Ex04_BattleDemo();
+                case "07_Ex05_BattleDemo_FullScenario":
+                    assignment.Ex05_BattleDemo();
 
                     var sb = new StringBuilder();
                     sb.AppendLine("You got Potion1 : 20");
@@ -400,14 +482,14 @@ namespace Week07.Tests
             }
         }
 
-        // ===================== ข้อ 5: ยาฟื้นพลัง (Potion) =====================
+        // ===================== ข้อ 6: ยาฟื้นพลัง (Potion) =====================
 
         [TestCase("01_ItemPotion_InheritsIdentity")]
         [TestCase("02_ItemPotion_HasHealPointField")]
         [TestCase("03_Potion_Hit_HealsPlayerAndLeavesMap")]
         [TestCase("04_Move_IntoPotion_NoEnergyLossAndPlayerMovesIn")]
-        [TestCase("05_Ex05_PotionDemo_Output")]
-        public void As05_ItemPotion(string subTask)
+        [TestCase("05_Ex06_PotionDemo_Output")]
+        public void As06_ItemPotion(string subTask)
         {
             switch (subTask)
             {
@@ -449,8 +531,8 @@ namespace Week07.Tests
                     Assert.AreEqual(2, player.positionY, "ผู้เล่นต้องเดินเข้าไปที่ช่องยา");
                     break;
 
-                case "05_Ex05_PotionDemo_Output":
-                    assignment.Ex05_PotionDemo();
+                case "05_Ex06_PotionDemo_Output":
+                    assignment.Ex06_PotionDemo();
 
                     var sb = new StringBuilder();
                     sb.AppendLine("You got Potion1 : 20");
@@ -461,14 +543,14 @@ namespace Week07.Tests
             }
         }
 
-        // ===================== ข้อ 6: ดาบ (Sword) =====================
+        // ===================== ข้อ 7: ดาบ (Sword) =====================
 
         [TestCase("01_ItemSword_InheritsIdentity")]
         [TestCase("02_ItemSword_HasAttackBonusField")]
         [TestCase("03_Sword_Hit_IncreasesAttackAndLeavesMap")]
         [TestCase("04_Move_IntoSword_NoEnergyLossAndPlayerMovesIn")]
-        [TestCase("05_Ex06_SwordDemo_Output")]
-        public void As06_ItemSword(string subTask)
+        [TestCase("05_Ex07_SwordDemo_Output")]
+        public void As07_ItemSword(string subTask)
         {
             switch (subTask)
             {
@@ -512,13 +594,161 @@ namespace Week07.Tests
                     Assert.AreEqual(3, player.positionX, "ผู้เล่นต้องเดินเข้าไปที่ช่องดาบ");
                     break;
 
-                case "05_Ex06_SwordDemo_Output":
-                    assignment.Ex06_SwordDemo();
+                case "05_Ex07_SwordDemo_Output":
+                    assignment.Ex07_SwordDemo();
 
                     var sb = new StringBuilder();
                     sb.AppendLine("You got Potion1 : 20");
                     sb.AppendLine("You got Sword1 : 10");
                     sb.AppendLine("Player attack point after picking up sword: 20");
+
+                    TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+            }
+        }
+
+        // ===================== ข้อ 8: กำแพง (Wall) =====================
+
+        [TestCase("01_Wall_InheritsIdentity")]
+        [TestCase("02_Wall_HasDurabilityField")]
+        [TestCase("03_Wall_Hit_DecreasesDurability")]
+        [TestCase("04_Wall_Hit_DestroysWhenDurabilityZero")]
+        [TestCase("05_Move_IntoWall_BlocksPlayer")]
+        [TestCase("06_Ex08_WallDemo_Output")]
+        public void As08_Wall(string subTask)
+        {
+            switch (subTask)
+            {
+                case "01_Wall_InheritsIdentity":
+                    Assert.AreEqual(typeof(Week07.Game.Identity), typeof(Week07.Game.Wall).BaseType,
+                        "class Wall ต้องสืบทอดจาก class Identity");
+                    break;
+
+                case "02_Wall_HasDurabilityField":
+                    var field = typeof(Week07.Game.Wall).GetField("durability", AnyInstance);
+                    Assert.IsNotNull(field, "Wall ต้องมีตัวแปร durability");
+                    Assert.AreEqual(typeof(int), field.FieldType, "durability ต้องเป็น int");
+                    Assert.IsTrue(field.IsPublic, "durability ต้องเป็น public");
+                    break;
+
+                case "03_Wall_Hit_DecreasesDurability":
+                    BuildMap();
+                    var wall = map.walls[1, 3];
+                    int durBefore = wall.durability;
+
+                    wall.Hit();
+
+                    Assert.AreEqual(durBefore - 1, wall.durability, "Wall.Hit() ต้องลด durability ลง 1");
+                    break;
+
+                case "04_Wall_Hit_DestroysWhenDurabilityZero":
+                    BuildMap();
+                    var targetWall = map.walls[1, 3];
+
+                    targetWall.Hit();
+                    targetWall.Hit();
+                    targetWall.Hit();
+
+                    Assert.AreEqual(0, targetWall.durability, "ตี 3 ครั้ง durability ต้องเหลือ 0");
+                    Assert.AreEqual(map.empty, map.mapData[1, 3], "กำแพงพังแล้ว ช่องแผนที่ต้องกลายเป็นช่องว่าง (0)");
+                    break;
+
+                case "05_Move_IntoWall_BlocksPlayer":
+                    BuildMap();
+                    var player = map.player;
+                    player.positionX = 0;
+                    player.positionY = 3;
+
+                    player.Move(Vector2.right); // พยายามเดินเข้าหากำแพงที่ (1, 3)
+
+                    Assert.AreEqual(0, player.positionX, "ชนกำแพงแล้วผู้เล่นต้องเดินผ่านไม่ได้ (positionX อยู่ที่เดิม)");
+                    Assert.AreEqual(3, player.positionY, "ชนกำแพงแล้วผู้เล่นต้องเดินผ่านไม่ได้ (positionY อยู่ที่เดิม)");
+                    Assert.AreEqual(2, map.walls[1, 3].durability, "การเดินชนกำแพงต้องเรียก Hit() ทำให้ durability ลดลง");
+                    break;
+
+                case "06_Ex08_WallDemo_Output":
+                    assignment.Ex08_WallDemo();
+
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Hit Wall Wall1! Remaining durability: 2");
+                    sb.AppendLine("Hit Wall Wall1! Remaining durability: 1");
+                    sb.AppendLine("Hit Wall Wall1! Remaining durability: 0");
+                    sb.AppendLine("💥 Wall Wall1 destroyed!");
+
+                    TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+            }
+        }
+
+        // ===================== ข้อ 9: กล่องสมบัติ (Chest) =====================
+
+        [TestCase("01_Chest_InheritsIdentity")]
+        [TestCase("02_Chest_HasRequiredFields")]
+        [TestCase("03_Chest_OpenChest_SpawnsItemAndClearsMap")]
+        [TestCase("04_Chest_Hit_CallsOpenChest")]
+        [TestCase("05_Move_IntoChest_OpensChestAndMovesIn")]
+        [TestCase("06_Ex09_ChestDemo_Output")]
+        public void As09_Chest(string subTask)
+        {
+            switch (subTask)
+            {
+                case "01_Chest_InheritsIdentity":
+                    Assert.AreEqual(typeof(Week07.Game.Identity), typeof(Week07.Game.Chest).BaseType,
+                        "class Chest ต้องสืบทอดจาก class Identity");
+                    break;
+
+                case "02_Chest_HasRequiredFields":
+                    var t = typeof(Week07.Game.Chest);
+                    var prefabField = t.GetField("spawnPrefab", AnyInstance);
+                    var isOpenField = t.GetField("isOpen", AnyInstance);
+
+                    Assert.IsNotNull(prefabField, "Chest ต้องมีฟิลด์ spawnPrefab");
+                    Assert.AreEqual(typeof(GameObject), prefabField.FieldType, "spawnPrefab ต้องเป็น GameObject");
+                    Assert.IsNotNull(isOpenField, "Chest ต้องมีฟิลด์ isOpen");
+                    break;
+
+                case "03_Chest_OpenChest_SpawnsItemAndClearsMap":
+                    BuildMap();
+                    var chest = map.chests[1, 1];
+                    var dummyItem = new GameObject("DummyChestItem");
+                    chest.spawnPrefab = dummyItem;
+
+                    chest.OpenChest();
+
+                    Assert.IsTrue(chest.isOpen, "OpenChest ต้องเปลี่ยนสถานะ isOpen เป็น true");
+                    Assert.AreEqual(map.empty, map.mapData[1, 1], "เปิดกล่องแล้ว ช่องแผนที่ต้องกลายเป็นช่องว่าง (0)");
+
+                    Object.DestroyImmediate(dummyItem);
+                    break;
+
+                case "04_Chest_Hit_CallsOpenChest":
+                    BuildMap();
+                    var hitChest = map.chests[1, 1];
+
+                    hitChest.Hit();
+
+                    Assert.IsTrue(hitChest.isOpen, "Chest.Hit() ต้องเรียก OpenChest()");
+                    TestUtils.AssertMultilineEqual("📦 Opened Chest1!", SimpleDebugConsole.GetOutput());
+                    break;
+
+                case "05_Move_IntoChest_OpensChestAndMovesIn":
+                    BuildMap();
+                    var player = map.player;
+                    player.positionX = 0;
+                    player.positionY = 1;
+
+                    player.Move(Vector2.right); // เดินเข้าไปที่กล่องสมบัติ (1, 1)
+
+                    Assert.IsTrue(map.chests[1, 1].isOpen, "เมื่อเดินเข้าหากล่อง กล่องต้องถูกเปิด");
+                    Assert.AreEqual(1, player.positionX, "เมื่อเปิดกล่องแล้ว ผู้เล่นต้องเดินเข้าไปที่ช่องกล่อง");
+                    Assert.AreEqual(1, player.positionY, "เมื่อเปิดกล่องแล้ว ผู้เล่นต้องเดินเข้าไปที่ช่องกล่อง");
+                    break;
+
+                case "06_Ex09_ChestDemo_Output":
+                    assignment.Ex09_ChestDemo();
+
+                    var sb = new StringBuilder();
+                    sb.AppendLine("📦 Opened Chest1!");
 
                     TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
                     break;

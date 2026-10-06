@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -74,6 +74,16 @@ namespace Week07.Game
                         mapGenerator.walls[toX, toY].Hit();
                     }
                 }
+                else if (IsChest(toX, toY))
+                {
+                    if (mapGenerator.chests != null && mapGenerator.chests[toX, toY] != null)
+                    {
+                        mapGenerator.chests[toX, toY].Hit();
+                    }
+                    positionX = toX;
+                    positionY = toY;
+                    transform.position = new Vector3(positionX, positionY, 0);
+                }
                 else if (IsExit(toX, toY))
                 {
                     if (mapGenerator.exitObject != null)
@@ -123,6 +133,12 @@ namespace Week07.Game
         {
             int mapdata = mapGenerator.GetMapData(x, y);
             return mapdata == mapGenerator.potion;
+        }
+
+        public bool IsChest(int x, int y)
+        {
+            int mapdata = mapGenerator.GetMapData(x, y);
+            return mapdata == mapGenerator.chest;
         }
 
         public bool IsExit(int x, int y)

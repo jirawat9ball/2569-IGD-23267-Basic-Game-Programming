@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Week07.Game
@@ -23,7 +23,8 @@ namespace Week07.Game
         public int enemy = 2;
         public int sword = 3;
         public int potion = 4;
-        public int exit = 5;
+        public int chest = 5;
+        public int exit = 6;
 
         [Header("Map Grid Data (OOP Typed)")]
         [System.NonSerialized] public int[,] mapData;
@@ -31,6 +32,7 @@ namespace Week07.Game
         [System.NonSerialized] public ItemPotion[,] potions;
         [System.NonSerialized] public ItemSword[,] swords;
         [System.NonSerialized] public Wall[,] walls;
+        [System.NonSerialized] public Chest[,] chests;
         public Exit exitObject;
         public Character player;
 
@@ -114,6 +116,7 @@ namespace Week07.Game
             potions = new ItemPotion[MapSize, MapSize];
             swords = new ItemSword[MapSize, MapSize];
             walls = new Wall[MapSize, MapSize];
+            chests = new Chest[MapSize, MapSize];
 
             player = Spawn<Player>("Player", 0, 0);
             player.energy = 100;
@@ -134,6 +137,15 @@ namespace Week07.Game
             theEnemy.attackPoint = 5;
             enemies[3, 3] = theEnemy;
             mapData[3, 3] = enemy;
+
+            var theWall = Spawn<Wall>("Wall1", 1, 3);
+            theWall.durability = 3;
+            walls[1, 3] = theWall;
+            mapData[1, 3] = demonWall;
+
+            var theChest = Spawn<Chest>("Chest1", 1, 1);
+            chests[1, 1] = theChest;
+            mapData[1, 1] = chest;
         }
 
         #endregion
@@ -151,6 +163,7 @@ namespace Week07.Game
             potions = new ItemPotion[Row, Col];
             swords = new ItemSword[Row, Col];
             walls = new Wall[Row, Col];
+            chests = new Chest[Row, Col];
 
             GenerateFloorAndOuterWalls();
             PlacePlayerVisual();
@@ -325,6 +338,11 @@ namespace Week07.Game
 
             spawned.Add(go);
             return identity;
+        }
+
+        public void TrackSpawned(GameObject go)
+        {
+            if (go != null) spawned.Add(go);
         }
 
         /// <summary>เก็บกวาดวัตถุทั้งหมดที่สร้างไว้ (ใช้ตอนจบชุดทดสอบ)</summary>
