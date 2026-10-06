@@ -2,20 +2,16 @@
 {
     public interface IAssignment
     {
-        void Ex01_CarDemo();
+        void Ex01_InheritanceDemo();
 
-        void Ex02_DogDemo();
+        void Ex02_AccessModifierDemo();
 
-        void Ex03_InheritanceDemo();
+        void Ex03_VirtualOverrideDemo();
 
-        void Ex04_AccessModifierDemo();
+        void Ex04_BattleDemo();
 
-        void Ex05_VirtualOverrideDemo();
+        void Ex05_PotionDemo();
 
-        void Ex06_BattleDemo();
-
-        void Ex07_PotionDemo();
-
-        void Ex08_SwordDemo();
+        void Ex06_SwordDemo();
     }
 }

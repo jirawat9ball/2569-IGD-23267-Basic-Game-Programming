@@ -1,7 +1,7 @@
 ﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
-namespace Week07.Ex03
+namespace Week07.Ex01
 {
     public class Animal
     {
@@ -34,7 +34,7 @@ namespace Week07.Ex03
         // Student code ends HERE ...
     }
 
-    public class AS03_Inheritance
+    public class AS01_Inheritance
     {
         public void Start()
         {

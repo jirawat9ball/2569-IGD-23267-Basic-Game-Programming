@@ -1,7 +1,7 @@
 ﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
-namespace Week07.Ex05
+namespace Week07.Ex03
 {
     public class Animal
     {
@@ -28,7 +28,7 @@ namespace Week07.Ex05
         // student code ends ...
     }
 
-    public class AS05_VirtualOverride
+    public class AS03_VirtualOverride
     {
         public void Start()
         {

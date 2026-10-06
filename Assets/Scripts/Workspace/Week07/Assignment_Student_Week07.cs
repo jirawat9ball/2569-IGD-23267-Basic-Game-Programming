@@ -7,39 +7,27 @@ namespace Week07
     {
         void Start()
         {
-            Ex01_CarDemo();
-            Ex02_DogDemo();
-            Ex03_InheritanceDemo();
-            Ex04_AccessModifierDemo();
-            Ex05_VirtualOverrideDemo();
+            Ex01_InheritanceDemo();
+            Ex02_AccessModifierDemo();
+            Ex03_VirtualOverrideDemo();
         }
 
-        public void Ex01_CarDemo()
+        public void Ex01_InheritanceDemo()
         {
-            // Guideline: (โค้ดของ Car ทำงานใน Start() และ Update() ของไฟล์ Ex01_Car.cs)
+            new Ex01.AS01_Inheritance().Start();
         }
 
-        public void Ex02_DogDemo()
+        public void Ex02_AccessModifierDemo()
         {
-            new Ex02.AS02_ClassConstructor().Start();
+            new Ex02.AS02_AccessModifier().Start();
         }
 
-        public void Ex03_InheritanceDemo()
+        public void Ex03_VirtualOverrideDemo()
         {
-            new Ex03.AS03_Inheritance().Start();
+            new Ex03.AS03_VirtualOverride().Start();
         }
 
-        public void Ex04_AccessModifierDemo()
-        {
-            new Ex04.AS04_AccessModifier().Start();
-        }
-
-        public void Ex05_VirtualOverrideDemo()
-        {
-            new Ex05.AS05_VirtualOverride().Start();
-        }
-
-        public void Ex06_BattleDemo()
+        public void Ex04_BattleDemo()
         {
             // Guideline: (คลาสของเกมอยู่ในโฟลเดอร์ Game/)
             // ฉากนี้เดินตามโจทย์: Player (0,0) energy 100 attack 10
@@ -75,7 +63,7 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex07_PotionDemo()
+        public void Ex05_PotionDemo()
         {
             // Guideline: เดินไปเหยียบยาที่ (2,2) แล้วดูว่า energy เพิ่มขึ้นไหม
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
@@ -91,7 +79,7 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex08_SwordDemo()
+        public void Ex06_SwordDemo()
         {
             // Guideline: เดินไปเหยียบดาบที่ (3,2) แล้วดูว่า attackPoint เพิ่มขึ้นไหม
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
@@ -109,3 +97,4 @@ namespace Week07
         }
     }
 }
+

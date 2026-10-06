@@ -5,43 +5,40 @@ namespace Week07.Teacher.Ex03
 {
     public class Animal
     {
-        public string name;
-
-        public void MakeSound()
+        public virtual void MakeSound()
         {
-            Debug.Log($"Animal {name} is making sound");
+            Debug.Log("Generic animal sound");
         }
     }
 
     public class Dog : Animal
     {
-        public void Walk()
+        public override void MakeSound()
         {
-            Debug.Log($"Dog {name} is walking");
+            Debug.Log("Woof!");
         }
     }
 
-    public class Bird : Animal
+    public class Cat : Animal
     {
-        public void Fly()
+        public override void MakeSound()
         {
-            Debug.Log($"Bird {name} is flying");
+            Debug.Log("Meow!");
         }
     }
 
-    public class AS03_Inheritance
+    public class AS03_VirtualOverride
     {
         public void Start()
         {
             Dog dog = new Dog();
-            dog.name = "Buddy";
             dog.MakeSound();
-            dog.Walk();
 
-            Bird bird = new Bird();
-            bird.name = "Twitty";
-            bird.MakeSound();
-            bird.Fly();
+            Cat cat = new Cat();
+            cat.MakeSound();
+
+            Animal animal = new Animal();
+            animal.MakeSound();
         }
     }
 }
