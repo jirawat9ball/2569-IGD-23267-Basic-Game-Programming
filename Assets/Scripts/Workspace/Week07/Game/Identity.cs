@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Week07.Game
 {
@@ -15,6 +15,18 @@ namespace Week07.Game
 
         public virtual void Hit()
         {
+        }
+
+        /// <summary>
+        /// ตรวจจับการชนผ่าน 2D Trigger ที่คลาสแม่เพียงที่เดียว
+        /// เมื่อตัวละคร Player เดินมาชน จะเรียก Hit() ของคลาสลูกตัวนั้น ๆ แบบ Polymorphism อัตโนมัติ
+        /// </summary>
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (this is not Player && other.GetComponent<Player>() != null)
+            {
+                Hit();
+            }
         }
 
         /// <summary>

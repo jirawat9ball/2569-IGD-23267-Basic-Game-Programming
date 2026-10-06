@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -23,15 +23,6 @@ namespace Week07.Game
         {
             isLevelClear = true;
             Debug.Log("🎉 Level Complete! You reached the exit!");
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            Player p = other.GetComponent<Player>();
-            if (p != null)
-            {
-                Hit();
-            }
         }
     }
 }

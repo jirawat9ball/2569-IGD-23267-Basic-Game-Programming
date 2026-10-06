@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Week07.Game
 {
@@ -39,15 +39,6 @@ namespace Week07.Game
             if (mapGenerator != null && mapGenerator.player != null)
             {
                 this.Attack(mapGenerator.player, attackPoint);
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            Player p = other.GetComponent<Player>();
-            if (p != null)
-            {
-                Hit();
             }
         }
     }
