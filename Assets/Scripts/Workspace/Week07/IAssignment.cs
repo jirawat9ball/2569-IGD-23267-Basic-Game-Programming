@@ -1,21 +1,23 @@
-﻿namespace Week07
+namespace Week07
 {
     public interface IAssignment
     {
-        void Ex01_CarDemo();
+        void Ex01_InheritanceDemo();
 
-        void Ex02_DogDemo();
+        void Ex02_AccessModifierDemo();
 
-        void Ex03_InheritanceDemo();
+        void Ex03_VirtualOverrideDemo();
 
-        void Ex04_AccessModifierDemo();
+        void Ex04_PlayerDemo();
 
-        void Ex05_VirtualOverrideDemo();
+        void Ex05_BattleDemo();
 
-        void Ex06_BattleDemo();
+        void Ex06_PotionDemo();
 
-        void Ex07_PotionDemo();
+        void Ex07_SwordDemo();
 
-        void Ex08_SwordDemo();
+        void Ex08_WallDemo();
+
+        void Ex09_ChestDemo();
     }
 }

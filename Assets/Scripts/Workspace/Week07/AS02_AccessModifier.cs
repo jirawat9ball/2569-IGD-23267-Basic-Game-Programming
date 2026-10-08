@@ -1,7 +1,7 @@
 ﻿using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
-namespace Week07.Ex04
+namespace Week07.Ex02
 {
     public class Animal
     {
@@ -68,7 +68,7 @@ namespace Week07.Ex04
         }
     }
 
-    public class AS04_AccessModifier
+    public class AS02_AccessModifier
     {
         public void Start()
         {

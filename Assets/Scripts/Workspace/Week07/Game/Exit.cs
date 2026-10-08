@@ -1,18 +1,28 @@
 ﻿using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
+
 namespace Week07.Game
 {
-    public class Exit : MonoBehaviour
+    /// <summary>
+    /// ประตูทางออกของเกม สืบทอดจาก Identity
+    /// เมื่อผู้เล่นเดินมาถึง (Hit) จะแสดงข้อความประกาศชัยชนะ
+    /// </summary>
+    public class Exit : Identity
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        public bool isLevelClear = false;
 
+        private void Awake()
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+                Name = "Exit";
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        public override void Hit()
         {
-
+            isLevelClear = true;
+            Debug.Log("🎉 Level Complete! You reached the exit!");
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Text;
 
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 using Week06;
 using SimpleDebugConsole = Workspace.Core.SimpleDebugConsole;
@@ -31,9 +32,17 @@ namespace Week06_Class
                 ?? System.Type.GetType($"Week06.Game.{typeName}");
         }
 
-        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : GetGameType("Enemy");
-        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : GetGameType("Exit");
-        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : GetGameType("ItemPotion");
+        protected static System.Type GetTypeWithFallback(string typeName, string altNamespace)
+        {
+            return GetGameType(typeName)
+                ?? System.Type.GetType($"{altNamespace}.{typeName}, Workspace")
+                ?? System.Type.GetType($"{altNamespace}.{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType($"{altNamespace}.{typeName}");
+        }
+
+        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : GetTypeWithFallback("Enemy", "Week06.Ex03");
+        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : GetTypeWithFallback("Exit", "Week06.Ex04");
+        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : GetTypeWithFallback("ItemPotion", "Week06.Ex05");
 
         protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : GetGameType("ItemSword");
         protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : GetGameType("Trap");
@@ -233,7 +242,7 @@ namespace Week06_Class
         public void As03_Enemy(string subTask)
         {
             var t = EnemyType;
-            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Enemy ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Enemy)");
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Enemy ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Enemy หรือ Week06.Ex03.Enemy)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -286,7 +295,7 @@ namespace Week06_Class
         public void As04_Exit(string subTask)
         {
             var t = ExitType;
-            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Exit ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Exit)");
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ Exit ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.Exit หรือ Week06.Ex04.Exit)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -315,7 +324,7 @@ namespace Week06_Class
         public void As05_ItemPotion(string subTask)
         {
             var t = PotionType;
-            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ ItemPotion ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.ItemPotion)");
+            Assert.IsNotNull(t, "ยังไม่พบสคริปต์ ItemPotion ในโปรเจกต์ (ให้นักเรียนสร้างคลาส Week06.Game.ItemPotion หรือ Week06.Ex05.ItemPotion)");
             switch (subTask)
             {
                 case "01_RequiredFields":
@@ -489,6 +498,8 @@ namespace Week06_Class
                     var player = playerGo.AddComponent<Week06.Game.Player>();
                     player.attackPoint = 10;
 
+                    LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.");
+
                     var trig = t.GetMethod("OnTriggerEnter2D", AnyInstance);
                     trig?.Invoke(sword, new object[] { col });
 
@@ -653,6 +664,8 @@ namespace Week06_Class
 
                     var openMethod = t.GetMethod("OpenChest", AnyInstance);
                     Assert.IsNotNull(openMethod, "Chest ต้องมีเมธอด OpenChest()");
+
+                    LogAssert.Expect(LogType.Error, "Destroy may not be called from edit mode! Use DestroyImmediate instead.");
 
                     openMethod.Invoke(chest, null);
 

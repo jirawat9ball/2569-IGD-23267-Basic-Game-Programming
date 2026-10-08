@@ -1,36 +1,38 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07
 {
     public class Assignment_Teacher_Week07 : MonoBehaviour, IAssignment
     {
-        public void Ex01_CarDemo()
+        public void Ex01_InheritanceDemo()
         {
-            // Guideline: (โค้ดของ Car ทำงานใน Start() และ Update() ของไฟล์ Ex01_Car.cs)
+            new Teacher.Ex01.AS01_Inheritance().Start();
         }
 
-        public void Ex02_DogDemo()
+        public void Ex02_AccessModifierDemo()
         {
-            new Teacher.Ex02.AS02_ClassConstructor().Start();
+            new Teacher.Ex02.AS02_AccessModifier().Start();
         }
 
-        public void Ex03_InheritanceDemo()
+        public void Ex03_VirtualOverrideDemo()
         {
-            new Teacher.Ex03.AS03_Inheritance().Start();
+            new Teacher.Ex03.AS03_VirtualOverride().Start();
         }
 
-        public void Ex04_AccessModifierDemo()
+        public void Ex04_PlayerDemo()
         {
-            new Teacher.Ex04.AS04_AccessModifier().Start();
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Player player = map.player as Game.Player;
+
+            player.Move(Vector2.right);
+            Debug.Log($"Player position: ({player.positionX}, {player.positionY})");
+            Debug.Log($"Player energy: {player.energy}");
+
+            map.ClearMap();
         }
 
-        public void Ex05_VirtualOverrideDemo()
-        {
-            new Teacher.Ex05.AS05_VirtualOverride().Start();
-        }
-
-        public void Ex06_BattleDemo()
+        public void Ex05_BattleDemo()
         {
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -63,7 +65,7 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex07_PotionDemo()
+        public void Ex06_PotionDemo()
         {
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -78,7 +80,7 @@ namespace Week07
             map.ClearMap();
         }
 
-        public void Ex08_SwordDemo()
+        public void Ex07_SwordDemo()
         {
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
             Game.Character player = map.player;
@@ -93,5 +95,28 @@ namespace Week07
 
             map.ClearMap();
         }
+
+        public void Ex08_WallDemo()
+        {
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Wall wall = map.walls[1, 3];
+
+            wall.Hit();
+            wall.Hit();
+            wall.Hit();
+
+            map.ClearMap();
+        }
+
+        public void Ex09_ChestDemo()
+        {
+            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
+            Game.Chest chest = map.chests[1, 1];
+
+            chest.OpenChest();
+
+            map.ClearMap();
+        }
     }
 }
+

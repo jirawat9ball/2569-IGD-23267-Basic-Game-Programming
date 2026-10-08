@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -33,14 +33,20 @@ namespace Week07.Game
                 // หมายเหตุ: ช่องที่มีของวางอยู่จะไม่โดนหัก energy (ต่างจากช่องว่างด้านล่าง)
                 if (IsPotion(toX, toY))
                 {
-                    mapGenerator.potions[toX, toY].Hit();
+                    if (mapGenerator.potions != null && mapGenerator.potions[toX, toY] != null)
+                    {
+                        mapGenerator.potions[toX, toY].Hit();
+                    }
                     positionX = toX;
                     positionY = toY;
                     transform.position = new Vector3(positionX, positionY, 0);
                 }
                 else if (IsSword(toX, toY))
                 {
-                    mapGenerator.swords[toX, toY].Hit();
+                    if (mapGenerator.swords != null && mapGenerator.swords[toX, toY] != null)
+                    {
+                        mapGenerator.swords[toX, toY].Hit();
+                    }
                     positionX = toX;
                     positionY = toY;
                     transform.position = new Vector3(positionX, positionY, 0);
@@ -60,6 +66,33 @@ namespace Week07.Game
                         positionY = toY;
                         transform.position = new Vector3(positionX, positionY, 0);
                     }
+                }
+                else if (IsDemonWall(toX, toY))
+                {
+                    if (mapGenerator.walls != null && mapGenerator.walls[toX, toY] != null)
+                    {
+                        mapGenerator.walls[toX, toY].Hit();
+                    }
+                }
+                else if (IsChest(toX, toY))
+                {
+                    if (mapGenerator.chests != null && mapGenerator.chests[toX, toY] != null)
+                    {
+                        mapGenerator.chests[toX, toY].Hit();
+                    }
+                    positionX = toX;
+                    positionY = toY;
+                    transform.position = new Vector3(positionX, positionY, 0);
+                }
+                else if (IsExit(toX, toY))
+                {
+                    if (mapGenerator.exitObject != null)
+                    {
+                        mapGenerator.exitObject.Hit();
+                    }
+                    positionX = toX;
+                    positionY = toY;
+                    transform.position = new Vector3(positionX, positionY, 0);
                 }
                 // ===== student code ends HERE =====
             }
@@ -100,6 +133,12 @@ namespace Week07.Game
         {
             int mapdata = mapGenerator.GetMapData(x, y);
             return mapdata == mapGenerator.potion;
+        }
+
+        public bool IsChest(int x, int y)
+        {
+            int mapdata = mapGenerator.GetMapData(x, y);
+            return mapdata == mapGenerator.chest;
         }
 
         public bool IsExit(int x, int y)

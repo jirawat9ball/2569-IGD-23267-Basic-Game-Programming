@@ -105,7 +105,8 @@ Buddy stopped barking
 ## ข้อ 3. ศัตรูและการต่อสู้ (Enemy)
 
 ### 📖 รายละเอียดโจทย์
-ในไฟล์ `AS03_Enemy.cs` (namespace `Week06.Ex03`) ให้เขียนคลาส `Enemy` สืบทอดจาก `MonoBehaviour`
+สร้างไฟล์ `Enemy.cs` ในโฟลเดอร์ `Assets/Scripts/Workspace/Week06/Game/` (namespace `Week06.Game`) ให้เขียนคลาส `Enemy` สืบทอดจาก `MonoBehaviour`  
+*(หมายเหตุ: ระบบเทสรองรับ `AS03_Enemy.cs` ใน namespace `Week06.Ex03` ด้วยเช่นกัน)*
 
 1. **ประกาศฟิลด์แบบ public:**
    - `string name = "Enemy"`
@@ -131,7 +132,8 @@ Buddy stopped barking
 ## ข้อ 4. ทางออกของเกม (Exit)
 
 ### 📖 รายละเอียดโจทย์
-ในไฟล์ `AS04_Exit.cs` (namespace `Week06.Ex04`) ให้เขียนคลาส `Exit` สืบทอดจาก `MonoBehaviour`
+สร้างไฟล์ `Exit.cs` ในโฟลเดอร์ `Assets/Scripts/Workspace/Week06/Game/` (namespace `Week06.Game`) ให้เขียนคลาส `Exit` สืบทอดจาก `MonoBehaviour`  
+*(หมายเหตุ: ระบบเทสรองรับ `AS04_Exit.cs` ใน namespace `Week06.Ex04` ด้วยเช่นกัน)*
 
 1. **ประกาศฟิลด์แบบ public:**
    - `int positionX`
@@ -146,7 +148,8 @@ Buddy stopped barking
 ## ข้อ 5. ไอเทมยาฟื้นพลัง (ItemPotion)
 
 ### 📖 รายละเอียดโจทย์
-ในไฟล์ `AS05_ItemPotion.cs` (namespace `Week06.Ex05`) ให้เขียนคลาส `ItemPotion` สืบทอดจาก `MonoBehaviour`
+สร้างไฟล์ `ItemPotion.cs` ในโฟลเดอร์ `Assets/Scripts/Workspace/Week06/Game/` (namespace `Week06.Game`) ให้เขียนคลาส `ItemPotion` สืบทอดจาก `MonoBehaviour`  
+*(หมายเหตุ: ระบบเทสรองรับ `AS05_ItemPotion.cs` ใน namespace `Week06.Ex05` ด้วยเช่นกัน)*
 
 1. **ประกาศฟิลด์แบบ public:**
    - `string name = "Potion"`

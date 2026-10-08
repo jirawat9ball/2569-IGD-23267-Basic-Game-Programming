@@ -18,6 +18,31 @@ namespace Week06
             HW04_ChestDemo();
         }
 
+        private static System.Type FindType(string typeName, string altNamespace = null)
+        {
+            var t = System.Type.GetType($"Week06.Game.{typeName}, Workspace")
+                ?? System.Type.GetType($"Week06.Game.{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType($"Week06.Game.{typeName}");
+            if (t != null) return t;
+
+            if (!string.IsNullOrEmpty(altNamespace))
+            {
+                t = System.Type.GetType($"{altNamespace}.{typeName}, Workspace")
+                    ?? System.Type.GetType($"{altNamespace}.{typeName}, Assembly-CSharp")
+                    ?? System.Type.GetType($"{altNamespace}.{typeName}");
+            }
+            return t;
+        }
+
+        private static void SafeDestroy(GameObject go)
+        {
+            if (go == null) return;
+            if (Application.isPlaying)
+                Destroy(go);
+            else
+                DestroyImmediate(go);
+        }
+
         public void Ex01_CarDemo()
         {
             var go = new GameObject("DemoCar");
@@ -32,7 +57,7 @@ namespace Week06
 
         public void Ex03_EnemyDemo()
         {
-            var t = System.Type.GetType("Week06.Game.Enemy, Workspace");
+            var t = FindType("Enemy", "Week06.Ex03");
             if (t != null)
             {
                 var go = new GameObject("DemoEnemy");
@@ -44,7 +69,7 @@ namespace Week06
 
         public void Ex04_ExitDemo()
         {
-            var t = System.Type.GetType("Week06.Game.Exit, Workspace");
+            var t = FindType("Exit", "Week06.Ex04");
             if (t != null)
             {
                 var go = new GameObject("DemoExit");
@@ -55,7 +80,7 @@ namespace Week06
 
         public void Ex05_PotionDemo()
         {
-            var t = System.Type.GetType("Week06.Game.ItemPotion, Workspace");
+            var t = FindType("ItemPotion", "Week06.Ex05");
             if (t != null)
             {
                 var go = new GameObject("DemoPotion");
@@ -67,7 +92,7 @@ namespace Week06
         #region Homework
         public void HW01_SwordDemo()
         {
-            var t = System.Type.GetType("Week06.Game.ItemSword, Workspace");
+            var t = FindType("ItemSword");
             if (t != null)
             {
                 var go = new GameObject("DemoSword");
@@ -78,7 +103,7 @@ namespace Week06
 
         public void HW02_TrapDemo()
         {
-            var t = System.Type.GetType("Week06.Game.Trap, Workspace");
+            var t = FindType("Trap");
             if (t != null)
             {
                 var go = new GameObject("DemoTrap");
@@ -89,7 +114,7 @@ namespace Week06
 
         public void HW03_WallDemo()
         {
-            var t = System.Type.GetType("Week06.Game.Wall, Workspace");
+            var t = FindType("Wall");
             if (t != null)
             {
                 var go = new GameObject("DemoWall");
@@ -100,7 +125,7 @@ namespace Week06
 
         public void HW04_ChestDemo()
         {
-            var t = System.Type.GetType("Week06.Game.Chest, Workspace");
+            var t = FindType("Chest");
             if (t != null)
             {
                 var go = new GameObject("DemoChest");

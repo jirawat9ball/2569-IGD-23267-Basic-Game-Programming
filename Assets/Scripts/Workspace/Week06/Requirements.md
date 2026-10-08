@@ -45,7 +45,8 @@
 
 ## ข้อ 3: การสร้างคลาสศัตรู (Enemy)
 
-**ไฟล์:** `AS03_Enemy.cs` (namespace `Week06.Ex03`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Enemy.cs` (namespace `Week06.Game`)  
+*(หมายเหตุ: เพื่อความยืดหยุ่น ระบบเทสรองรับทั้ง `Enemy.cs` ใน `Week06.Game` และ `AS03_Enemy.cs` ใน `Week06.Ex03`)*
 
 1. สร้างคลาส `Enemy` สืบทอดจาก `MonoBehaviour`
 2. กำหนดฟิลด์แบบ `public`:
@@ -62,7 +63,8 @@
 
 ## ข้อ 4: การสร้างคลาสทางออก (Exit)
 
-**ไฟล์:** `AS04_Exit.cs` (namespace `Week06.Ex04`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/Exit.cs` (namespace `Week06.Game`)  
+*(หมายเหตุ: เพื่อความยืดหยุ่น ระบบเทสรองรับทั้ง `Exit.cs` ใน `Week06.Game` และ `AS04_Exit.cs` ใน `Week06.Ex04`)*
 
 1. สร้างคลาส `Exit` สืบทอดจาก `MonoBehaviour`
 2. กำหนดฟิลด์แบบ `public`:
@@ -74,7 +76,8 @@
 
 ## ข้อ 5: การสร้างคลาสไอเทมยาฟื้นพลัง (ItemPotion)
 
-**ไฟล์:** `AS05_ItemPotion.cs` (namespace `Week06.Ex05`)
+**ไฟล์:** `Assets/Scripts/Workspace/Week06/Game/ItemPotion.cs` (namespace `Week06.Game`)  
+*(หมายเหตุ: เพื่อความยืดหยุ่น ระบบเทสรองรับทั้ง `ItemPotion.cs` ใน `Week06.Game` และ `AS05_ItemPotion.cs` ใน `Week06.Ex05`)*
 
 1. สร้างคลาส `ItemPotion` สืบทอดจาก `MonoBehaviour`
 2. กำหนดฟิลด์แบบ `public`:

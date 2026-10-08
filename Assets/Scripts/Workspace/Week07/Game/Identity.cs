@@ -18,6 +18,18 @@ namespace Week07.Game
         }
 
         /// <summary>
+        /// ตรวจจับการชนผ่าน 2D Trigger ที่คลาสแม่เพียงที่เดียว
+        /// เมื่อตัวละคร Player เดินมาชน จะเรียก Hit() ของคลาสลูกตัวนั้น ๆ แบบ Polymorphism อัตโนมัติ
+        /// </summary>
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (this is not Player && other.GetComponent<Player>() != null)
+            {
+                Hit();
+            }
+        }
+
+        /// <summary>
         /// เอาวัตถุออกจากเกม
         /// ตอนเล่นจริงใช้ Destroy ตามปกติ ส่วนตอนรันชุดทดสอบ (EditMode) ใช้ Destroy ไม่ได้
         /// จึงปิดการทำงานแทน เพื่อให้โค้ดที่อ่านค่าต่อจากวัตถุนั้นยังทำงานได้เหมือนตอนเล่นจริง
