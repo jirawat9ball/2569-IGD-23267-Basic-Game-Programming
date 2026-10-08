@@ -11,7 +11,7 @@ namespace Week06.Teacher.HW04
 
         public void OpenChest()
         {
-            Debug.Log($"📦 Opened {Name}!");
+            Debug.Log($"Opened {Name}!");
 
             if (spawnPrefab != null)
             {

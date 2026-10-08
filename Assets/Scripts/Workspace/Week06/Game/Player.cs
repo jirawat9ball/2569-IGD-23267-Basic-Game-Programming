@@ -72,7 +72,7 @@ namespace Week06.Game
             // หากติดกับดัก จะเดินไม่ได้ 1 ครั้ง
             if (isTrapped)
             {
-                Debug.Log("⛓️ You are trapped! Cannot move for 1 turn.");
+                Debug.Log("You are trapped! Cannot move for 1 turn.");
                 isTrapped = false; // ปลดกับดักเพื่อให้เดินได้ในตาถัดไป
                 return;
             }
@@ -191,7 +191,7 @@ namespace Week06.Game
         {
             if (energy <= 0)
             {
-                Debug.Log("💀 You Lose! Out of energy.");
+                Debug.Log("You Lose! Out of energy.");
                 Destroy(gameObject);
             }
         }

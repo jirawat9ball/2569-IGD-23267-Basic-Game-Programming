@@ -6,7 +6,7 @@ namespace Week06.Teacher.Ex03
 {
     public class Enemy : MonoBehaviour
     {
-        public new string name = "Enemy";
+        public string Name = "Enemy";
         public int energy = 10;
         public int attackPoint = 5;
 
@@ -19,19 +19,19 @@ namespace Week06.Teacher.Ex03
         {
             if (target != null)
             {
-                Debug.Log($"{name} attacks {target.Name} with {damage} damage!");
-                target.TakeDamage(damage, name);
+                Debug.Log($"{Name} attacks {target.Name} with {damage} damage!");
+                target.TakeDamage(damage, Name);
             }
         }
 
         public void TakeDamage(int damage)
         {
             energy -= damage;
-            Debug.Log($"{name} takes {damage} damage! Remaining HP: {energy}");
+            Debug.Log($"{Name} takes {damage} damage! Remaining HP: {energy}");
 
             if (energy <= 0)
             {
-                Debug.Log($"💥 {name} defeated!");
+                Debug.Log($"{Name} defeated!");
                 Destroy(gameObject);
             }
         }

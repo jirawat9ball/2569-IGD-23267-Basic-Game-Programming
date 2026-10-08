@@ -16,7 +16,8 @@ namespace Week06.Teacher.Ex04
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log("🎉 You Win! Reached the exit!");
+                player.enabled = false;
+                Debug.Log("You Win! Reached the exit!");
             }
         }
     }

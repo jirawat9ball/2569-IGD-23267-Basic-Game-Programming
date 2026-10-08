@@ -16,7 +16,7 @@ namespace Week06.Teacher.HW01
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log($"⚔️ Picked up {Name}! +{attackBonus} Attack");
+                Debug.Log($"Picked up {Name}! +{attackBonus} Attack");
                 player.IncreaseAttack(attackBonus);
                 Destroy(gameObject);
             }

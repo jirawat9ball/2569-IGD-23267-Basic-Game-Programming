@@ -12,11 +12,11 @@ namespace Week06.Teacher.HW03
         public void Hit()
         {
             durability--;
-            Debug.Log($"🧱 {Name} was hit! Remaining durability: {durability}");
+            Debug.Log($"{Name} was hit! Remaining durability: {durability}");
 
             if (durability <= 0)
             {
-                Debug.Log($"💥 {Name} destroyed!");
+                Debug.Log($"{Name} destroyed!");
                 Destroy(gameObject);
             }
         }

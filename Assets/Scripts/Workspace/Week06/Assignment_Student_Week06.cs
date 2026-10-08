@@ -22,7 +22,7 @@ namespace Week06
         {
             var go = new GameObject("DemoCar");
             var car = go.AddComponent<Ex01.Car>();
-            if (go != null) Destroy(go);
+            SafeDestroy(go);
         }
 
         public void Ex02_DogDemo()
@@ -38,7 +38,7 @@ namespace Week06
                 var go = new GameObject("DemoEnemy");
                 var enemy = go.AddComponent(t);
                 t.GetMethod("TakeDamage", new System.Type[] { typeof(int) })?.Invoke(enemy, new object[] { 10 });
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
 
@@ -49,7 +49,7 @@ namespace Week06
             {
                 var go = new GameObject("DemoExit");
                 go.AddComponent(t);
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Week06
             {
                 var go = new GameObject("DemoPotion");
                 go.AddComponent(t);
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
 
@@ -72,7 +72,7 @@ namespace Week06
             {
                 var go = new GameObject("DemoSword");
                 go.AddComponent(t);
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Week06
             {
                 var go = new GameObject("DemoTrap");
                 go.AddComponent(t);
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Week06
             {
                 var go = new GameObject("DemoWall");
                 go.AddComponent(t);
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
 
@@ -105,9 +105,18 @@ namespace Week06
             {
                 var go = new GameObject("DemoChest");
                 go.AddComponent(t);
-                if (go != null) Destroy(go);
+                SafeDestroy(go);
             }
         }
         #endregion
+
+        private void SafeDestroy(GameObject go)
+        {
+            if (go == null) return;
+            if (Application.isPlaying)
+                Destroy(go);
+            else
+                DestroyImmediate(go);
+        }
     }
 }

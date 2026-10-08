@@ -13,12 +13,7 @@ namespace Week06.Ex02
 
         // สร้าง constructor ที่รับ parameter 3 ตัว และกำหนดค่าให้กับ properties ของ class
         // โดยทั้ง 3 parameter คือ name, breed, age ตามลำดับ
-        public Dog(string name, string breed, int age)
-        {
-            this.name = name;
-            this.breed = breed;
-            this.age = age;
-        }
+   
 
         // behaviors ...
         public void Bark()

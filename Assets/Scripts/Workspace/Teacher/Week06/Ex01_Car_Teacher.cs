@@ -5,15 +5,18 @@ namespace Week06.Teacher.Ex01
 {
     public class Car : MonoBehaviour
     {
-        public new string name;
-        public string color;
-        public float speed;
+        public string Name;
+        public Color carColor;
+        public float Speed;
 
         void Start()
         {
-            name = "civic";
-            color = "black";
-            speed = 110;
+            Name = "civic";
+            carColor = Color.black;
+            Speed = 110;
+
+            gameObject.name = Name;
+            gameObject.GetComponent<MeshRenderer>().material.color = carColor;
         }
 
         void Update()

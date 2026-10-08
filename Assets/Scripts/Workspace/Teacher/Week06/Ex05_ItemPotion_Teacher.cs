@@ -16,7 +16,7 @@ namespace Week06.Teacher.Ex05
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log($"✨ Picked up {name}! +{healPoint} Energy");
+                Debug.Log($"Picked up {name}! +{healPoint} Energy");
                 player.Heal(healPoint);
                 Destroy(gameObject);
             }

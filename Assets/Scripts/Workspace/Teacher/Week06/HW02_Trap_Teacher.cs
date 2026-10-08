@@ -16,7 +16,7 @@ namespace Week06.Teacher.HW02
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                Debug.Log($"⚠️ Stepped on {Name}! Trapped for 1 turn (-{damage} Energy)");
+                Debug.Log($"Stepped on {Name}! Trapped for 1 turn (-{damage} Energy)");
                 player.isTrapped = true;
                 player.TakeDamage(damage);
             }
