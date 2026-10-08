@@ -134,14 +134,5 @@ namespace Week06
             }
         }
         #endregion
-
-        private void SafeDestroy(GameObject go)
-        {
-            if (go == null) return;
-            if (Application.isPlaying)
-                Destroy(go);
-            else
-                DestroyImmediate(go);
-        }
     }
 }

@@ -25,13 +25,21 @@ namespace Week03_Loop
         protected IAssignment assignment;
         protected GameObject testGo;
 
+        protected static System.Type FindType(string typeName)
+        {
+            return System.Type.GetType($"{typeName}, Workspace")
+                ?? System.Type.GetType($"{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType(typeName);
+        }
+
         [SetUp]
         public void Setup()
         {
             testGo = new GameObject("Week03_TestRunner");
-            if (isTeacherMode)
+            var teacherType = isTeacherMode ? FindType("Assignment_Teacher_Week03") : null;
+            if (teacherType != null)
             {
-                assignment = testGo.AddComponent<Assignment_Teacher_Week03>();
+                assignment = testGo.AddComponent(teacherType) as IAssignment;
             }
             else
             {

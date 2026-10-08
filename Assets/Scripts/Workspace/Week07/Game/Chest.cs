@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -22,32 +22,27 @@ namespace Week07.Game
 
         public override void Hit()
         {
-            OpenChest();
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 9)
+            // เรียก OpenChest();
+
+            // ===== student code ends HERE =====
         }
 
         public void OpenChest()
         {
-            if (isOpen) return;
-            isOpen = true;
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 9)
+            // 1. ถ้า isOpen เป็นจริง ให้ return ทันที (ไม่เปิดซ้ำ)
+            // 2. ตั้งค่า isOpen = true;
+            // 3. แสดงข้อความ: "📦 Opened <Name>!"
+            // 4. ถ้า spawnPrefab != null:
+            //    - สร้างวัตถุใหม่ที่ตำแหน่ง transform.position + Vector3.up ด้วย Instantiate
+            //    - บันทึกการเกิดวัตถุด้วย mapGenerator.TrackSpawned(...) ถ้า mapGenerator ไม่เป็น null
+            // 5. ตั้งค่าช่องในแผนที่เป็น 0 (mapGenerator.mapData[positionX, positionY] = 0)
+            // 6. ทำลายวัตถุทิ้งด้วย DestroySafe(gameObject);
 
-            Debug.Log($"📦 Opened {Name}!");
-
-            if (spawnPrefab != null)
-            {
-                Vector3 spawnPosition = transform.position + Vector3.up;
-                var spawned = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
-                if (mapGenerator != null)
-                {
-                    mapGenerator.TrackSpawned(spawned);
-                }
-            }
-
-            if (mapGenerator != null && mapGenerator.mapData != null)
-            {
-                mapGenerator.mapData[positionX, positionY] = 0;
-            }
-
-            DestroySafe(gameObject);
+            // ===== student code ends HERE =====
         }
     }
 }

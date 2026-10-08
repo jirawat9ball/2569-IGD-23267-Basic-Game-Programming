@@ -55,21 +55,16 @@ namespace Week07.Game
 
         public override void Move(Vector2 direction)
         {
-            // หากติดกับดัก จะเดินไม่ได้ 1 ครั้ง
-            if (isTrapped)
-            {
-                Debug.Log("⛓️ You are trapped! Cannot move for 1 turn.");
-                isTrapped = false;
-                return;
-            }
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 4)
+            // 1. หากติดกับดัก (isTrapped เป็นจริง) ให้แสดงข้อความ
+            //    "⛓️ You are trapped! Cannot move for 1 turn."
+            //    แล้วปลดสถานะ isTrapped = false; และ return ออกทันที
+            // 2. ตรวจสอบขอบเขตแผนที่ก่อนเดิน ถ้าเดินไม่ได้ (!CanMove(direction)) ให้ return
+            // 3. บันทึกตำแหน่งก่อนหน้า previousPositionX = positionX; และ previousPositionY = positionY;
+            // 4. เรียก base.Move(direction);
 
-            // ตรวจสอบขอบเขตแผนที่ก่อนเดิน
-            if (!CanMove(direction)) return;
-
-            previousPositionX = positionX;
-            previousPositionY = positionY;
-
-            base.Move(direction);
+            // ===== student code ends HERE =====
         }
 
         public void Move(float x, float y)
@@ -79,21 +74,25 @@ namespace Week07.Game
 
         public bool CanMove(Vector2 direction)
         {
-            int targetX = (int)(positionX + direction.x);
-            int targetY = (int)(positionY + direction.y);
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 4)
+            // คำนวณหา targetX และ targetY จาก positionX/Y + direction.x/y
+            // ดึงจำนวน row และ col จาก mapGenerator (หรือ MapGenerator.MapSize ถ้า mapGenerator เป็น null)
+            // คืนค่า true ถ้า targetX และ targetY อยู่ในช่วง 0 ถึง row/col
 
-            int row = mapGenerator != null ? mapGenerator.Row : MapGenerator.MapSize;
-            int col = mapGenerator != null ? mapGenerator.Col : MapGenerator.MapSize;
-
-            return targetX >= 0 && targetX < row && targetY >= 0 && targetY < col;
+            // ===== student code ends HERE =====
+            return false;
         }
 
         public void RevertPosition()
         {
-            positionX = previousPositionX;
-            positionY = previousPositionY;
-            transform.position = new Vector3(positionX, positionY, 0);
-            energy += 1;
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 4)
+            // 1. คืนค่าตำแหน่ง: positionX = previousPositionX; positionY = previousPositionY;
+            // 2. อัปเดต transform.position = new Vector3(positionX, positionY, 0);
+            // 3. คืนพลังงาน: energy += 1;
+
+            // ===== student code ends HERE =====
         }
 
         public int GetEnergy()

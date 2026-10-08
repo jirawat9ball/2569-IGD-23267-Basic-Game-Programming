@@ -25,13 +25,21 @@ namespace Week04_Array2D
         protected IAssignment assignment;
         protected GameObject testGo;
 
+        protected static System.Type FindType(string typeName)
+        {
+            return System.Type.GetType($"{typeName}, Workspace")
+                ?? System.Type.GetType($"{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType(typeName);
+        }
+
         [SetUp]
         public void Setup()
         {
             testGo = new GameObject("Week04_TestRunner");
-            if (isTeacherMode)
+            var teacherType = isTeacherMode ? FindType("Assignment_Teacher_Week04") : null;
+            if (teacherType != null)
             {
-                assignment = testGo.AddComponent<Assignment_Teacher_Week04>();
+                assignment = testGo.AddComponent(teacherType) as IAssignment;
             }
             else
             {
@@ -174,19 +182,23 @@ namespace Week04_Array2D
                 SetFieldIfExists(student, "player", player);
                 SetFieldIfExists(student, "exitTile", exit);
             }
-            var teacher = testGo.GetComponent<Assignment_Teacher_Week04>();
-            if (teacher != null)
+            var teacherType = FindType("Assignment_Teacher_Week04");
+            if (teacherType != null)
             {
-                teacher.cols = cols;
-                teacher.rows = rows;
-                teacher.wall = walls;
-                teacher.floorTiles = floors;
-                teacher.Item = item;
-                teacher.ItemPosX = itemX;
-                teacher.ItemPosY = itemY;
-                teacher.foodTiles = food;
-                teacher.player = player != null ? new GameObject[] { player } : null;
-                teacher.exitTile = exit;
+                var teacher = testGo.GetComponent(teacherType);
+                if (teacher != null)
+                {
+                    SetFieldIfExists(teacher, "cols", cols);
+                    SetFieldIfExists(teacher, "rows", rows);
+                    SetFieldIfExists(teacher, "wall", walls);
+                    SetFieldIfExists(teacher, "floorTiles", floors);
+                    SetFieldIfExists(teacher, "Item", item);
+                    SetFieldIfExists(teacher, "ItemPosX", itemX);
+                    SetFieldIfExists(teacher, "ItemPosY", itemY);
+                    SetFieldIfExists(teacher, "foodTiles", food);
+                    SetFieldIfExists(teacher, "player", player != null ? new GameObject[] { player } : null);
+                    SetFieldIfExists(teacher, "exitTile", exit);
+                }
             }
         }
 

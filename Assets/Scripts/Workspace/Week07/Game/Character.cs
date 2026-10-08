@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -30,70 +30,11 @@ namespace Week07.Game
                 //    3.2 ให้เราตีศัตรูก่อน: this.Attack(e, attackPoint);
                 //    3.3 ถ้าศัตรูยังไม่ตาย (e.energy > 0) -> ให้ศัตรูตีสวนกลับด้วย mapGenerator.enemies[toX, toY].Hit();
                 //    3.4 ถ้าศัตรูตายแล้ว -> ขยับตัวละครเข้าไปที่ช่องนั้น
+                // 4. ถ้าเป็นกำแพง (IsDemonWall) -> เรียก mapGenerator.walls[toX, toY].Hit(); (ไม่ขยับเข้าช่องกำแพง)
+                // 5. ถ้าเป็นกล่องสมบัติ (IsChest) -> เรียก mapGenerator.chests[toX, toY].Hit(); แล้วขยับตัวละครเข้าไป
+                // 6. ถ้าเป็นทางออก (IsExit) -> เรียก mapGenerator.exitObject.Hit(); แล้วขยับตัวละครเข้าไป
                 // หมายเหตุ: ช่องที่มีของวางอยู่จะไม่โดนหัก energy (ต่างจากช่องว่างด้านล่าง)
-                if (IsPotion(toX, toY))
-                {
-                    if (mapGenerator.potions != null && mapGenerator.potions[toX, toY] != null)
-                    {
-                        mapGenerator.potions[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsSword(toX, toY))
-                {
-                    if (mapGenerator.swords != null && mapGenerator.swords[toX, toY] != null)
-                    {
-                        mapGenerator.swords[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsEnemy(toX, toY))
-                {
-                    Enemy e = mapGenerator.enemies[toX, toY];
-                    this.Attack(e, attackPoint);
 
-                    if (e.energy > 0)
-                    {
-                        mapGenerator.enemies[toX, toY].Hit();
-                    }
-                    else
-                    {
-                        positionX = toX;
-                        positionY = toY;
-                        transform.position = new Vector3(positionX, positionY, 0);
-                    }
-                }
-                else if (IsDemonWall(toX, toY))
-                {
-                    if (mapGenerator.walls != null && mapGenerator.walls[toX, toY] != null)
-                    {
-                        mapGenerator.walls[toX, toY].Hit();
-                    }
-                }
-                else if (IsChest(toX, toY))
-                {
-                    if (mapGenerator.chests != null && mapGenerator.chests[toX, toY] != null)
-                    {
-                        mapGenerator.chests[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsExit(toX, toY))
-                {
-                    if (mapGenerator.exitObject != null)
-                    {
-                        mapGenerator.exitObject.Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
                 // ===== student code ends HERE =====
             }
             else

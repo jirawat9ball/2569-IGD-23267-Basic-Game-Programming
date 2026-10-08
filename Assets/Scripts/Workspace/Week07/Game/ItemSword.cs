@@ -22,23 +22,14 @@ namespace Week07.Game
 
         public override void Hit()
         {
-            // Guideline: (ข้อ 6)
-            // 2. พิมพ์ข้อความ "You got <ชื่อไอเทม> : <attackBonus>"
-            // 3. เพิ่มพลังโจมตีให้ผู้เล่น: mapGenerator.player.IncreaseAttack(attackBonus);
-            // 4. เอาไอเทมออกจากแผนที่ แบบเดียวกับ Potion
-            Debug.Log($"You got {Name} : {attackBonus}");
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 7)
+            // 1. พิมพ์ข้อความ "You got <ชื่อไอเทม> : <attackBonus>"
+            // 2. เพิ่มพลังโจมตีให้ผู้เล่น: mapGenerator.player.IncreaseAttack(attackBonus);
+            // 3. เอาไอเทมออกจากแผนที่แบบเดียวกับ Potion (ตั้ง mapGenerator.mapData[positionX, positionY] = 0)
+            // 4. ทำลายวัตถุทิ้งด้วย DestroySafe(gameObject);
 
-            if (mapGenerator != null && mapGenerator.player != null)
-            {
-                mapGenerator.player.IncreaseAttack(attackBonus);
-            }
-
-            if (mapGenerator != null && mapGenerator.mapData != null)
-            {
-                mapGenerator.mapData[positionX, positionY] = 0;
-            }
-
-            DestroySafe(gameObject);
+            // ===== student code ends HERE =====
         }
     }
 }

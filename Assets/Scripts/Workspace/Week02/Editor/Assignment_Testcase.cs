@@ -18,13 +18,21 @@ namespace Week02_If
         protected IAssignment assignment;
         protected UnityEngine.GameObject testGo;
 
+        protected static System.Type FindType(string typeName)
+        {
+            return System.Type.GetType($"{typeName}, Workspace")
+                ?? System.Type.GetType($"{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType(typeName);
+        }
+
         [SetUp]
         public void Setup()
         {
             testGo = new UnityEngine.GameObject();
-            if (isTeacherMode)
+            var teacherType = isTeacherMode ? FindType("Assignment_Teacher_Week02") : null;
+            if (teacherType != null)
             {
-                assignment = testGo.AddComponent<Assignment_Teacher_Week02>();
+                assignment = testGo.AddComponent(teacherType) as IAssignment;
             }
             else
             {

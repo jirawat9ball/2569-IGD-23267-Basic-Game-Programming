@@ -23,8 +23,15 @@ namespace Week06_Class
         protected const BindingFlags AnyInstance =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
-        protected static System.Type CarType => isTeacherMode ? typeof(Week06.Teacher.Ex01.Car) : typeof(Week06.Ex01.Car);
-        protected static System.Type Dog02Type => isTeacherMode ? typeof(Week06.Teacher.Ex02.Dog) : typeof(Week06.Ex02.Dog);
+        protected static System.Type FindType(string typeName)
+        {
+            return System.Type.GetType($"{typeName}, Workspace")
+                ?? System.Type.GetType($"{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType(typeName);
+        }
+
+        protected static System.Type CarType => (isTeacherMode ? FindType("Week06.Teacher.Ex01.Car") : null) ?? typeof(Week06.Ex01.Car);
+        protected static System.Type Dog02Type => (isTeacherMode ? FindType("Week06.Teacher.Ex02.Dog") : null) ?? typeof(Week06.Ex02.Dog);
         protected static System.Type GetGameType(string typeName)
         {
             return System.Type.GetType($"Week06.Game.{typeName}, Workspace")
@@ -40,14 +47,14 @@ namespace Week06_Class
                 ?? System.Type.GetType($"{altNamespace}.{typeName}");
         }
 
-        protected static System.Type EnemyType => isTeacherMode ? typeof(Week06.Teacher.Ex03.Enemy) : GetTypeWithFallback("Enemy", "Week06.Ex03");
-        protected static System.Type ExitType => isTeacherMode ? typeof(Week06.Teacher.Ex04.Exit) : GetTypeWithFallback("Exit", "Week06.Ex04");
-        protected static System.Type PotionType => isTeacherMode ? typeof(Week06.Teacher.Ex05.ItemPotion) : GetTypeWithFallback("ItemPotion", "Week06.Ex05");
+        protected static System.Type EnemyType => (isTeacherMode ? FindType("Week06.Teacher.Ex03.Enemy") : null) ?? GetTypeWithFallback("Enemy", "Week06.Ex03");
+        protected static System.Type ExitType => (isTeacherMode ? FindType("Week06.Teacher.Ex04.Exit") : null) ?? GetTypeWithFallback("Exit", "Week06.Ex04");
+        protected static System.Type PotionType => (isTeacherMode ? FindType("Week06.Teacher.Ex05.ItemPotion") : null) ?? GetTypeWithFallback("ItemPotion", "Week06.Ex05");
 
-        protected static System.Type SwordType => isTeacherMode ? typeof(Week06.Teacher.HW01.ItemSword) : GetGameType("ItemSword");
-        protected static System.Type TrapType => isTeacherMode ? typeof(Week06.Teacher.HW02.Trap) : GetGameType("Trap");
-        protected static System.Type WallType => isTeacherMode ? typeof(Week06.Teacher.HW03.Wall) : GetGameType("Wall");
-        protected static System.Type ChestType => isTeacherMode ? typeof(Week06.Teacher.HW04.Chest) : GetGameType("Chest");
+        protected static System.Type SwordType => (isTeacherMode ? FindType("Week06.Teacher.HW01.ItemSword") : null) ?? GetGameType("ItemSword");
+        protected static System.Type TrapType => (isTeacherMode ? FindType("Week06.Teacher.HW02.Trap") : null) ?? GetGameType("Trap");
+        protected static System.Type WallType => (isTeacherMode ? FindType("Week06.Teacher.HW03.Wall") : null) ?? GetGameType("Wall");
+        protected static System.Type ChestType => (isTeacherMode ? FindType("Week06.Teacher.HW04.Chest") : null) ?? GetGameType("Chest");
         protected static System.Type PlayerType => typeof(Week06.Game.Player);
         protected static System.Type MapGeneratorType => typeof(Week06.Game.MapGenerator);
 
@@ -55,8 +62,9 @@ namespace Week06_Class
         public void Setup()
         {
             testGo = new GameObject("Week06_TestRunner");
-            if (isTeacherMode)
-                assignment = testGo.AddComponent<Week06.Assignment_Teacher_Week06>();
+            var teacherType = isTeacherMode ? FindType("Week06.Assignment_Teacher_Week06") : null;
+            if (teacherType != null)
+                assignment = testGo.AddComponent(teacherType) as IAssignment;
             else
                 assignment = testGo.AddComponent<Assignment_Student_Week06>();
             SimpleDebugConsole.Clear();

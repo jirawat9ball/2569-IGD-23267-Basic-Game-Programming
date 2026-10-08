@@ -22,23 +22,14 @@ namespace Week07.Game
 
         public override void Hit()
         {
-            // Guideline: (ข้อ 5)
-            // 2. พิมพ์ข้อความ "You got <ชื่อไอเทม> : <healPoint>"
-            // 3. เพิ่มเลือดให้ผู้เล่น: mapGenerator.player.Heal(healPoint);
-            // 4. เอาไอเทมออกจากแผนที่ โดยตั้งค่าช่องนั้นเป็น 0 แล้วทำลายวัตถุทิ้ง
-            Debug.Log($"You got {Name} : {healPoint}");
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 6)
+            // 1. พิมพ์ข้อความ "You got <ชื่อไอเทม> : <healPoint>"
+            // 2. เพิ่มเลือดให้ผู้เล่น: mapGenerator.player.Heal(healPoint);
+            // 3. เอาไอเทมออกจากแผนที่ โดยตั้งค่าช่องนั้นเป็น 0 ใน mapGenerator.mapData
+            // 4. ทำลายวัตถุทิ้งด้วย DestroySafe(gameObject);
 
-            if (mapGenerator != null && mapGenerator.player != null)
-            {
-                mapGenerator.player.Heal(healPoint);
-            }
-
-            if (mapGenerator != null && mapGenerator.mapData != null)
-            {
-                mapGenerator.mapData[positionX, positionY] = 0;
-            }
-
-            DestroySafe(gameObject);
+            // ===== student code ends HERE =====
         }
     }
 }

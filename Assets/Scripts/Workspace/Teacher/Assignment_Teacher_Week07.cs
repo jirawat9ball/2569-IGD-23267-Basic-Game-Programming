@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07
@@ -22,8 +22,8 @@ namespace Week07
 
         public void Ex04_PlayerDemo()
         {
-            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Player player = map.player as Game.Player;
+            Teacher.Game.MapGenerator map = Teacher.Game.MapGenerator.CreateDemoMap();
+            Teacher.Game.Player player = map.player;
 
             player.Move(Vector2.right);
             Debug.Log($"Player position: ({player.positionX}, {player.positionY})");
@@ -34,9 +34,9 @@ namespace Week07
 
         public void Ex05_BattleDemo()
         {
-            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Character player = map.player;
-            Game.Enemy enemy = map.enemies[3, 3];
+            Teacher.Game.MapGenerator map = Teacher.Game.MapGenerator.CreateDemoMap();
+            Teacher.Game.Character player = map.player;
+            Teacher.Game.Enemy enemy = map.enemies[3, 3];
 
             player.Move(Vector2.up);      // (0,1) ช่องว่าง -> energy 99
             player.Move(Vector2.up);      // (0,2) ช่องว่าง -> energy 98
@@ -67,8 +67,8 @@ namespace Week07
 
         public void Ex06_PotionDemo()
         {
-            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Character player = map.player;
+            Teacher.Game.MapGenerator map = Teacher.Game.MapGenerator.CreateDemoMap();
+            Teacher.Game.Character player = map.player;
 
             player.Move(Vector2.up);
             player.Move(Vector2.up);
@@ -82,8 +82,8 @@ namespace Week07
 
         public void Ex07_SwordDemo()
         {
-            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Character player = map.player;
+            Teacher.Game.MapGenerator map = Teacher.Game.MapGenerator.CreateDemoMap();
+            Teacher.Game.Character player = map.player;
 
             player.Move(Vector2.up);
             player.Move(Vector2.up);
@@ -98,8 +98,8 @@ namespace Week07
 
         public void Ex08_WallDemo()
         {
-            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Wall wall = map.walls[1, 3];
+            Teacher.Game.MapGenerator map = Teacher.Game.MapGenerator.CreateDemoMap();
+            Teacher.Game.Wall wall = map.walls[1, 3];
 
             wall.Hit();
             wall.Hit();
@@ -110,8 +110,8 @@ namespace Week07
 
         public void Ex09_ChestDemo()
         {
-            Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Chest chest = map.chests[1, 1];
+            Teacher.Game.MapGenerator map = Teacher.Game.MapGenerator.CreateDemoMap();
+            Teacher.Game.Chest chest = map.chests[1, 1];
 
             chest.OpenChest();
 
@@ -119,4 +119,3 @@ namespace Week07
         }
     }
 }
-

@@ -21,17 +21,16 @@ namespace Week07.Game
 
         public override void Hit()
         {
-            durability--;
-            Debug.Log($"Hit Wall {Name}! Remaining durability: {durability}");
-            if (durability <= 0)
-            {
-                Debug.Log($"💥 Wall {Name} destroyed!");
-                if (mapGenerator != null && mapGenerator.mapData != null)
-                {
-                    mapGenerator.mapData[positionX, positionY] = 0;
-                }
-                DestroySafe(gameObject);
-            }
+            // ===== student code starts HERE =====
+            // Guideline: (ข้อ 8)
+            // 1. ลดความทนทานลง 1: durability--;
+            // 2. แสดงข้อความ: "Hit Wall <Name>! Remaining durability: <durability>"
+            // 3. ถ้า durability <= 0:
+            //    - แสดงข้อความ: "💥 Wall <Name> destroyed!"
+            //    - ตั้งค่าช่องในแผนที่เป็น 0 (mapGenerator.mapData[positionX, positionY] = 0)
+            //    - ทำลายวัตถุทิ้งด้วย DestroySafe(gameObject);
+
+            // ===== student code ends HERE =====
         }
     }
 }

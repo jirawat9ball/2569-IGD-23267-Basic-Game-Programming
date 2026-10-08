@@ -167,11 +167,17 @@ namespace Week01_Value
         // =========================================================================================
         private const bool isTeacherMode = false;
 
-        private static Type TargetType => isTeacherMode
-            ? typeof(Assignment_Teacher_Week01)
-            : typeof(Assignment_Student_Week01);
+        private static Type FindType(string typeName)
+        {
+            return Type.GetType($"{typeName}, Workspace")
+                ?? Type.GetType($"{typeName}, Assembly-CSharp")
+                ?? Type.GetType(typeName);
+        }
 
-        private static string TargetTypeName => TargetType.Name;
+        private static Type TargetType => (isTeacherMode ? FindType("Assignment_Teacher_Week01") : null)
+            ?? typeof(Assignment_Student_Week01);
+
+        private static string TargetTypeName => TargetType?.Name ?? "Assignment_Student_Week01";
 
         private void CheckField(string varName, Type expectedType, bool? shouldBeExposed = null)
         {

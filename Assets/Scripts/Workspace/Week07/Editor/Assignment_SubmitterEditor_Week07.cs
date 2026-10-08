@@ -70,7 +70,7 @@ public class Assignment_SubmitterEditor_Week07 : Editor
         {
             testMode = TestMode.EditMode,
             assemblyNames = new string[] { "Workspace.Editor", "Assembly-CSharp-Editor", "Assembly-CSharp-Editor-testable" },
-            groupNames = new string[] { submitter.weekName }
+            groupNames = new string[] { submitter.weekName, "Week07_OOP" }
         }));
     }
 }

@@ -28,17 +28,17 @@ namespace Week05_Method
 
         private void SyncFieldsBeforeInvoke()
         {
-            if (_studentSync != null && _target is Assignment_Teacher_Week05 teacher)
+            if (_studentSync != null && _target is MonoBehaviour teacherMb)
             {
-                teacher.transform.position = _studentSync.transform.position;
+                teacherMb.transform.position = _studentSync.transform.position;
             }
         }
 
         private void SyncFieldsAfterInvoke()
         {
-            if (_studentSync != null && _target is Assignment_Teacher_Week05 teacher)
+            if (_studentSync != null && _target is MonoBehaviour teacherMb)
             {
-                _studentSync.transform.position = teacher.transform.position;
+                _studentSync.transform.position = teacherMb.transform.position;
             }
         }
 
@@ -481,13 +481,20 @@ namespace Week05_Method
 
         protected IAssignment assignment;
         protected Assignment_Student_Week05 student;
-        protected Assignment_Teacher_Week05 teacher;
+        protected Component teacher;
 
         protected PlayerInvoker player;
         protected MapGeneratorInvoker mapGenerator;
         protected GameObject testGo;
         protected GameObject playerGo;
         protected GameObject mapGeneratorGo;
+
+        protected static System.Type FindType(string typeName)
+        {
+            return System.Type.GetType($"{typeName}, Workspace")
+                ?? System.Type.GetType($"{typeName}, Assembly-CSharp")
+                ?? System.Type.GetType(typeName);
+        }
 
         [SetUp]
         public void Setup()
@@ -498,12 +505,16 @@ namespace Week05_Method
 
             if (isTeacherMode)
             {
-                teacher = testGo.AddComponent<Assignment_Teacher_Week05>();
+                var teacherType = FindType("Assignment_Teacher_Week05");
+                var teacherPlayerType = FindType("Player_Teacher_Week05");
+                var teacherMapType = FindType("MapGenerator_Teacher_Week05");
+
+                if (teacherType != null) teacher = testGo.AddComponent(teacherType);
                 student = testGo.AddComponent<Assignment_Student_Week05>();
-                assignment = new AssignmentInvoker(teacher, student);
-                var teacherPlayer = playerGo.AddComponent<Player_Teacher_Week05>();
+                assignment = new AssignmentInvoker(teacher != null ? (object)teacher : student, student);
+                var teacherPlayer = teacherPlayerType != null ? playerGo.AddComponent(teacherPlayerType) : (Component)playerGo.AddComponent<Player>();
                 player = new PlayerInvoker(teacherPlayer);
-                var teacherMap = mapGeneratorGo.AddComponent<MapGenerator_Teacher_Week05>();
+                var teacherMap = teacherMapType != null ? mapGeneratorGo.AddComponent(teacherMapType) : (Component)mapGeneratorGo.AddComponent<MapGenerator>();
                 mapGenerator = new MapGeneratorInvoker(teacherMap);
             }
             else
