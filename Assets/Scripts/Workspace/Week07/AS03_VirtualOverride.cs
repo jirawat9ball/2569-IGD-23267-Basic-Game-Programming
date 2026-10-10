@@ -1,4 +1,4 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week07.Ex03
@@ -12,23 +12,19 @@ namespace Week07.Ex03
         }
     }
 
-    public class Dog : Animal
+    public class Dog 
     {
         // student code here ...
-        public override void MakeSound()
-        {
-            Debug.Log("Woof!");
-        }
+        // 1. declare overridden MakeSound() method
+
         // student code ends ...
     }
 
-    public class Cat : Animal
+    public class Cat 
     {
         // student code here ...
-        public override void MakeSound()
-        {
-            Debug.Log("Meow!");
-        }
+        // 2. declare overridden MakeSound() method
+
         // student code ends ...
     }
 
@@ -37,15 +33,18 @@ namespace Week07.Ex03
         public void Start()
         {
             // Student code starts HERE ...
-            Dog dog = new Dog();
-            dog.MakeSound();
+            // 3. create instance of Dog and call MakeSound()
+            // Dog dog = new Dog();
+            // dog.MakeSound();
 
-            Cat cat = new Cat();
-            cat.MakeSound();
+            // 4. create instance of Cat and call MakeSound()
+            // Cat cat = new Cat();
+            // cat.MakeSound();
+            // Student code ends HERE ...
 
+            // 5. create instance of Animal and call MakeSound()
             Animal animal = new Animal();
             animal.MakeSound();
-            // Student code ends HERE ...
         }
     }
 }

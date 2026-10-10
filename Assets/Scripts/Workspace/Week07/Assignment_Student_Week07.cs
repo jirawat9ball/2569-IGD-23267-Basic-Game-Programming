@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07
@@ -52,7 +52,7 @@ namespace Week07
             // Player (0,0) energy 100 attack 10
             // ผ่านช่องว่าง 3 ช่อง -> เก็บยาที่ (2,2) -> เก็บดาบที่ (3,2) -> ตีศัตรูที่ (3,3) 3 ครั้ง
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Character player = map.player;
+            var player = map.player;
             Game.Enemy enemy = map.enemies[3, 3];
 
             player.Move(Vector2.up);      // (0,1) ช่องว่าง -> energy 99
@@ -86,7 +86,7 @@ namespace Week07
         {
             // ข้อ 6: เดินไปเหยียบยาที่ (2,2) แล้วดูว่า energy เพิ่มขึ้นไหม
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Character player = map.player;
+            var player = map.player;
 
             player.Move(Vector2.up);
             player.Move(Vector2.up);
@@ -102,7 +102,7 @@ namespace Week07
         {
             // ข้อ 7: เดินไปเหยียบดาบที่ (3,2) แล้วดูว่า attackPoint เพิ่มขึ้นไหม
             Game.MapGenerator map = Game.MapGenerator.CreateDemoMap();
-            Game.Character player = map.player;
+            var player = map.player;
 
             player.Move(Vector2.up);
             player.Move(Vector2.up);

@@ -16,9 +16,13 @@ namespace Week07.Game
     ///    - ตั้งค่าช่องในแผนที่เป็น 0: mapGenerator.mapData[positionX, positionY] = 0;
     ///    - ทำลายตัวเอง: DestroySafe(gameObject);
     /// </summary>
-    public class ItemSword : Identity
+    public class ItemSword : MonoBehaviour
     {
+        public string Name = "Sword";
+        public int positionX;
+        public int positionY;
         public int attackBonus = 10;
+        public MapGenerator mapGenerator;
 
         private void Awake()
         {
@@ -28,28 +32,28 @@ namespace Week07.Game
             }
         }
 
-        // ===== student code starts HERE =====
-        public override void Hit(Player player = null)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log($"You got {Name} : {attackBonus}");
-
-            if (player == null && mapGenerator != null)
-            {
-                player = mapGenerator.player;
-            }
-
+            Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                player.IncreaseAttack(attackBonus);
+                Debug.Log($"You got {Name} : {attackBonus}");
+                if (mapGenerator != null && mapGenerator.player != null)
+                {
+                    mapGenerator.player.IncreaseAttack(attackBonus);
+                    mapGenerator.mapData[positionX, positionY] = 0;
+                }
+                else
+                {
+                    player.IncreaseAttack(attackBonus);
+                }
+                Destroy(gameObject);
             }
-
-            if (mapGenerator != null && mapGenerator.mapData != null)
-            {
-                mapGenerator.mapData[positionX, positionY] = 0;
-            }
-
-            DestroySafe(gameObject);
         }
+
+        // ===== student code starts HERE =====
+        // 🎯 ข้อ 7: รีแฟกเตอร์จาก OnTriggerEnter2D มาเป็น Hit()
+        
         // ===== student code ends HERE =====
     }
 }

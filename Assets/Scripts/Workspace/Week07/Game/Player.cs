@@ -1,16 +1,30 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
 {
     /// <summary>
     /// สคริปต์ควบคุมตัวละครผู้เล่น (Player)
-    /// สืบทอดคุณสมบัติทั้งหมดจาก Character (ซึ่งสืบทอดจาก Identity)
-    /// ปรับปรุงจาก Week 06 โดยนำระบบควบคุมการเดินด้วยคีย์บอร์ด (WASD / ลูกศร)
-    /// และการตรวจจับสถานะมาต่อยอดบนโครงสร้าง OOP
+    /// 
+    /// 🎯 โจทย์ Week 07 (ข้อ 4): ปรับปรุงเป็น OOP
+    /// 1. เปลี่ยนการสืบทอดจาก MonoBehaviour ให้สืบทอดจาก Character:
+    ///    public class Player : Character
+    /// 2. ลบตัวแปรซ้ำซ้อน (Name, positionX, positionY, energy, attackPoint, mapGenerator) ออก เนื่องจาก Character และ Identity มีให้อยู่แล้ว
+    /// 3. คงตัวแปรเฉพาะของ Player ไว้: previousPositionX, previousPositionY, isTrapped
+    /// 4. เขียน override void Move(Vector2 direction)
+    /// 5. เขียนเมธอด CanMove(Vector2 direction)
+    /// 6. เขียนเมธอด RevertPosition()
     /// </summary>
-    public class Player : Character
+    public class Player : MonoBehaviour
     {
+        [Header("ข้อมูลและพิกัดตัวละคร")]
+        public string Name = "Player";
+        public int positionX;
+        public int positionY;
+        public int energy = 20;
+        public int attackPoint = 10;
+        public MapGenerator mapGenerator;
+
         [Header("ตำแหน่งก่อนหน้า (Previous Position)")]
         public int previousPositionX;
         public int previousPositionY;
@@ -53,23 +67,16 @@ namespace Week07.Game
             }
         }
 
-        public override void Move(Vector2 direction)
+        // ===== student code starts HERE =====
+        public void Move(Vector2 direction)
         {
-            // ===== student code starts HERE =====
-            if (isTrapped)
-            {
-                Debug.Log("You are trapped! Cannot move for 1 turn.");
-                isTrapped = false;
-                return;
-            }
-
-            if (!CanMove(direction)) return;
-
-            previousPositionX = positionX;
-            previousPositionY = positionY;
-
-            base.Move(direction);
-            // ===== student code ends HERE =====
+            // Guideline: (ข้อ 4)
+            // 1. หากติดกับดัก (isTrapped เป็นจริง) ให้แสดงข้อความ
+            //    "You are trapped! Cannot move for 1 turn."
+            //    แล้วปลดสถานะ isTrapped = false; และ return ออกทันที
+            // 2. ตรวจสอบขอบเขตแผนที่ก่อนเดิน ถ้าเดินไม่ได้ (!CanMove(direction)) ให้ return
+            // 3. บันทึกตำแหน่งก่อนหน้า previousPositionX = positionX; และ previousPositionY = positionY;
+            // 4. เรียก base.Move(direction);
         }
 
         public void Move(float x, float y)
@@ -79,31 +86,45 @@ namespace Week07.Game
 
         public bool CanMove(Vector2 direction)
         {
-            // ===== student code starts HERE =====
-            int targetX = (int)(positionX + direction.x);
-            int targetY = (int)(positionY + direction.y);
-
-            var map = mapGenerator as MapGenerator;
-            int row = map != null ? map.Row : MapGenerator.MapSize;
-            int col = map != null ? map.Col : MapGenerator.MapSize;
-
-            return targetX >= 0 && targetX < row && targetY >= 0 && targetY < col;
-            // ===== student code ends HERE =====
+            // Guideline: (ข้อ 4)
+            // คำนวณหา targetX และ targetY จาก positionX/Y + direction.x/y
+            // ดึงจำนวน row และ col จาก mapGenerator (หรือ MapGenerator.MapSize ถ้า mapGenerator เป็น null)
+            // คืนค่า true ถ้า targetX และ targetY อยู่ในช่วง 0 ถึง row/col
+            return false;
         }
 
         public void RevertPosition()
         {
-            // ===== student code starts HERE =====
-            positionX = previousPositionX;
-            positionY = previousPositionY;
-            transform.position = new Vector3(positionX, positionY, 0);
-            energy += 1;
-            // ===== student code ends HERE =====
+            // Guideline: (ข้อ 4)
+            // 1. คืนค่าตำแหน่ง: positionX = previousPositionX; positionY = previousPositionY;
+            // 2. อัปเดต transform.position = new Vector3(positionX, positionY, 0);
+            // 3. คืนพลังงาน: energy += 1;
         }
+        // ===== student code ends HERE =====
 
         public int GetEnergy()
         {
             return energy;
+        }
+
+        public void Attack(Character target, int damage)
+        {
+            target?.TakeDamage(damage);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            energy -= damage;
+        }
+
+        public void Heal(int healPoint)
+        {
+            energy += healPoint;
+        }
+
+        public void IncreaseAttack(int value)
+        {
+            attackPoint += value;
         }
     }
 }

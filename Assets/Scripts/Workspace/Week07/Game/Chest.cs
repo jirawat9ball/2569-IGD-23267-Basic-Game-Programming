@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -19,10 +19,14 @@ namespace Week07.Game
     ///    - ตั้งค่าช่องในแผนที่เป็น 0: mapGenerator.mapData[positionX, positionY] = 0;
     ///    - ทำลายตัวเอง: DestroySafe(gameObject);
     /// </summary>
-    public class Chest : Identity
+    public class Chest : MonoBehaviour
     {
+        public string Name = "Chest";
+        public int positionX;
+        public int positionY;
         public GameObject spawnPrefab;
         public bool isOpen = false;
+        public MapGenerator mapGenerator;
 
         private void Awake()
         {
@@ -32,13 +36,21 @@ namespace Week07.Game
             }
         }
 
-        // ===== student code starts HERE =====
-        public override void Hit(Player player = null)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if(player != null){
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
                 OpenChest();
             }
-            
+        }
+
+        // ===== student code starts HERE =====
+        // 🎯 ข้อ 9: รีแฟกเตอร์จาก OnTriggerEnter2D มาเป็น Hit()
+        public void Hit(Player player = null)
+        {
+            // Guideline: (ข้อ 9)
+            // เรียก OpenChest();
         }
 
         public void OpenChest()
@@ -52,10 +64,9 @@ namespace Week07.Game
             {
                 Vector3 spawnPosition = transform.position + Vector3.up;
                 var spawned = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
-                var map = mapGenerator as MapGenerator;
-                if (map != null)
+                if (mapGenerator != null)
                 {
-                    map.TrackSpawned(spawned);
+                    mapGenerator.TrackSpawned(spawned);
                 }
             }
 
@@ -64,7 +75,7 @@ namespace Week07.Game
                 mapGenerator.mapData[positionX, positionY] = 0;
             }
 
-            DestroySafe(gameObject);
+            Identity.DestroySafe(gameObject);
         }
         // ===== student code ends HERE =====
     }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Week07.Game
 {
@@ -14,7 +14,6 @@ namespace Week07.Game
         public int positionY;
         public MapGenerator mapGenerator;
 
-
         public virtual void Hit(Player player = null)
         {
         }
@@ -25,14 +24,7 @@ namespace Week07.Game
         /// </summary>
         public virtual void OnTriggerEnter2D(Collider2D other)
         {
-            if (this is not Player)
-            {
-                Player player = other.GetComponent<Player>();
-                if (player != null)
-                {
-                    Hit(player);
-                }
-            }
+           
         }
 
         /// <summary>
@@ -40,7 +32,7 @@ namespace Week07.Game
         /// ตอนเล่นจริงใช้ Destroy ตามปกติ ส่วนตอนรันชุดทดสอบ (EditMode) ใช้ Destroy ไม่ได้
         /// จึงปิดการทำงานแทน เพื่อให้โค้ดที่อ่านค่าต่อจากวัตถุนั้นยังทำงานได้เหมือนตอนเล่นจริง
         /// </summary>
-        protected static void DestroySafe(GameObject target)
+        public static void DestroySafe(GameObject target)
         {
             if (target == null)
             {

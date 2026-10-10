@@ -1,4 +1,4 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week07.Ex01
@@ -17,23 +17,21 @@ namespace Week07.Ex01
     // 1. ทำให้ Dog สืบทอด (inherit) จาก Animal โดยเขียน  : Animal  ต่อท้ายชื่อคลาส
     // 2. พอสืบทอดแล้ว Dog จะใช้ตัวแปร name และเมธอด MakeSound() ของ Animal ได้เลย
     // 3. ในเมธอด Walk ให้พิมพ์ "Dog <ชื่อ> is walking"
-    public class Dog : Animal
+    public class Dog
     {
-        public void Walk()
-        {
-            Debug.Log($"Dog {name} is walking");
-        }
+        // Student code starts HERE ...
+
+        // Student code ends HERE ...
     }
 
     // Guideline:
     // 1. ทำให้ Bird สืบทอดจาก Animal เหมือนกัน
     // 2. ในเมธอด Fly ให้พิมพ์ "Bird <ชื่อ> is flying"
-    public class Bird : Animal
+    public class Bird
     {
-        public void Fly()
-        {
-            Debug.Log($"Bird {name} is flying");
-        }
+        // Student code starts HERE ...
+
+        // Student code ends HERE ...
     }
 
     public class AS01_Inheritance
@@ -44,19 +42,17 @@ namespace Week07.Ex01
             // + กำหนดชื่อ (name) ว่า "Buddy"
             // + เรียกใช้ method MakeSound() ของ dog
             // + เรียกใช้ method Walk() ของ dog
-            Dog dog = new Dog();
-            dog.name = "Buddy";
-            dog.MakeSound();
-            dog.Walk();
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
 
             // 2. สร้าง instance ของ class Bird โดยกำหนดชื่อตัวแปรว่า bird
             // + กำหนดชื่อ (name) ว่า "Twitty"
             // + เรียกใช้ method MakeSound() ของ bird
             // + เรียกใช้ method Fly() ของ bird
-            Bird bird = new Bird();
-            bird.name = "Twitty";
-            bird.MakeSound();
-            bird.Fly();
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -7,8 +7,12 @@ namespace Week07.Game
     /// ประตูทางออกของเกม สืบทอดจาก Identity
     /// เมื่อผู้เล่นเดินมาถึง (Hit) จะแสดงข้อความประกาศชัยชนะ
     /// </summary>
-    public class Exit : Identity
+    public class Exit : MonoBehaviour
     {
+        public string Name = "Exit";
+        public int positionX;
+        public int positionY;
+        public MapGenerator mapGenerator;
         public bool isLevelClear = false;
 
         private void Awake()
@@ -19,11 +23,17 @@ namespace Week07.Game
             }
         }
 
-        public override void Hit(Player player = null)
+        public void OnTriggerEnter2D(Collider2D other)
         {
-            isLevelClear = true;
-            player.enabled = false;
-            Debug.Log("Level Complete! You reached the exit!");
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                isLevelClear = true;
+                if (player != null) player.enabled = false;
+                Debug.Log("Level Complete! You reached the exit!");
+            }
         }
+
+
     }
 }

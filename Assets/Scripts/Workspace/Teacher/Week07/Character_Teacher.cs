@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Teacher.Game
@@ -67,7 +67,7 @@ namespace Week07.Teacher.Game
                 return map.chests[x, y];
 
             if (map.exitObject != null && map.exitObject.positionX == x && map.exitObject.positionY == y)
-                return map.exitObject;
+                return (object)map.exitObject as Week07.Game.Identity;
 
             return null;
         }
