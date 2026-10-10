@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,16 +18,22 @@ namespace Workspace.Core.Editor
             public int weekNumber;
             public string weekId;
             public string title;
+            public string topic;
             public bool isSelected = true;
             public string scriptFolder;
             public string[] scenePaths;
             public string[] prefabFolders;
 
-            public WeekExportConfig(int number, string id, string title, string scriptFolder, string[] scenePaths, string[] prefabFolders = null)
+            public string PackageFileName => !string.IsNullOrEmpty(topic)
+                ? $"{weekId}_{topic}_Student.unitypackage"
+                : $"{weekId}_Student.unitypackage";
+
+            public WeekExportConfig(int number, string id, string title, string topic, string scriptFolder, string[] scenePaths, string[] prefabFolders = null)
             {
                 this.weekNumber = number;
                 this.weekId = id;
                 this.title = title;
+                this.topic = topic;
                 this.scriptFolder = scriptFolder;
                 this.scenePaths = scenePaths ?? Array.Empty<string>();
                 this.prefabFolders = prefabFolders ?? Array.Empty<string>();
@@ -37,43 +43,43 @@ namespace Workspace.Core.Editor
         public static readonly List<WeekExportConfig> WeekConfigs = new List<WeekExportConfig>()
         {
             new WeekExportConfig(
-                1, "Week01", "Week 01: Value & Variables",
+                1, "Week01", "Week 01: Value & Variables", "Value_and_Variables",
                 "Assets/Scripts/Workspace/Week01",
                 new[] { "Assets/Scenes/Week01_Value.unity" },
                 new[] { "Assets/Prefabs/Value" }
             ),
             new WeekExportConfig(
-                2, "Week02", "Week 02: If-Else Condition",
+                2, "Week02", "Week 02: If-Else Condition", "If_Else_Condition",
                 "Assets/Scripts/Workspace/Week02",
                 new[] { "Assets/Scenes/Week02_If.unity" },
                 null
             ),
             new WeekExportConfig(
-                3, "Week03", "Week 03: Array 1D",
+                3, "Week03", "Week 03: Array 1D", "Array_1D",
                 "Assets/Scripts/Workspace/Week03",
                 new[] { "Assets/Scenes/Week03_Array.unity" },
                 new[] { "Assets/Prefabs/Array" }
             ),
             new WeekExportConfig(
-                4, "Week04", "Week 04: Array 2D & TicTacToe",
+                4, "Week04", "Week 04: Array 2D & TicTacToe", "Array_2D_and_TicTacToe",
                 "Assets/Scripts/Workspace/Week04",
                 new[] { "Assets/Scenes/Week04_2D_Array.unity", "Assets/Scenes/Week04_XO.unity" },
                 new[] { "Assets/Prefabs/2D Array" }
             ),
             new WeekExportConfig(
-                5, "Week05", "Week 05: Method & Grid Map",
+                5, "Week05", "Week 05: Method & Grid Map", "Method_and_Grid_Map",
                 "Assets/Scripts/Workspace/Week05",
                 new[] { "Assets/Scenes/Week05_Method.unity" },
                 new[] { "Assets/Prefabs/Method" }
             ),
             new WeekExportConfig(
-                6, "Week06", "Week 06: Class & Grid Game",
+                6, "Week06", "Week 06: Class & Grid Game", "Class_and_Grid_Game",
                 "Assets/Scripts/Workspace/Week06",
                 new[] { "Assets/Scenes/Week06_Class.unity" },
                 new[] { "Assets/Prefabs/Class" }
             ),
             new WeekExportConfig(
-                7, "Week07", "Week 07: Object-Oriented Programming (OOP)",
+                7, "Week07", "Week 07: Object-Oriented Programming (OOP)", "OOP_and_Grid_Game",
                 "Assets/Scripts/Workspace/Week07",
                 new[] { "Assets/Scenes/Week07_OOP.unity" },
                 new[] { "Assets/Prefabs/OOP" }
@@ -241,6 +247,7 @@ namespace Workspace.Core.Editor
                     ExportSingleWeek(week, exportDirectory, includeCore, includeComponents, includeSprites, includeTextMeshPro, includeSettings, includeDependencies, openFolderAfterExport);
                 }
                 EditorGUILayout.EndHorizontal();
+                EditorGUILayout.LabelField($"    ↳ ไฟล์: {week.PackageFileName}", EditorStyles.miniLabel);
             }
             EditorGUILayout.EndVertical();
         }
@@ -358,7 +365,7 @@ namespace Workspace.Core.Editor
                     float progress = (float)i / total;
                     EditorUtility.DisplayProgressBar("Exporting Student Packages", $"Exporting {week.weekId}: {week.title}...", progress);
 
-                    string fileName = $"{week.weekId}_Student.unitypackage";
+                    string fileName = week.PackageFileName;
                     string destinationPath = Path.Combine(targetDir, fileName).Replace('\\', '/');
 
                     var assetList = CollectAssetsForWeeks(new[] { week }, withCore, withComponents, withSprites, withTmp, withSettings);
