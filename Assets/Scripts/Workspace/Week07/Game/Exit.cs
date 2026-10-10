@@ -34,6 +34,10 @@ namespace Week07.Game
             }
         }
 
+        public void Hit(Player player = null)
+        {
+        }
+
 
     }
 }

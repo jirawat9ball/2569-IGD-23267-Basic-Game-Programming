@@ -53,7 +53,9 @@ namespace Week07.Game
 
         // ===== student code starts HERE =====
         // 🎯 ข้อ 6: รีแฟกเตอร์จาก OnTriggerEnter2D มาเป็น Hit()
-        
+        public void Hit(Player player = null)
+        {
+        }
         // ===== student code ends HERE =====
     }
 }
