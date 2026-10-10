@@ -15,18 +15,30 @@ namespace Week07.Teacher.Game
             }
         }
 
-        public override void Hit()
+        public override void Hit(Week07.Game.Player player = null)
         {
             durability--;
             Debug.Log($"Hit Wall {Name}! Remaining durability: {durability}");
             if (durability <= 0)
             {
-                Debug.Log($"💥 Wall {Name} destroyed!");
+                Debug.Log($"Wall {Name} destroyed!");
                 if (mapGenerator != null && mapGenerator.mapData != null)
                 {
                     mapGenerator.mapData[positionX, positionY] = 0;
                 }
                 DestroySafe(gameObject);
+            }
+        }
+
+        public override void OnTriggerEnter2D(Collider2D other)
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                Hit();
+                player.positionX = player.previousPositionX;
+                player.positionY = player.previousPositionY;
+                player.transform.position = new Vector3(player.positionX, player.positionY, 0);
             }
         }
     }

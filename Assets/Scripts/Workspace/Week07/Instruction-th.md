@@ -349,7 +349,7 @@ Player attack point after picking up sword: 20
 - เขียน `override void Hit()`:
   - ลดความทนทาน `durability--;`
   - พิมพ์ `Hit Wall <ชื่อ>! Remaining durability: <durability>`
-  - หาก `durability <= 0` ให้พิมพ์ `💥 Wall <ชื่อ> destroyed!` เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และเรียก `DestroySafe(gameObject);`
+  - หาก `durability <= 0` ให้พิมพ์ `Wall <ชื่อ> destroyed!` เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และเรียก `DestroySafe(gameObject);`
 
 ใน `Character.cs` ส่วน `else if (IsDemonWall(toX, toY))`
 - เรียก `mapGenerator.walls[toX, toY].Hit();` โดยผู้เล่นจะไม่เดินข้ามกำแพง
@@ -359,7 +359,7 @@ Player attack point after picking up sword: 20
 Hit Wall Wall1! Remaining durability: 2
 Hit Wall Wall1! Remaining durability: 1
 Hit Wall Wall1! Remaining durability: 0
-💥 Wall Wall1 destroyed!
+Wall Wall1 destroyed!
 ```
 
 ---
@@ -378,7 +378,7 @@ Hit Wall Wall1! Remaining durability: 0
 - เขียนเมธอด `public void OpenChest()`:
   - หาก `isOpen` เป็นจริง ให้ return
   - ตั้ง `isOpen = true;`
-  - พิมพ์ `📦 Opened <ชื่อ>!`
+  - พิมพ์ `Opened <ชื่อ>!`
   - หาก `spawnPrefab != null` ให้สร้างวัตถุใหม่ที่ `transform.position + Vector3.up`
   - เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และเรียก `DestroySafe(gameObject);`
 - เขียน `override void Hit()` ให้เรียก `OpenChest();`
@@ -388,14 +388,14 @@ Hit Wall Wall1! Remaining durability: 0
 
 **ผลลัพธ์ที่ได้ใน `Ex09_ChestDemo()`:**
 ```text
-📦 Opened Chest1!
+Opened Chest1!
 ```
 
 ---
 
 ## 📌 ข้อควรระวัง
 
-- ข้อความที่พิมพ์ต้องตรงเป๊ะ ทั้งตัวพิมพ์เล็กใหญ่ ช่องว่าง และเครื่องหมาย (`!`, `:`, `📦`, `💥`)
+- ข้อความที่พิมพ์ต้องตรงเป๊ะ ทั้งตัวพิมพ์เล็กใหญ่ ช่องว่าง และเครื่องหมาย (`!`, `:`)
 - Access Modifier ต้องตรงตามโจทย์ — ระบบตรวจเช็คถึงระดับว่า `health` เป็น `private` จริงไหม, `specie` เป็น `protected` จริงไหม
 - ทุกคลาสในส่วนเกม (Player, Enemy, ItemPotion, ItemSword, Wall, Chest) ต้องสืบทอดตามลำดับชั้น OOP ที่กำหนด
 - แต่ละข้อใน Lecture อยู่คนละ namespace (`Week07.Ex01`, `Week07.Ex02`, `Week07.Ex03`)

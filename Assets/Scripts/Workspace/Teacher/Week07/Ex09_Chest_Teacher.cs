@@ -16,7 +16,7 @@ namespace Week07.Teacher.Game
             }
         }
 
-        public override void Hit()
+        public override void Hit(Week07.Game.Player player = null)
         {
             OpenChest();
         }
@@ -26,7 +26,7 @@ namespace Week07.Teacher.Game
             if (isOpen) return;
             isOpen = true;
 
-            Debug.Log($"📦 Opened {Name}!");
+            Debug.Log($"Opened {Name}!");
 
             if (spawnPrefab != null)
             {

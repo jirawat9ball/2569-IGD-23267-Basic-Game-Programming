@@ -4,8 +4,20 @@ using Debug = Workspace.Core.SimpleDebugConsole;
 namespace Week07.Game
 {
     /// <summary>
-    /// กล่องสมบัติในแผนที่ สืบทอดจาก Identity
-    /// เมื่อถูกเปิด (Hit หรือ OpenChest) จะเสกไอเทมจาก spawnPrefab ออกมาและทำลายกล่อง
+    /// กล่องสมบัติ (Chest) - ยกมาจาก Week 06
+    /// 
+    /// 🎯 โจทย์ Week 07 (ข้อ 9): ปรับปรุงเป็น OOP
+    /// 1. เปลี่ยนการสืบทอดจาก MonoBehaviour ให้สืบทอดจาก Identity:
+    ///    public class Chest : Identity
+    /// 2. มีฟิลด์ spawnPrefab และ isOpen = false
+    /// 3. เขียน override void Hit() ให้เรียก OpenChest()
+    /// 4. เขียนเมธอด OpenChest():
+    ///    - ถ้า isOpen ให้ return
+    ///    - ตั้ง isOpen = true
+    ///    - แสดงข้อความ: $"Opened {Name}!"
+    ///    - เสกสร้างวัตถุใหม่ที่ตำแหน่งด้านบน: Instantiate(spawnPrefab, transform.position + Vector3.up, Quaternion.identity);
+    ///    - ตั้งค่าช่องในแผนที่เป็น 0: mapGenerator.mapData[positionX, positionY] = 0;
+    ///    - ทำลายตัวเอง: DestroySafe(gameObject);
     /// </summary>
     public class Chest : Identity
     {
@@ -20,29 +32,40 @@ namespace Week07.Game
             }
         }
 
-        public override void Hit()
+        // ===== student code starts HERE =====
+        public override void Hit(Player player = null)
         {
-            // ===== student code starts HERE =====
-            // Guideline: (ข้อ 9)
-            // เรียก OpenChest();
-
-            // ===== student code ends HERE =====
+            if(player != null){
+                OpenChest();
+            }
+            
         }
 
         public void OpenChest()
         {
-            // ===== student code starts HERE =====
-            // Guideline: (ข้อ 9)
-            // 1. ถ้า isOpen เป็นจริง ให้ return ทันที (ไม่เปิดซ้ำ)
-            // 2. ตั้งค่า isOpen = true;
-            // 3. แสดงข้อความ: "📦 Opened <Name>!"
-            // 4. ถ้า spawnPrefab != null:
-            //    - สร้างวัตถุใหม่ที่ตำแหน่ง transform.position + Vector3.up ด้วย Instantiate
-            //    - บันทึกการเกิดวัตถุด้วย mapGenerator.TrackSpawned(...) ถ้า mapGenerator ไม่เป็น null
-            // 5. ตั้งค่าช่องในแผนที่เป็น 0 (mapGenerator.mapData[positionX, positionY] = 0)
-            // 6. ทำลายวัตถุทิ้งด้วย DestroySafe(gameObject);
+            if (isOpen) return;
+            isOpen = true;
 
-            // ===== student code ends HERE =====
+            Debug.Log($"Opened {Name}!");
+
+            if (spawnPrefab != null)
+            {
+                Vector3 spawnPosition = transform.position + Vector3.up;
+                var spawned = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
+                var map = mapGenerator as MapGenerator;
+                if (map != null)
+                {
+                    map.TrackSpawned(spawned);
+                }
+            }
+
+            if (mapGenerator != null && mapGenerator.mapData != null)
+            {
+                mapGenerator.mapData[positionX, positionY] = 0;
+            }
+
+            DestroySafe(gameObject);
         }
+        // ===== student code ends HERE =====
     }
 }

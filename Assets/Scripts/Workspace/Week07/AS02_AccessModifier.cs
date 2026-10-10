@@ -26,8 +26,10 @@ namespace Week07.Ex02
 
         public void Feed(int food)
         {
+            // student code starts HERE ...
             health += food;
             Debug.Log($"{name} got {food} food");
+            // student code ends HERE
         }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace Week07.Ex02
         /// </summary>
         public void MakeSound()
         {
+            // student code starts HERE ...
             if (health > 50)
             {
                 Debug.Log($"{name} happy!");
@@ -45,6 +48,7 @@ namespace Week07.Ex02
             {
                 Debug.Log($"{name} weak!");
             }
+            // student code ends HERE
         }
     }
 
@@ -52,19 +56,10 @@ namespace Week07.Ex02
     {
         public Dog(string name)
         {
-            // 1. กำหนด specie = "Dog"
-            // สามารถเข้าถึง specie ได้เนื่องจาก specie เป็น protected
-            // ทำให้สามารถเข้าถึงได้จาก class ที่สืบทอด Animal ได้
+            // student code starts HERE ...
             specie = "Dog";
-
-            // 2. กำหนด this.name = name ที่รับเป็น parameter จาก constructor
-            // สามารถเข้าถึง name ได้เนื่องจาก name เป็น public
-            // ทำให้สามารถเข้าถึงได้จาก class นี้ได้ เนื่องจาก class นี้สืบทอด Animal
             this.name = name;
-
-            // ไม่สามารถเข้าถึง health ได้เนื่องจาก health เป็น private
-            // ทำให้ใช้งานได้แค่ใน class ที่ประกาศ health ไว้เท่านั้น ซึ่งก็คือ class Animal
-            // this.health = 100; ==> COMPILE ERROR
+            // student code ends HERE
         }
     }
 
@@ -72,11 +67,12 @@ namespace Week07.Ex02
     {
         public void Start()
         {
-            Dog dog = new Dog("Buddy");
-
             // student code start HERE ...
-            // 1. พิมพ์ dog.name ออกมาในข้อความ $"my name is {dog.name}"
-
+            Dog dog = new Dog("Buddy");
+            Debug.Log($"my name is {dog.name}");
+            dog.MakeSound();
+            dog.Feed(50);
+            dog.MakeSound();
             // student code ends HERE
 
             // NOTE #1
@@ -91,10 +87,6 @@ namespace Week07.Ex02
             // ตัวแปร health จึงไม่ถูกสืบทอดต่อมาที่ class Dog ได้
             // ไม่สามารถเรียกใช้งานตัวแปร health จาก dog ได้
             // Debug.Log($"my health {dog.health}");
-
-            dog.MakeSound();
-            dog.Feed(50);
-            dog.MakeSound();
         }
     }
 }

@@ -233,12 +233,14 @@ MonoBehaviour:
   - {fileID: 4829121873122157084, guid: 3ad279aa4e409f9429d30bdebce57743, type: 3}
   - {fileID: 1153298426408827053, guid: aa3706a1649a0f745ab2dfe875169e6e, type: 3}
   - {fileID: 2868505506387828058, guid: 9ad07f6733267b645a10735b1144aff0, type: 3}
-  - {fileID: 2782601005154120690, guid: ff8967661af8bf4498324cd32802d2cd, type: 3}
   enemyPrefab:
   - {fileID: 3003392536853120156, guid: c44814bc5767f1b49af945aa51a1f3b5, type: 3}
+  - {fileID: 2782601005154120690, guid: ff8967661af8bf4498324cd32802d2cd, type: 3}
   itemsPrefab:
   - {fileID: 8115495000308165093, guid: ef1a3ec669cf4664492090da4c84b462, type: 3}
   - {fileID: 6586689788709595604, guid: 68fc5f1923892294ca1bbc5ae6903d13, type: 3}
+  - {fileID: 4996260407530312338, guid: c6c0f81b1212de741a627d49d46f30b8, type: 3}
+  - {fileID: 1372286297665085875, guid: b0df9c7acc838b24a8b122eb805fe320, type: 3}
   floorParent: {fileID: 804051181}
   wallParent: {fileID: 804051183}
   itemPotionParent: {fileID: 804051185}

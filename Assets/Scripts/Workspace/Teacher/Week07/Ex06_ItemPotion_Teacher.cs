@@ -15,19 +15,26 @@ namespace Week07.Teacher.Game
             }
         }
 
-        public override void Hit()
+        public override void Hit(Week07.Game.Player player = null)
         {
             Debug.Log($"You got {Name} : {healPoint}");
 
-            var map = mapGenerator as MapGenerator;
-            if (map != null && map.player != null)
+            if (player != null)
             {
-                map.player.Heal(healPoint);
+                player.Heal(healPoint);
+            }
+            else
+            {
+                var map = mapGenerator as MapGenerator;
+                if (map != null && map.player != null)
+                {
+                    map.player.Heal(healPoint);
+                }
             }
 
-            if (map != null && map.mapData != null)
+            if (mapGenerator != null && mapGenerator.mapData != null)
             {
-                map.mapData[positionX, positionY] = 0;
+                mapGenerator.mapData[positionX, positionY] = 0;
             }
 
             DestroySafe(gameObject);

@@ -18,32 +18,60 @@ namespace Week07.Game
             int toX = (int)(positionX + direction.x);
             int toY = (int)(positionY + direction.y);
 
-            if (HasSomeObject(toX, toY))
-            {
-                // ===== student code starts HERE =====
-                // Guideline:
-                // 1. ถ้าช่องนั้นเป็นยา (IsPotion) -> เรียก mapGenerator.potions[toX, toY].Hit();
-                //    แล้วขยับตัวละครเข้าไปที่ช่องนั้น (กำหนด positionX, positionY และ transform.position)
-                // 2. ถ้าเป็นดาบ (IsSword) -> เรียก mapGenerator.swords[toX, toY].Hit(); แล้วขยับเข้าไปเหมือนกัน
-                // 3. ถ้าเป็นศัตรู (IsEnemy) -> ทำตามลำดับนี้
-                //    3.1 เก็บศัตรูไว้ในตัวแปร: Enemy e = mapGenerator.enemies[toX, toY];
-                //    3.2 ให้เราตีศัตรูก่อน: this.Attack(e, attackPoint);
-                //    3.3 ถ้าศัตรูยังไม่ตาย (e.energy > 0) -> ให้ศัตรูตีสวนกลับด้วย mapGenerator.enemies[toX, toY].Hit();
-                //    3.4 ถ้าศัตรูตายแล้ว -> ขยับตัวละครเข้าไปที่ช่องนั้น
-                // 4. ถ้าเป็นกำแพง (IsDemonWall) -> เรียก mapGenerator.walls[toX, toY].Hit(); (ไม่ขยับเข้าช่องกำแพง)
-                // 5. ถ้าเป็นกล่องสมบัติ (IsChest) -> เรียก mapGenerator.chests[toX, toY].Hit(); แล้วขยับตัวละครเข้าไป
-                // 6. ถ้าเป็นทางออก (IsExit) -> เรียก mapGenerator.exitObject.Hit(); แล้วขยับตัวละครเข้าไป
-                // หมายเหตุ: ช่องที่มีของวางอยู่จะไม่โดนหัก energy (ต่างจากช่องว่างด้านล่าง)
+            bool hasItemOrObstacle = HasSomeObject(toX, toY);
 
-                // ===== student code ends HERE =====
-            }
-            else
+            // ขยับพิกัดตัวละครไปยังช่องเป้าหมาย (เหมือน Week 06)
+            positionX = toX;
+            positionY = toY;
+            transform.position = new Vector3(positionX, positionY, 0);
+
+            // ถ้าเป็นช่องว่าง (ไม่มีไอเทม/สิ่งกีดขวาง) จะเสียพลังงาน 1 หน่วย
+            if (!hasItemOrObstacle)
             {
-                positionX = toX;
-                positionY = toY;
-                transform.position = new Vector3(positionX, positionY, 0);
                 TakeDamage(1);
             }
+
+            // ส่งสัญญาณ Trigger ชนกับวัตถุในช่องเป้าหมาย ให้ OnTriggerEnter2D ทำงาน
+            TriggerAt(toX, toY);
+        }
+
+        public void TriggerAt(int x, int y)
+        {
+            Identity target = GetIdentityAt(x, y);
+            if (target != null && target != this)
+            {
+                Collider2D col = GetComponent<Collider2D>();
+                if (col == null)
+                {
+                    col = gameObject.AddComponent<BoxCollider2D>();
+                }
+                target.OnTriggerEnter2D(col);
+            }
+        }
+
+        public Identity GetIdentityAt(int x, int y)
+        {
+            if (mapGenerator == null) return null;
+
+            if (mapGenerator.enemies != null && x >= 0 && x < mapGenerator.Row && y >= 0 && y < mapGenerator.Col && mapGenerator.enemies[x, y] != null)
+                return mapGenerator.enemies[x, y];
+
+            if (mapGenerator.walls != null && x >= 0 && x < mapGenerator.Row && y >= 0 && y < mapGenerator.Col && mapGenerator.walls[x, y] != null)
+                return mapGenerator.walls[x, y];
+
+            if (mapGenerator.potions != null && x >= 0 && x < mapGenerator.Row && y >= 0 && y < mapGenerator.Col && mapGenerator.potions[x, y] != null)
+                return mapGenerator.potions[x, y];
+
+            if (mapGenerator.swords != null && x >= 0 && x < mapGenerator.Row && y >= 0 && y < mapGenerator.Col && mapGenerator.swords[x, y] != null)
+                return mapGenerator.swords[x, y];
+
+            if (mapGenerator.chests != null && x >= 0 && x < mapGenerator.Row && y >= 0 && y < mapGenerator.Col && mapGenerator.chests[x, y] != null)
+                return mapGenerator.chests[x, y];
+
+            if (mapGenerator.exitObject != null && mapGenerator.exitObject.positionX == x && mapGenerator.exitObject.positionY == y)
+                return mapGenerator.exitObject;
+
+            return null;
         }
 
         public bool HasSomeObject(int x, int y)

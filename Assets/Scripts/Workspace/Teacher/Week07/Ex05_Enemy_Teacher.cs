@@ -20,10 +20,16 @@ namespace Week07.Teacher.Game
             }
         }
 
-        public override void Hit()
+        public override void Hit(Week07.Game.Player player = null)
         {
             if (energy <= 0)
             {
+                return;
+            }
+
+            if (player != null)
+            {
+                player.TakeDamage(attackPoint);
                 return;
             }
 
@@ -31,6 +37,30 @@ namespace Week07.Teacher.Game
             if (map != null && map.player != null)
             {
                 this.Attack(map.player, attackPoint);
+            }
+        }
+
+        public override void OnTriggerEnter2D(Collider2D other)
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                player.Attack(this, player.attackPoint);
+                if (energy > 0)
+                {
+                    Hit();
+                    player.positionX = player.previousPositionX;
+                    player.positionY = player.previousPositionY;
+                    player.transform.position = new Vector3(player.positionX, player.positionY, 0);
+                }
+                else
+                {
+                    var map = mapGenerator as MapGenerator;
+                    if (map != null && map.mapData != null)
+                    {
+                        map.mapData[positionX, positionY] = 0;
+                    }
+                }
             }
         }
     }

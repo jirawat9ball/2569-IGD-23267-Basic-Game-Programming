@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using NUnit.Framework;
 using UnityEngine;
 using Workspace.Core;
@@ -420,6 +420,7 @@ namespace Week07_OOP
         [TestCase("05_Move_IntoEnemy_PlayerAttacksFirstThenEnemyStrikesBack")]
         [TestCase("06_Move_IntoDeadEnemy_PlayerMovesIn")]
         [TestCase("07_Ex05_BattleDemo_FullScenario")]
+        [TestCase("08_Enemy_HasOnTriggerEnter2D")]
         public void As05_Enemy(string subTask)
         {
             switch (subTask)
@@ -430,7 +431,8 @@ namespace Week07_OOP
                     break;
 
                 case "02_Enemy_Hit_IsOverride":
-                    var method = EnemyType.GetMethod("Hit");
+                    var method = EnemyType.GetMethod("Hit", new[] { typeof(Week07.Game.Player) })
+                        ?? EnemyType.GetMethod("Hit", System.Type.EmptyTypes);
                     Assert.IsNotNull(method, "Enemy ต้องมีเมธอด Hit()");
                     Assert.AreEqual(EnemyType, method.DeclaringType, "Enemy ต้อง override Hit() ของตัวเอง");
                     Assert.AreEqual(typeof(Week07.Game.Identity), method.GetBaseDefinition().DeclaringType,
@@ -516,6 +518,11 @@ namespace Week07_OOP
                     sb.AppendLine("Enemy energy after attack: 0");
 
                     TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+
+                case "08_Enemy_HasOnTriggerEnter2D":
+                    var triggerMethod = EnemyType.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(triggerMethod, "Enemy ต้องมีเมธอด OnTriggerEnter2D()");
                     break;
             }
         }
@@ -653,6 +660,7 @@ namespace Week07_OOP
         [TestCase("04_Wall_Hit_DestroysWhenDurabilityZero")]
         [TestCase("05_Move_IntoWall_BlocksPlayer")]
         [TestCase("06_Ex08_WallDemo_Output")]
+        [TestCase("07_Wall_HasOnTriggerEnter2D")]
         public void As08_Wall(string subTask)
         {
             switch (subTask)
@@ -711,9 +719,14 @@ namespace Week07_OOP
                     sb.AppendLine("Hit Wall Wall1! Remaining durability: 2");
                     sb.AppendLine("Hit Wall Wall1! Remaining durability: 1");
                     sb.AppendLine("Hit Wall Wall1! Remaining durability: 0");
-                    sb.AppendLine("💥 Wall Wall1 destroyed!");
+                    sb.AppendLine("Wall Wall1 destroyed!");
 
                     TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+
+                case "07_Wall_HasOnTriggerEnter2D":
+                    var wallTrigger = WallType.GetMethod("OnTriggerEnter2D", AnyInstance);
+                    Assert.IsNotNull(wallTrigger, "Wall ต้องมีเมธอด OnTriggerEnter2D()");
                     break;
             }
         }
@@ -766,7 +779,7 @@ namespace Week07_OOP
                     hitChest.Hit();
 
                     Assert.IsTrue(hitChest.isOpen, "Chest.Hit() ต้องเรียก OpenChest()");
-                    TestUtils.AssertMultilineEqual("📦 Opened Chest1!", SimpleDebugConsole.GetOutput());
+                    TestUtils.AssertMultilineEqual("Opened Chest1!", SimpleDebugConsole.GetOutput());
                     break;
 
                 case "05_Move_IntoChest_OpensChestAndMovesIn":
@@ -786,7 +799,7 @@ namespace Week07_OOP
                     assignment.Ex09_ChestDemo();
 
                     var sb = new StringBuilder();
-                    sb.AppendLine("📦 Opened Chest1!");
+                    sb.AppendLine("Opened Chest1!");
 
                     TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
                     break;

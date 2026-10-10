@@ -18,84 +18,58 @@ namespace Week07.Teacher.Game
             int toX = (int)(positionX + direction.x);
             int toY = (int)(positionY + direction.y);
 
-            var map = mapGenerator as MapGenerator;
+            bool hasItemOrObstacle = HasSomeObject(toX, toY);
 
-            if (HasSomeObject(toX, toY))
-            {
-                if (IsPotion(toX, toY))
-                {
-                    if (map != null && map.potions != null && map.potions[toX, toY] != null)
-                    {
-                        map.potions[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsSword(toX, toY))
-                {
-                    if (map != null && map.swords != null && map.swords[toX, toY] != null)
-                    {
-                        map.swords[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsEnemy(toX, toY))
-                {
-                    if (map != null && map.enemies != null && map.enemies[toX, toY] != null)
-                    {
-                        Enemy e = map.enemies[toX, toY];
-                        this.Attack(e, attackPoint);
+            positionX = toX;
+            positionY = toY;
+            transform.position = new Vector3(positionX, positionY, 0);
 
-                        if (e.energy > 0)
-                        {
-                            e.Hit();
-                        }
-                        else
-                        {
-                            positionX = toX;
-                            positionY = toY;
-                            transform.position = new Vector3(positionX, positionY, 0);
-                        }
-                    }
-                }
-                else if (IsDemonWall(toX, toY))
-                {
-                    if (map != null && map.walls != null && map.walls[toX, toY] != null)
-                    {
-                        map.walls[toX, toY].Hit();
-                    }
-                }
-                else if (IsChest(toX, toY))
-                {
-                    if (map != null && map.chests != null && map.chests[toX, toY] != null)
-                    {
-                        map.chests[toX, toY].Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsExit(toX, toY))
-                {
-                    if (map != null && map.exitObject != null)
-                    {
-                        map.exitObject.Hit();
-                    }
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-            }
-            else
+            if (!hasItemOrObstacle)
             {
-                positionX = toX;
-                positionY = toY;
-                transform.position = new Vector3(positionX, positionY, 0);
                 TakeDamage(1);
             }
+
+            TriggerAt(toX, toY);
+        }
+
+        public void TriggerAt(int x, int y)
+        {
+            Week07.Game.Identity target = GetIdentityAt(x, y);
+            if (target != null && target != this)
+            {
+                Collider2D col = GetComponent<Collider2D>();
+                if (col == null)
+                {
+                    col = gameObject.AddComponent<BoxCollider2D>();
+                }
+                target.OnTriggerEnter2D(col);
+            }
+        }
+
+        public Week07.Game.Identity GetIdentityAt(int x, int y)
+        {
+            var map = mapGenerator as MapGenerator;
+            if (map == null) return null;
+
+            if (map.enemies != null && x >= 0 && x < map.Row && y >= 0 && y < map.Col && map.enemies[x, y] != null)
+                return map.enemies[x, y];
+
+            if (map.walls != null && x >= 0 && x < map.Row && y >= 0 && y < map.Col && map.walls[x, y] != null)
+                return map.walls[x, y];
+
+            if (map.potions != null && x >= 0 && x < map.Row && y >= 0 && y < map.Col && map.potions[x, y] != null)
+                return map.potions[x, y];
+
+            if (map.swords != null && x >= 0 && x < map.Row && y >= 0 && y < map.Col && map.swords[x, y] != null)
+                return map.swords[x, y];
+
+            if (map.chests != null && x >= 0 && x < map.Row && y >= 0 && y < map.Col && map.chests[x, y] != null)
+                return map.chests[x, y];
+
+            if (map.exitObject != null && map.exitObject.positionX == x && map.exitObject.positionY == y)
+                return map.exitObject;
+
+            return null;
         }
 
         public bool HasSomeObject(int x, int y)

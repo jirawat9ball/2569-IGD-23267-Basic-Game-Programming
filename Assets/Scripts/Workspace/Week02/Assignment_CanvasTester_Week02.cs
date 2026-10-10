@@ -37,7 +37,7 @@ namespace Week02
         {
             if (studentScript == null)
             {
-                Debug.LogError("❌ ลืมลาก Assignment_Student_Week02 มาใส่ช่อง studentScript หรือเปล่าครับ?");
+                Debug.LogError("ลืมลาก Assignment_Student_Week02 มาใส่ช่อง studentScript หรือเปล่าครับ?");
                 return;
             }
 

@@ -1,4 +1,4 @@
-# 🎥 คำสั่งส่งคลิปวิดีโอ (VDO) — Week 06: การใช้งานไอเทมในเกม (Item Usage)
+﻿# 🎥 คำสั่งส่งคลิปวิดีโอ (VDO) — Week 06: การใช้งานไอเทมในเกม (Item Usage)
 
 ## 📋 คำชี้แจง
 
@@ -23,10 +23,10 @@
    - ✅ **Game View:** ไอเทม Potion หายไปจากฉากทันทีเมื่อชน (`Destroy(gameObject)`)
    - ✅ **Console Log:** มีข้อความเด้งขึ้นมาตามลำดับอย่างชัดเจน:
      1. `[Trigger] Potion collided with Player` (ตรวจจับการชนผ่าน `OnTriggerEnter2D`)
-     2. `✨ Picked up Potion! +10 Energy` (ข้อความจากการเก็บไอเทม `ItemPotion`)
+     2. `Picked up Potion! +10 Energy` (ข้อความจากการเก็บไอเทม `ItemPotion`)
      3. `Healed +10! Current Energy: <ตัวเลข>` (ข้อความยืนยันการเพิ่มพลังงานจาก `player.Heal()`)
 
-> 💡 **ส่วนเสริม (Bonus / HW):** หากทำไอเทมดาบ (`ItemSword`) หรือส่วนอื่นๆ สามารถเดินเก็บดาบและแสดง Log `⚔️ Picked up Sword! +10 Attack` ต่อในคลิปเดียวกันได้เลย
+> 💡 **ส่วนเสริม (Bonus / HW):** หากทำไอเทมดาบ (`ItemSword`) หรือส่วนอื่นๆ สามารถเดินเก็บดาบและแสดง Log `Picked up Sword! +10 Attack` ต่อในคลิปเดียวกันได้เลย
 
 ---
 

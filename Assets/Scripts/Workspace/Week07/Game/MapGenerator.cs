@@ -157,10 +157,11 @@ namespace Week07.Game
 
         public void PlacePlayerVisual() => PlacePlayer();
 
-        /// <summary>สุ่มวางสิ่งกีดขวาง (DemonWall) ตามจำนวน obsatcleCount</summary>
+        /// <summary>สุ่มวางสิ่งกีดขวาง (DemonWall/Enemy) ตามจำนวน obsatcleCount</summary>
         public void GenerateObstacles()
         {
             if (walls == null) walls = new Wall[Row, Col];
+            if (enemies == null) enemies = new Enemy[Row, Col];
             if (obsatcleCount <= 0) return;
 
             int count = 0;
@@ -181,11 +182,12 @@ namespace Week07.Game
 
         public void GenerateObstaclesVisual() => GenerateObstacles();
 
-        /// <summary>สุ่มวางไอเทมตามจำนวน itemPotionCount</summary>
+        /// <summary>สุ่มวางไอเทม (Potion/Sword/Chest) ตามจำนวน itemPotionCount</summary>
         public void GenerateItems()
         {
             if (potions == null) potions = new ItemPotion[Row, Col];
             if (swords == null) swords = new ItemSword[Row, Col];
+            if (chests == null) chests = new Chest[Row, Col];
             if (itemPotionCount <= 0) return;
 
             int count = 0;
@@ -216,14 +218,23 @@ namespace Week07.Game
 
             if (Exit != null)
             {
-                Exit spawnedExit = Instantiate(Exit, new Vector3(exitX, exitY, 0), Quaternion.identity);
+                Exit spawnedExit;
+                if (!Exit.gameObject.scene.IsValid())
+                {
+                    spawnedExit = Instantiate(Exit, new Vector3(exitX, exitY, 0), Quaternion.identity);
+                    spawned.Add(spawnedExit.gameObject);
+                }
+                else
+                {
+                    spawnedExit = Exit;
+                    spawnedExit.transform.position = new Vector3(exitX, exitY, 0);
+                }
                 spawnedExit.name = "Exit";
                 spawnedExit.Name = "Exit";
                 spawnedExit.positionX = exitX;
                 spawnedExit.positionY = exitY;
                 spawnedExit.mapGenerator = this;
                 Exit = spawnedExit;
-                spawned.Add(spawnedExit.gameObject);
             }
             else
             {
@@ -297,29 +308,65 @@ namespace Week07.Game
             GameObject obj = Instantiate(itemsPrefab[r], new Vector3(x, y, 0), Quaternion.identity);
             if (itemPotionParent != null) obj.transform.parent = itemPotionParent;
 
-            if (index % 2 == 0)
+            if (obj.TryGetComponent<ItemPotion>(out var itemPotion))
             {
                 if (mapData != null) mapData[x, y] = potion;
-                var itemPotion = obj.GetComponent<ItemPotion>();
-                if (itemPotion == null) itemPotion = obj.AddComponent<ItemPotion>();
+                if (potions == null) potions = new ItemPotion[Row, Col];
+                potions[x, y] = itemPotion;
                 itemPotion.positionX = x;
                 itemPotion.positionY = y;
                 itemPotion.mapGenerator = this;
-                if (potions != null) potions[x, y] = itemPotion;
-                var nameVal = !string.IsNullOrEmpty(itemPotion.Name) ? itemPotion.Name : "Potion";
-                obj.name = $"Item_{nameVal} {x}, {y}";
+                if (string.IsNullOrEmpty(itemPotion.Name)) itemPotion.Name = "Potion";
+                obj.name = $"Item_Potion {x}, {y}";
             }
-            else
+            else if (obj.TryGetComponent<ItemSword>(out var itemSword))
             {
                 if (mapData != null) mapData[x, y] = sword;
-                var itemSword = obj.GetComponent<ItemSword>();
-                if (itemSword == null) itemSword = obj.AddComponent<ItemSword>();
+                if (swords == null) swords = new ItemSword[Row, Col];
+                swords[x, y] = itemSword;
                 itemSword.positionX = x;
                 itemSword.positionY = y;
                 itemSword.mapGenerator = this;
-                if (swords != null) swords[x, y] = itemSword;
-                var nameVal = !string.IsNullOrEmpty(itemSword.Name) ? itemSword.Name : "Sword";
-                obj.name = $"Item_{nameVal} {x}, {y}";
+                if (string.IsNullOrEmpty(itemSword.Name)) itemSword.Name = "Sword";
+                obj.name = $"Item_Sword {x}, {y}";
+            }
+            else if (obj.TryGetComponent<Chest>(out var chestComp))
+            {
+                if (mapData != null) mapData[x, y] = chest;
+                if (chests == null) chests = new Chest[Row, Col];
+                chests[x, y] = chestComp;
+                chestComp.positionX = x;
+                chestComp.positionY = y;
+                chestComp.mapGenerator = this;
+                if (string.IsNullOrEmpty(chestComp.Name)) chestComp.Name = "Chest";
+                obj.name = $"Chest {x}, {y}";
+            }
+            else
+            {
+                if (index % 2 == 0)
+                {
+                    if (mapData != null) mapData[x, y] = potion;
+                    var potionComp = obj.AddComponent<ItemPotion>();
+                    if (potions == null) potions = new ItemPotion[Row, Col];
+                    potions[x, y] = potionComp;
+                    potionComp.positionX = x;
+                    potionComp.positionY = y;
+                    potionComp.mapGenerator = this;
+                    if (string.IsNullOrEmpty(potionComp.Name)) potionComp.Name = "Potion";
+                    obj.name = $"Item_Potion {x}, {y}";
+                }
+                else
+                {
+                    if (mapData != null) mapData[x, y] = sword;
+                    var swordComp = obj.AddComponent<ItemSword>();
+                    if (swords == null) swords = new ItemSword[Row, Col];
+                    swords[x, y] = swordComp;
+                    swordComp.positionX = x;
+                    swordComp.positionY = y;
+                    swordComp.mapGenerator = this;
+                    if (string.IsNullOrEmpty(swordComp.Name)) swordComp.Name = "Sword";
+                    obj.name = $"Item_Sword {x}, {y}";
+                }
             }
             spawned.Add(obj);
         }
@@ -338,21 +385,197 @@ namespace Week07.Game
 
             GameObject obj = Instantiate(prefabs[r], new Vector3(x, y, 0), Quaternion.identity);
             if (wallParent != null) obj.transform.parent = wallParent;
-            if (mapData != null) mapData[x, y] = demonWall;
 
-            var wall = obj.GetComponent<Wall>();
-            if (wall == null) wall = obj.AddComponent<Wall>();
-
-            wall.positionX = x;
-            wall.positionY = y;
-            wall.mapGenerator = this;
-            if (walls != null) walls[x, y] = wall;
-            var nameVal = !string.IsNullOrEmpty(wall.Name) ? wall.Name : "Wall";
-            obj.name = $"DemonWall_{nameVal} {x}, {y}";
+            if (obj.TryGetComponent<Enemy>(out var enemyComp))
+            {
+                if (mapData != null) mapData[x, y] = enemy;
+                if (enemies == null) enemies = new Enemy[Row, Col];
+                enemies[x, y] = enemyComp;
+                enemyComp.positionX = x;
+                enemyComp.positionY = y;
+                enemyComp.mapGenerator = this;
+                if (string.IsNullOrEmpty(enemyComp.Name)) enemyComp.Name = "Enemy";
+                obj.name = $"Enemy {x}, {y}";
+            }
+            else if (obj.TryGetComponent<Wall>(out var wallComp))
+            {
+                if (mapData != null) mapData[x, y] = demonWall;
+                if (walls == null) walls = new Wall[Row, Col];
+                walls[x, y] = wallComp;
+                wallComp.positionX = x;
+                wallComp.positionY = y;
+                wallComp.mapGenerator = this;
+                if (string.IsNullOrEmpty(wallComp.Name)) wallComp.Name = "Wall";
+                obj.name = $"DemonWall_Wall {x}, {y}";
+            }
+            else
+            {
+                if (mapData != null) mapData[x, y] = demonWall;
+                var wall = obj.AddComponent<Wall>();
+                if (walls == null) walls = new Wall[Row, Col];
+                walls[x, y] = wall;
+                wall.positionX = x;
+                wall.positionY = y;
+                wall.mapGenerator = this;
+                if (string.IsNullOrEmpty(wall.Name)) wall.Name = "Wall";
+                obj.name = $"DemonWall_Wall {x}, {y}";
+            }
             spawned.Add(obj);
         }
 
-        public T Spawn<T>(string objectName, int x, int y, GameObject prefab = null) where T : Identity
+        public void PlaceEnemy(int x, int y)
+        {
+            if (x < 0 || x >= Row || y < 0 || y >= Col) return;
+
+            GameObject prefab = null;
+            if (enemyPrefab != null)
+            {
+                foreach (var p in enemyPrefab)
+                {
+                    if (p != null && p.GetComponent<Enemy>() != null)
+                    {
+                        prefab = p;
+                        break;
+                    }
+                }
+            }
+
+            GameObject obj = prefab != null
+                ? Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity)
+                : new GameObject("Enemy");
+            if (prefab == null) obj.transform.position = new Vector3(x, y, 0);
+
+            if (wallParent != null) obj.transform.parent = wallParent;
+            if (mapData != null) mapData[x, y] = enemy;
+
+            var enemyComp = obj.GetComponent<Enemy>();
+            if (enemyComp == null) enemyComp = obj.AddComponent<Enemy>();
+
+            enemyComp.positionX = x;
+            enemyComp.positionY = y;
+            enemyComp.mapGenerator = this;
+            if (string.IsNullOrEmpty(enemyComp.Name)) enemyComp.Name = "Enemy";
+            if (enemies == null) enemies = new Enemy[Row, Col];
+            enemies[x, y] = enemyComp;
+            obj.name = $"Enemy {x}, {y}";
+            spawned.Add(obj);
+        }
+
+        public void PlacePotion(int x, int y)
+        {
+            if (x < 0 || x >= Row || y < 0 || y >= Col) return;
+
+            GameObject prefab = null;
+            if (itemsPrefab != null)
+            {
+                foreach (var p in itemsPrefab)
+                {
+                    if (p != null && p.GetComponent<ItemPotion>() != null)
+                    {
+                        prefab = p;
+                        break;
+                    }
+                }
+            }
+
+            GameObject obj = prefab != null
+                ? Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity)
+                : new GameObject("Potion");
+            if (prefab == null) obj.transform.position = new Vector3(x, y, 0);
+
+            if (itemPotionParent != null) obj.transform.parent = itemPotionParent;
+            if (mapData != null) mapData[x, y] = potion;
+
+            var itemPotion = obj.GetComponent<ItemPotion>();
+            if (itemPotion == null) itemPotion = obj.AddComponent<ItemPotion>();
+
+            itemPotion.positionX = x;
+            itemPotion.positionY = y;
+            itemPotion.mapGenerator = this;
+            if (string.IsNullOrEmpty(itemPotion.Name)) itemPotion.Name = "Potion";
+            if (potions == null) potions = new ItemPotion[Row, Col];
+            potions[x, y] = itemPotion;
+            obj.name = $"Item_Potion {x}, {y}";
+            spawned.Add(obj);
+        }
+
+        public void PlaceSword(int x, int y)
+        {
+            if (x < 0 || x >= Row || y < 0 || y >= Col) return;
+
+            GameObject prefab = null;
+            if (itemsPrefab != null)
+            {
+                foreach (var p in itemsPrefab)
+                {
+                    if (p != null && p.GetComponent<ItemSword>() != null)
+                    {
+                        prefab = p;
+                        break;
+                    }
+                }
+            }
+
+            GameObject obj = prefab != null
+                ? Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity)
+                : new GameObject("Sword");
+            if (prefab == null) obj.transform.position = new Vector3(x, y, 0);
+
+            if (itemPotionParent != null) obj.transform.parent = itemPotionParent;
+            if (mapData != null) mapData[x, y] = sword;
+
+            var itemSword = obj.GetComponent<ItemSword>();
+            if (itemSword == null) itemSword = obj.AddComponent<ItemSword>();
+
+            itemSword.positionX = x;
+            itemSword.positionY = y;
+            itemSword.mapGenerator = this;
+            if (string.IsNullOrEmpty(itemSword.Name)) itemSword.Name = "Sword";
+            if (swords == null) swords = new ItemSword[Row, Col];
+            swords[x, y] = itemSword;
+            obj.name = $"Item_Sword {x}, {y}";
+            spawned.Add(obj);
+        }
+
+        public void PlaceChest(int x, int y)
+        {
+            if (x < 0 || x >= Row || y < 0 || y >= Col) return;
+
+            GameObject prefab = null;
+            if (itemsPrefab != null)
+            {
+                foreach (var p in itemsPrefab)
+                {
+                    if (p != null && p.GetComponent<Chest>() != null)
+                    {
+                        prefab = p;
+                        break;
+                    }
+                }
+            }
+
+            GameObject obj = prefab != null
+                ? Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity)
+                : new GameObject("Chest");
+            if (prefab == null) obj.transform.position = new Vector3(x, y, 0);
+
+            if (itemPotionParent != null) obj.transform.parent = itemPotionParent;
+            if (mapData != null) mapData[x, y] = chest;
+
+            var chestComp = obj.GetComponent<Chest>();
+            if (chestComp == null) chestComp = obj.AddComponent<Chest>();
+
+            chestComp.positionX = x;
+            chestComp.positionY = y;
+            chestComp.mapGenerator = this;
+            if (string.IsNullOrEmpty(chestComp.Name)) chestComp.Name = "Chest";
+            if (chests == null) chests = new Chest[Row, Col];
+            chests[x, y] = chestComp;
+            obj.name = $"Chest {x}, {y}";
+            spawned.Add(obj);
+        }
+
+        public T Spawn<T>(string objectName, int x, int y, GameObject prefab = null) where T : Component
         {
             GameObject go;
             if (prefab != null)
@@ -365,20 +588,23 @@ namespace Week07.Game
                 go.transform.position = new Vector3(x, y, 0);
             }
 
-            T identity = go.GetComponent<T>();
-            if (identity == null)
+            T comp = go.GetComponent<T>();
+            if (comp == null)
             {
-                identity = go.AddComponent<T>();
+                comp = go.AddComponent<T>();
             }
 
-            identity.name = objectName;
-            identity.Name = objectName;
-            identity.positionX = x;
-            identity.positionY = y;
-            identity.mapGenerator = this;
+            comp.name = objectName;
+            if (comp is Identity identity)
+            {
+                identity.Name = objectName;
+                identity.positionX = x;
+                identity.positionY = y;
+                identity.mapGenerator = this;
+            }
 
             spawned.Add(go);
-            return identity;
+            return comp;
         }
 
         public void TrackSpawned(GameObject go)

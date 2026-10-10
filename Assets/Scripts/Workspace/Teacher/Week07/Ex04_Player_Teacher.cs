@@ -30,7 +30,7 @@ namespace Week07.Teacher.Game
         {
             if (isTrapped)
             {
-                Debug.Log("⛓️ You are trapped! Cannot move for 1 turn.");
+                Debug.Log("You are trapped! Cannot move for 1 turn.");
                 isTrapped = false;
                 return;
             }

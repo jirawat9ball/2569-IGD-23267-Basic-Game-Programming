@@ -1,10 +1,17 @@
 ﻿using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
 {
     /// <summary>
-    /// สคริปต์ศัตรู (Enemy) สืบทอดจาก Character (ซึ่งสืบทอดจาก Identity)
-    /// มีความสามารถเหมือนตัวละครทุกอย่าง และ override Hit() เพื่อตีสวนผู้เล่น
+    /// สคริปต์ศัตรู (Enemy) - ยกมาจาก Week 06
+    /// 
+    /// 🎯 โจทย์ Week 07 (ข้อ 5): ปรับปรุงเป็น OOP
+    /// 1. เปลี่ยนการสืบทอดจาก MonoBehaviour ให้สืบทอดจาก Character:
+    ///    public class Enemy : Character
+    /// 2. ลบตัวแปรซ้ำซ้อน (Name, energy, attackPoint) ออก เนื่องจาก Character และ Identity มีให้อยู่แล้ว
+    /// 3. ลบเมธอด Attack, TakeDamage, OnTriggerEnter2D ออก (ใช้ระบบของ Character แทน)
+    /// 4. เขียน override void Hit() เพื่อตีสวนผู้เล่นเมื่อถูกโจมตี
     /// </summary>
     public class Enemy : Character
     {
@@ -24,16 +31,35 @@ namespace Week07.Game
             }
         }
 
-        public override void Hit()
+        // ===== student code starts HERE =====
+        public override void Hit(Player player = null)
         {
-            // ===== student code starts HERE =====
-            // Guideline: (ข้อ 5)
-            // 1. ตรวจก่อนว่า energy ของศัตรูหมดหรือยัง
-            //    ถ้า energy <= 0 แปลว่าตายแล้ว ไม่ต้องทำอะไรต่อ ให้ return ออกไปเลย
-            // 2. ถ้ายังไม่ตาย ให้ศัตรูตีผู้เล่นกลับ
-            //    ใช้ this.Attack(mapGenerator.player, attackPoint);
-
-            // ===== student code ends HERE =====
+            player.Attack(this, player.attackPoint);
+                if (energy > 0)
+                {
+                    Hit(player);
+                    player.positionX = player.previousPositionX;
+                    player.positionY = player.previousPositionY;
+                    player.transform.position = new Vector3(player.positionX, player.positionY, 0);
+                }
+                else
+                {
+                    var map = mapGenerator as MapGenerator;
+                    if (map != null && map.mapData != null)
+                    {
+                        map.mapData[positionX, positionY] = 0;
+                    }
+                }
         }
+
+        public override void OnTriggerEnter2D(Collider2D other)
+        {
+            Player player = other.GetComponent<Player>();
+            if (player != null)
+            {
+                Hit(player);
+            }
+        }
+        // ===== student code ends HERE =====
     }
 }

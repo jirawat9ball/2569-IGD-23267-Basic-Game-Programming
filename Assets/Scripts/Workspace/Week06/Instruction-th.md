@@ -1,4 +1,4 @@
-# Assignment Week 06: คลาสและการสร้างอ็อบเจกต์ (Class & Constructor)
+﻿# Assignment Week 06: คลาสและการสร้างอ็อบเจกต์ (Class & Constructor)
 
 ## 📋 ภาพรวมของ Assignment
 
@@ -121,7 +121,7 @@ Buddy stopped barking
    - `TakeDamage(int damage)`:
      - ลดค่า `energy -= damage`
      - พิมพ์ `"<name> takes <damage> damage! Remaining HP: <energy>"`
-     - ถ้า `energy <= 0` พิมพ์ `"💥 <name> defeated!"` และสั่ง `Destroy(gameObject)`
+     - ถ้า `energy <= 0` พิมพ์ `"<name> defeated!"` และสั่ง `Destroy(gameObject)`
 4. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
    - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
    - ดึง `Player player = other.GetComponent<Player>()`
@@ -141,7 +141,7 @@ Buddy stopped barking
 2. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
    - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
    - ดึง `Player player = other.GetComponent<Player>()`
-   - ถ้าเจอ Player ให้พิมพ์ `"🎉 You Win! Reached the exit!"`
+   - ถ้าเจอ Player ให้พิมพ์ `"You Win! Reached the exit!"`
 
 ---
 
@@ -159,7 +159,7 @@ Buddy stopped barking
    - ดึง `Player player = other.GetComponent<Player>()`
    - ถ้าเจอ Player ให้สั่ง:
      - `player.Heal(healPoint)`
-     - พิมพ์ `"✨ Picked up <name>! +<healPoint> Energy"`
+     - พิมพ์ `"Picked up <name>! +<healPoint> Energy"`
      - สั่ง `Destroy(gameObject)` เพื่อทำลายไอเทมออกจากฉาก
 
 ---
@@ -177,7 +177,7 @@ Buddy stopped barking
    - ดึง `Player player = other.GetComponent<Player>()`
    - ถ้าเจอ Player ให้สั่ง:
      - `player.IncreaseAttack(attackBonus)`
-     - พิมพ์ `"⚔️ Picked up <Name>! +<attackBonus> Attack"`
+     - พิมพ์ `"Picked up <Name>! +<attackBonus> Attack"`
      - สั่ง `Destroy(gameObject)` เพื่อทำลายไอเทมออกจากฉาก
 
 ---
@@ -194,7 +194,7 @@ Buddy stopped barking
    - ถ้าเจอ Player ให้สั่ง:
      - `player.isTrapped = true` (ทำให้เดินไม่ได้ 1 ครั้ง)
      - `player.TakeDamage(damage)`
-     - พิมพ์ `"⚠️ Stepped on <Name>! Trapped for 1 turn (-<damage> Energy)"`
+     - พิมพ์ `"Stepped on <Name>! Trapped for 1 turn (-<damage> Energy)"`
 
 ---
 
@@ -206,8 +206,8 @@ Buddy stopped barking
    - `int durability = 2`
 2. **ประกาศเมธอด `Hit()` แบบ public:**
    - ลดค่าความทนทานลง 1 (`durability--`)
-   - พิมพ์ `"🧱 <Name> was hit! Remaining durability: <durability>"`
-   - หาก `durability <= 0` ให้พิมพ์ `"💥 <Name> destroyed!"` และเรียก `Destroy(gameObject)`
+   - พิมพ์ `"<Name> was hit! Remaining durability: <durability>"`
+   - หาก `durability <= 0` ให้พิมพ์ `"<Name> destroyed!"` และเรียก `Destroy(gameObject)`
 3. **ประกาศเมธอด `OnTriggerEnter2D(Collider2D other)` แบบ private:**
    - พิมพ์ `"[Trigger] <gameObject.name> collided with <other.gameObject.name>"`
    - ดึง `Player player = other.GetComponent<Player>()`
@@ -224,7 +224,7 @@ Buddy stopped barking
    - `string Name = "Chest"`
    - `GameObject spawnPrefab` (Prefab วัตถุที่จะเสกออกมา)
 2. **ประกาศเมธอด `OpenChest()` แบบ public:**
-   - พิมพ์ `"📦 Opened <Name>!"`
+   - พิมพ์ `"Opened <Name>!"`
    - หากมี `spawnPrefab != null` ให้เสกสร้างวัตถุใหม่ลงฉากที่ตำแหน่ง **ด้านบน 1 ช่อง (y + 1)**:
      `Vector3 spawnPosition = transform.position + Vector3.up;`
      `Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);`

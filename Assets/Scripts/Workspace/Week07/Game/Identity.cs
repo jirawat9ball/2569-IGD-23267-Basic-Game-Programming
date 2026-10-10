@@ -6,6 +6,7 @@ namespace Week07.Game
     /// คลาสแม่ของทุกอย่างที่วางอยู่บนแผนที่ (ตัวละคร, ยา, ดาบ)
     /// ไฟล์นี้ไม่ต้องแก้ — นักศึกษาแก้เฉพาะ Enemy.cs / ItemPotion.cs / ItemSword.cs / Character.cs
     /// </summary>
+    [ RequireComponent(typeof(BoxCollider2D))]
     public class Identity : MonoBehaviour
     {
         public string Name;
@@ -13,7 +14,8 @@ namespace Week07.Game
         public int positionY;
         public MapGenerator mapGenerator;
 
-        public virtual void Hit()
+
+        public virtual void Hit(Player player = null)
         {
         }
 
@@ -21,11 +23,15 @@ namespace Week07.Game
         /// ตรวจจับการชนผ่าน 2D Trigger ที่คลาสแม่เพียงที่เดียว
         /// เมื่อตัวละคร Player เดินมาชน จะเรียก Hit() ของคลาสลูกตัวนั้น ๆ แบบ Polymorphism อัตโนมัติ
         /// </summary>
-        protected virtual void OnTriggerEnter2D(Collider2D other)
+        public virtual void OnTriggerEnter2D(Collider2D other)
         {
-            if (this is not Player && other.GetComponent<Player>() != null)
+            if (this is not Player)
             {
-                Hit();
+                Player player = other.GetComponent<Player>();
+                if (player != null)
+                {
+                    Hit(player);
+                }
             }
         }
 

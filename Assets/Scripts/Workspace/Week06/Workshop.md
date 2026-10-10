@@ -1,4 +1,4 @@
-# 🎮 Workshop Week 06: Mini 2D Grid Game
+﻿# 🎮 Workshop Week 06: Mini 2D Grid Game
 ## การประยุกต์ใช้ Class, Method, GetComponent และ Trigger ใน Unity
 
 ---
@@ -8,7 +8,7 @@
 ใน Workshop นี้ นักศึกษาจะได้นำความรู้เรื่อง **Class, Fields (ตัวแปรประจำคลาส), Methods (ฟังก์ชันการทำงาน)** จาก Lecture มาประยุกต์สร้างเกมจริงแนว **2D Grid-based Dungeon Game** ใน Unity!
 
 ```
-[ จุดเริ่มต้น (0,0) ] ───> [ เก็บยา/ดาบ 🧪⚔️ ] ───> [ สู้กับศัตรู 👾 ] ───> [ ทางออก 🏁 ]
+[ จุดเริ่มต้น (0,0) ] ───> [ เก็บยา/ดาบ 🧪] ───> [ สู้กับศัตรู 👾 ] ───> [ ทางออก 🏁 ]
 ```
 
 ### 🎯 วัตถุประสงค์การเรียนรู้
@@ -105,7 +105,7 @@ private void OnTriggerEnter2D(Collider2D other)
     // 2. ถ้าใช่ Player ให้เรียกความสามารถของ Player แล้วทำลายตัวเองทิ้ง
     if (player != null)
     {
-        Debug.Log($"✨ Picked up {Name}! +{healPoint} Energy");
+        Debug.Log($"Picked up {Name}! +{healPoint} Energy");
         player.Heal(healPoint); // เรียก Method บน Player
         Destroy(gameObject);    // ลบไอเทมออกจากฉาก
     }
@@ -137,7 +137,7 @@ public void TakeDamage(int damage)
 
     if (energy <= 0)
     {
-        Debug.Log($"💥 {Name} defeated!");
+        Debug.Log($"{Name} defeated!");
         Destroy(gameObject); // ศัตรูถูกกำจัดเมื่อเลือดหมด
     }
 }
@@ -158,7 +158,7 @@ if (enemy != null)
 ### 🔹 Step 4: กำแพงและทางออก ([Wall.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Wall.cs) & [Exit.cs](file:///d:/Unity/2569-IGD-23267-Basic-Game-Programming/Assets/Scripts/Workspace/Week06/Game/Exit.cs))
 
 - **Wall (กำแพง):** มีฟิลด์ `durability = 2` ทุกครั้งที่ชนจะเรียก `Hit()` ลดความทนทาน เมื่อชนครบ 2 ครั้ง กำแพงจะพังลง
-- **Exit (ทางออก):** เมื่อ Player เดินมาชน จะแสดงข้อความ `"🎉 You Win! Reached the exit!"`
+- **Exit (ทางออก):** เมื่อ Player เดินมาชน จะแสดงข้อความ `"You Win! Reached the exit!"`
 
 ---
 
@@ -178,10 +178,10 @@ if (enemy != null)
 2. กดปุ่ม **Play ▶️**
 3. สังเกตหน้าต่าง **Console**:
    - กดปุ่ม **W, A, S, D** หรือ **ลูกศร** เพื่อเดินสังเกตการหักค่า Energy: `Current Energy : 19...`
-   - เดินไปเก็บยา Potion: `✨ Picked up Potion! +10 Energy`
-   - เดินไปเก็บดาบ Sword: `⚔️ Picked up Sword! +10 Attack`
+   - เดินไปเก็บยา Potion: `Picked up Potion! +10 Energy`
+   - เดินไปเก็บดาบ Sword: `Picked up Sword! +10 Attack`
    - เดินชนศัตรู Enemy: เกิดการต่อสู้ แสดงดาเมจ และศัตรูหายไป
-   - เดินไปถึงจุด Exit ที่มุมขวาบน: `🎉 You Win! Reached the exit!`
+   - เดินไปถึงจุด Exit ที่มุมขวาบน: `You Win! Reached the exit!`
 
 ---
 

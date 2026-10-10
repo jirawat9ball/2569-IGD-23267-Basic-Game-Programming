@@ -408,7 +408,7 @@ else if (IsSword(toX, toY))
    - เขียน `override method Hit()`:
      - ลดค่าความทนทาน `durability--;`
      - พิมพ์ `Debug.Log($"Hit Wall {Name}! Remaining durability: {durability}");`
-     - ถ้า `durability <= 0` พิมพ์ `Debug.Log($"💥 Wall {Name} destroyed!");` เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และสั่ง `DestroySafe(gameObject);`
+     - ถ้า `durability <= 0` พิมพ์ `Debug.Log($"Wall {Name} destroyed!");` เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และสั่ง `DestroySafe(gameObject);`
 2. **File `Character.cs`**
    - ภายใต้ `if (HasSomeObject(toX, toY))` เมื่อเจอ `IsDemonWall(toX, toY)` ให้เรียก `mapGenerator.walls[toX, toY].Hit();` โดยผู้เล่นจะไม่เดินข้ามกำแพง
 
@@ -417,7 +417,7 @@ else if (IsSword(toX, toY))
 Hit Wall Wall1! Remaining durability: 2
 Hit Wall Wall1! Remaining durability: 1
 Hit Wall Wall1! Remaining durability: 0
-💥 Wall Wall1 destroyed!
+Wall Wall1 destroyed!
 ```
 
 ---
@@ -433,7 +433,7 @@ Hit Wall Wall1! Remaining durability: 0
    - เขียนเมธอด `OpenChest()`:
      - ถ้า `isOpen` แล้ว ให้ return
      - ตั้งค่า `isOpen = true;`
-     - พิมพ์ `Debug.Log($"📦 Opened {Name}!");`
+     - พิมพ์ `Debug.Log($"Opened {Name}!");`
      - ถ้า `spawnPrefab != null` ให้สร้างวัตถุใหม่ที่ด้านบน 1 ช่อง (`transform.position + Vector3.up`)
      - เคลียร์ช่องแผนที่ `mapGenerator.mapData[positionX, positionY] = 0;` และสั่ง `DestroySafe(gameObject);`
    - เขียน `override method Hit()` ให้เรียก `OpenChest();`
@@ -442,5 +442,5 @@ Hit Wall Wall1! Remaining durability: 0
 
 **ตัวอย่างผลลัพธ์ใน `Ex09_ChestDemo()`:**
 ```text
-📦 Opened Chest1!
+Opened Chest1!
 ```

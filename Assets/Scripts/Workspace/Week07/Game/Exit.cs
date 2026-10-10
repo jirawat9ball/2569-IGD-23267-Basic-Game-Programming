@@ -19,10 +19,11 @@ namespace Week07.Game
             }
         }
 
-        public override void Hit()
+        public override void Hit(Player player = null)
         {
             isLevelClear = true;
-            Debug.Log("🎉 Level Complete! You reached the exit!");
+            player.enabled = false;
+            Debug.Log("Level Complete! You reached the exit!");
         }
     }
 }
