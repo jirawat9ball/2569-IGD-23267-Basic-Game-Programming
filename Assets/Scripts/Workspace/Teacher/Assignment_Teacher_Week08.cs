@@ -46,6 +46,7 @@ namespace Week08
             scanner.FindItemPosition(map, 3);
             scanner.CountItems(map, 3);
             scanner.ScanThreats(map, new Vector2Int(0, 0), 2);
+            if (mapGen != null) scanner.FindPlayerPosition(mapGen);
             scanner.FindPlayerPosition(map, 1);
             SafeDestroy(go);
         }
@@ -53,12 +54,12 @@ namespace Week08
         public void Level3_MethodAndClassDemo()
         {
             var go = new GameObject("TeacherSpawnerDemo");
-            var spawner = go.AddComponent<Teacher.Ex03.WeaponSpawner>();
-            var dummyPrefab = new GameObject("Wooden Stick");
-            var spawned = spawner.SpawnWeapon(dummyPrefab, new Vector3(1, 0, 0));
+            var spawner = go.AddComponent<Teacher.Ex03.ArmorSpawner>();
+            var dummyPrefab = new GameObject("Iron Armor");
+            var spawned = spawner.SpawnArmor(dummyPrefab, new Vector3(1, 0, 0));
 
-            var weapon = go.AddComponent<Teacher.Ex03.Weapon>();
-            weapon.Use();
+            var armor = go.AddComponent<Teacher.Ex03.Armor>();
+            Debug.Log($"Armor: {armor.Name}, Defense Bonus: {armor.defenseBonus}");
 
             SafeDestroy(dummyPrefab);
             SafeDestroy(spawned);

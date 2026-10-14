@@ -18,11 +18,11 @@
       "hash": "aa5fc638d623f56178d50329d9ad8c541a57fe66"
     },
     "com.unity.2d.animation": {
-      "version": "15.1.0",
+      "version": "15.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "14.0.1",
+        "com.unity.2d.common": "14.0.0",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.collections": "2.4.3",
         "com.unity.modules.animation": "1.0.0",
@@ -165,15 +165,6 @@
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.33"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.inputsystem": {
-      "version": "1.20.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.uielements": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },

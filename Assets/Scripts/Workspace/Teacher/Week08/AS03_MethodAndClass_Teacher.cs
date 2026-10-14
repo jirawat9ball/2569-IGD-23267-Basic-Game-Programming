@@ -3,25 +3,28 @@ using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week08.Teacher.Ex03
 {
-    public class Weapon : MonoBehaviour
+    public class Armor : MonoBehaviour
     {
-        public string weaponName = "Wooden Stick";
-        public int attackPower = 10;
-        public int durability = 20;
+        public string Name = "Iron Armor";
+        public int defenseBonus = 10;
 
-        public void Use()
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (durability > 0)
+            Debug.Log($"[Trigger] {gameObject.name} collided with {other.gameObject.name}");
+
+            Player player = other.GetComponent<Player>();
+            if (player != null)
             {
-                durability--;
+                Debug.Log($"Picked up {Name}! +{defenseBonus} Defense");
+                player.IncreaseDefense(defenseBonus);
+                Destroy(gameObject);
             }
-            Debug.Log($"{weaponName} used. Durability: {durability}");
         }
     }
 
-    public class WeaponSpawner : MonoBehaviour
+    public class ArmorSpawner : MonoBehaviour
     {
-        public GameObject SpawnWeapon(GameObject prefab, Vector3 spawnPosition)
+        public GameObject SpawnArmor(GameObject prefab, Vector3 spawnPosition)
         {
             if (prefab == null)
             {
@@ -33,5 +36,7 @@ namespace Week08.Teacher.Ex03
             Debug.Log($"Spawned {prefab.name} at {spawnPosition}");
             return spawned;
         }
+
+        public GameObject SpawnWeapon(GameObject prefab, Vector3 spawnPosition) => SpawnArmor(prefab, spawnPosition);
     }
 }

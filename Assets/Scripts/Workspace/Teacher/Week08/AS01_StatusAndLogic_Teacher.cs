@@ -9,6 +9,8 @@ namespace Week08.Teacher.Ex01
         public int maxHealth = 100;
         public int currentHealth = 100;
         public bool isAlive = true;
+        public int attackPoint = 10;
+        public int defensePoint = 0;
 
         public void TakeDamage(int damage)
         {

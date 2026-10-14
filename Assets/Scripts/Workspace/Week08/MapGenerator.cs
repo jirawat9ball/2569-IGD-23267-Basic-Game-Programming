@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week08
 {
@@ -21,6 +22,7 @@ namespace Week08
         public GameObject[] wallPrefabs;
         public GameObject playerPrefab;
         public GameObject exitPrefab;
+        public GameObject armorPrefab;
         public GameObject stickPrefab;
 
         [Header("Parent Transform สำหรับจัดระเบียบ Hierarchy")]
@@ -30,6 +32,7 @@ namespace Week08
 
         [Header("จำนวนสิ่งกีดขวาง/ไอเทม")]
         public int threatCount = 2;
+        public int armorCount = 2;
         public int stickCount = 2;
 
         /// <summary>
@@ -85,6 +88,15 @@ namespace Week08
                 DestroyImmediate(obj);
         }
 
+        private Transform CreateChildFolder(string name)
+        {
+            var child = transform.Find(name);
+            if (child != null) return child;
+            var go = new GameObject(name);
+            go.transform.SetParent(transform);
+            return go.transform;
+        }
+
         [ContextMenu("Generate Map")]
         public void GenerateMap()
         {
@@ -92,12 +104,37 @@ namespace Week08
 
             mapGrid = new int[rows, columns];
 
-            // สร้าง Parent Transforms หากยังไม่ได้กำหนด
+            // สร้าง Parent Transforms สำหรับจัดระเบียบ Hierarchy ในฉาก
             if (floorParent == null) floorParent = CreateChildFolder("Floors");
             if (wallParent == null) wallParent = CreateChildFolder("Walls");
             if (itemParent == null) itemParent = CreateChildFolder("Items");
 
-            // 1. สร้างพื้น 5x5
+            // 1. สร้างพื้น (Floors) ขนาด rows x columns
+            GenerateFloors();
+
+            // 2. สร้างกำแพงล้อมรอบ (Outer Walls)
+            GenerateWalls();
+
+            // 3. กำหนดตำแหน่งผู้เล่น (Player) ที่ playerStartPos (รหัส 1)
+            PlacePlayer();
+
+            // 4. กำหนดตำแหน่งทางออก (Exit) ที่ exitPos (รหัส 9)
+            PlaceExit();
+
+            // 5. สุ่มวางภัยคุกคาม (Threats) ตาม threatCount (รหัส 2)
+            PlaceThreats();
+
+            // 6. เสกสร้างไอเทมเกราะ (Armor Items) ผ่าน ArmorSpawner ของ AS03 (รหัส 3)
+            SpawnArmor();
+        }
+
+        // =========================================================================
+        // ฟังก์ชันสร้างแผนที่ย่อยแยกตามขั้นตอน (Steps 1 - 6)
+        // =========================================================================
+
+        // ขั้นตอนที่ 1: สร้างพื้น (Floors)
+        private void GenerateFloors()
+        {
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < columns; c++)
@@ -114,45 +151,56 @@ namespace Week08
                     mapGrid[r, c] = 0; // Empty
                 }
             }
+        }
 
-            // 2. สร้างกำแพงล้อมรอบ 5x5
-            if (wallPrefabs != null && wallPrefabs.Length > 0)
+        // ขั้นตอนที่ 2: สร้างกำแพงล้อมรอบ (Outer Walls)
+        private void GenerateWalls()
+        {
+            if (wallPrefabs == null || wallPrefabs.Length == 0) return;
+
+            for (int r = -1; r <= rows; r++)
             {
-                for (int r = -1; r <= rows; r++)
+                for (int c = -1; c <= columns; c++)
                 {
-                    for (int c = -1; c <= columns; c++)
+                    if (r == -1 || r == rows || c == -1 || c == columns)
                     {
-                        if (r == -1 || r == rows || c == -1 || c == columns)
+                        var prefab = wallPrefabs[Random.Range(0, wallPrefabs.Length)];
+                        if (prefab != null)
                         {
-                            var prefab = wallPrefabs[Random.Range(0, wallPrefabs.Length)];
-                            if (prefab != null)
-                            {
-                                var wall = Instantiate(prefab, new Vector3(c, r, 0), Quaternion.identity, wallParent);
-                                wall.name = $"OuterWall_{r}_{c}";
-                            }
+                            var wall = Instantiate(prefab, new Vector3(c, r, 0), Quaternion.identity, wallParent);
+                            wall.name = $"OuterWall_{r}_{c}";
                         }
                     }
                 }
             }
+        }
 
-            // 3. กำหนดตำแหน่งผู้เล่นที่ตำแหน่ง playerStartPos (รหัส 1)
+        // ขั้นตอนที่ 3: กำหนดตำแหน่งผู้เล่น (Player)
+        private void PlacePlayer()
+        {
             if (playerStartPos.x >= 0 && playerStartPos.x < rows && playerStartPos.y >= 0 && playerStartPos.y < columns)
             {
                 mapGrid[playerStartPos.x, playerStartPos.y] = 1; // Player code 1
             }
+        }
 
-            // 4. กำหนดทางออกที่ตำแหน่ง exitPos (รหัส 9)
+        // ขั้นตอนที่ 4: กำหนดตำแหน่งทางออก (Exit)
+        private void PlaceExit()
+        {
             if (exitPos.x >= 0 && exitPos.x < rows && exitPos.y >= 0 && exitPos.y < columns)
             {
-                mapGrid[exitPos.x, exitPos.y] = 9;
+                mapGrid[exitPos.x, exitPos.y] = 9; // Exit code 9
                 if (exitPrefab != null)
                 {
                     var exitObj = Instantiate(exitPrefab, new Vector3(exitPos.y, exitPos.x, 0), Quaternion.identity);
                     exitObj.name = "Exit";
                 }
             }
+        }
 
-            // 4. สุ่มวาง Threat (รหัส 2) ในตาราง
+        // ขั้นตอนที่ 5: สุ่มวางภัยคุกคาม (Threats)
+        private void PlaceThreats()
+        {
             int placedThreats = 0;
             int maxAttempts = 50;
             while (placedThreats < threatCount && maxAttempts-- > 0)
@@ -165,31 +213,153 @@ namespace Week08
                     placedThreats++;
                 }
             }
+        }
 
-            // 5. วางไม้สติ๊ก (Wooden Stick)
-            if (stickPrefab != null && itemParent != null)
+        // ขั้นตอนที่ 6: เสกสร้างไอเทมเกราะ (Armor Items) ผ่าน ArmorSpawner ของ Level 3 (AS03)
+        [ContextMenu("Spawn Armor")]
+        public void SpawnArmor()
+        {
+            SpawnItems();
+        }
+
+        [ContextMenu("Spawn Items")]
+        public void SpawnItems()
+        {
+            var prefabToSpawn = armorPrefab != null ? armorPrefab : stickPrefab;
+            if (prefabToSpawn == null)
             {
-                for (int i = 0; i < stickCount; i++)
+                #if UNITY_EDITOR
+                prefabToSpawn = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Iron Armor.prefab");
+                #endif
+            }
+
+            if (itemParent == null) itemParent = CreateChildFolder("Items");
+
+            // ดึงหรือแนบคอมโพเนนต์ ArmorSpawner จาก AS03 (รองรับทั้งนักเรียนและอาจารย์แบบ Dynamic)
+            Component spawnerComp = null;
+            var spawnerType = System.Type.GetType("Week08.Ex03.ArmorSpawner, Workspace")
+                ?? System.Type.GetType("Week08.ArmorSpawner, Workspace")
+                ?? System.Type.GetType("ArmorSpawner, Workspace")
+                ?? System.Type.GetType("Week08.Teacher.Ex03.ArmorSpawner, Workspace")
+                ?? System.Type.GetType("Week08.Ex03.ArmorSpawner, Assembly-CSharp")
+                ?? System.Type.GetType("Week08.ArmorSpawner, Assembly-CSharp")
+                ?? System.Type.GetType("ArmorSpawner, Assembly-CSharp")
+                ?? System.Type.GetType("Week08.Teacher.Ex03.ArmorSpawner, Assembly-CSharp");
+
+            if (spawnerType != null)
+            {
+                spawnerComp = GetComponent(spawnerType) ?? gameObject.AddComponent(spawnerType);
+            }
+
+            int count = armorCount > 0 ? armorCount : stickCount;
+            for (int i = 0; i < count; i++)
+            {
+                int r = Random.Range(0, rows);
+                int c = Random.Range(0, columns);
+                int attempts = 50;
+                while (mapGrid[r, c] != 0 && attempts-- > 0)
                 {
-                    int r = Random.Range(0, rows);
-                    int c = Random.Range(0, columns);
-                    if (mapGrid[r, c] == 0)
+                    r = Random.Range(0, rows);
+                    c = Random.Range(0, columns);
+                }
+
+                if (mapGrid[r, c] == 0)
+                {
+                    mapGrid[r, c] = 3; // Item code 3 (Armor / Item)
+                    Vector3 spawnPos = new Vector3(c, r, 0);
+
+                    GameObject spawned = null;
+                    if (spawnerComp != null)
                     {
-                        mapGrid[r, c] = 3; // Item code 3 (Wooden Stick)
-                        var stick = Instantiate(stickPrefab, new Vector3(c, r, 0), Quaternion.identity, itemParent);
-                        stick.name = $"Wooden Stick_{i + 1}";
+                        var method = spawnerComp.GetType().GetMethod("SpawnArmor") 
+                            ?? spawnerComp.GetType().GetMethod("SpawnWeapon");
+                        if (method != null)
+                        {
+                            spawned = method.Invoke(spawnerComp, new object[] { prefabToSpawn, spawnPos }) as GameObject;
+                        }
+                    }
+
+                    if (spawned == null && prefabToSpawn != null)
+                    {
+                        spawned = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+                    }
+
+                    if (spawned != null)
+                    {
+                        if (itemParent != null) spawned.transform.SetParent(itemParent);
+                        spawned.name = $"Iron Armor_{i + 1}";
                     }
                 }
             }
         }
 
-        private Transform CreateChildFolder(string name)
+        // =========================================================================
+        // ระดับ 2: การค้นหาและเรดาร์สำรวจดันเจี้ยนบนตาราง (Dungeon Grid Radar)
+        // =========================================================================
+
+        // 1. ค้นหาพิกัดไอเทมช่องแรกบนตาราง
+        public Vector2Int FindItemPosition(int itemCode)
         {
-            var child = transform.Find(name);
-            if (child != null) return child;
-            var go = new GameObject(name);
-            go.transform.SetParent(transform);
-            return go.transform;
+            return FindItemPosition(this.mapGrid, itemCode);
+        }
+
+        public virtual Vector2Int FindItemPosition(int[,] grid, int itemCode)
+        {
+            // Student code starts HERE ...
+            return new Vector2Int(-1, -1);
+            // Student code ends HERE ...
+        }
+
+        // 2. นับจำนวนไอเทมบนตาราง
+        public int CountItems(int itemCode)
+        {
+            return CountItems(this.mapGrid, itemCode);
+        }
+
+        public virtual int CountItems(int[,] grid, int itemCode)
+        {
+            // Student code starts HERE ...
+            return 0;
+            // Student code ends HERE ...
+        }
+
+        // 3. สแกนหาภัยคุกคามรอบตัวผู้เล่นในรัศมี 1 ช่อง (8 ทิศทาง)
+        public int ScanThreats(Vector2Int playerPos, int threatCode = 2)
+        {
+            return ScanThreats(this.mapGrid, playerPos, threatCode);
+        }
+
+        public virtual int ScanThreats(int[,] grid, Vector2Int playerPos, int threatCode = 2)
+        {
+            // Student code starts HERE ...
+            return 0;
+            // Student code ends HERE ...
+        }
+
+        // 4. หาพิกัดตำแหน่งผู้เล่น
+        public Vector2Int FindPlayerPosition()
+        {
+            return playerStartPos;
+        }
+
+        public virtual Vector2Int FindPlayerPosition(MapGenerator mapGen)
+        {
+            // Student code starts HERE ...
+            if (mapGen == null) return new Vector2Int(-1, -1);
+            return mapGen.playerStartPos;
+            // Student code ends HERE ...
+        }
+
+        public Vector2Int FindPlayerPosition(int playerCode)
+        {
+            return FindPlayerPosition(this.mapGrid, playerCode);
+        }
+
+        public virtual Vector2Int FindPlayerPosition(int[,] grid, int playerCode)
+        {
+            // Student code starts HERE ...
+            return new Vector2Int(-1, -1);
+            // Student code ends HERE ...
         }
     }
 }

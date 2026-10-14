@@ -14,6 +14,58 @@ namespace Week08
         public string characterName = "Hero";
         public int positionX = 0;
         public int positionY = 0;
+        public int attackPoint
+        {
+            get => GetFieldInt(GetAnyStatus(), "attackPoint", _fallbackAttack);
+            set
+            {
+                var s = GetAnyStatus();
+                if (s != null) SetFieldInt(s, "attackPoint", value);
+                _fallbackAttack = value;
+            }
+        }
+        private int _fallbackAttack = 10;
+
+        public int defensePoint
+        {
+            get => GetFieldInt(GetAnyStatus(), "defensePoint", _fallbackDefense);
+            set
+            {
+                var s = GetAnyStatus();
+                if (s != null) SetFieldInt(s, "defensePoint", value);
+                _fallbackDefense = value;
+            }
+        }
+        private int _fallbackDefense = 0;
+
+        private Component GetAnyStatus()
+        {
+            return GetComponent<Teacher.Ex01.CharacterStatus>() as Component
+                ?? GetComponent<Ex01.CharacterStatus>() as Component
+                ?? GetComponent("CharacterStatus")
+                ?? GetComponent("Week08.Ex01.CharacterStatus");
+        }
+
+        private static int GetFieldInt(Component comp, string fieldName, int fallback)
+        {
+            if (comp == null) return fallback;
+            var field = comp.GetType().GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (field != null && field.FieldType == typeof(int))
+            {
+                return (int)field.GetValue(comp);
+            }
+            return fallback;
+        }
+
+        private static void SetFieldInt(Component comp, string fieldName, int value)
+        {
+            if (comp == null) return;
+            var field = comp.GetType().GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (field != null && field.FieldType == typeof(int))
+            {
+                field.SetValue(comp, value);
+            }
+        }
 
         [Header("ขอบเขตตารางแผนที่ (5 x 5)")]
         public int rows = 5;
@@ -94,24 +146,10 @@ namespace Week08
 
         public void ScanNearbyThreats()
         {
-            if (mapGenerator == null || mapGenerator.mapGrid == null) return;
+            if (mapGenerator == null) return;
             Vector2Int gridPos = new Vector2Int(positionY, positionX);
-
-            var scanner = GetComponent<Ex02.InventoryAndGridScanner>();
-            if (scanner != null)
-            {
-                int threats = scanner.ScanThreats(mapGenerator.mapGrid, gridPos, 2);
-                Debug.Log($"[Radar] Found {threats} threats around {characterName} at ({positionX}, {positionY})");
-                return;
-            }
-
-            var teacherScanner = GetComponent<Teacher.Ex02.InventoryAndGridScanner>();
-            if (teacherScanner != null)
-            {
-                int threats = teacherScanner.ScanThreats(mapGenerator.mapGrid, gridPos, 2);
-                Debug.Log($"[Radar] Found {threats} threats around {characterName} at ({positionX}, {positionY})");
-                return;
-            }
+            int threats = mapGenerator.ScanThreats(gridPos, 2);
+            Debug.Log($"[Radar] Found {threats} threats around {characterName} at ({positionX}, {positionY})");
         }
 
         public void Move(Vector2 direction)
@@ -132,61 +170,52 @@ namespace Week08
             Debug.Log($"{characterName} moved to ({positionX}, {positionY})");
         }
 
+        public void IncreaseAttack(int value)
+        {
+            attackPoint += value;
+            Debug.Log($"Attack increased by +{value}! Current Attack: {attackPoint}");
+        }
+
+        public void IncreaseDefense(int value)
+        {
+            defensePoint += value;
+            Debug.Log($"Defense increased by +{value}! Current Defense: {defensePoint}");
+        }
+
         public void UseEquippedWeapon()
         {
-            var weapon = GetComponent<Ex03.Weapon>();
-            if (weapon != null)
-            {
-                weapon.Use();
-                return;
-            }
-
-            var teacherWeapon = GetComponent<Teacher.Ex03.Weapon>();
-            if (teacherWeapon != null)
-            {
-                teacherWeapon.Use();
-                return;
-            }
-
-            Debug.Log($"{characterName} attacks with bare hands! (Damage: 5)");
+            Debug.Log($"{characterName} attacks! (Attack: {attackPoint})");
         }
 
         public void CheckStatus()
         {
-            var status = GetComponent<Ex01.CharacterStatus>();
+            var status = GetAnyStatus();
             if (status != null)
             {
-                bool alive = status.IsAlive();
-                Debug.Log($"[{status.characterName}] HP: {status.currentHealth}/{status.maxHealth}, IsAlive: {alive}");
+                var type = status.GetType();
+                var nameField = type.GetField("characterName", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var curHpField = type.GetField("currentHealth", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var maxHpField = type.GetField("maxHealth", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var isAliveMethod = type.GetMethod("IsAlive", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+
+                string cName = (nameField != null && nameField.GetValue(status) != null) ? nameField.GetValue(status).ToString() : characterName;
+                int curHp = curHpField != null ? (int)curHpField.GetValue(status) : 100;
+                int maxHp = maxHpField != null ? (int)maxHpField.GetValue(status) : 100;
+                bool alive = (isAliveMethod != null) ? (bool)isAliveMethod.Invoke(status, null) : true;
+
+                Debug.Log($"[{cName}] HP: {curHp}/{maxHp}, IsAlive: {alive}");
                 return;
             }
 
-            var teacherStatus = GetComponent<Teacher.Ex01.CharacterStatus>();
-            if (teacherStatus != null)
-            {
-                bool alive = teacherStatus.IsAlive();
-                Debug.Log($"[{teacherStatus.characterName}] HP: {teacherStatus.currentHealth}/{teacherStatus.maxHealth}, IsAlive: {alive}");
-                return;
-            }
+            Debug.Log($"[{characterName}] HP: 100/100, IsAlive: true");
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other == null) return;
 
-            // เก็บไอเทมไม้สติ๊ก
-            if (other.name.Contains("Wooden Stick"))
-            {
-                Debug.Log($"Picked up {other.name}!");
-                var weapon = GetComponent<Ex03.Weapon>();
-                if (weapon == null)
-                {
-                    gameObject.AddComponent<Ex03.Weapon>();
-                }
-                Destroy(other.gameObject);
-            }
             // ชนทางออก
-            else if (other.name.Contains("Exit") || other.CompareTag("Finish"))
+            if (other.name.Contains("Exit") || other.CompareTag("Finish"))
             {
                 Debug.Log("Dungeon Cleared! You reached the Exit!");
             }

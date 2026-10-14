@@ -134,6 +134,10 @@ namespace Workspace.Core.Editor
         [MenuItem("Assignment/Quick Export/Week 07 - OOP & Grid Game")]
         public static void QuickExportWeek07() => ExportWeekByNumber(7);
 
+        [MenuItem("Assignment/Quick Export/Week 08 - Midterm Practical Exam")]
+        [MenuItem("Assignment/Export Exam Package (Week 08)")]
+        public static void QuickExportWeek08() => ExportWeekByNumber(8);
+
         [MenuItem("Assignment/Quick Export/Export All Weeks (Separate Packages)")]
         public static void QuickExportAllWeeksSeparate()
         {
@@ -146,12 +150,12 @@ namespace Workspace.Core.Editor
             ExportCombinedWeeks(WeekConfigs, "Exports", "All_Weeks_Student.unitypackage", true, true, true, true, true, true, true);
         }
 
-        private static void ExportWeekByNumber(int weekNumber)
+        public static void ExportWeekByNumber(int weekNumber, bool showDialog = true)
         {
             var config = WeekConfigs.FirstOrDefault(w => w.weekNumber == weekNumber);
             if (config != null)
             {
-                ExportSingleWeek(config, "Exports", true, true, true, true, true, true, true);
+                ExportSingleWeek(config, "Exports", true, true, true, true, true, true, true, showDialog);
             }
         }
 
@@ -331,7 +335,8 @@ namespace Workspace.Core.Editor
             bool withTmp,
             bool withSettings,
             bool withDependencies,
-            bool revealWhenDone)
+            bool revealWhenDone,
+            bool showDialog = true)
         {
             ExportWeeks(
                 new List<WeekExportConfig> { week },
@@ -342,7 +347,8 @@ namespace Workspace.Core.Editor
                 withTmp,
                 withSettings,
                 withDependencies,
-                revealWhenDone
+                revealWhenDone,
+                showDialog
             );
         }
 
@@ -355,7 +361,8 @@ namespace Workspace.Core.Editor
             bool withTmp,
             bool withSettings,
             bool withDependencies,
-            bool revealWhenDone)
+            bool revealWhenDone,
+            bool showDialog = true)
         {
             EnsureDirectory(targetDir);
 
@@ -408,22 +415,28 @@ namespace Workspace.Core.Editor
 
             if (successCount > 0)
             {
-                EditorUtility.DisplayDialog(
-                    "Export สำเร็จ",
-                    $"สร้างไฟล์สำหรับนักเรียนสำเร็จทั้งหมด {successCount} แพ็กเกจ!\n" +
-                    $"ตำแหน่ง: {targetDir}\n\n" +
-                    $"🔒 ตรวจสอบแล้ว: ตัดโฟลเดอร์เฉลยอาจารย์ (Teacher) ออกทั้งหมดเรียบร้อย",
-                    "ตกลง"
-                );
+                if (showDialog && !Application.isBatchMode)
+                {
+                    EditorUtility.DisplayDialog(
+                        "Export สำเร็จ",
+                        $"สร้างไฟล์สำหรับนักเรียนสำเร็จทั้งหมด {successCount} แพ็กเกจ!\n" +
+                        $"ตำแหน่ง: {targetDir}\n\n" +
+                        $"🔒 ตรวจสอบแล้ว: ตัดโฟลเดอร์เฉลยอาจารย์ (Teacher) ออกทั้งหมดเรียบร้อย",
+                        "ตกลง"
+                    );
+                }
 
-                if (revealWhenDone && !string.IsNullOrEmpty(lastExportedFile) && File.Exists(lastExportedFile))
+                if (revealWhenDone && !string.IsNullOrEmpty(lastExportedFile) && File.Exists(lastExportedFile) && !Application.isBatchMode)
                 {
                     EditorUtility.RevealInFinder(lastExportedFile);
                 }
             }
             else
             {
-                EditorUtility.DisplayDialog("แจ้งเตือน", "ไม่มีไฟล์ที่ถูก Export", "ตกลง");
+                if (showDialog && !Application.isBatchMode)
+                {
+                    EditorUtility.DisplayDialog("แจ้งเตือน", "ไม่มีไฟล์ที่ถูก Export", "ตกลง");
+                }
             }
         }
 
