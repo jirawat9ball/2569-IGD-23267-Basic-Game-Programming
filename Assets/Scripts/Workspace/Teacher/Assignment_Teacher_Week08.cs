@@ -25,8 +25,9 @@ namespace Week08
         {
             var go = new GameObject("TeacherPlayerStatusDemo");
             var status = go.AddComponent<Teacher.Ex01.CharacterStatus>();
-            status.CheckHealthStatus();
-            status.CalculateDamage(20, "Fire", "Fire");
+            status.TakeDamage(20);
+            status.IsAlive();
+            status.CalculateDamage(30, 10);
             SafeDestroy(go);
         }
 

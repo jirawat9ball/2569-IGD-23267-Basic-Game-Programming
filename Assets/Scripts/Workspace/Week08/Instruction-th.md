@@ -11,10 +11,10 @@
 
 ## 🎯 วัตถุประสงค์การวัดผล
 
-1. **ระดับ 1 (Level 1): ตัวแปร, ชนิดข้อมูล และตรรกะเงื่อนไข (Week 01 – 02)**
-   - ประกาศและกำหนดค่าตัวแปรประเภทต่างๆ (`int`, `float`, `string`, `bool`)
-   - ควบคุมการเข้าถึงตัวแปรและการแสดงผลใน Inspector ด้วย `[SerializeField]`
-   - การประยุกต์ใช้ `if-else` และ `switch-case` ในการตัดสินใจและคำนวณดาเมจธาตุในเกม
+1. **ระดับ 1 (Level 1): การสร้างคลาส และเมธอดแบบคืนค่า/ไม่คืนค่า (Week 01 – 03)**
+   - ประกาศและกำหนดค่าเริ่มต้นของตัวแปรประเภทต่างๆ (`int`, `string`, `bool`) ภายในคลาส
+   - การเขียนเมธอดแบบไม่คืนค่า (`void`) เช่น `TakeDamage(int damage)` เพื่อลดค่าตัวแปรและปรับสถานะ
+   - การเขียนเมธอดแบบคืนค่า (Return Types) เช่น `IsAlive()` (คืนค่า `bool`) และ `CalculateDamage(int, int)` (คืนค่า `int`)
 
 2. **ระดับ 2 (Level 2): โครงสร้างข้อมูลตาราง 2 มิติ และการวนลูป Loop (Week 04 – 05)**
    - การจัดการข้อมูลแผนที่แบบ 2 มิติ (2D Array Grid) ร่วมกับ Nested Loop (`GetLength(0)`, `GetLength(1)`)
@@ -31,7 +31,7 @@
 
 | ระดับ | ไฟล์ที่ต้องเขียน | Namespace | หัวข้อหลัก |
 |---|---|---|---|
-| **Level 1** | `AS01_StatusAndLogic.cs` | `Week08.Ex01` | Status System & Elemental Combat Logic |
+| **Level 1** | `AS01_StatusAndLogic.cs` | `Week08.Ex01` | Class, Void & Return Type Methods |
 | **Level 2** | `AS02_InventoryAndGrid.cs` | `Week08.Ex02` | Dungeon Grid Scanner & Item Finder |
 | **Level 3** | `AS03_MethodAndClass.cs` | `Week08.Ex03` | Weapon Class & Prefab Spawner |
 

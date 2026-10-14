@@ -8,48 +8,38 @@ namespace Week08.Teacher.Ex01
         public string characterName = "Hero";
         public int maxHealth = 100;
         public int currentHealth = 100;
-        public int shield = 0;
         public bool isAlive = true;
 
-        public string CheckHealthStatus()
+        public void TakeDamage(int damage)
         {
+            currentHealth -= damage;
             if (currentHealth <= 0)
             {
+                currentHealth = 0;
                 isAlive = false;
-                Debug.Log($"{characterName} is Defeated");
-                return "Defeated";
-            }
-
-            if (currentHealth <= maxHealth * 0.25f)
-            {
-                Debug.Log($"{characterName} is in Critical condition");
-                return "Critical";
-            }
-
-            Debug.Log($"{characterName} is Healthy");
-            return "Healthy";
-        }
-
-        public int CalculateDamage(int rawDamage, string attackElement, string targetWeakness)
-        {
-            if (rawDamage <= 0 || attackElement == "None")
-            {
-                Debug.Log("Invalid Attack");
-                return 0;
-            }
-
-            if (attackElement == targetWeakness)
-            {
-                int finalDamage = rawDamage * 2;
-                Debug.Log($"Super Effective! Damage: {finalDamage}");
-                return finalDamage;
+                Debug.Log($"{characterName} is defeated!");
             }
             else
             {
-                int finalDamage = rawDamage;
-                Debug.Log($"Normal Damage: {finalDamage}");
-                return finalDamage;
+                Debug.Log($"{characterName} took {damage} damage. Current HP: {currentHealth}");
             }
+        }
+
+        public bool IsAlive()
+        {
+            return currentHealth > 0 && isAlive;
+        }
+
+        public int CalculateDamage(int rawDamage, int defense)
+        {
+            int netDamage = rawDamage - defense;
+            if (netDamage < 0)
+            {
+                netDamage = 0;
+            }
+
+            Debug.Log($"Damage calculated: {netDamage}");
+            return netDamage;
         }
     }
 }

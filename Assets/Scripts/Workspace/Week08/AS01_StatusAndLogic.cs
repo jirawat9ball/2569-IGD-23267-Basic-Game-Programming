@@ -6,54 +6,53 @@ namespace Week08.Ex01
     public class CharacterStatus : MonoBehaviour
     {
         // =========================================================================
-        // ระดับ 1: ข้อมูลสถานะตัวละครและการคำนวณดาเมจธาตุ (Status & Elemental Combat)
+        // ระดับ 1: ข้อมูลสถานะตัวละคร และเมธอดแบบคืนค่า/ไม่คืนค่า (Class & Methods)
         // =========================================================================
 
-        // 1. ประกาศตัวแปรแบบ public ทั้งหมด 5 ตัวแปร:
+        // 1. ประกาศตัวแปรแบบ public ทั้งหมด 4 ตัวแปร พร้อมกำหนดค่าเริ่มต้น:
         //    - characterName (string) เริ่มต้น "Hero"
         //    - maxHealth (int) เริ่มต้น 100
         //    - currentHealth (int) เริ่มต้น 100
-        //    - shield (int) เริ่มต้น 0
         //    - isAlive (bool) เริ่มต้น true
         // Student code starts HERE ...
         public string characterName = "Hero";
         public int maxHealth = 100;
         public int currentHealth = 100;
-        public int shield = 0;
         public bool isAlive = true;
         // Student code ends HERE ...
 
-        // 2. เมธอด CheckHealthStatus() คืนค่า string
+        // 2. เมธอดแบบไม่คืนค่า (void): TakeDamage(int damage)
+        //    - ลด currentHealth ลงตามค่า damage ที่รับเข้ามา
         //    - ถ้า currentHealth <= 0:
+        //        currentHealth = 0
         //        isAlive = false
-        //        พิมพ์ $"{characterName} is Defeated"
-        //        คืนค่า "Defeated"
-        //    - ถ้า currentHealth <= maxHealth * 0.25f (เลือดเหลือ <= 25%):
-        //        พิมพ์ $"{characterName} is in Critical condition"
-        //        คืนค่า "Critical"
-        //    - กรณีอื่นๆ:
-        //        พิมพ์ $"{characterName} is Healthy"
-        //        คืนค่า "Healthy"
-        public string CheckHealthStatus()
+        //        พิมพ์ $"{characterName} is defeated!"
+        //    - ถ้า currentHealth > 0:
+        //        พิมพ์ $"{characterName} took {damage} damage. Current HP: {currentHealth}"
+        public void TakeDamage(int damage)
         {
             // Student code starts HERE ...
-            return "Healthy";
+            
             // Student code ends HERE ...
         }
 
-        // 3. เมธอด CalculateDamage(int rawDamage, string attackElement, string targetWeakness) คืนค่า int
-        //    - ถ้า rawDamage <= 0 หรือ attackElement == "None":
-        //        พิมพ์ "Invalid Attack"
-        //        คืนค่า 0
-        //    - ถ้า attackElement == targetWeakness:
-        //        ดาเมจคูณ 2 (finalDamage = rawDamage * 2)
-        //        พิมพ์ $"Super Effective! Damage: {finalDamage}"
-        //        คืนค่า finalDamage
-        //    - กรณีอื่นๆ:
-        //        finalDamage = rawDamage
-        //        พิมพ์ $"Normal Damage: {finalDamage}"
-        //        คืนค่า finalDamage
-        public int CalculateDamage(int rawDamage, string attackElement, string targetWeakness)
+        // 3. เมธอดแบบคืนค่า (bool): IsAlive()
+        //    - ตรวจสอบสถานะว่าตัวละครยังมีชีวิตอยู่หรือไม่
+        //    - คืนค่า true หาก currentHealth > 0 (หรือ isAlive เป็นจริง)
+        //    - คืนค่า false หากเลือดหมดแล้ว (<= 0)
+        public bool IsAlive()
+        {
+            // Student code starts HERE ...
+            return true;
+            // Student code ends HERE ...
+        }
+
+        // 4. เมธอดแบบคืนค่า (int): CalculateDamage(int rawDamage, int defense)
+        //    - คำนวณดาเมจสุทธิโดยนำ rawDamage ลบด้วย defense (netDamage = rawDamage - defense)
+        //    - หาก netDamage < 0 ให้กำหนด netDamage = 0 (ดาเมจสุทธิต้องไม่ติดลบ)
+        //    - พิมพ์ $"Damage calculated: {netDamage}"
+        //    - คืนค่า netDamage ที่คำนวณได้
+        public int CalculateDamage(int rawDamage, int defense)
         {
             // Student code starts HERE ...
             return 0;

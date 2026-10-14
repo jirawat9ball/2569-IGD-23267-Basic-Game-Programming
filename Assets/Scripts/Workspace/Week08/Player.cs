@@ -128,14 +128,16 @@ namespace Week08
             var status = GetComponent<Ex01.CharacterStatus>();
             if (status != null)
             {
-                status.CheckHealthStatus();
+                bool alive = status.IsAlive();
+                Debug.Log($"[{status.characterName}] HP: {status.currentHealth}/{status.maxHealth}, IsAlive: {alive}");
                 return;
             }
 
             var teacherStatus = GetComponent<Teacher.Ex01.CharacterStatus>();
             if (teacherStatus != null)
             {
-                teacherStatus.CheckHealthStatus();
+                bool alive = teacherStatus.IsAlive();
+                Debug.Log($"[{teacherStatus.characterName}] HP: {teacherStatus.currentHealth}/{teacherStatus.maxHealth}, IsAlive: {alive}");
                 return;
             }
         }

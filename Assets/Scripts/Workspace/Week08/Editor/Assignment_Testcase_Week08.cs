@@ -67,76 +67,75 @@ namespace Week08_Exam
             var charNameField = StatusType.GetField("characterName", AnyInstance);
             var maxHpField = StatusType.GetField("maxHealth", AnyInstance);
             var curHpField = StatusType.GetField("currentHealth", AnyInstance);
-            var shieldField = StatusType.GetField("shield", AnyInstance);
             var isAliveField = StatusType.GetField("isAlive", AnyInstance);
 
             Assert.IsNotNull(charNameField, "CharacterStatus ต้องมีฟิลด์ characterName");
             Assert.IsNotNull(maxHpField, "CharacterStatus ต้องมีฟิลด์ maxHealth");
             Assert.IsNotNull(curHpField, "CharacterStatus ต้องมีฟิลด์ currentHealth");
-            Assert.IsNotNull(shieldField, "CharacterStatus ต้องมีฟิลด์ shield");
             Assert.IsNotNull(isAliveField, "CharacterStatus ต้องมีฟิลด์ isAlive");
 
             Assert.AreEqual("Hero", charNameField.GetValue(comp), "ค่าเริ่มต้นของ characterName ควรเป็น 'Hero'");
             Assert.AreEqual(100, (int)maxHpField.GetValue(comp), "ค่าเริ่มต้นของ maxHealth ควรเป็น 100");
             Assert.AreEqual(100, (int)curHpField.GetValue(comp), "ค่าเริ่มต้นของ currentHealth ควรเป็น 100");
-            Assert.AreEqual(0, (int)shieldField.GetValue(comp), "ค่าเริ่มต้นของ shield ควรเป็น 0");
             Assert.AreEqual(true, (bool)isAliveField.GetValue(comp), "ค่าเริ่มต้นของ isAlive ควรเป็น true");
         }
 
         [Test]
-        public void Lv1_02_CheckHealthStatus_Healthy_Critical_Defeated()
+        public void Lv1_02_TakeDamage_VoidMethod()
         {
             var comp = testGo.AddComponent(StatusType);
-            var checkMethod = StatusType.GetMethod("CheckHealthStatus", AnyInstance);
-            Assert.IsNotNull(checkMethod, "ต้องมีเมธอด CheckHealthStatus()");
+            var takeDamageMethod = StatusType.GetMethod("TakeDamage", AnyInstance);
+            Assert.IsNotNull(takeDamageMethod, "ต้องมีเมธอด TakeDamage(int)");
+            Assert.AreEqual(typeof(void), takeDamageMethod.ReturnType, "เมธอด TakeDamage ต้องเป็น void (ไม่คืนค่า)");
 
             var curHpField = StatusType.GetField("currentHealth", AnyInstance);
             var isAliveField = StatusType.GetField("isAlive", AnyInstance);
 
-            // 1. Healthy (> 25)
-            curHpField.SetValue(comp, 80);
-            SimpleDebugConsole.Clear();
-            string status1 = (string)checkMethod.Invoke(comp, null);
-            Assert.AreEqual("Healthy", status1);
-            Assert.IsTrue(SimpleDebugConsole.GetOutput().Contains("Healthy"));
+            // 1. โดนดาเมจ 30: เลือดต้องลดจาก 100 เหลือ 70
+            takeDamageMethod.Invoke(comp, new object[] { 30 });
+            Assert.AreEqual(70, (int)curHpField.GetValue(comp), "โดนดาเมจ 30 เลือดต้องเหลือ 70");
+            Assert.IsTrue((bool)isAliveField.GetValue(comp), "เลือดยังเหลือ ตัวละครต้องยังมีชีวิต (isAlive = true)");
 
-            // 2. Critical (<= 25)
-            curHpField.SetValue(comp, 25);
-            SimpleDebugConsole.Clear();
-            string status2 = (string)checkMethod.Invoke(comp, null);
-            Assert.AreEqual("Critical", status2);
-            Assert.IsTrue(SimpleDebugConsole.GetOutput().Contains("Critical"));
-
-            // 3. Defeated (<= 0)
-            curHpField.SetValue(comp, 0);
-            SimpleDebugConsole.Clear();
-            string status3 = (string)checkMethod.Invoke(comp, null);
-            Assert.AreEqual("Defeated", status3);
+            // 2. โดนดาเมจเกินเลือดที่เหลือ (100): เลือดต้องเหลือ 0 และ isAlive ต้องเป็น false
+            takeDamageMethod.Invoke(comp, new object[] { 100 });
+            Assert.AreEqual(0, (int)curHpField.GetValue(comp), "เมื่อเลือดหมด currentHealth ต้องเป็น 0 (ไม่ติดลบ)");
             Assert.IsFalse((bool)isAliveField.GetValue(comp), "เมื่อ currentHealth <= 0 ตัวแปร isAlive ต้องเป็น false");
-            Assert.IsTrue(SimpleDebugConsole.GetOutput().Contains("Defeated"));
         }
 
         [Test]
-        public void Lv1_03_CalculateDamage_Effective_Normal_Invalid()
+        public void Lv1_03_IsAlive_And_CalculateDamage_ReturnMethods()
         {
             var comp = testGo.AddComponent(StatusType);
+            var isAliveMethod = StatusType.GetMethod("IsAlive", AnyInstance);
             var calcMethod = StatusType.GetMethod("CalculateDamage", AnyInstance);
-            Assert.IsNotNull(calcMethod, "ต้องมีเมธอด CalculateDamage(int, string, string)");
 
-            // Invalid Attack
-            int dmg0 = (int)calcMethod.Invoke(comp, new object[] { 0, "Fire", "Fire" });
-            Assert.AreEqual(0, dmg0, "ถ้า rawDamage <= 0 ดาเมจต้องคืนค่า 0");
+            Assert.IsNotNull(isAliveMethod, "ต้องมีเมธอด IsAlive()");
+            Assert.AreEqual(typeof(bool), isAliveMethod.ReturnType, "เมธอด IsAlive ต้องคืนค่าเป็น bool");
 
-            int dmgNone = (int)calcMethod.Invoke(comp, new object[] { 30, "None", "Water" });
-            Assert.AreEqual(0, dmgNone, "ถ้า attackElement เป็น 'None' ดาเมจต้องคืนค่า 0");
+            Assert.IsNotNull(calcMethod, "ต้องมีเมธอด CalculateDamage(int, int)");
+            Assert.AreEqual(typeof(int), calcMethod.ReturnType, "เมธอด CalculateDamage ต้องคืนค่าเป็น int");
 
-            // Super Effective (2x)
-            int dmgEffective = (int)calcMethod.Invoke(comp, new object[] { 25, "Fire", "Fire" });
-            Assert.AreEqual(50, dmgEffective, "ถ้าโจมตีตรงจุดอ่อน ดาเมจต้องคูณ 2");
+            var curHpField = StatusType.GetField("currentHealth", AnyInstance);
+            var isAliveField = StatusType.GetField("isAlive", AnyInstance);
 
-            // Normal Damage
-            int dmgNormal = (int)calcMethod.Invoke(comp, new object[] { 25, "Grass", "Fire" });
-            Assert.AreEqual(25, dmgNormal, "ถ้าไม่ตรงจุดอ่อน ดาเมจต้องเท่ากับ rawDamage");
+            // ทดสอบ IsAlive() เมื่อมีชีวิต
+            curHpField.SetValue(comp, 50);
+            isAliveField.SetValue(comp, true);
+            bool alive = (bool)isAliveMethod.Invoke(comp, null);
+            Assert.IsTrue(alive, "เมื่อ currentHealth > 0 เมธอด IsAlive() ต้องคืนค่า true");
+
+            // ทดสอบ IsAlive() เมื่อตาย
+            curHpField.SetValue(comp, 0);
+            isAliveField.SetValue(comp, false);
+            bool dead = (bool)isAliveMethod.Invoke(comp, null);
+            Assert.IsFalse(dead, "เมื่อ currentHealth <= 0 เมธอด IsAlive() ต้องคืนค่า false");
+
+            // ทดสอบ CalculateDamage(rawDamage, defense)
+            int dmg1 = (int)calcMethod.Invoke(comp, new object[] { 50, 20 });
+            Assert.AreEqual(30, dmg1, "CalculateDamage(50, 20) ดาเมจสุทธิต้องเท่ากับ 30 (50 - 20)");
+
+            int dmg2 = (int)calcMethod.Invoke(comp, new object[] { 15, 30 });
+            Assert.AreEqual(0, dmg2, "CalculateDamage(15, 30) เมื่อ defense มากกว่า rawDamage ดาเมจสุทธิต้องไม่ติดลบ (คืนค่า 0)");
         }
     }
 

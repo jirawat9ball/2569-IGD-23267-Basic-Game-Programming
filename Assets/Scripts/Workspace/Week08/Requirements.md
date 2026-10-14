@@ -15,36 +15,27 @@
    - `characterName` (ชนิด `string`) กำหนดค่าเริ่มต้นเป็น `"Hero"`
    - `maxHealth` (ชนิด `int`) กำหนดค่าเริ่มต้นเป็น `100`
    - `currentHealth` (ชนิด `int`) กำหนดค่าเริ่มต้นเป็น `100`
-   - `shield` (ชนิด `int`) กำหนดค่าเริ่มต้นเป็น `0`
    - `isAlive` (ชนิด `bool`) กำหนดค่าเริ่มต้นเป็น `true`
    *(ทุกตัวแปรต้องสามารถเข้าถึงได้จากภายนอกคลาส / public)*
 
-2. **เมธอด `CheckHealthStatus()` (คืนค่า `string`):**
+2. **เมธอดไม่คืนค่า `TakeDamage(int damage)` (ชนิด `void`):**
+   - ลดค่า `currentHealth` ลงตามค่า `damage`
    - หาก `currentHealth <= 0`:
+     - กำหนด `currentHealth = 0` (ไม่ให้เลือดติดลบ)
      - กำหนด `isAlive = false`
-     - แสดงข้อความผ่าน SimpleDebugConsole: `Debug.Log($"{characterName} is Defeated");`
-     - คืนค่า `"Defeated"`
-   - หาก `currentHealth <= maxHealth * 0.25f` (เลือดเหลือน้อยกว่าหรือเท่ากับ 25%):
-     - แสดงข้อความ: `Debug.Log($"{characterName} is in Critical condition");`
-     - คืนค่า `"Critical"`
-   - กรณีอื่นๆ (เลือดมากกว่า 25%):
-     - แสดงข้อความ: `Debug.Log($"{characterName} is Healthy");`
-     - คืนค่า `"Healthy"`
+     - แสดงข้อความผ่าน SimpleDebugConsole: `Debug.Log($"{characterName} is defeated!");`
+   - หากยังมีชีวิตอยู่ (`currentHealth > 0`):
+     - แสดงข้อความ: `Debug.Log($"{characterName} took {damage} damage. Current HP: {currentHealth}");`
 
-3. **เมธอด `CalculateDamage(int rawDamage, string attackElement, string targetWeakness)` (คืนค่า `int`):**
-   - ตรวจสอบความถูกต้องของค่าโจมตี:
-     - หาก `rawDamage <= 0` หรือ `attackElement == "None"`:
-       - แสดงข้อความ: `Debug.Log("Invalid Attack");`
-       - คืนค่า `0`
-   - ตรวจสอบจุดอ่อนธาตุ (เช่น `"Fire"`, `"Water"`, `"Grass"`):
-     - หาก `attackElement == targetWeakness`:
-       - ดาเมจสุทธิเป็น 2 เท่า (`rawDamage * 2`)
-       - แสดงข้อความ: `Debug.Log($"Super Effective! Damage: {finalDamage}");`
-       - คืนค่าดาเมจสุทธิ
-     - กรณีอื่นๆ:
-       - ดาเมจสุทธิเท่ากับ `rawDamage` ปกติ
-       - แสดงข้อความ: `Debug.Log($"Normal Damage: {finalDamage}");`
-       - คืนค่าดาเมจสุทธิ
+3. **เมธอดคืนค่า `IsAlive()` (คืนค่า `bool`):**
+   - คืนค่า `true` หากตัวละครยังมีชีวิตอยู่ (`currentHealth > 0`)
+   - คืนค่า `false` หากตัวละครตายแล้ว (`currentHealth <= 0`)
+
+4. **เมธอดคืนค่า `CalculateDamage(int rawDamage, int defense)` (คืนค่า `int`):**
+   - คำนวณดาเมจสุทธิ: `int netDamage = rawDamage - defense;`
+   - หาก `netDamage < 0` ให้กำหนด `netDamage = 0` (ดาเมจสุทธิต้องไม่ติดลบ)
+   - แสดงข้อความ: `Debug.Log($"Damage calculated: {netDamage}");`
+   - คืนค่า `netDamage` ที่คำนวณได้
 
 ---
 
