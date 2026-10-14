@@ -69,10 +69,11 @@
    - แสดงข้อความ: `Debug.Log($"Found {threatCount} threats around player");`
    - คืนค่าจำนวนภัยคุกคามที่ตรวจพบรอบตัวผู้เล่น
 
-4. **เมธอด `FindExitPosition(int[,] mapGrid, int exitCode)` (คืนค่า `Vector2Int`):**
-   - ใช้ Nested Loop วนหาพิกัดแรกที่มีค่าเท่ากับ `exitCode`
+4. **เมธอด `FindPlayerPosition(int[,] mapGrid, int playerCode)` (คืนค่า `Vector2Int`):**
+   - รับตารางแผนที่ 2 มิติ `mapGrid` และรหัสผู้เล่น `playerCode` (เช่น รหัส 1)
+   - ใช้ Nested Loop วนหาพิกัดแรกที่มีค่าเท่ากับ `playerCode`
    - หากพบ ให้คืนค่า `new Vector2Int(r, c)` ทันที โดยที่ `r` คือแถว และ `c` คือคอลัมน์
-   - หากไม่พบช่องทางออกเลย ให้คืนค่า `new Vector2Int(-1, -1)`
+   - หากไม่พบช่องผู้เล่นเลย ให้คืนค่า `new Vector2Int(-1, -1)`
 
 ---
 

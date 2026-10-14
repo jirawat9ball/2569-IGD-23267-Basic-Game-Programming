@@ -46,7 +46,7 @@ namespace Week08
             scanner.FindItemPosition(map, 3);
             scanner.CountItems(map, 3);
             scanner.ScanThreats(map, new Vector2Int(0, 0), 2);
-            scanner.FindExitPosition(map, 9);
+            scanner.FindPlayerPosition(map, 1);
             SafeDestroy(go);
         }
 

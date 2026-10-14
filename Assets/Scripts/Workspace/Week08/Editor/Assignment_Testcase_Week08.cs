@@ -217,24 +217,24 @@ namespace Week08_Exam
         }
 
         [Test]
-        public void Lv2_04_FindExitPosition_2DGrid()
+        public void Lv2_04_FindPlayerPosition_2DGrid()
         {
             var scanner = testGo.AddComponent(ScannerType);
-            var method = ScannerType.GetMethod("FindExitPosition", AnyInstance);
-            Assert.IsNotNull(method, "ต้องมีเมธอด FindExitPosition(int[,], int)");
+            var method = ScannerType.GetMethod("FindPlayerPosition", AnyInstance);
+            Assert.IsNotNull(method, "ต้องมีเมธอด FindPlayerPosition(int[,], int)");
 
             int[,] map = new int[,]
             {
-                { 0, 1, 0, 0 },
-                { 0, 0, 9, 0 },
-                { 1, 0, 0, 0 }
+                { 0, 0, 0, 0 },
+                { 0, 0, 1, 0 },
+                { 0, 0, 0, 0 }
             };
 
-            Vector2Int exitPos = (Vector2Int)method.Invoke(scanner, new object[] { map, 9 });
-            Assert.AreEqual(new Vector2Int(1, 2), exitPos, "ทางออกรหัส 9 อยู่ที่แถว 1 คอลัมน์ 2");
+            Vector2Int playerPos = (Vector2Int)method.Invoke(scanner, new object[] { map, 1 });
+            Assert.AreEqual(new Vector2Int(1, 2), playerPos, "ผู้เล่นรหัส 1 อยู่ที่แถว 1 คอลัมน์ 2");
 
             Vector2Int notFound = (Vector2Int)method.Invoke(scanner, new object[] { map, 99 });
-            Assert.AreEqual(new Vector2Int(-1, -1), notFound, "หากไม่พบทางออก ต้องคืนค่า (-1, -1)");
+            Assert.AreEqual(new Vector2Int(-1, -1), notFound, "หากไม่พบผู้เล่นรหัส 99 ต้องคืนค่า (-1, -1)");
         }
     }
 

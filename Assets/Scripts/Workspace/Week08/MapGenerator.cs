@@ -35,7 +35,7 @@ namespace Week08
         /// <summary>
         /// ตารางข้อมูลแผนที่ 2 มิติ (5 x 5) ที่สอดคล้องกับโจทย์ Level 2
         /// 0 = ช่องว่าง (Empty)
-        /// 1 = กำแพง (Wall)
+        /// 1 = ผู้เล่น (Player)
         /// 2 = ภัยคุกคาม/ศัตรู (Threat / Enemy)
         /// 3 = ไอเทม/ไม้สติ๊ก (Item / Wooden Stick)
         /// 9 = ทางออก (Exit)
@@ -135,7 +135,13 @@ namespace Week08
                 }
             }
 
-            // 3. กำหนดทางออกที่ตำแหน่ง exitPos
+            // 3. กำหนดตำแหน่งผู้เล่นที่ตำแหน่ง playerStartPos (รหัส 1)
+            if (playerStartPos.x >= 0 && playerStartPos.x < rows && playerStartPos.y >= 0 && playerStartPos.y < columns)
+            {
+                mapGrid[playerStartPos.x, playerStartPos.y] = 1; // Player code 1
+            }
+
+            // 4. กำหนดทางออกที่ตำแหน่ง exitPos (รหัส 9)
             if (exitPos.x >= 0 && exitPos.x < rows && exitPos.y >= 0 && exitPos.y < columns)
             {
                 mapGrid[exitPos.x, exitPos.y] = 9;

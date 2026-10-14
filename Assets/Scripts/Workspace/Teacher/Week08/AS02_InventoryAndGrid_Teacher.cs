@@ -81,7 +81,7 @@ namespace Week08.Teacher.Ex02
             return threatCount;
         }
 
-        public Vector2Int FindExitPosition(int[,] mapGrid, int exitCode)
+        public Vector2Int FindPlayerPosition(int[,] mapGrid, int playerCode)
         {
             if (mapGrid == null) return new Vector2Int(-1, -1);
 
@@ -92,7 +92,7 @@ namespace Week08.Teacher.Ex02
             {
                 for (int c = 0; c < cols; c++)
                 {
-                    if (mapGrid[r, c] == exitCode)
+                    if (mapGrid[r, c] == playerCode)
                     {
                         return new Vector2Int(r, c);
                     }

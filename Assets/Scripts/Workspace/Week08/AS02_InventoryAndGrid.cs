@@ -47,11 +47,11 @@ namespace Week08.Ex02
             // Student code ends HERE ...
         }
 
-        // 4. เมธอด FindExitPosition(int[,] mapGrid, int exitCode) คืนค่า Vector2Int
-        //    - ใช้ Nested Loop ค้นหาพิกัดช่องแรกที่มีค่าเท่ากับ exitCode
+        // 4. เมธอด FindPlayerPosition(int[,] mapGrid, int playerCode) คืนค่า Vector2Int
+        //    - ใช้ Nested Loop ค้นหาพิกัดช่องแรกที่มีค่าเท่ากับ playerCode (เช่น รหัส 1)
         //    - หากพบ ให้คืนค่า new Vector2Int(row, col) ทันที
         //    - หากไม่พบ ให้คืนค่า new Vector2Int(-1, -1)
-        public Vector2Int FindExitPosition(int[,] mapGrid, int exitCode)
+        public Vector2Int FindPlayerPosition(int[,] mapGrid, int playerCode)
         {
             // Student code starts HERE ...
             return new Vector2Int(-1, -1);
