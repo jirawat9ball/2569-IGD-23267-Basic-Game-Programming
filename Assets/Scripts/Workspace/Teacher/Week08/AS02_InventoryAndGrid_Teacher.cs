@@ -48,7 +48,7 @@ namespace Week08.Teacher.Ex02
             return count;
         }
 
-        public int ScanThreats(int[,] mapGrid, int threatCode)
+        public int ScanThreats(int[,] mapGrid, Vector2Int playerPos, int threatCode)
         {
             if (mapGrid == null) return 0;
 
@@ -56,18 +56,28 @@ namespace Week08.Teacher.Ex02
             int rows = mapGrid.GetLength(0);
             int cols = mapGrid.GetLength(1);
 
-            for (int r = 0; r < rows; r++)
+            for (int r = playerPos.x - 1; r <= playerPos.x + 1; r++)
             {
-                for (int c = 0; c < cols; c++)
+                for (int c = playerPos.y - 1; c <= playerPos.y + 1; c++)
                 {
-                    if (mapGrid[r, c] == threatCode)
+                    // ข้ามตำแหน่งที่ตัวผู้เล่นยืนอยู่
+                    if (r == playerPos.x && c == playerPos.y)
                     {
-                        threatCount++;
+                        continue;
+                    }
+
+                    // ตรวจสอบขอบเขตของตาราง
+                    if (r >= 0 && r < rows && c >= 0 && c < cols)
+                    {
+                        if (mapGrid[r, c] == threatCode)
+                        {
+                            threatCount++;
+                        }
                     }
                 }
             }
 
-            Debug.Log($"Found {threatCount} threats of code {threatCode}");
+            Debug.Log($"Found {threatCount} threats around player at {playerPos}");
             return threatCount;
         }
 

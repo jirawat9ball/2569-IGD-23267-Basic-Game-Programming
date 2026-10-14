@@ -18,7 +18,7 @@
 
 2. **ระดับ 2 (Level 2): โครงสร้างข้อมูลตาราง 2 มิติ และการวนลูป Loop (Week 04 – 05)**
    - การจัดการข้อมูลแผนที่แบบ 2 มิติ (2D Array Grid) ร่วมกับ Nested Loop (`GetLength(0)`, `GetLength(1)`)
-   - การเขียนอัลกอริทึมค้นหาพิกัดไอเทมบนตาราง (`FindItemPosition`), การตรวจนับจำนวนไอเทม (`CountItems`), ตรวจจับภัยคุกคาม (`ScanThreats`) และค้นหาทางออก (`FindExitPosition`)
+   - การเขียนอัลกอริทึมค้นหาพิกัดไอเทมบนตาราง (`FindItemPosition`), การตรวจนับจำนวนไอเทม (`CountItems`), ตรวจจับภัยคุกคามรอบตัวผู้เล่น (`ScanThreats`) และค้นหาทางออก (`FindExitPosition`)
 
 3. **ระดับ 3 (Level 3): การสร้างคลาส และการเสกวัตถุจาก Prefab (Week 05 – 06)**
    - การสร้าง Custom Class พร้อม Properties/Fields และกำหนดค่าเริ่มต้น

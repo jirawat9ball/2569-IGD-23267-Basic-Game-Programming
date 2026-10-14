@@ -31,13 +31,16 @@ namespace Week08.Ex02
             // Student code ends HERE ...
         }
 
-        // 3. เมธอด ScanThreats(int[,] mapGrid, int threatCode) คืนค่า int
-        //    - ใช้ Nested Loop วนอ่านค่าทุกแถวและคอลัมน์ใน mapGrid
-        //      โดยใช้ mapGrid.GetLength(0) และ mapGrid.GetLength(1)
-        //    - นับจำนวนช่องทั้งหมดที่มีค่าเท่ากับ threatCode
-        //    - พิมพ์ $"Found {threatCount} threats of code {threatCode}"
+        // 3. เมธอด ScanThreats(int[,] mapGrid, Vector2Int playerPos, int threatCode) คืนค่า int
+        //    - สแกนหาภัยคุกคามรอบตัวผู้เล่นในรัศมี 1 ช่อง (พื้นที่ 3x3 หรือ 8 ทิศทางรอบ playerPos)
+        //    - วนลูป r ตั้งแต่ playerPos.x - 1 ถึง playerPos.x + 1
+        //      และ c ตั้งแต่ playerPos.y - 1 ถึง playerPos.y + 1
+        //    - ตรวจสอบว่าพิกัดอยู่ในขอบเขตแผนที่หรือไม่ (r >= 0 && r < mapGrid.GetLength(0) && c >= 0 && c < mapGrid.GetLength(1))
+        //    - ข้ามช่องที่ตัวผู้เล่นยืนอยู่ (r == playerPos.x && c == playerPos.y)
+        //    - นับจำนวนช่องที่มีค่าเท่ากับ threatCode
+        //    - พิมพ์ $"Found {threatCount} threats around player"
         //    - คืนค่า threatCount
-        public int ScanThreats(int[,] mapGrid, int threatCode)
+        public int ScanThreats(int[,] mapGrid, Vector2Int playerPos, int threatCode)
         {
             // Student code starts HERE ...
             return 0;

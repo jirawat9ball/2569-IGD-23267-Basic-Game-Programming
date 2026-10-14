@@ -58,12 +58,16 @@
    - นับจำนวนช่องทั้งหมดที่มีค่าเท่ากับ `itemCode`
    - คืนค่าจำนวนไอเทมที่นับได้ทั้งหมดบนตาราง
 
-3. **เมธอด `ScanThreats(int[,] mapGrid, int threatCode)` (คืนค่า `int`):**
-   - รับตารางแผนที่ 2 มิติ `mapGrid`
-   - ใช้ Nested Loop วนอ่านข้อมูลทุกแถวและคอลัมน์ โดยหาขนาดจาก `mapGrid.GetLength(0)` (แถว) และ `mapGrid.GetLength(1)` (คอลัมน์)
-   - นับจำนวนช่องทั้งหมดที่มีค่าเท่ากับ `threatCode`
-   - แสดงข้อความ: `Debug.Log($"Found {threatCount} threats of code {threatCode}");`
-   - คืนค่าจำนวนช่องที่เป็นภัยคุกคาม
+3. **เมธอด `ScanThreats(int[,] mapGrid, Vector2Int playerPos, int threatCode)` (คืนค่า `int`):**
+   - รับตารางแผนที่ 2 มิติ `mapGrid`, ตำแหน่งผู้เล่น `playerPos` (โดย `playerPos.x` คือแถว และ `playerPos.y` คือคอลัมน์) และรหัสภัยคุกคาม `threatCode`
+   - ตรวจสอบพื้นที่รอบตัวผู้เล่นในรัศมี 1 ช่อง (พื้นที่ 3x3 หรือ 8 ทิศทางรอบตัว):
+     - วนลูป `r` จาก `playerPos.x - 1` ถึง `playerPos.x + 1`
+     - วนลูป `c` จาก `playerPos.y - 1` ถึง `playerPos.y + 1`
+     - ตรวจสอบว่าพิกัดอยู่ในขอบเขตของตาราง (`r >= 0 && r < mapGrid.GetLength(0) && c >= 0 && c < mapGrid.GetLength(1)`)
+     - ข้ามช่องที่ผู้เล่นยืนอยู่ (`r == playerPos.x && c == playerPos.y`)
+     - หากช่องนั้นมีค่าเท่ากับ `threatCode` ให้นับจำนวนเพิ่มขึ้น 1
+   - แสดงข้อความ: `Debug.Log($"Found {threatCount} threats around player");`
+   - คืนค่าจำนวนภัยคุกคามที่ตรวจพบรอบตัวผู้เล่น
 
 4. **เมธอด `FindExitPosition(int[,] mapGrid, int exitCode)` (คืนค่า `Vector2Int`):**
    - ใช้ Nested Loop วนหาพิกัดแรกที่มีค่าเท่ากับ `exitCode`

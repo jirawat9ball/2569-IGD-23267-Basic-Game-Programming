@@ -84,6 +84,34 @@ namespace Week08
             {
                 CheckStatus();
             }
+
+            // 4. รับ Input เรดาร์สแกนหาภัยคุกคามรอบตัว (Key R)
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                ScanNearbyThreats();
+            }
+        }
+
+        public void ScanNearbyThreats()
+        {
+            if (mapGenerator == null || mapGenerator.mapGrid == null) return;
+            Vector2Int gridPos = new Vector2Int(positionY, positionX);
+
+            var scanner = GetComponent<Ex02.InventoryAndGridScanner>();
+            if (scanner != null)
+            {
+                int threats = scanner.ScanThreats(mapGenerator.mapGrid, gridPos, 2);
+                Debug.Log($"[Radar] Found {threats} threats around {characterName} at ({positionX}, {positionY})");
+                return;
+            }
+
+            var teacherScanner = GetComponent<Teacher.Ex02.InventoryAndGridScanner>();
+            if (teacherScanner != null)
+            {
+                int threats = teacherScanner.ScanThreats(mapGenerator.mapGrid, gridPos, 2);
+                Debug.Log($"[Radar] Found {threats} threats around {characterName} at ({positionX}, {positionY})");
+                return;
+            }
         }
 
         public void Move(Vector2 direction)

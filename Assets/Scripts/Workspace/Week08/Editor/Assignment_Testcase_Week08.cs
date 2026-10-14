@@ -190,21 +190,30 @@ namespace Week08_Exam
         }
 
         [Test]
-        public void Lv2_03_ScanThreats_2DGridNestedLoop()
+        public void Lv2_03_ScanThreats_AroundPlayer()
         {
             var scanner = testGo.AddComponent(ScannerType);
             var method = ScannerType.GetMethod("ScanThreats", AnyInstance);
-            Assert.IsNotNull(method, "ต้องมีเมธอด ScanThreats(int[,], int)");
+            Assert.IsNotNull(method, "ต้องมีเมธอด ScanThreats(int[,], Vector2Int, int)");
 
+            // แผนที่ 5x5:
+            // ผู้เล่นอยู่ที่ (1, 1): มี Threat (2) รอบตัวที่ (0, 1) และ (1, 2) รวม 2 ตัว
+            // และมี Threat นอกระยะที่ (3, 3) ซึ่งไม่ควรถูกนับ
             int[,] map = new int[,]
             {
-                { 0, 2, 1 },
-                { 2, 0, 2 },
-                { 1, 3, 0 }
+                { 0, 2, 0, 0, 0 },
+                { 0, 0, 2, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 2, 0 },
+                { 0, 0, 0, 0, 9 }
             };
 
-            int threats = (int)method.Invoke(scanner, new object[] { map, 2 });
-            Assert.AreEqual(3, threats, "ต้องนับรหัสภัยคุกคาม 2 ได้ทั้งหมด 3 ช่อง");
+            int threatsAround = (int)method.Invoke(scanner, new object[] { map, new Vector2Int(1, 1), 2 });
+            Assert.AreEqual(2, threatsAround, "ต้องนับรหัสภัยคุกคาม 2 รอบตัวผู้เล่นที่ (1, 1) ได้ 2 ช่อง (ไม่นับช่องนอกระยะ)");
+
+            // ทดสอบที่มุม (0, 0): ตรวจสอบการกัน Out of Bounds
+            int threatsCorner = (int)method.Invoke(scanner, new object[] { map, new Vector2Int(0, 0), 2 });
+            Assert.AreEqual(1, threatsCorner, "ที่มุม (0, 0) มี Threat ที่ (0, 1) เพียง 1 ตัว และต้องไม่เกิด Out of Bounds Error");
         }
 
         [Test]
