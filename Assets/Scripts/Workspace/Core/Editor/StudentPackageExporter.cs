@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -83,6 +83,12 @@ namespace Workspace.Core.Editor
                 "Assets/Scripts/Workspace/Week07",
                 new[] { "Assets/Scenes/Week07_OOP.unity" },
                 new[] { "Assets/Prefabs/OOP" }
+            ),
+            new WeekExportConfig(
+                8, "Week08", "Week 08: Midterm Practical Exam", "Midterm_Exam",
+                "Assets/Scripts/Workspace/Week08",
+                new[] { "Assets/Scenes/Week08_Exam.unity" },
+                new[] { "Assets/Prefabs/Exam" }
             ),
         };
 
