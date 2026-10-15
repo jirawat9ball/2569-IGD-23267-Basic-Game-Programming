@@ -263,7 +263,7 @@ public class AS03_VirtualOverride
      - บันทึก `previousPositionX`, `previousPositionY`
      - เรียก `base.Move(direction);`
 3. **การย้อนตำแหน่งกลับ:**
-   - เมธอด `RevertPosition()`: คืนค่าตำแหน่งไปยัง `previousPositionX`, `previousPositionY` และคืนพลังงาน `energy += 1;`
+   - เมธอด `RevertPosition()`: คืนค่าตำแหน่งไปยัง `previousPositionX`, `previousPositionY` และอัปเดตตำแหน่ง transform.position
 
 **ตัวอย่างผลลัพธ์ใน `Ex04_PlayerDemo()`:**
 ```text

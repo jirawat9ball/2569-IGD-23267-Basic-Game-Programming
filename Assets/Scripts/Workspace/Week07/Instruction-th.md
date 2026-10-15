@@ -231,7 +231,7 @@ MonoBehaviour
   - ตรวจสอบ `if (!CanMove(direction)) return;`
   - บันทึก `previousPositionX = positionX;` และ `previousPositionY = positionY;`
   - เรียก `base.Move(direction);`
-- เมธอด `RevertPosition()`: คืนค่าตำแหน่งไปที่ `previousPositionX/Y` อัปเดต `transform.position` และคืนพลังงาน `energy += 1;`
+- เมธอด `RevertPosition()`: คืนค่าตำแหน่งไปที่ `previousPositionX/Y` และอัปเดต `transform.position`
 
 **ตัวอย่างผลลัพธ์ใน `Ex04_PlayerDemo()`:**
 ```text

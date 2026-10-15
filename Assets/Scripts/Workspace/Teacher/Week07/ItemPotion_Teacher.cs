@@ -1,34 +1,34 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Teacher.Game
 {
-    public class ItemSword : Week07.Game.Identity
+    public class ItemPotion : Identity
     {
-        public int attackBonus = 10;
+        public int healPoint = 10;
 
         private void Awake()
         {
             if (string.IsNullOrEmpty(Name))
             {
-                Name = "Sword";
+                Name = "Potion";
             }
         }
 
         public override void Hit(Week07.Game.Player player = null)
         {
-            Debug.Log($"You got {Name} : {attackBonus}");
+            Debug.Log($"You got {Name} : {healPoint}");
 
             if (player != null)
             {
-                player.IncreaseAttack(attackBonus);
+                player.Heal(healPoint);
             }
             else
             {
                 var map = mapGenerator as MapGenerator;
                 if (map != null && map.player != null)
                 {
-                    map.player.IncreaseAttack(attackBonus);
+                    map.player.Heal(healPoint);
                 }
             }
 
@@ -42,7 +42,7 @@ namespace Week07.Teacher.Game
     }
 }
 
-namespace Week07.Teacher.Ex07
+namespace Week07.Teacher.Ex06
 {
-    public class ItemSword : Week07.Teacher.Game.ItemSword { }
+    public class ItemPotion : Week07.Teacher.Game.ItemPotion { }
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Game
@@ -98,7 +98,6 @@ namespace Week07.Game
             // Guideline: (ข้อ 4)
             // 1. คืนค่าตำแหน่ง: positionX = previousPositionX; positionY = previousPositionY;
             // 2. อัปเดต transform.position = new Vector3(positionX, positionY, 0);
-            // 3. คืนพลังงาน: energy += 1;
         }
         // ===== student code ends HERE =====
 
