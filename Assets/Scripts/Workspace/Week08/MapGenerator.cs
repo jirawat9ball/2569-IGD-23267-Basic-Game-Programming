@@ -306,11 +306,7 @@ namespace Week08
         public virtual void PlaceExit()
         {
             // Student code starts HERE ...
-            if (exitPrefab != null)
-            {
-                var exitObj = Instantiate(exitPrefab, new Vector3(exitPos.y, exitPos.x, 0), Quaternion.identity);
-                exitObj.name = "Exit";
-            }
+
             // Student code ends HERE ...
         }
 
@@ -319,18 +315,7 @@ namespace Week08
         public virtual void PlaceArmor()
         {
             // Student code starts HERE ...
-            if (armorPrefab == null) return;
 
-            for (int i = 0; i < armorCount; i++)
-            {
-                int X = Random.Range(0, rows);
-                int Y = Random.Range(0, columns);
-                var armorObj = Instantiate(armorPrefab, new Vector3(Y, X, 0), Quaternion.identity, itemParent);
-                if (armorObj != null)
-                {
-                    armorObj.name = $"Armor_{X}_{Y}";
-                }
-            }
             // Student code ends HERE ...
         }
 
@@ -338,27 +323,7 @@ namespace Week08
         public virtual void GenerateLWall()
         {
             // Student code starts HERE ...
-            int wallHeight = rows / 2;
-            int wallWidth = columns / 2;
-            var wallPrefab = (wallPrefabs != null && wallPrefabs.Length > 1) ? wallPrefabs[1] : (wallPrefabs != null && wallPrefabs.Length > 0 ? wallPrefabs[0] : null);
 
-            // 1. สร้างกำแพงแนวดิ่งตามแนวแถว r จาก 0 ถึง wallHeight (ที่ c = 0)
-            for (int r = 0; r <= wallHeight; r++)
-            {
-                if (wallPrefab != null)
-                {
-                    Instantiate(wallPrefab, new Vector3(0, r, 0), Quaternion.identity, wallParent);
-                }
-            }
-
-            // 2. สร้างกำแพงแนวนอนตามแนวคอลัมน์ c จาก 0 ถึง wallWidth (ที่ r = 0)
-            for (int c = 0; c <= wallWidth; c++)
-            {
-                if (wallPrefab != null)
-                {
-                    Instantiate(wallPrefab, new Vector3(c, 0, 0), Quaternion.identity, wallParent);
-                }
-            }
             // Student code ends HERE ...
         }
 
@@ -381,11 +346,7 @@ namespace Week08
                     if (IsInBounds(grid, r, c))
                     {
                         // Student code starts HERE ...
-                        // ตรวจสอบว่าช่อง grid[r, c] ตรงกับ threatCode หรือไม่ ถ้าใช่ให้เพิ่มค่า count
-                        if (grid[r, c] == threatCode)
-                        {
-                            count++;
-                        }
+
                         // Student code ends HERE ...
                     }
                 }
