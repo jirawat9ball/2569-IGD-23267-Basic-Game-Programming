@@ -157,6 +157,7 @@ namespace Week07_OOP
                     sbDemo.AppendLine("Dog Buddy is walking");
                     sbDemo.AppendLine("Animal Twitty is making sound");
                     sbDemo.AppendLine("Bird Twitty is flying");
+                    sbDemo.AppendLine("Animal Noname is making sound");
 
                     TestUtils.AssertMultilineEqual(sbDemo.ToString(), SimpleDebugConsole.GetOutput());
                     break;

@@ -30,6 +30,8 @@
    - เรียกใช้เมธอด `MakeSound()` และ `Walk()` ของ `dog`
    - สร้าง instance ของคลาส `Bird` และกำหนดชื่อ `name` เป็น `"Twitty"`
    - เรียกใช้เมธอด `MakeSound()` และ `Fly()` ของ `bird`
+   - สร้าง instance ของคลาส `Animal` และกำหนดชื่อ `name` เป็น `"Noname"`
+   - เรียกใช้เมธอด `MakeSound()` ของ `animal`
 
 **ตัวอย่าง output ที่ได้จากการ run program:**
 ```text
@@ -37,6 +39,7 @@ Animal Buddy is making sound
 Dog Buddy is walking
 Animal Twitty is making sound
 Bird Twitty is flying
+Animal Noname is making sound
 ```
 
 <details>
@@ -87,6 +90,10 @@ public class AS01_Inheritance
         bird.name = "Twitty";
         bird.MakeSound();
         bird.Fly();
+
+        Animal animal = new Animal();
+        animal.name = "Noname";
+        animal.MakeSound();
     }
 }
 ```

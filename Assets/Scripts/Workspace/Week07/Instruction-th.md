@@ -93,6 +93,7 @@ public class MyScript : MonoBehaviour
 ใน `Ex01_InheritanceDemo()` (ใน `Assignment_Student_Week07.cs`):
 - สร้าง `Dog` ตั้งชื่อ `"Buddy"` → เรียก `MakeSound()` แล้ว `Walk()`
 - สร้าง `Bird` ตั้งชื่อ `"Twitty"` → เรียก `MakeSound()` แล้ว `Fly()`
+- สร้าง `Animal` ตั้งชื่อ `"Noname"` → เรียก `MakeSound()`
 
 **ผลลัพธ์ที่ต้องได้:**
 ```text
@@ -100,6 +101,7 @@ Animal Buddy is making sound
 Dog Buddy is walking
 Animal Twitty is making sound
 Bird Twitty is flying
+Animal Noname is making sound
 ```
 
 ---
