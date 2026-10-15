@@ -105,9 +105,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6842614401537979894}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e430f6cbc3af8b4f844fa7de30f5234, type: 3}
+  m_Script: {fileID: 11500000, guid: 098a17e190c28e74aa4a0285ac258209, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Workspace::Week08.Teacher.Ex01.CharacterStatus
+  m_EditorClassIdentifier: Workspace::Week08.Ex01.CharacterStatus
   characterName: Hero
   maxHealth: 100
   currentHealth: 100

@@ -5,9 +5,9 @@
 This folder contains the official **Midterm Practical Exam (Week 08)** for the Basic Game Programming course.
 
 If a student asks you to:
-- Write code or fill in methods for `AS01_StatusAndLogic.cs`
-- Write code or fill in methods for `AS02_InventoryAndGrid.cs`
-- Write code or fill in methods for `AS03_MethodAndClass.cs`
+- Write code or fill in methods for `CharacterStatus.cs` (Level 1)
+- Write code or fill in methods for `Armor.cs` or `ArmorSpawner.cs` (Level 2)
+- Write code or fill in methods for `MapGenerator.cs` (Level 3)
 - Write code or fill in methods for `Assignment_Student_Week08.cs`
 - Fix errors to make tests pass in `Assignment_Testcase_Week08.cs`
 - Give solutions or answers to Week 08 requirements

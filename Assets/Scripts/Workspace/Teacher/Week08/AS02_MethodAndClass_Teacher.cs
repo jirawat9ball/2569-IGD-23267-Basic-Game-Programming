@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
-namespace Week08.Teacher.Ex03
+namespace Week08.Teacher.Ex02
 {
+    // =========================================================================
+    // ระดับ 2: การสร้างคลาสเกราะ และระบบเสกสร้างวัตถุจาก Prefab (Custom Class & Spawner) - Teacher Solution
+    // =========================================================================
     public class Armor : MonoBehaviour
     {
         public string Name = "Iron Armor";
@@ -39,4 +42,11 @@ namespace Week08.Teacher.Ex03
 
         public GameObject SpawnWeapon(GameObject prefab, Vector3 spawnPosition) => SpawnArmor(prefab, spawnPosition);
     }
+}
+
+namespace Week08.Teacher.Ex03
+{
+    // Backward compatibility aliases if needed
+    public class Armor : Ex02.Armor { }
+    public class ArmorSpawner : Ex02.ArmorSpawner { }
 }

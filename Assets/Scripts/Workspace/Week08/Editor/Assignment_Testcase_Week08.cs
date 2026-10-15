@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -33,28 +33,38 @@ namespace Week08_Exam
             ?? FindType("Week08.CharacterStatus")
             ?? FindType("CharacterStatus");
 
-        // Level 2: MapGenerator & Scanner
-        protected static System.Type MapGenType => (isTeacherMode ? FindType("Week08.Teacher.Ex02.InventoryAndGridScanner") : null)
-            ?? FindType("Week08.MapGenerator") 
-            ?? FindType("Week08.Teacher.Ex02.InventoryAndGridScanner")
-            ?? FindType("Week08.Ex02.InventoryAndGridScanner")
-            ?? FindType("MapGenerator");
-        protected static System.Type ScannerType => MapGenType;
-
-        // Level 3: Armor & ArmorSpawner
-        protected static System.Type ArmorType => (isTeacherMode ? FindType("Week08.Teacher.Ex03.Armor") : null) 
+        // Level 2: Armor & ArmorSpawner
+        protected static System.Type ArmorType => (isTeacherMode ? FindType("Week08.Teacher.Ex02.Armor") : null) 
+            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex03.Armor") : null) 
+            ?? FindType("Week08.Ex02.Armor")
             ?? FindType("Week08.Ex03.Armor") 
             ?? FindType("Week08.Armor")
             ?? FindType("Armor")
-            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex03.Weapon") : null) 
-            ?? FindType("Week08.Ex03.Weapon");
+            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex02.Weapon") : null) 
+            ?? FindType("Week08.Ex02.Weapon");
 
-        protected static System.Type SpawnerType => (isTeacherMode ? FindType("Week08.Teacher.Ex03.ArmorSpawner") : null) 
+        protected static System.Type SpawnerType => (isTeacherMode ? FindType("Week08.Teacher.Ex02.ArmorSpawner") : null) 
+            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex03.ArmorSpawner") : null) 
+            ?? FindType("Week08.Ex02.ArmorSpawner") 
             ?? FindType("Week08.Ex03.ArmorSpawner") 
             ?? FindType("Week08.ArmorSpawner")
             ?? FindType("ArmorSpawner")
-            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex03.WeaponSpawner") : null) 
-            ?? FindType("Week08.Ex03.WeaponSpawner");
+            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex02.WeaponSpawner") : null) 
+            ?? FindType("Week08.Ex02.WeaponSpawner")
+            ?? MapGenType;
+
+        // Level 3: MapGenerator & Scanner
+        protected static System.Type MapGenType => (isTeacherMode ? FindType("Week08.Teacher.Ex03.MapGenerator_Teacher") : null)
+            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex03.InventoryAndGridScanner") : null)
+            ?? (isTeacherMode ? FindType("Week08.Teacher.Ex02.InventoryAndGridScanner") : null)
+            ?? FindType("Week08.MapGenerator") 
+            ?? FindType("Week08.Teacher.Ex03.MapGenerator_Teacher")
+            ?? FindType("Week08.Teacher.Ex03.InventoryAndGridScanner")
+            ?? FindType("Week08.Teacher.Ex02.InventoryAndGridScanner")
+            ?? FindType("Week08.Ex03.InventoryAndGridScanner")
+            ?? FindType("Week08.Ex02.InventoryAndGridScanner")
+            ?? FindType("MapGenerator");
+        protected static System.Type ScannerType => MapGenType;
 
         [SetUp]
         public void Setup()
@@ -169,149 +179,12 @@ namespace Week08_Exam
     [TestFixture]
     [Category("Week08")]
     [Category("Week08_Exam")]
-    public class Level2_MapGenerator_Tests : TestBase
+    public class Level2_MethodAndClass_Tests : TestBase
     {
         [Test]
-        public void Lv2_01_MapGenerator_FindItemPosition()
+        public void Lv2_01_Armor_FieldsAndTrigger()
         {
-            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
-            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(MapGenType), "คลาสต้องสืบทอดจาก MonoBehaviour");
-
-            var scanner = testGo.AddComponent(MapGenType);
-            var mapGen = scanner as Week08.MapGenerator;
-            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
-
-            int[,] map = new int[,]
-            {
-                { 0, 3, 0 },
-                { 1, 0, 0 },
-                { 0, 0, 3 }
-            };
-            mapGen.mapGrid = map;
-
-            // 1. เรียกใช้งานผ่าน MapGenerator (ดึงข้อมูลจาก mapGrid ภายใน)
-            Vector2Int posDirect = mapGen.FindItemPosition(3);
-            Assert.AreEqual(new Vector2Int(0, 1), posDirect, "FindItemPosition(3) บน MapGenerator ต้องหาเจอไอเทมชิ้นแรกที่ (0, 1)");
-
-            Vector2Int posNotFound = mapGen.FindItemPosition(999);
-            Assert.AreEqual(new Vector2Int(-1, -1), posNotFound, "หากหาไอเทมไม่เจอ ต้องคืนค่า (-1, -1)");
-
-            // 2. เรียกใช้งานผ่านพารามิเตอร์ตาราง 2 มิติ (Overload)
-            Vector2Int posOverload = mapGen.FindItemPosition(map, 3);
-            Assert.AreEqual(new Vector2Int(0, 1), posOverload, "FindItemPosition(map, 3) ต้องหาเจอที่ (0, 1)");
-        }
-
-        [Test]
-        public void Lv2_02_MapGenerator_CountItems()
-        {
-            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
-
-            var scanner = testGo.AddComponent(MapGenType);
-            var mapGen = scanner as Week08.MapGenerator;
-            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
-
-            int[,] map = new int[,]
-            {
-                { 0, 3, 0, 0 },
-                { 2, 0, 3, 0 },
-                { 0, 0, 0, 3 }
-            };
-            mapGen.mapGrid = map;
-
-            // 1. เรียกใช้งานผ่าน MapGenerator (ดึงข้อมูลจาก mapGrid ภายใน)
-            int countDirect = mapGen.CountItems(3);
-            Assert.AreEqual(3, countDirect, "CountItems(3) บน MapGenerator ต้องนับไอเทมรหัส 3 ได้ทั้งหมด 3 ชิ้น");
-
-            int countZero = mapGen.CountItems(50);
-            Assert.AreEqual(0, countZero, "ถ้าไม่มีไอเทมรหัส 50 ต้องคืนค่า 0");
-
-            // 2. เรียกใช้งานผ่านพารามิเตอร์ตาราง 2 มิติ (Overload)
-            int countOverload = mapGen.CountItems(map, 3);
-            Assert.AreEqual(3, countOverload, "CountItems(map, 3) ต้องนับไอเทมได้ 3 ชิ้น");
-        }
-
-        [Test]
-        public void Lv2_03_MapGenerator_ScanThreats()
-        {
-            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
-
-            var scanner = testGo.AddComponent(MapGenType);
-            var mapGen = scanner as Week08.MapGenerator;
-            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
-
-            // แผนที่ 5x5:
-            // ผู้เล่นอยู่ที่ (1, 1): มี Threat (2) รอบตัวที่ (0, 1) และ (1, 2) รวม 2 ตัว
-            // และมี Threat นอกระยะที่ (3, 3) ซึ่งไม่ควรถูกนับ
-            int[,] map = new int[,]
-            {
-                { 0, 2, 0, 0, 0 },
-                { 0, 0, 2, 0, 0 },
-                { 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 2, 0 },
-                { 0, 0, 0, 0, 9 }
-            };
-            mapGen.mapGrid = map;
-
-            // 1. สแกนรอบตัวผู้เล่นที่ (1, 1)
-            int threatsAround = mapGen.ScanThreats(new Vector2Int(1, 1), 2);
-            Assert.AreEqual(2, threatsAround, "ต้องนับรหัสภัยคุกคาม 2 รอบตัวผู้เล่นที่ (1, 1) ได้ 2 ช่อง (ไม่นับช่องนอกระยะ)");
-
-            // 2. ทดสอบที่มุม (0, 0): ป้องกัน Out of Bounds
-            int threatsCorner = mapGen.ScanThreats(new Vector2Int(0, 0), 2);
-            Assert.AreEqual(1, threatsCorner, "ที่มุม (0, 0) มี Threat ที่ (0, 1) เพียง 1 ตัว และต้องไม่เกิด Out of Bounds Error");
-
-            // 3. เรียกใช้งานผ่านพารามิเตอร์ตาราง 2 มิติ (Overload)
-            int threatsOverload = mapGen.ScanThreats(map, new Vector2Int(1, 1), 2);
-            Assert.AreEqual(2, threatsOverload, "ScanThreats(map, ...) ต้องนับได้ 2 ช่อง");
-        }
-
-        [Test]
-        public void Lv2_04_MapGenerator_FindPlayerPosition()
-        {
-            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
-
-            var scanner = testGo.AddComponent(MapGenType);
-            var mapGen = scanner as Week08.MapGenerator;
-            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
-            mapGen.playerStartPos = new Vector2Int(2, 3);
-
-            // 1. ทดสอบ FindPlayerPosition() จาก MapGenerator
-            Vector2Int posDirect = mapGen.FindPlayerPosition();
-            Assert.AreEqual(new Vector2Int(2, 3), posDirect, "FindPlayerPosition() ต้องดึงตำแหน่ง playerStartPos ได้ถูกต้อง");
-
-            // 2. ทดสอบ FindPlayerPosition(MapGenerator mapGen)
-            Vector2Int posFromGen = mapGen.FindPlayerPosition(mapGen);
-            Assert.AreEqual(new Vector2Int(2, 3), posFromGen, "FindPlayerPosition(mapGen) ต้องดึงค่า playerStartPos ได้");
-
-            Vector2Int nullGen = mapGen.FindPlayerPosition((Week08.MapGenerator)null);
-            Assert.AreEqual(new Vector2Int(-1, -1), nullGen, "เมื่อ MapGenerator เป็น null ต้องคืนค่า (-1, -1)");
-
-            // 3. ทดสอบ FindPlayerPosition(int[,] grid, int playerCode)
-            int[,] map = new int[,]
-            {
-                { 0, 0, 0, 0 },
-                { 0, 0, 1, 0 },
-                { 0, 0, 0, 0 }
-            };
-            mapGen.mapGrid = map;
-
-            Vector2Int playerPos = mapGen.FindPlayerPosition(map, 1);
-            Assert.AreEqual(new Vector2Int(1, 2), playerPos, "ผู้เล่นรหัส 1 อยู่ที่แถว 1 คอลัมน์ 2");
-
-            Vector2Int notFound = mapGen.FindPlayerPosition(map, 99);
-            Assert.AreEqual(new Vector2Int(-1, -1), notFound, "หากไม่พบผู้เล่นรหัส 99 ต้องคืนค่า (-1, -1)");
-        }
-    }
-
-    [TestFixture]
-    [Category("Week08")]
-    [Category("Week08_Exam")]
-    public class Level3_MethodAndClass_Tests : TestBase
-    {
-        [Test]
-        public void Lv3_01_Armor_FieldsAndTrigger()
-        {
-            Assert.IsNotNull(ArmorType, "ต้องมีคลาส Armor ใน namespace Week08.Ex03 (นักศึกษาต้องเขียนประกาศคลาส Armor : MonoBehaviour ขึ้นมาเอง)");
+            Assert.IsNotNull(ArmorType, "ต้องมีคลาส Armor ใน namespace Week08.Ex02 หรือ Week08.Ex03 (นักศึกษาต้องเขียนประกาศคลาส Armor : MonoBehaviour ขึ้นมาเอง)");
             Assert.AreEqual(typeof(MonoBehaviour), ArmorType.BaseType, "คลาส Armor ต้องสืบทอดจาก MonoBehaviour");
 
             var armor = testGo.AddComponent(ArmorType);
@@ -348,13 +221,13 @@ namespace Week08_Exam
         }
 
         [Test]
-        public void Lv3_02_ArmorSpawner_NullPrefab()
+        public void Lv2_02_ArmorSpawner_NullPrefab()
         {
             Assert.IsNotNull(SpawnerType, "ต้องมีคลาส ArmorSpawner");
-            Assert.AreEqual(typeof(MonoBehaviour), SpawnerType.BaseType, "คลาส ArmorSpawner ต้องสืบทอดจาก MonoBehaviour");
+            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(SpawnerType), "คลาสต้องสืบทอดจาก MonoBehaviour");
 
             var spawner = testGo.AddComponent(SpawnerType);
-            var spawnMethod = SpawnerType.GetMethod("SpawnArmor", AnyInstance) ?? SpawnerType.GetMethod("SpawnWeapon", AnyInstance);
+            var spawnMethod = System.Array.Find(SpawnerType.GetMethods(AnyInstance), m => (m.Name == "SpawnArmor" || m.Name == "SpawnWeapon") && m.GetParameters().Length == 2);
             Assert.IsNotNull(spawnMethod, "ต้องมีเมธอด SpawnArmor(GameObject, Vector3)");
 
             SimpleDebugConsole.Clear();
@@ -364,12 +237,12 @@ namespace Week08_Exam
         }
 
         [Test]
-        public void Lv3_03_ArmorSpawner_InstantiateArmorPrefab()
+        public void Lv2_03_ArmorSpawner_InstantiateArmorPrefab()
         {
             Assert.IsNotNull(SpawnerType, "ต้องมีคลาส ArmorSpawner");
 
             var spawner = testGo.AddComponent(SpawnerType);
-            var spawnMethod = SpawnerType.GetMethod("SpawnArmor", AnyInstance) ?? SpawnerType.GetMethod("SpawnWeapon", AnyInstance);
+            var spawnMethod = System.Array.Find(SpawnerType.GetMethods(AnyInstance), m => (m.Name == "SpawnArmor" || m.Name == "SpawnWeapon") && m.GetParameters().Length == 2);
             Assert.IsNotNull(spawnMethod, "ต้องมีเมธอด SpawnArmor(GameObject, Vector3)");
 
             GameObject armorPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Iron Armor.prefab");
@@ -392,6 +265,155 @@ namespace Week08_Exam
                 if (spawnedObj != null)
                     Object.DestroyImmediate(spawnedObj);
             }
+        }
+    }
+
+    [TestFixture]
+    [Category("Week08")]
+    [Category("Week08_Exam")]
+    public class Level3_MapGenerator_Tests : TestBase
+    {
+        [Test]
+        public void Lv3_01_MapGenerator_PlaceExit()
+        {
+            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
+
+            var scanner = testGo.AddComponent(MapGenType);
+            var mapGen = scanner as Week08.MapGenerator;
+            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
+
+            mapGen.rows = 5;
+            mapGen.columns = 5;
+            mapGen.exitPos = new Vector2Int(4, 4);
+
+            var dummyExitPrefab = new GameObject("ExitPrefab");
+            mapGen.exitPrefab = dummyExitPrefab;
+
+            try
+            {
+                mapGen.PlaceExit();
+                var spawnedExit = GameObject.Find("Exit");
+                Assert.IsNotNull(spawnedExit, "PlaceExit() ต้องเสกสร้าง GameObject ทางออกที่มีชื่อว่า 'Exit'");
+                Assert.AreEqual(4f, spawnedExit.transform.position.x, 0.01f, "พิกัด X ของ GameObject ต้องตรงกับ exitPos.y");
+                Assert.AreEqual(4f, spawnedExit.transform.position.y, 0.01f, "พิกัด Y ของ GameObject ต้องตรงกับ exitPos.x");
+            }
+            finally
+            {
+                var spawnedExit = GameObject.Find("Exit");
+                if (spawnedExit != null) Object.DestroyImmediate(spawnedExit);
+                Object.DestroyImmediate(dummyExitPrefab);
+            }
+        }
+
+        [Test]
+        public void Lv3_02_MapGenerator_PlaceArmor()
+        {
+            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
+
+            var scanner = testGo.AddComponent(MapGenType);
+            var mapGen = scanner as Week08.MapGenerator;
+            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
+
+            mapGen.rows = 5;
+            mapGen.columns = 5;
+            mapGen.armorCount = 2;
+
+            var dummyArmorPrefab = new GameObject("Iron Armor");
+            mapGen.armorPrefab = dummyArmorPrefab;
+
+            var itemsFolder = new GameObject("Items");
+            mapGen.itemParent = itemsFolder.transform;
+
+            try
+            {
+                mapGen.PlaceArmor();
+                var armors = itemsFolder.GetComponentsInChildren<Transform>();
+                Assert.IsTrue(armors.Length > 1, "PlaceArmor() ต้องเสกสร้าง GameObject ไอเทมเกราะลงใน itemParent");
+            }
+            finally
+            {
+                Object.DestroyImmediate(itemsFolder);
+                Object.DestroyImmediate(dummyArmorPrefab);
+            }
+        }
+
+        [Test]
+        public void Lv3_03_MapGenerator_GenerateLWall()
+        {
+            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
+            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(MapGenType), "คลาสต้องสืบทอดจาก MonoBehaviour");
+
+            var scanner = testGo.AddComponent(MapGenType);
+            var mapGen = scanner as Week08.MapGenerator;
+            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
+
+            mapGen.rows = 6;
+            mapGen.columns = 6;
+            mapGen.mapGrid = new int[6, 6];
+
+            var dummyWallPrefab = new GameObject("WallPrefab");
+            mapGen.wallPrefabs = new GameObject[] { dummyWallPrefab };
+            mapGen.wallParent = testGo.transform;
+
+            try
+            {
+                mapGen.GenerateLWall();
+
+                // ตรวจสอบว่ามีการเสกสร้าง GameObject กำแพงลงในฉากใต้ wallParent
+                var spawnedWalls = testGo.GetComponentsInChildren<Transform>();
+                Assert.IsTrue(spawnedWalls.Length > 1, "GenerateLWall() ต้องเสกสร้าง GameObject กำแพงลงใน wallParent");
+
+                // ตรวจสอบตำแหน่งกำแพง: มีทั้งแนวดิ่ง (X=0) และแนวนอน (Y=0)
+                bool hasVertical = false;
+                bool hasHorizontal = false;
+                foreach (var t in spawnedWalls)
+                {
+                    if (t == testGo.transform) continue;
+                    if (Mathf.Approximately(t.position.x, 0f) && t.position.y > 0f) hasVertical = true;
+                    if (Mathf.Approximately(t.position.y, 0f) && t.position.x > 0f) hasHorizontal = true;
+                }
+                Assert.IsTrue(hasVertical, "GenerateLWall() ต้องเสกสร้างกำแพงแนวดิ่งที่ X=0");
+                Assert.IsTrue(hasHorizontal, "GenerateLWall() ต้องเสกสร้างกำแพงแนวนอนที่ Y=0");
+            }
+            finally
+            {
+                Object.DestroyImmediate(dummyWallPrefab);
+            }
+        }
+
+        [Test]
+        public void Lv3_04_MapGenerator_ScanThreats()
+        {
+            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
+
+            var scanner = testGo.AddComponent(MapGenType);
+            var mapGen = scanner as Week08.MapGenerator;
+            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
+
+            // แผนที่ 5x5:
+            // ผู้เล่นอยู่ที่ (1, 1): มี Threat (2) รอบตัวที่ (0, 1) และ (1, 2) รวม 2 ตัว
+            // และมี Threat นอกระยะที่ (3, 3) ซึ่งไม่ควรถูกนับ
+            int[,] map = new int[,]
+            {
+                { 0, 2, 0, 0, 0 },
+                { 0, 0, 2, 0, 0 },
+                { 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 2, 0 },
+                { 0, 0, 0, 0, 9 }
+            };
+            mapGen.mapGrid = map;
+
+            // 1. สแกนรอบตัวผู้เล่นที่ (1, 1)
+            int threatsAround = mapGen.ScanThreats(new Vector2Int(1, 1), 2);
+            Assert.AreEqual(2, threatsAround, "ต้องนับรหัสภัยคุกคาม 2 รอบตัวผู้เล่นที่ (1, 1) ได้ 2 ช่อง (ไม่นับช่องนอกระยะ)");
+
+            // 2. ทดสอบที่มุม (0, 0): ป้องกัน Out of Bounds
+            int threatsCorner = mapGen.ScanThreats(new Vector2Int(0, 0), 2);
+            Assert.AreEqual(1, threatsCorner, "ที่มุม (0, 0) มี Threat ที่ (0, 1) เพียง 1 ตัว และต้องไม่เกิด Out of Bounds Error");
+
+            // 3. เรียกใช้งานผ่านพารามิเตอร์ตาราง 2 มิติ (Overload)
+            int threatsOverload = mapGen.ScanThreats(map, new Vector2Int(1, 1), 2);
+            Assert.AreEqual(2, threatsOverload, "ScanThreats(map, ...) ต้องนับได้ 2 ช่อง");
         }
     }
 

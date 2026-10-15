@@ -41,8 +41,8 @@
 
 ```
 [Level 1: 3 คะแนน] Status & Elemental Combat  -> สร้างตัวแปร, เมธอด void TakeDamage, เมธอด return IsAlive & CalculateDamage
-[Level 2: 4 คะแนน] Dungeon Grid Radar          -> ตาราง 2D Grid, Loop ค้นหาไอเทม, เรดาร์ตรวจภัยคุกคามรอบตัว 8 ทิศทาง
-[Level 3: 3 คะแนน] Custom Class & Spawner      -> เขียนคลาส Armor, คลาส ArmorSpawner และประกอบ Prefab เกราะในฉาก
+[Level 2: 3 คะแนน] Custom Class & Spawner      -> เขียนคลาส Armor, คลาส ArmorSpawner และประกอบ Prefab เกราะในฉาก
+[Level 3: 4 คะแนน] Dungeon Map & Placement    -> จัดวางทางออก (PlaceExit), วางไอเทมเกราะ (PlaceArmor), สร้างกำแพงรูปตัว L (GenerateLWall) และเรดาร์ตรวจภัยคุกคาม (ScanThreats)
 ```
 
 ### 🟢 ระดับ 1 (Level 1): ระบบสถานะตัวละคร (3 คะแนน)
@@ -53,20 +53,20 @@
   3. เมธอด `IsAlive()`: คืนค่า `bool` (เลือด > 0 เป็น true)
   4. เมธอด `CalculateDamage(int rawDamage, int defense)`: คำนวณ `netDamage = rawDamage - defense` (ไม่ให้ติดลบ)
 
-### 🟡 ระดับ 2 (Level 2): เรดาร์สำรวจตารางดันเจี้ยน (4 คะแนน)
-* **ไฟล์:** `Assets/Scripts/Workspace/Week08/MapGenerator.cs` (namespace `Week08`)
-* **สิ่งที่ต้องทำ (จัดการตาราง 2 มิติ `mapGrid`):**
-  1. `FindItemPosition`: ค้นหาพิกัดแรกของไอเทม คืนค่า `new Vector2Int(r, c)` (หากไม่พบ คืนค่า `(-1, -1)`)
-  2. `CountItems`: วนลูปนับจำนวนไอเทมทั้งหมดในตารางตามรหัสที่ระบุ
-  3. `ScanThreats`: ตรวจจับภัยคุกคามรอบตัวผู้เล่น 8 ทิศทาง (พื้นที่ 3x3) พร้อมเขียนเงื่อนไขป้องกันขอบเขตตาราง (Boundary Guard)
-  4. `FindPlayerPosition`: ค้นหาและคืนค่าพิกัดตำแหน่งของผู้เล่น
-
-### 🟠 ระดับ 3 (Level 3): สร้างคลาสเกราะและระบบเสกวัตถุ (3 คะแนน)
-* **ไฟล์:** **สร้างไฟล์สคริปต์ C# ขึ้นมาเอง** ในโฟลเดอร์ `Assets/Scripts/Workspace/Week08/` ใน namespace `Week08.Ex03`
+### 🟡 ระดับ 2 (Level 2): สร้างคลาสเกราะและระบบเสกวัตถุ (3 คะแนน)
+* **ไฟล์:** สร้างสคริปต์ `Armor.cs` (namespace `Week08.Ex02` หรือ `Week08.Ex03`)
 * **สิ่งที่ต้องทำ:**
   1. **เขียนคลาส `Armor : MonoBehaviour`:** ตัวแปร `Name` ("Iron Armor"), `defenseBonus` (10), และเมธอด `OnTriggerEnter2D` เพิ่ม Defense ให้ Player และ Destroy ตัวเอง
-  2. **เขียนคลาส `ArmorSpawner : MonoBehaviour`:** เมธอด `SpawnArmor(GameObject prefab, Vector3 spawnPosition)` ที่ตรวจสอบกรณี prefab เป็น null และใช้ `Instantiate` เสกวัตถุ
+  2. **เขียนคลาส `ArmorSpawner : MonoBehaviour`:** พร้อมเมธอด `SpawnArmor(GameObject prefab, Vector3 spawnPosition)` ตรวจสอบกรณี prefab เป็น null และใช้ `Instantiate` เสกวัตถุ
   3. **สร้าง Prefab `Iron Armor` ใน Unity Editor:** สร้าง GameObject ใส่ `Sprite Renderer` (`Iron Armor.png`), `Box Collider 2D` (ติ๊ก `Is Trigger`), แนบสคริปต์ `Armor` และเซฟเป็น Prefab ไว้ที่ `Assets/Prefabs/Exam/Iron Armor.prefab`
+
+### 🟠 ระดับ 3 (Level 3): การสร้างฉากและจัดวางตำแหน่งออบเจกต์ (4 คะแนน)
+* **ไฟล์:** `Assets/Scripts/Workspace/Week08/MapGenerator.cs` (namespace `Week08`)
+* **สิ่งที่ต้องทำ:**
+  1. `PlaceExit`: เสกสร้าง Exit Prefab ที่ตำแหน่งทางออก `exitPos`
+  2. `PlaceArmor`: เสกสร้างไอเทมเกราะจำนวน `armorCount` ชิ้นลงในฉากใต้ `itemParent`
+  3. `GenerateLWall`: สร้างกำแพงรูปตัว L สูง `rows/2` และกว้าง `columns/2` ลงใน `wallParent`
+  4. `ScanThreats`: สแกนพื้นที่รอบตัวผู้เล่นรัศมี 1 ช่อง (3x3 หรือ 8 ทิศทาง) เพื่อนับภัยคุกคามรอบตัว
 
 ---
 

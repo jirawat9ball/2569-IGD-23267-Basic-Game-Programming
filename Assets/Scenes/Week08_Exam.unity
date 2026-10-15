@@ -169,13 +169,16 @@ MonoBehaviour:
   - {fileID: 1153298426408827053, guid: f5913a5334ebf96469f23905454a0fc8, type: 3}
   - {fileID: 2868505506387828058, guid: 2027d7ae57fe2f4468ab7165b3934a17, type: 3}
   playerPrefab: {fileID: 6842614401537979894, guid: b52a804612b75114187ddfa112b0a93a, type: 3}
+  itemPotions:
+  - {fileID: 5202002002002002001, guid: c7b39a82e1d04b6894c25f1e8a93d202, type: 3}
+  - {fileID: 5101001001001001001, guid: e5d26a19f4a04d49a71b3e8c95a2b101, type: 3}
   exitPrefab: {fileID: 1958592615570192235, guid: fcf4601527682244182d7888101d08df, type: 3}
-  stickPrefab: {fileID: 3464570580780470776, guid: f166c4ccf18d35e4989a18aaa2550d7f, type: 3}
+  armorPrefab: {fileID: 0}
   floorParent: {fileID: 333413405}
   wallParent: {fileID: 1153622978}
   itemParent: {fileID: 2084339896}
   threatCount: 2
-  stickCount: 2
+  armorCount: 2
 --- !u!4 &42775975
 Transform:
   m_ObjectHideFlags: 0

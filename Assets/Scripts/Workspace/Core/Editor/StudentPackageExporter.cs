@@ -94,11 +94,11 @@ namespace Workspace.Core.Editor
 
         private string exportDirectory = "Exports";
         private bool includeCore = true;
-        private bool includeComponents = true;
+        private bool includeComponents = false;
         private bool includeSprites = true;
         private bool includeTextMeshPro = true;
         private bool includeSettings = true;
-        private bool includeDependencies = true;
+        private bool includeDependencies = false;
         private bool openFolderAfterExport = true;
         private Vector2 scrollPos;
 
@@ -141,13 +141,13 @@ namespace Workspace.Core.Editor
         [MenuItem("Assignment/Quick Export/Export All Weeks (Separate Packages)")]
         public static void QuickExportAllWeeksSeparate()
         {
-            ExportWeeks(WeekConfigs, "Exports", true, true, true, true, true, true, true);
+            ExportWeeks(WeekConfigs, "Exports", true, false, true, true, true, false, true);
         }
 
         [MenuItem("Assignment/Quick Export/Export All Weeks (Single Combined Package)")]
         public static void QuickExportAllWeeksCombined()
         {
-            ExportCombinedWeeks(WeekConfigs, "Exports", "All_Weeks_Student.unitypackage", true, true, true, true, true, true, true);
+            ExportCombinedWeeks(WeekConfigs, "Exports", "All_Weeks_Student.unitypackage", true, false, true, true, true, false, true);
         }
 
         public static void ExportWeekByNumber(int weekNumber, bool showDialog = true)
@@ -155,7 +155,8 @@ namespace Workspace.Core.Editor
             var config = WeekConfigs.FirstOrDefault(w => w.weekNumber == weekNumber);
             if (config != null)
             {
-                ExportSingleWeek(config, "Exports", true, true, true, true, true, true, true, showDialog);
+                bool withComponents = (weekNumber == 1);
+                ExportSingleWeek(config, "Exports", true, withComponents, true, true, true, false, true, showDialog);
             }
         }
 
@@ -222,7 +223,6 @@ namespace Workspace.Core.Editor
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
             includeCore = EditorGUILayout.ToggleLeft("รวม Core Scripts (SimpleDebugConsole, IAssignment, Submitter, Workspace.asmdef)", includeCore);
-            includeComponents = EditorGUILayout.ToggleLeft("รวม Components Scripts (Assets/Scripts/Components)", includeComponents);
             includeSprites = EditorGUILayout.ToggleLeft("รวมโฟลเดอร์รูปภาพ (Assets/Sprite)", includeSprites);
             includeTextMeshPro = EditorGUILayout.ToggleLeft("รวมโฟลเดอร์ TextMesh Pro (Assets/TextMesh Pro)", includeTextMeshPro);
             includeSettings = EditorGUILayout.ToggleLeft("รวม Fonts และ Project Settings (Assets/Settings)", includeSettings);
@@ -381,7 +381,8 @@ namespace Workspace.Core.Editor
                     string fileName = week.PackageFileName;
                     string destinationPath = Path.Combine(targetDir, fileName).Replace('\\', '/');
 
-                    var assetList = CollectAssetsForWeeks(new[] { week }, withCore, withComponents, withSprites, withTmp, withSettings);
+                    bool shouldIncludeComponents = withComponents && (week.weekNumber == 1);
+                    var assetList = CollectAssetsForWeeks(new[] { week }, withCore, shouldIncludeComponents, withSprites, withTmp, withSettings);
 
                     if (assetList.Count == 0)
                     {
@@ -557,8 +558,9 @@ namespace Workspace.Core.Editor
                 }
             }
 
-            // 5. Shared Components
-            if (withComponents && AssetExists("Assets/Scripts/Components"))
+            // 5. Shared Components (นำออกเฉพาะกรณีมี Week 01 เท่านั้น)
+            bool hasWeek01 = weeks.Any(w => w.weekNumber == 1);
+            if (withComponents && hasWeek01 && AssetExists("Assets/Scripts/Components"))
             {
                 assets.Add("Assets/Scripts/Components");
             }

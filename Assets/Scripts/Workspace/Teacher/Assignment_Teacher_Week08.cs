@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week08
@@ -8,8 +8,8 @@ namespace Week08
         void Start()
         {
             Level1_StatusAndLogicDemo();
-            Level2_InventoryAndGridDemo();
-            Level3_MethodAndClassDemo();
+            Level2_MethodAndClassDemo();
+            Level3_MapGeneratorDemo();
         }
 
         private static void SafeDestroy(GameObject go)
@@ -31,38 +31,30 @@ namespace Week08
             SafeDestroy(go);
         }
 
-        public void Level2_InventoryAndGridDemo()
-        {
-            var go = new GameObject("TeacherInventoryScannerDemo");
-            var scanner = go.AddComponent<Teacher.Ex02.InventoryAndGridScanner>();
-            var mapGen = FindAnyObjectByType<MapGenerator>();
-            int[,] map = (mapGen != null && mapGen.mapGrid != null) ? mapGen.mapGrid : new int[,] {
-                { 0, 1, 0, 3, 0 },
-                { 2, 0, 0, 0, 0 },
-                { 0, 0, 2, 0, 0 },
-                { 0, 1, 0, 3, 0 },
-                { 0, 0, 0, 0, 9 }
-            };
-            scanner.FindItemPosition(map, 3);
-            scanner.CountItems(map, 3);
-            scanner.ScanThreats(map, new Vector2Int(0, 0), 2);
-            if (mapGen != null) scanner.FindPlayerPosition(mapGen);
-            scanner.FindPlayerPosition(map, 1);
-            SafeDestroy(go);
-        }
-
-        public void Level3_MethodAndClassDemo()
+        public void Level2_MethodAndClassDemo()
         {
             var go = new GameObject("TeacherSpawnerDemo");
-            var spawner = go.AddComponent<Teacher.Ex03.ArmorSpawner>();
+            var spawner = go.AddComponent<Teacher.Ex02.ArmorSpawner>();
             var dummyPrefab = new GameObject("Iron Armor");
             var spawned = spawner.SpawnArmor(dummyPrefab, new Vector3(1, 0, 0));
 
-            var armor = go.AddComponent<Teacher.Ex03.Armor>();
+            var armor = go.AddComponent<Teacher.Ex02.Armor>();
             Debug.Log($"Armor: {armor.Name}, Defense Bonus: {armor.defenseBonus}");
 
             SafeDestroy(dummyPrefab);
             SafeDestroy(spawned);
+            SafeDestroy(go);
+        }
+
+        public void Level3_MapGeneratorDemo()
+        {
+            var go = new GameObject("TeacherMapGeneratorDemo");
+            var mapGen = go.AddComponent<Teacher.Ex03.MapGenerator_Teacher>();
+            if (mapGen.mapGrid == null) mapGen.mapGrid = new int[5, 5];
+            mapGen.PlaceExit();
+            mapGen.PlaceArmor();
+            mapGen.GenerateLWall();
+            mapGen.ScanThreats(new Vector2Int(0, 0), 2);
             SafeDestroy(go);
         }
     }

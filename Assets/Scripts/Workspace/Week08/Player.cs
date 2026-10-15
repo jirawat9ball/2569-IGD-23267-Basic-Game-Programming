@@ -40,10 +40,10 @@ namespace Week08
 
         private Component GetAnyStatus()
         {
-            return GetComponent<Teacher.Ex01.CharacterStatus>() as Component
-                ?? GetComponent<Ex01.CharacterStatus>() as Component
+            return GetComponent<Ex01.CharacterStatus>() as Component
                 ?? GetComponent("CharacterStatus")
-                ?? GetComponent("Week08.Ex01.CharacterStatus");
+                ?? GetComponent("Week08.Ex01.CharacterStatus")
+                ?? GetComponent("Week08.Teacher.Ex01.CharacterStatus");
         }
 
         private static int GetFieldInt(Component comp, string fieldName, int fallback)
