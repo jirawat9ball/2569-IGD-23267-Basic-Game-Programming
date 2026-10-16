@@ -67,7 +67,7 @@ namespace Week07.Teacher.Game
                 return map.chests[x, y];
 
             if (map.exitObject != null && map.exitObject.positionX == x && map.exitObject.positionY == y)
-                return (object)map.exitObject as Week07.Game.Identity;
+                return (object)map.exitObject as Identity;
 
             return null;
         }
