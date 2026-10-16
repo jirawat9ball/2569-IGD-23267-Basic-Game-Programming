@@ -1,4 +1,4 @@
-﻿using Debug = Workspace.Core.SimpleDebugConsole;
+using Debug = Workspace.Core.SimpleDebugConsole;
 using UnityEngine;
 
 namespace Week07.Ex01
@@ -50,6 +50,13 @@ namespace Week07.Ex01
             // + กำหนดชื่อ (name) ว่า "Twitty"
             // + เรียกใช้ method MakeSound() ของ bird
             // + เรียกใช้ method Fly() ของ bird
+            // Student code starts HERE ...
+
+            // Student code ends HERE ...
+
+            // 3. สร้าง instance ของ class Animal โดยกำหนดชื่อตัวแปรว่า animal
+            // + กำหนดชื่อ (name) ว่า "Noname"
+            // + เรียกใช้ method MakeSound() ของ animal
             // Student code starts HERE ...
 
             // Student code ends HERE ...

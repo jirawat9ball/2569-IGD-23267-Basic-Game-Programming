@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using NUnit.Framework;
 using UnityEngine;
 using Workspace.Core;
@@ -67,14 +67,38 @@ namespace Week07_OOP
     {
         // ===================== ข้อ 1: Inheritance =====================
 
-        [TestCase("01_DogAndBird_InheritFromAnimal")]
-        [TestCase("02_Dog_CanUseInheritedNameAndMakeSound")]
-        [TestCase("03_Bird_CanUseInheritedNameAndMakeSound")]
-        [TestCase("04_Ex01_InheritanceDemo_Output")]
+        [TestCase("01_Animal_CanUseNameAndMakeSound")]
+        [TestCase("02_DogAndBird_InheritFromAnimal")]
+        [TestCase("03_Dog_CanUseInheritedNameAndMakeSound")]
+        [TestCase("04_Bird_CanUseInheritedNameAndMakeSound")]
+        [TestCase("05_Ex01_InheritanceDemo_Output")]
         public void As01_Inheritance(string subTask)
         {
             switch (subTask)
             {
+                case "01_Animal_CanUseNameAndMakeSound":
+                case "Animal_CanUseNameAndMakeSound":
+                    var nameField = Animal01Type.GetField("name", AnyInstance);
+                    var makeAnimal = Animal01Type.GetMethod("MakeSound", AnyInstance);
+
+                    Assert.IsNotNull(nameField, "คลาส Animal ต้องมีฟิลด์ name");
+                    Assert.IsTrue(nameField.IsPublic, "ฟิลด์ name ต้องเป็น public");
+                    Assert.IsNotNull(makeAnimal, "คลาส Animal ต้องมีเมธอด MakeSound()");
+                    Assert.IsTrue(makeAnimal.IsPublic, "เมธอด MakeSound ต้องเป็น public");
+
+                    var animal = System.Activator.CreateInstance(Animal01Type);
+                    nameField.SetValue(animal, "Milo");
+
+                    SimpleDebugConsole.Clear();
+                    makeAnimal.Invoke(animal, null);
+
+                    var sbAnimal = new StringBuilder();
+                    sbAnimal.AppendLine("Animal Milo is making sound");
+
+                    TestUtils.AssertMultilineEqual(sbAnimal.ToString(), SimpleDebugConsole.GetOutput());
+                    break;
+
+                case "02_DogAndBird_InheritFromAnimal":
                 case "01_DogAndBird_InheritFromAnimal":
                     Assert.AreEqual(Animal01Type, Dog01Type.BaseType,
                         "คลาส Dog ต้องสืบทอดจาก Animal (เขียน : Animal ต่อท้ายชื่อคลาส)");
@@ -82,6 +106,7 @@ namespace Week07_OOP
                         "คลาส Bird ต้องสืบทอดจาก Animal");
                     break;
 
+                case "03_Dog_CanUseInheritedNameAndMakeSound":
                 case "02_Dog_CanUseInheritedNameAndMakeSound":
                     var dog = System.Activator.CreateInstance(Dog01Type);
                     Dog01Type.GetField("name", AnyInstance)?.SetValue(dog, "Rex");
@@ -102,6 +127,7 @@ namespace Week07_OOP
                     TestUtils.AssertMultilineEqual(sbDog.ToString(), SimpleDebugConsole.GetOutput());
                     break;
 
+                case "04_Bird_CanUseInheritedNameAndMakeSound":
                 case "03_Bird_CanUseInheritedNameAndMakeSound":
                     var bird = System.Activator.CreateInstance(Bird01Type);
                     Bird01Type.GetField("name", AnyInstance)?.SetValue(bird, "Sky");
@@ -122,6 +148,7 @@ namespace Week07_OOP
                     TestUtils.AssertMultilineEqual(sbBird.ToString(), SimpleDebugConsole.GetOutput());
                     break;
 
+                case "05_Ex01_InheritanceDemo_Output":
                 case "04_Ex01_InheritanceDemo_Output":
                     assignment.Ex01_InheritanceDemo();
 
@@ -130,6 +157,7 @@ namespace Week07_OOP
                     sbDemo.AppendLine("Dog Buddy is walking");
                     sbDemo.AppendLine("Animal Twitty is making sound");
                     sbDemo.AppendLine("Bird Twitty is flying");
+                    sbDemo.AppendLine("Animal Noname is making sound");
 
                     TestUtils.AssertMultilineEqual(sbDemo.ToString(), SimpleDebugConsole.GetOutput());
                     break;
@@ -305,6 +333,7 @@ namespace Week07_OOP
     {
         protected Week07.Game.MapGenerator map;
 
+        protected static System.Type IdentityType => (isTeacherMode ? FindType("Week07.Teacher.Game.Identity") : null) ?? typeof(Week07.Game.Identity);
         protected static System.Type PlayerType => (isTeacherMode ? FindType("Week07.Teacher.Game.Player") : null) ?? typeof(Week07.Game.Player);
         protected static System.Type CharacterType => (isTeacherMode ? FindType("Week07.Teacher.Game.Character") : null) ?? typeof(Week07.Game.Character);
         protected static System.Type EnemyType => (isTeacherMode ? FindType("Week07.Teacher.Game.Enemy") : null) ?? typeof(Week07.Game.Enemy);
@@ -382,7 +411,7 @@ namespace Week07_OOP
 
                     Assert.AreEqual(1, player.positionX, "RevertPosition ต้องย้อนกลับไป previousPositionX");
                     Assert.AreEqual(2, player.positionY, "RevertPosition ต้องย้อนกลับไป previousPositionY");
-                    Assert.AreEqual(51, player.energy, "RevertPosition ต้องคืนค่า energy + 1");
+                    Assert.AreEqual(50, player.energy, "RevertPosition ต้องย้อนพิกัดกลับโดยไม่เปลี่ยนแปลงค่า energy");
                     break;
 
                 case "05_Player_Trapped_CannotMoveForOneTurn":
@@ -435,7 +464,7 @@ namespace Week07_OOP
                         ?? EnemyType.GetMethod("Hit", System.Type.EmptyTypes);
                     Assert.IsNotNull(method, "Enemy ต้องมีเมธอด Hit()");
                     Assert.AreEqual(EnemyType, method.DeclaringType, "Enemy ต้อง override Hit() ของตัวเอง");
-                    Assert.AreEqual(typeof(Week07.Game.Identity), method.GetBaseDefinition().DeclaringType,
+                    Assert.AreEqual(IdentityType, method.GetBaseDefinition().DeclaringType,
                         "Hit() ของ Enemy ต้องใช้ override (สืบมาจาก Identity)");
                     break;
 
@@ -502,6 +531,8 @@ namespace Week07_OOP
                 case "07_Ex05_BattleDemo_FullScenario":
                     assignment.Ex05_BattleDemo();
 
+                    var output = SimpleDebugConsole.GetOutput();
+
                     var sb = new StringBuilder();
                     sb.AppendLine("You got Potion1 : 20");
                     sb.AppendLine("You got Sword1 : 10");
@@ -517,7 +548,7 @@ namespace Week07_OOP
                     sb.AppendLine("Player energy after attack: 107");
                     sb.AppendLine("Enemy energy after attack: 0");
 
-                    TestUtils.AssertMultilineEqual(sb.ToString(), SimpleDebugConsole.GetOutput());
+                    TestUtils.AssertMultilineEqual(sb.ToString(), output);
                     break;
 
                 case "08_Enemy_HasOnTriggerEnter2D":
@@ -539,7 +570,7 @@ namespace Week07_OOP
             switch (subTask)
             {
                 case "01_ItemPotion_InheritsIdentity":
-                    Assert.AreEqual(typeof(Week07.Game.Identity), PotionType.BaseType,
+                    Assert.AreEqual(IdentityType, PotionType.BaseType,
                         "class ItemPotion ต้องสืบทอดจาก class Identity");
                     break;
 
@@ -600,7 +631,7 @@ namespace Week07_OOP
             switch (subTask)
             {
                 case "01_ItemSword_InheritsIdentity":
-                    Assert.AreEqual(typeof(Week07.Game.Identity), SwordType.BaseType,
+                    Assert.AreEqual(IdentityType, SwordType.BaseType,
                         "class ItemSword ต้องสืบทอดจาก class Identity");
                     break;
 
@@ -666,7 +697,7 @@ namespace Week07_OOP
             switch (subTask)
             {
                 case "01_Wall_InheritsIdentity":
-                    Assert.AreEqual(typeof(Week07.Game.Identity), WallType.BaseType,
+                    Assert.AreEqual(IdentityType, WallType.BaseType,
                         "class Wall ต้องสืบทอดจาก class Identity");
                     break;
 
@@ -744,7 +775,7 @@ namespace Week07_OOP
             switch (subTask)
             {
                 case "01_Chest_InheritsIdentity":
-                    Assert.AreEqual(typeof(Week07.Game.Identity), ChestType.BaseType,
+                    Assert.AreEqual(IdentityType, ChestType.BaseType,
                         "class Chest ต้องสืบทอดจาก class Identity");
                     break;
 
@@ -809,10 +840,20 @@ namespace Week07_OOP
 
     public class TestUtils
     {
+        internal static string Normalize(string text)
+        {
+            return text == null ? "" : text.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
+        }
+
+        internal static bool IsMultilineEqual(string expected, string actual)
+        {
+            return Normalize(expected) == Normalize(actual);
+        }
+
         internal static void AssertMultilineEqual(string expected, string actual, string message = null)
         {
-            string normExpected = expected.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
-            string normActual = actual.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
+            string normExpected = Normalize(expected);
+            string normActual = Normalize(actual);
             if (message == null)
                 message = $"Expected output:\n{normExpected}\n----\nActual output:\n{normActual}";
             Assert.AreEqual(normExpected, normActual, message);

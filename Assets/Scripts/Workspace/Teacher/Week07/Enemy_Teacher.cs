@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Week07.Teacher.Game
 {
@@ -49,9 +49,7 @@ namespace Week07.Teacher.Game
                 if (energy > 0)
                 {
                     Hit();
-                    player.positionX = player.previousPositionX;
-                    player.positionY = player.previousPositionY;
-                    player.transform.position = new Vector3(player.positionX, player.positionY, 0);
+                    player.RevertPosition();
                 }
                 else
                 {

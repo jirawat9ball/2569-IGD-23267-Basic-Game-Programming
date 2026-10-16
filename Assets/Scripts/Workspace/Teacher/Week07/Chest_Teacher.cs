@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Teacher.Game
 {
-    public class Chest : Week07.Game.Identity
+    public class Chest : Identity
     {
         public GameObject spawnPrefab;
         public bool isOpen = false;

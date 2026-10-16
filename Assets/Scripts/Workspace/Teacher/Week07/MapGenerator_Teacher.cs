@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Week07.Teacher.Game
@@ -64,7 +64,7 @@ namespace Week07.Teacher.Game
             mapData[1, 1] = chest;
         }
 
-        public T SpawnTeacher<T>(string objectName, int x, int y) where T : Week07.Game.Identity
+        public T SpawnTeacher<T>(string objectName, int x, int y) where T : Identity
         {
             var go = new GameObject(objectName);
             go.transform.position = new Vector3(x, y, 0);

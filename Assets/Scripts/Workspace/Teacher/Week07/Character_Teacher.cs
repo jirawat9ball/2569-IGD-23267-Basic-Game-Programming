@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Teacher.Game
 {
-    public class Character : Week07.Game.Identity
+    public class Character : Identity
     {
         public int energy;
         public int attackPoint;
@@ -34,7 +34,7 @@ namespace Week07.Teacher.Game
 
         public void TriggerAt(int x, int y)
         {
-            Week07.Game.Identity target = GetIdentityAt(x, y);
+            Identity target = GetIdentityAt(x, y);
             if (target != null && target != this)
             {
                 Collider2D col = GetComponent<Collider2D>();
@@ -46,7 +46,7 @@ namespace Week07.Teacher.Game
             }
         }
 
-        public Week07.Game.Identity GetIdentityAt(int x, int y)
+        public Identity GetIdentityAt(int x, int y)
         {
             var map = mapGenerator as MapGenerator;
             if (map == null) return null;

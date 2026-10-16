@@ -42,6 +42,10 @@ namespace Week07.Teacher.Ex01
             bird.name = "Twitty";
             bird.MakeSound();
             bird.Fly();
+
+            Animal animal = new Animal();
+            animal.name = "Noname";
+            animal.MakeSound();
         }
     }
 }

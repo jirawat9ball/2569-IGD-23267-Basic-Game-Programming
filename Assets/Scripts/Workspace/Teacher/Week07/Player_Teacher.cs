@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Teacher.Game
@@ -65,7 +65,6 @@ namespace Week07.Teacher.Game
             positionX = previousPositionX;
             positionY = previousPositionY;
             transform.position = new Vector3(positionX, positionY, 0);
-            energy += 1;
         }
 
         public int GetEnergy()

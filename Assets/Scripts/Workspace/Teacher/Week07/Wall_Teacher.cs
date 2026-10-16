@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week07.Teacher.Game
 {
-    public class Wall : Week07.Game.Identity
+    public class Wall : Identity
     {
         public int durability = 3;
 
@@ -36,9 +36,7 @@ namespace Week07.Teacher.Game
             if (player != null)
             {
                 Hit();
-                player.positionX = player.previousPositionX;
-                player.positionY = player.previousPositionY;
-                player.transform.position = new Vector3(player.positionX, player.positionY, 0);
+                player.RevertPosition();
             }
         }
     }
