@@ -33,21 +33,23 @@ namespace Week08
 
         public void Level2_MethodAndClassDemo()
         {
-            var go = new GameObject("TeacherSpawnerDemo");
-            var spawner = go.AddComponent<Teacher.Ex02.ArmorSpawner>();
-            var dummyPrefab = new GameObject("Iron Armor");
-            var spawned = spawner.SpawnArmor(dummyPrefab, new Vector3(1, 0, 0));
-
+            var go = new GameObject("TeacherArmorDemo");
             var armor = go.AddComponent<Teacher.Ex02.Armor>();
             Debug.Log($"Armor: {armor.Name}, Defense Bonus: {armor.defenseBonus}");
 
-            SafeDestroy(dummyPrefab);
-            SafeDestroy(spawned);
             SafeDestroy(go);
         }
 
         public void Level3_MapGeneratorDemo()
         {
+            var existingMapGen = FindAnyObjectByType<Teacher.Ex03.MapGenerator_Teacher>() ?? FindAnyObjectByType<MapGenerator>() as Teacher.Ex03.MapGenerator_Teacher;
+            if (existingMapGen != null)
+            {
+                // หากมี MapGenerator ในฉาก แผนที่จะถูกสร้างใน Start() เรียบร้อยแล้ว จึงทดสอบเฉพาะการสแกนหาภัยคุกคาม
+                existingMapGen.ScanThreats(new Vector2Int(0, 0), 2);
+                return;
+            }
+
             var go = new GameObject("TeacherMapGeneratorDemo");
             var mapGen = go.AddComponent<Teacher.Ex03.MapGenerator_Teacher>();
             if (mapGen.mapGrid == null) mapGen.mapGrid = new int[5, 5];

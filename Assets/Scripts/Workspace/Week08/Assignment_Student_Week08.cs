@@ -73,8 +73,16 @@ namespace Week08
 
         public void Level3_MapGeneratorDemo()
         {
+            var existingMapGen = FindAnyObjectByType<MapGenerator>();
+            if (existingMapGen != null)
+            {
+                // หากมี MapGenerator ในฉาก แผนที่จะถูกสร้างใน Start() เรียบร้อยแล้ว จึงทดสอบเฉพาะการสแกนหาภัยคุกคาม
+                existingMapGen.ScanThreats(new Vector2Int(0, 0), 2);
+                return;
+            }
+
             var go = new GameObject("MapGeneratorDemo");
-            var mapGen = FindAnyObjectByType<MapGenerator>() ?? go.AddComponent<MapGenerator>();
+            var mapGen = go.AddComponent<MapGenerator>();
             if (mapGen.mapGrid == null) mapGen.mapGrid = new int[5, 5];
             mapGen.PlaceExit();
             mapGen.PlaceArmor();

@@ -35,17 +35,17 @@
 
 ---
 
-## 💻 3. รายละเอียดข้อสอบ ส่วนที่ 2: ข้อสอบปฏิบัติ (3 ข้อใหญ่ 10 คะแนนเต็ม)
+## 💻 3. รายละเอียดข้อสอบ ส่วนที่ 2: ข้อสอบปฏิบัติ (3 ข้อใหญ่ 11 คะแนนเต็ม)
 
-ข้อสอบปฏิบัติแบ่งออกเป็น **3 ระดับ (Level 1 – 3)** รวม **10 ข้อทดสอบ (10 คะแนน)** โดยตรวจผลอัตโนมัติผ่าน Unity Test Runner:
+ข้อสอบปฏิบัติแบ่งออกเป็น **3 ระดับ (Level 1 – 3)** รวม **12 ข้อทดสอบ (12 คะแนน)** โดยตรวจผลอัตโนมัติผ่าน Unity Test Runner:
 
 ```
-[Level 1: 3 คะแนน] Status & Elemental Combat  -> สร้างตัวแปร, เมธอด void TakeDamage, เมธอด return IsAlive & CalculateDamage
-[Level 2: 3 คะแนน] Custom Class & Spawner      -> เขียนคลาส Armor, คลาส ArmorSpawner และประกอบ Prefab เกราะในฉาก
-[Level 3: 4 คะแนน] Dungeon Map & Placement    -> จัดวางทางออก (PlaceExit), วางไอเทมเกราะ (PlaceArmor), สร้างกำแพงรูปตัว L (GenerateLWall) และเรดาร์ตรวจภัยคุกคาม (ScanThreats)
+[Level 1: 4 คะแนน] Status & Elemental Combat  -> สร้างตัวแปร, เมธอด void TakeDamage, เมธอด return IsAlive & CalculateDamage
+[Level 2: 3 คะแนน] Custom Class & Prefab       -> คลาส Armor (ตัวแปร, เมธอด OnTriggerEnter2D) และประกอบ Prefab เกราะในฉาก
+[Level 3: 5 คะแนน] Dungeon Map & Placement    -> จัดวางทางออก (PlaceExit), วางไอเทมเกราะ (PlaceArmor), สร้างกำแพงรูปตัว L (GenerateLWall), เรดาร์ตรวจภัยคุกคาม (ScanThreats) และคอมเมนต์ปิด SpawnItemPotions
 ```
 
-### 🟢 ระดับ 1 (Level 1): ระบบสถานะตัวละคร (3 คะแนน)
+### 🟢 ระดับ 1 (Level 1): ระบบสถานะตัวละคร (4 คะแนน)
 * **ไฟล์:** `Assets/Scripts/Workspace/Week08/CharacterStatus.cs` (namespace `Week08.Ex01`)
 * **สิ่งที่ต้องทำ:**
   1. ประกาศตัวแปร `public` ทั้ง 6 ตัว: `characterName` ("Hero"), `maxHealth` (100), `currentHealth` (100), `isAlive` (true), `attackPoint` (10), `defensePoint` (0)
@@ -53,20 +53,21 @@
   3. เมธอด `IsAlive()`: คืนค่า `bool` (เลือด > 0 เป็น true)
   4. เมธอด `CalculateDamage(int rawDamage, int defense)`: คำนวณ `netDamage = rawDamage - defense` (ไม่ให้ติดลบ)
 
-### 🟡 ระดับ 2 (Level 2): สร้างคลาสเกราะและระบบเสกวัตถุ (3 คะแนน)
-* **ไฟล์:** สร้างสคริปต์ `Armor.cs` (namespace `Week08.Ex02` หรือ `Week08.Ex03`)
+### 🟡 ระดับ 2 (Level 2): สร้างคลาสเกราะและประกอบ Prefab (3 คะแนน)
+* **ไฟล์:** สร้างสคริปต์ `Armor.cs` ใน `Assets/Scripts/Workspace/Week08/` (เพิ่ม `using Week08;` ด้านบนสุดของไฟล์)
 * **สิ่งที่ต้องทำ:**
-  1. **เขียนคลาส `Armor : MonoBehaviour`:** ตัวแปร `Name` ("Iron Armor"), `defenseBonus` (10), และเมธอด `OnTriggerEnter2D` เพิ่ม Defense ให้ Player และ Destroy ตัวเอง
-  2. **เขียนคลาส `ArmorSpawner : MonoBehaviour`:** พร้อมเมธอด `SpawnArmor(GameObject prefab, Vector3 spawnPosition)` ตรวจสอบกรณี prefab เป็น null และใช้ `Instantiate` เสกวัตถุ
-  3. **สร้าง Prefab `Iron Armor` ใน Unity Editor:** สร้าง GameObject ใส่ `Sprite Renderer` (`Iron Armor.png`), `Box Collider 2D` (ติ๊ก `Is Trigger`), แนบสคริปต์ `Armor` และเซฟเป็น Prefab ไว้ที่ `Assets/Prefabs/Exam/Iron Armor.prefab`
+  1. **สร้างคลาสและตัวแปร `Armor : MonoBehaviour` (`Lv2_01`):** ตัวแปร `Name` ("Iron Armor") และ `defenseBonus` (10)
+  2. **เขียนเมธอดตรวจจับการชน `OnTriggerEnter2D` (`Lv2_02`):** เมื่อชน Player ให้เพิ่ม Defense และ Destroy ตัวเอง
+  3. **สร้าง Prefab `Iron Armor` ใน Unity Editor (`Lv2_03`):** สร้าง GameObject ใส่ `Sprite Renderer` (`Iron Armor.png`), `Box Collider 2D` (ติ๊ก `Is Trigger`), แนบสคริปต์ `Armor` และเซฟเป็น Prefab ไว้ที่ `Assets/Prefabs/Exam/Iron Armor.prefab`
 
-### 🟠 ระดับ 3 (Level 3): การสร้างฉากและจัดวางตำแหน่งออบเจกต์ (4 คะแนน)
+### 🟠 ระดับ 3 (Level 3): การสร้างฉากและจัดวางตำแหน่งออบเจกต์ (5 คะแนน)
 * **ไฟล์:** `Assets/Scripts/Workspace/Week08/MapGenerator.cs` (namespace `Week08`)
 * **สิ่งที่ต้องทำ:**
   1. `PlaceExit`: เสกสร้าง Exit Prefab ที่ตำแหน่งทางออก `exitPos`
   2. `PlaceArmor`: เสกสร้างไอเทมเกราะจำนวน `armorCount` ชิ้นลงในฉากใต้ `itemParent`
   3. `GenerateLWall`: สร้างกำแพงรูปตัว L สูง `rows/2` และกว้าง `columns/2` ลงใน `wallParent`
   4. `ScanThreats`: สแกนพื้นที่รอบตัวผู้เล่นรัศมี 1 ช่อง (3x3 หรือ 8 ทิศทาง) เพื่อนับภัยคุกคามรอบตัว
+  5. คอมเมนต์ปิดการเสกยา (`Lv3_05`): คอมเมนต์ปิด `// SpawnItemPotions();` ใน `GenerateMap()` เพื่อไม่ให้มียาฟื้นพลังในฉาก
 
 ---
 

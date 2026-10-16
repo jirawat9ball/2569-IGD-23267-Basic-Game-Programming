@@ -20,33 +20,23 @@ namespace Week08.Teacher.Ex02
             {
                 Debug.Log($"Picked up {Name}! +{defenseBonus} Defense");
                 player.IncreaseDefense(defenseBonus);
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                    DestroyImmediate(gameObject);
+                else
+                    Destroy(gameObject);
+#else
                 Destroy(gameObject);
+#endif
             }
         }
     }
 
-    public class ArmorSpawner : MonoBehaviour
-    {
-        public GameObject SpawnArmor(GameObject prefab, Vector3 spawnPosition)
-        {
-            if (prefab == null)
-            {
-                Debug.Log("Prefab is null");
-                return null;
-            }
-
-            GameObject spawned = Instantiate(prefab, spawnPosition, Quaternion.identity);
-            Debug.Log($"Spawned {prefab.name} at {spawnPosition}");
-            return spawned;
-        }
-
-        public GameObject SpawnWeapon(GameObject prefab, Vector3 spawnPosition) => SpawnArmor(prefab, spawnPosition);
-    }
+   
 }
 
 namespace Week08.Teacher.Ex03
 {
     // Backward compatibility aliases if needed
     public class Armor : Ex02.Armor { }
-    public class ArmorSpawner : Ex02.ArmorSpawner { }
 }

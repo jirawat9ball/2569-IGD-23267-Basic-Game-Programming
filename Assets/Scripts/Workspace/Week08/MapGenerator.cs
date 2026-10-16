@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Debug = Workspace.Core.SimpleDebugConsole;
 
 namespace Week08
@@ -30,8 +30,7 @@ namespace Week08
         public Transform wallParent;
         public Transform itemParent;
 
-        [Header("จำนวนสิ่งกีดขวาง/ไอเทม")]
-        public int threatCount = 2;
+        [Header("จำนวนไอเทม")]
         public int armorCount = 2;
 
         /// <summary>
@@ -120,11 +119,11 @@ namespace Week08
             // 4. กำหนดตำแหน่งทางออก (Exit) ที่ exitPos (รหัส 9) (Level 3 - ข้อ 1)
             PlaceExit();
 
-            // 5. สุ่มวางภัยคุกคาม (Threats) ตาม threatCount (รหัส 2)
-            PlaceThreats();
+            // 5. เสกสร้างไอเทมเกราะ (Level 3 - ข้อ 2)
+            PlaceArmor();
 
-            // 6. เสกสร้างไอเทมเกราะและยา (Level 3 - ข้อ 2)
-            SpawnItems();
+            // 6. เสกสร้างไอเทมโพชั่น (Level 3 - ข้อ 5)
+            SpawnItemPotions();
         }
 
         // =========================================================================
@@ -202,67 +201,20 @@ namespace Week08
             return emptyCells[Random.Range(0, emptyCells.Count)];
         }
 
-        // ขั้นตอนที่ 5: สุ่มวางภัยคุกคาม (Threats)
-        private void PlaceThreats()
-        {
-            for (int i = 0; i < threatCount; i++)
-            {
-                Vector2Int pos = GetRandomEmptyCell();
-                if (pos.x != -1)
-                {
-                    mapGrid[pos.x, pos.y] = 2; // Threat code 2
-                }
-            }
-        }
-
-        // ขั้นตอนที่ 6: เสกสร้างไอเทม (Armor Items และ ItemPotions)
-        [ContextMenu("Spawn All Items")]
-        public void SpawnItems()
-        {
-            SpawnArmorItems();
-            SpawnItemPotions();
-        }
-
         /// <summary>
-        /// เสกสร้างเกราะ (Armor Items) ผ่านเมธอด SpawnArmor ของ Level 2
+        /// เสกสร้างเกราะ (Armor Items)
         /// </summary>
         [ContextMenu("Spawn Armor Items")]
         public void SpawnArmorItems()
         {
-            if (itemParent == null) itemParent = CreateChildFolder("Items");
-
-            var prefab = armorPrefab;
-            #if UNITY_EDITOR
-            if (prefab == null)
-            {
-                prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Iron Armor.prefab");
-            }
-            #endif
-
-            if (prefab == null) return;
-
-            for (int i = 0; i < armorCount; i++)
-            {
-                Vector2Int pos = GetRandomEmptyCell();
-                if (pos.x != -1)
-                {
-                    mapGrid[pos.x, pos.y] = 3; // Item code 3
-                    Vector3 spawnPos = new Vector3(pos.y, pos.x, 0);
-                    GameObject spawned = Instantiate(prefab, spawnPos, Quaternion.identity);
-                    if (spawned != null)
-                    {
-                        spawned.transform.SetParent(itemParent);
-                        spawned.name = $"{prefab.name}_{i + 1}";
-                    }
-                }
-            }
+            PlaceArmor();
         }
 
         /// <summary>
         /// เสกสร้างยา (ItemPotions) ลงในฉาก
         /// </summary>
         [ContextMenu("Spawn Item Potions")]
-        public void SpawnItemPotions()
+        public virtual void SpawnItemPotions()
         {
             if (itemParent == null) itemParent = CreateChildFolder("Items");
 
@@ -355,6 +307,11 @@ namespace Week08
             Debug.Log($"Found {count} threats around player at {playerPos}");
             return count;
         }
+
+        // =========================================================================
+        // [Level 3 - ข้อ 5] คอมเมนต์ปิดการเรียกใช้งาน SpawnItemPotions();
+        // ให้นักศึกษาขึ้นไปที่เมธอด GenerateMap() ด้านบน แล้วใส่เครื่องหมาย // เพื่อคอมเมนต์ปิดบรรทัด SpawnItemPotions();
+        // =========================================================================
     }
 }
 

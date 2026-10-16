@@ -40,13 +40,15 @@ namespace Week08.Teacher.Ex03
         {
             int wallHeight = rows / 2;
             int wallWidth = columns / 2;
-            var wallPrefab = (wallPrefabs != null && wallPrefabs.Length > 1) ? wallPrefabs[1] : (wallPrefabs != null && wallPrefabs.Length > 0 ? wallPrefabs[0] : null);
+            if (wallPrefabs == null || wallPrefabs.Length == 0) return;
+            var wallPrefab = wallPrefabs[0];
+            if (wallPrefab == null) return;
 
             for (int r = 0; r <= wallHeight; r++)
             {
                 if (wallPrefab != null)
                 {
-                    Instantiate(wallPrefab, new Vector3(0, r, 0), Quaternion.identity, wallParent);
+                    Instantiate(wallPrefab, new Vector3(wallWidth, r, 0), Quaternion.identity, wallParent);
                 }
             }
 
@@ -54,7 +56,7 @@ namespace Week08.Teacher.Ex03
             {
                 if (wallPrefab != null)
                 {
-                    Instantiate(wallPrefab, new Vector3(c, 0, 0), Quaternion.identity, wallParent);
+                    Instantiate(wallPrefab, new Vector3(c, wallHeight, 0), Quaternion.identity, wallParent);
                 }
             }
         }

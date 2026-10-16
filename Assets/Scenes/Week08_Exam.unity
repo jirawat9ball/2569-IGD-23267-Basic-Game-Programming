@@ -177,7 +177,6 @@ MonoBehaviour:
   floorParent: {fileID: 333413405}
   wallParent: {fileID: 1153622978}
   itemParent: {fileID: 2084339896}
-  threatCount: 2
   armorCount: 2
 --- !u!4 &42775975
 Transform:

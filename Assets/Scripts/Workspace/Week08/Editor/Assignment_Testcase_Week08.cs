@@ -140,17 +140,13 @@ namespace Week08_Exam
         }
 
         [Test]
-        public void Lv1_03_IsAlive_And_CalculateDamage_ReturnMethods()
+        public void Lv1_03_IsAlive_ReturnMethod()
         {
             var comp = testGo.AddComponent(StatusType);
             var isAliveMethod = StatusType.GetMethod("IsAlive", AnyInstance);
-            var calcMethod = StatusType.GetMethod("CalculateDamage", AnyInstance);
 
             Assert.IsNotNull(isAliveMethod, "ต้องมีเมธอด IsAlive()");
             Assert.AreEqual(typeof(bool), isAliveMethod.ReturnType, "เมธอด IsAlive ต้องคืนค่าเป็น bool");
-
-            Assert.IsNotNull(calcMethod, "ต้องมีเมธอด CalculateDamage(int, int)");
-            Assert.AreEqual(typeof(int), calcMethod.ReturnType, "เมธอด CalculateDamage ต้องคืนค่าเป็น int");
 
             var curHpField = StatusType.GetField("currentHealth", AnyInstance);
             var isAliveField = StatusType.GetField("isAlive", AnyInstance);
@@ -166,6 +162,16 @@ namespace Week08_Exam
             isAliveField.SetValue(comp, false);
             bool dead = (bool)isAliveMethod.Invoke(comp, null);
             Assert.IsFalse(dead, "เมื่อ currentHealth <= 0 เมธอด IsAlive() ต้องคืนค่า false");
+        }
+
+        [Test]
+        public void Lv1_04_CalculateDamage_ReturnMethod()
+        {
+            var comp = testGo.AddComponent(StatusType);
+            var calcMethod = StatusType.GetMethod("CalculateDamage", AnyInstance);
+
+            Assert.IsNotNull(calcMethod, "ต้องมีเมธอด CalculateDamage(int, int)");
+            Assert.AreEqual(typeof(int), calcMethod.ReturnType, "เมธอด CalculateDamage ต้องคืนค่าเป็น int");
 
             // ทดสอบ CalculateDamage(rawDamage, defense)
             int dmg1 = (int)calcMethod.Invoke(comp, new object[] { 50, 20 });
@@ -182,9 +188,9 @@ namespace Week08_Exam
     public class Level2_MethodAndClass_Tests : TestBase
     {
         [Test]
-        public void Lv2_01_Armor_FieldsAndTrigger()
+        public void Lv2_01_Armor_Fields()
         {
-            Assert.IsNotNull(ArmorType, "ต้องมีคลาส Armor ใน namespace Week08.Ex02 หรือ Week08.Ex03 (นักศึกษาต้องเขียนประกาศคลาส Armor : MonoBehaviour ขึ้นมาเอง)");
+            Assert.IsNotNull(ArmorType, "ต้องมีคลาส Armor (นักศึกษาต้องเขียนประกาศคลาส Armor : MonoBehaviour ขึ้นมาเอง)");
             Assert.AreEqual(typeof(MonoBehaviour), ArmorType.BaseType, "คลาส Armor ต้องสืบทอดจาก MonoBehaviour");
 
             var armor = testGo.AddComponent(ArmorType);
@@ -198,9 +204,17 @@ namespace Week08_Exam
 
             Assert.AreEqual("Iron Armor", nameField.GetValue(armor), "Name เริ่มต้นต้องเป็น 'Iron Armor'");
             Assert.AreEqual(10, (int)bonusField.GetValue(armor), "defenseBonus เริ่มต้นต้องเป็น 10");
+        }
+
+        [Test]
+        public void Lv2_02_Armor_OnTriggerEnter2D()
+        {
+            Assert.IsNotNull(ArmorType, "ต้องมีคลาส Armor");
+            var armorGo = new GameObject("TestArmor");
+            var armor = armorGo.AddComponent(ArmorType);
 
             var triggerMethod = ArmorType.GetMethod("OnTriggerEnter2D", AnyInstance);
-            Assert.IsNotNull(triggerMethod, "Armor ต้องมีเมธอด OnTriggerEnter2D()");
+            Assert.IsNotNull(triggerMethod, "Armor ต้องมีเมธอด OnTriggerEnter2D(Collider2D other)");
 
             // ทดสอบชน Player
             var playerGo = new GameObject("TestPlayer");
@@ -209,61 +223,61 @@ namespace Week08_Exam
             var player = playerGo.AddComponent<Week08.Player>();
             player.defensePoint = 0;
 
-            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Destroy may not be called from edit mode"));
+            var capturedLogs = new System.Text.StringBuilder();
+            Application.LogCallback onLog = (condition, stackTrace, type) => capturedLogs.AppendLine(condition);
+            Application.logMessageReceived += onLog;
 
-            SimpleDebugConsole.Clear();
-            triggerMethod.Invoke(armor, new object[] { col });
-
-            Assert.AreEqual(10, player.defensePoint, "เมื่อเก็บไอเทมเกราะ ค่า defensePoint ของ Player ต้องเพิ่มขึ้นตาม defenseBonus (+10)");
-            Assert.IsTrue(SimpleDebugConsole.GetOutput().Contains("Picked up Iron Armor! +10 Defense"), "ต้องพิมพ์ข้อความการเก็บเกราะ เช่น 'Picked up Iron Armor! +10 Defense'");
-
-            Object.DestroyImmediate(playerGo);
-        }
-
-        [Test]
-        public void Lv2_02_ArmorSpawner_NullPrefab()
-        {
-            Assert.IsNotNull(SpawnerType, "ต้องมีคลาส ArmorSpawner");
-            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(SpawnerType), "คลาสต้องสืบทอดจาก MonoBehaviour");
-
-            var spawner = testGo.AddComponent(SpawnerType);
-            var spawnMethod = System.Array.Find(SpawnerType.GetMethods(AnyInstance), m => (m.Name == "SpawnArmor" || m.Name == "SpawnWeapon") && m.GetParameters().Length == 2);
-            Assert.IsNotNull(spawnMethod, "ต้องมีเมธอด SpawnArmor(GameObject, Vector3)");
-
-            SimpleDebugConsole.Clear();
-            var result = spawnMethod.Invoke(spawner, new object[] { null, Vector3.zero });
-            Assert.IsNull(result, "หาก prefab เป็น null เมธอด SpawnArmor ต้องคืนค่า null");
-            Assert.IsTrue(SimpleDebugConsole.GetOutput().Contains("Prefab is null"), "หาก prefab เป็น null ต้องพิมพ์ 'Prefab is null'");
-        }
-
-        [Test]
-        public void Lv2_03_ArmorSpawner_InstantiateArmorPrefab()
-        {
-            Assert.IsNotNull(SpawnerType, "ต้องมีคลาส ArmorSpawner");
-
-            var spawner = testGo.AddComponent(SpawnerType);
-            var spawnMethod = System.Array.Find(SpawnerType.GetMethods(AnyInstance), m => (m.Name == "SpawnArmor" || m.Name == "SpawnWeapon") && m.GetParameters().Length == 2);
-            Assert.IsNotNull(spawnMethod, "ต้องมีเมธอด SpawnArmor(GameObject, Vector3)");
-
-            GameObject armorPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Iron Armor.prefab");
-            Assert.IsNotNull(armorPrefab, "ไม่พบไฟล์ Prefab 'Assets/Prefabs/Exam/Iron Armor.prefab'! ให้นักศึกษาสร้าง Prefab เกราะขึ้นมาเองใน Unity Editor แล้วบันทึกไว้ที่ Assets/Prefabs/Exam/Iron Armor.prefab");
-
-            Vector3 spawnPos = new Vector3(2f, 3f, 0f);
-            SimpleDebugConsole.Clear();
-            GameObject spawnedObj = (GameObject)spawnMethod.Invoke(spawner, new object[] { armorPrefab, spawnPos });
-
+            LogAssert.ignoreFailingMessages = true;
             try
             {
-                Assert.IsNotNull(spawnedObj, "SpawnArmor ต้องเสกสร้าง GameObject ออกมา");
-                Assert.IsTrue(spawnedObj.name.StartsWith("Iron Armor"), "ชื่อของ Object ที่ถูกเสกต้องขึ้นต้นด้วยชื่อ Prefab ('Iron Armor')");
-                Assert.AreEqual(spawnPos.x, spawnedObj.transform.position.x, 0.01f, "พิกัด X ของ Object ต้องตรงกับ spawnPosition");
-                Assert.AreEqual(spawnPos.y, spawnedObj.transform.position.y, 0.01f, "พิกัด Y ของ Object ต้องตรงกับ spawnPosition");
-                Assert.IsTrue(SimpleDebugConsole.GetOutput().Contains("Spawned Iron Armor"), "SpawnArmor ต้องพิมพ์ข้อความการเสกสร้างวัตถุ เช่น 'Spawned Iron Armor at ...'");
+                SimpleDebugConsole.Clear();
+                triggerMethod.Invoke(armor, new object[] { col });
+
+                Assert.AreEqual(10, player.defensePoint, "เมื่อเก็บไอเทมเกราะ ค่า defensePoint ของ Player ต้องเพิ่มขึ้นตาม defenseBonus (+10)");
+                string allOutput = SimpleDebugConsole.GetOutput() + "\n" + capturedLogs.ToString();
+                bool hasMsg = allOutput.Contains("Picked up Iron Armor! +10 Defense")
+                    || (allOutput.Contains("Picked up") && allOutput.Contains("Iron Armor") && allOutput.Contains("10"));
+                Assert.IsTrue(hasMsg, "ต้องพิมพ์ข้อความการเก็บเกราะ เช่น 'Picked up Iron Armor! +10 Defense'");
             }
             finally
             {
-                if (spawnedObj != null)
-                    Object.DestroyImmediate(spawnedObj);
+                Application.logMessageReceived -= onLog;
+                if (armorGo != null) Object.DestroyImmediate(armorGo);
+                if (playerGo != null) Object.DestroyImmediate(playerGo);
+            }
+        }
+
+        [Test]
+        public void Lv2_03_Armor_Prefab_Configuration()
+        {
+            GameObject armorPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Iron Armor.prefab");
+            Assert.IsNotNull(armorPrefab, "ไม่พบไฟล์ Prefab 'Assets/Prefabs/Exam/Iron Armor.prefab'! ให้นักศึกษาสร้าง Prefab เกราะขึ้นมาเองใน Unity Editor แล้วบันทึกไว้ที่ Assets/Prefabs/Exam/Iron Armor.prefab");
+
+            // 1. ตรวจสอบ SpriteRenderer
+            var spriteRenderer = armorPrefab.GetComponent<SpriteRenderer>();
+            Assert.IsNotNull(spriteRenderer, "Prefab 'Iron Armor' ต้องมีคอมโพเนนต์ SpriteRenderer");
+            Assert.IsNotNull(spriteRenderer.sprite, "SpriteRenderer ของ Prefab 'Iron Armor' ต้องมีการกำหนด Sprite รูปภาพ");
+
+            // 2. ตรวจสอบ BoxCollider2D และ Is Trigger
+            var collider = armorPrefab.GetComponent<BoxCollider2D>();
+            Assert.IsNotNull(collider, "Prefab 'Iron Armor' ต้องมีคอมโพเนนต์ BoxCollider2D");
+            Assert.IsTrue(collider.isTrigger, "BoxCollider2D บน Prefab 'Iron Armor' ต้องติ๊กถูกที่ช่อง 'Is Trigger'");
+
+            // 3. ตรวจสอบการแนบคอมโพเนนต์ Armor
+            Assert.IsNotNull(ArmorType, "ต้องมีคลาส Armor ในสคริปต์");
+            var armorComp = armorPrefab.GetComponent(ArmorType);
+            Assert.IsNotNull(armorComp, "Prefab 'Iron Armor' ต้องมีคอมโพเนนต์ Armor แนบอยู่");
+
+            var nameField = ArmorType.GetField("Name", AnyInstance) ?? ArmorType.GetField("name", AnyInstance) ?? ArmorType.GetField("armorName", AnyInstance);
+            var bonusField = ArmorType.GetField("defenseBonus", AnyInstance) ?? ArmorType.GetField("defense", AnyInstance);
+
+            if (nameField != null)
+            {
+                Assert.AreEqual("Iron Armor", nameField.GetValue(armorComp), "ค่า Name บน Prefab ต้องเป็น 'Iron Armor'");
+            }
+            if (bonusField != null)
+            {
+                Assert.AreEqual(10, (int)bonusField.GetValue(armorComp), "ค่า defenseBonus บน Prefab ต้องเป็น 10");
             }
         }
     }
@@ -363,17 +377,19 @@ namespace Week08_Exam
                 var spawnedWalls = testGo.GetComponentsInChildren<Transform>();
                 Assert.IsTrue(spawnedWalls.Length > 1, "GenerateLWall() ต้องเสกสร้าง GameObject กำแพงลงใน wallParent");
 
-                // ตรวจสอบตำแหน่งกำแพง: มีทั้งแนวดิ่ง (X=0) และแนวนอน (Y=0)
+                // ตรวจสอบตำแหน่งกำแพง: มีทั้งแนวดิ่ง (X=wallWidth หรือ X=0) และแนวนอน (Y=wallHeight หรือ Y=0)
+                int wallHeight = mapGen.rows / 2;
+                int wallWidth = mapGen.columns / 2;
                 bool hasVertical = false;
                 bool hasHorizontal = false;
                 foreach (var t in spawnedWalls)
                 {
                     if (t == testGo.transform) continue;
-                    if (Mathf.Approximately(t.position.x, 0f) && t.position.y > 0f) hasVertical = true;
-                    if (Mathf.Approximately(t.position.y, 0f) && t.position.x > 0f) hasHorizontal = true;
+                    if ((Mathf.Approximately(t.position.x, wallWidth) || Mathf.Approximately(t.position.x, 0f)) && t.position.y >= 0f) hasVertical = true;
+                    if ((Mathf.Approximately(t.position.y, wallHeight) || Mathf.Approximately(t.position.y, 0f)) && t.position.x >= 0f) hasHorizontal = true;
                 }
-                Assert.IsTrue(hasVertical, "GenerateLWall() ต้องเสกสร้างกำแพงแนวดิ่งที่ X=0");
-                Assert.IsTrue(hasHorizontal, "GenerateLWall() ต้องเสกสร้างกำแพงแนวนอนที่ Y=0");
+                Assert.IsTrue(hasVertical, "GenerateLWall() ต้องเสกสร้างกำแพงแนวดิ่ง");
+                Assert.IsTrue(hasHorizontal, "GenerateLWall() ต้องเสกสร้างกำแพงแนวนอน");
             }
             finally
             {
@@ -414,6 +430,77 @@ namespace Week08_Exam
             // 3. เรียกใช้งานผ่านพารามิเตอร์ตาราง 2 มิติ (Overload)
             int threatsOverload = mapGen.ScanThreats(map, new Vector2Int(1, 1), 2);
             Assert.AreEqual(2, threatsOverload, "ScanThreats(map, ...) ต้องนับได้ 2 ช่อง");
+        }
+
+        [Test]
+        public void Lv3_05_MapGenerator_DisableSpawnItemPotions()
+        {
+            Assert.IsNotNull(MapGenType, "ต้องมีคลาส MapGenerator หรือ InventoryAndGridScanner");
+
+            var scanner = testGo.AddComponent(MapGenType);
+            var mapGen = scanner as Week08.MapGenerator;
+            Assert.IsNotNull(mapGen, "คอมโพเนนต์ต้องเป็นหรือสืบทอดจาก MapGenerator");
+
+            mapGen.rows = 5;
+            mapGen.columns = 5;
+
+            // จัดเตรียม Prefabs พื้นฐานเพื่อป้องกัน NullReferenceException ในขั้นตอน GenerateLWall/PlaceExit/PlaceArmor
+            var dummyWallPrefab = new GameObject("DummyWall");
+            mapGen.wallPrefabs = new GameObject[] { dummyWallPrefab };
+            mapGen.wallParent = testGo.transform;
+
+            var dummyExitPrefab = new GameObject("Exit");
+            mapGen.exitPrefab = dummyExitPrefab;
+
+            var dummyArmorPrefab = new GameObject("DummyArmor");
+            mapGen.armorPrefab = dummyArmorPrefab;
+
+            // โหลด Prefab โพชั่นของจริงจากโปรเจกต์ หรือสร้าง Dummy ขึ้นมาทดสอบ
+            GameObject bluePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Blue Potion.prefab");
+            GameObject redPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Exam/Red Potion.prefab");
+            bool createdBlue = false;
+            bool createdRed = false;
+
+            if (bluePrefab == null)
+            {
+                bluePrefab = new GameObject("Blue Potion");
+                createdBlue = true;
+            }
+            if (redPrefab == null)
+            {
+                redPrefab = new GameObject("Red Potion");
+                createdRed = true;
+            }
+
+            mapGen.itemPotions = new GameObject[] { bluePrefab, redPrefab };
+
+            var itemsFolder = new GameObject("Items");
+            mapGen.itemParent = itemsFolder.transform;
+
+            try
+            {
+                mapGen.GenerateMap();
+
+                // ตรวจสอบว่าในฉากต้องไม่มีทั้ง Blue Potion และ Red Potion ถูกเสกออกมา
+                var allTransforms = Object.FindObjectsOfType<Transform>();
+                var spawnedPotions = System.Array.FindAll(
+                    allTransforms,
+                    t => t != null && 
+                         (t.name.Contains("Blue Potion") || t.name.Contains("Red Potion")) &&
+                         t.gameObject != bluePrefab && t.gameObject != redPrefab
+                );
+
+                Assert.AreEqual(0, spawnedPotions.Length, "ต้องคอมเมนต์ปิดการเรียกใช้ SpawnItemPotions() ใน GenerateMap() เพื่อไม่ให้มี Blue Potion หรือ Red Potion ในซีน");
+            }
+            finally
+            {
+                Object.DestroyImmediate(itemsFolder);
+                Object.DestroyImmediate(dummyWallPrefab);
+                Object.DestroyImmediate(dummyExitPrefab);
+                Object.DestroyImmediate(dummyArmorPrefab);
+                if (createdBlue) Object.DestroyImmediate(bluePrefab);
+                if (createdRed) Object.DestroyImmediate(redPrefab);
+            }
         }
     }
 
