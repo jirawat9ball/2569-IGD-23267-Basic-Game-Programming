@@ -68,6 +68,10 @@ namespace Week05
             UserNameIdentification(testName, testAge);
             UserCountry(testCountry);
 
+            // ตัวอย่าง: การใช้ return ใน void Method เพื่อหยุดการทำงานก่อนกำหนด (Early Exit)
+            CheckPlayerStatus(0);    // กรณี return ออกจาก method ทันที (Early Exit)
+            CheckPlayerStatus(100);  // กรณีไม่เข้าเงื่อนไข return
+
             Debug.Log(LineSeparator);
 
             // ข้อ 2: ทดสอบเรียก Method แบบมีค่าส่งกลับ (Return Type)
@@ -121,6 +125,19 @@ namespace Week05
         public void UserCountry(string country = "Thailand")
         {
             Debug.Log(country);
+        }
+
+        // ตัวอย่างการใช้ return ใน void Method เพื่อหยุดการทำงานก่อนกำหนด (Early Exit):
+        // หมายเหตุ: ไม่สามารถใช้ break เพื่อออกจาก Method ได้ (Error CS0139) ต้องใช้ return เท่านั้น
+        public void CheckPlayerStatus(int hp)
+        {
+            if (hp <= 0)
+            {
+                Debug.Log("Dead (return)");
+                return;
+            }
+
+            Debug.Log("Alive: " + hp);
         }
 
         #endregion
